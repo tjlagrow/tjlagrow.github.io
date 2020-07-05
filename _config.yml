@@ -1,12 +1,11 @@
 # Site settings
-title: Varun Agrawal Online
-email: varagrawal@gmail.com
+title: Theodore LaGrow Online
+email: tjlagrow@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  This is the website of Varun Agrawal. Created by yours truly!
+  This is the website of Theodore LaGrow. Created by yours truly!
 baseurl: "" # the subpath of your site, e.g. /blog/
-url: "https://varunagrawal.github.io" # the base hostname & protocol for your site
-twitter_username: varagrawal
-github_username:  varunagrawal
+url: "https://tjlagrow.github.io" # the base hostname & protocol for your site
+github_username:  tjlagrow
 
 name: Varun Agrawal
 timezone: EST
