@@ -684,6 +684,14 @@
     border-radius: 20px;
 }
 
+.strong {
+    font-weight: bold; 
+}
+
+.b { 
+    font-weight: bold; 
+}
+
 /* Eyes Animation */
 
 @-webkit-keyframes eyes {
