@@ -1,0 +1,25 @@
+<nav class="navbar navbar-expand-md navbar-light" role="navigation">
+    <a class="navbar-brand" href="/">Theodore J. LaGrow</a>
+
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-main" aria-expanded="false" aria-controls="navbar-main">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-main" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav mr-auto">
+            {% for link in site.data.navbar %}
+                <li class="nav-item {% if page.url == link.url %}active{% endif %}">
+                    <a class="nav-link" href="{{ link.url }}" {% if link.external %}target="_blank"{% endif %}>{{ link.title }}</a>
+                </li>
+            {% endfor %}
+
+            <li {% if page.url == "CV" %}class="active"{% endif %}>
+                <a class="nav-link" href="/CV/CV_tlagrow.pdf" target="_blank">CV</a>
+            </li>
+
+            <li {% if page.url == "blog" %}class="active"{% endif %}>
+                <a class="nav-link" href="/blog/" target="_blank">Blog</a>
+            </li>
+        </ul>
+    </div>
+</nav>

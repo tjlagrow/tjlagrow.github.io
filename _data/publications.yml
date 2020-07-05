@@ -1,0 +1,33 @@
+- title: "Relationship between the frequency profile of BOLD fluctuations and calculated metrics of complexity in the Human Connectome Project"
+  authors: Shella Keilholz, Eric A Maltbie, Xiaodi Zhang, Behnaz Yousefi, Wen-Ju Pan, Nan Xu, Maysam Nezafati, Theodore J. LaGrow
+  venue: pre-print
+  date: 2020
+  links: 
+
+- title: "Toward a Reproducible, Scalable, Framework for Processing Large Neuroimaging Datasets"
+  authors: Erik C. Johnson, Miller Wilt, Luis M. Rodriguez, Raphael Norman-Tenazas, Corban Rivera, Nathan Drenkow, Dean Kleissas, Theodore J. LaGrow, Hannah Cowley, Joseph Downs, Jordan Matelsky, Marisa Hughes, Elizabeth Reilly, Brock Wester, Eva Dyer, Konrad Kording, William Gray-Roncal
+  venue: biorXiv
+  date: 2019
+  links: 
+    biorXiv link: https://www.biorxiv.org/content/10.1101/615161v1
+
+- title: "Sparse Recovery Methods for Cell Detection and Layer Estimation"
+  authors: Theodore J. LaGrow, Michael G. Moore, Judy A. Prasad, Alexis Webber, Mark A. Davenport, Eva L. Dyer
+  venue: biorXiv
+  date: 2018
+  links: 
+    biorXiv link: https://www.biorxiv.org/content/10.1101/445742v4
+
+- title: "Approximating Cellular Densities from High-Resolution Neuroanatomical Imaging Data"
+  authors: Theodore J. LaGrow, Michael G. Moore, Judy A. Prasad, Mark A. Davenport, Eva L. Dyer
+  venue: IEEE Engineering in Medicine and Biology Society Annual Conference (EMBC)
+  date: 2018
+  links:
+    IEEE link: https://ieeexplore.ieee.org/document/8512220
+
+- title: "Do You Know Where Your Research Is Being Used? An Exploration of Scientific Literature Using Natural Language Processing"
+  authors: Theodore J. LaGrow, Jacob Bieker, Boyana Norris
+  venue: Oregon Undergraduate Research Journal
+  date: 2017
+  links:
+    OURJ link: https://scholarsbank.uoregon.edu/xmlui/handle/1794/23466

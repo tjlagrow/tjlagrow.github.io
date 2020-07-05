@@ -1,0 +1,58 @@
+---
+layout: page
+title: Research
+permalink: /research/
+---
+
+<div class="row">
+    <h4 class="col-10 ml-auto mr-auto">Publications</h4>
+    <div class="col-10 ml-auto mr-auto">* indicates equal contribution</div>
+    <div><br /><br /></div>
+
+    <div class="col-10 ml-auto mr-auto">
+        <ul class="">
+            {% for paper in site.data.publications %}
+            <li>
+                <div class="paper-title">
+                    {{paper.title}}{% if paper.type %}, {{paper.type}}{% endif %}</div>
+                {% for link in paper.links %}
+                {% if link %}
+                [<a href="{{link[1]}}">{{link[0]}}</a>]
+                {% endif %}
+                {% endfor %}
+                <br />
+                {{paper.authors}}
+                <br />
+                <i>{{paper.venue}}</i>, {{paper.date}}
+            </li>
+            <br />
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <h4 class="col-10 ml-auto mr-auto">Talks</h4>
+    <div><br /><br /></div>
+
+    <div class="col-10 ml-auto mr-auto">
+        <ul class="">
+            {% for talk in site.data.talks %}
+            <li>
+                <div class="paper-title">
+                    {{talk.title}}{% if talk.type %}, {{talk.type}}{% endif %}</div>
+                {% for link in paper.links %}
+                {% if link %}
+                [<a href="{{link[1]}}">{{link[0]}}</a>]
+                {% endif %}
+                {% endfor %}
+                <br />
+                <i>{{talk.venue}}</i>
+                <br />
+                {{talk.date}}
+            </li>
+            <br />
+            {% endfor %}
+        </ul>
+    </div>
+</div>
