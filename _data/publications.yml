@@ -1,15 +1,23 @@
+- title: "Functional connectivity of the brain across rodents and humans"
+  authors:  Nan Xu,  Theodore J. LaGrow, Nmachi Anumba, Azalea Lee, Xiaodi Zhang, Behnaz Yousefi, Yasmine Bassil, Gloria P. Clavijo, Vahid Khalilzad Sharghi, Eric Maltbie, Lisa Meyer-Baese, Maysam Nezafati1, Wen-Ju Pan, Shella Keilholz
+  venue: Frontiers In Neuroscience
+  date: 2022
+  links: 
+    Frontiers Link: https://www.frontiersin.org/articles/10.3389/fnins.2022.816331/abstract
+
 - title: "Relationship between the frequency profile of BOLD fluctuations and calculated metrics of complexity in the Human Connectome Project"
-  authors: Shella Keilholz, Eric A Maltbie, Xiaodi Zhang, Behnaz Yousefi, Wen-Ju Pan, Nan Xu, Maysam Nezafati, Theodore J. LaGrow
-  venue: pre-print
+  authors: Shella Keilholz, Eric A Maltbie, Xiaodi Zhang, Behnaz Yousefi, Wen-Ju Pan, Nan Xu, Maysam Nezafati, Theodore J. LaGrow,  Ying Guo
+  venue: Frontiers In Neuroscience
   date: 2020
   links: 
+    Frontiers Link: https://www.frontiersin.org/articles/10.3389/fnins.2020.550923/full
 
 - title: "Toward a Reproducible, Scalable, Framework for Processing Large Neuroimaging Datasets"
   authors: Erik C. Johnson, Miller Wilt, Luis M. Rodriguez, Raphael Norman-Tenazas, Corban Rivera, Nathan Drenkow, Dean Kleissas, Theodore J. LaGrow, Hannah Cowley, Joseph Downs, Jordan Matelsky, Marisa Hughes, Elizabeth Reilly, Brock Wester, Eva Dyer, Konrad Kording, William Gray-Roncal
   venue: biorXiv
   date: 2019
   links: 
-    biorXiv link: https://www.biorxiv.org/content/10.1101/615161v1
+    Giga Science link: https://academic.oup.com/gigascience/article/9/12/giaa147/6042730
 
 - title: "Sparse Recovery Methods for Cell Detection and Layer Estimation"
   authors: Theodore J. LaGrow, Michael G. Moore, Judy A. Prasad, Alexis Webber, Mark A. Davenport, Eva L. Dyer
