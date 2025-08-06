@@ -2,17 +2,15 @@
   url: /
   external: false
 
-
 - title: Publications
   url: /research/
   external: false
 
+- title: Teaching
+  url: /teaching/
+  external: false
 
- - title: Teaching
-   url: /teaching/
-   external: false
-
- - title: Media
+- title: Media
   url: /media/
   external: false
 
@@ -20,7 +18,7 @@
   url: /blog/
   external: false
 
-
-# - title: Guides
-#   url: /guides/
+# Example external link:
+# - title: Scholar
+#   url: https://scholar.google.com/citations?user=KO7oYeAAAAAJ&hl=en
 #   external: true
