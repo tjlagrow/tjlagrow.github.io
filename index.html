@@ -1,6 +1,15 @@
 ---
 layout: default
 title: Theodore LaGrow Online
+# Cards under the "Explore" section—edit here without touching _data/navbar.yml
+portal:
+  - { title: "Home",        url: "/",              blurb: "Start here. Overview & recent work." }
+  - { title: "Newsletter",  url: "/newsletter/",   blurb: "Occasional updates. No spam." }
+  - { title: "Publications",url: "/research/",     blurb: "Peer-reviewed papers, preprints & software." }
+  - { title: "Teaching",    url: "/teaching/",     blurb: "Courses, syllabi, pedagogy, and resources." }
+  - { title: "Blog",        url: "/blog/",         blurb: "Short, opinionated notes on ML & teaching." }
+  - { title: "Consulting",  url: "/consulting/",   blurb: "ML systems, analytics, and product strategy." }
+  - { title: "Contact",     url: "/contact/",      blurb: "Email, booking, and office hours." }
 ---
 
 <style>
@@ -8,7 +17,7 @@ title: Theodore LaGrow Online
   .hero {
     position: relative;
     border-radius: 1.25rem;
-    padding: 3rem 2rem;
+    padding: 2.25rem;
     overflow: hidden;
     background:
       radial-gradient(1200px 600px at 10% -20%, rgba(80,126,255,.25), transparent 60%),
@@ -16,256 +25,169 @@ title: Theodore LaGrow Online
       linear-gradient(135deg, #0f1223, #0a0c18);
     color: #fff;
   }
-  .hero .badge {
-    background: rgba(255,255,255,.15);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,.25);
-  }
-
-  .glass {
-    background: rgba(255,255,255,.8);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0,0,0,.06);
-    border-radius: 1rem;
-    transition: transform .2s ease, box-shadow .2s ease;
-  }
-  .glass:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,.08); }
-
-  /* Hero avatar slideshow */
-  .avatar-wrap {
-    position: relative;
-    max-width: 420px;
-    margin-left: auto;
-    margin-right: auto;
-    aspect-ratio: 1 / 1; /* keep square footprint */
-  }
-  .hero-slide {
-    position: absolute;
-    inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    border-radius: 1rem;           /* square with rounded corners */
-    border: 4px solid rgba(255,255,255,.6);
-    box-shadow: 0 8px 24px rgba(0,0,0,.25);
-    opacity: 0;
-  }
-  .hero-slide.active {
-    opacity: 1;
-    animation: sweepReveal .8s ease-out both;
-  }
-  /* Left-to-right sweep reveal */
-  @keyframes sweepReveal {
-    0%   { clip-path: inset(0 100% 0 0); }
-    100% { clip-path: inset(0 0 0 0); }
-  }
-
-  .icon-inline { width: 1.15em; height: 1.15em; vertical-align: -.15em; opacity: .9; }
-
-  .timeline { position: relative; padding-left: 1.25rem; margin-left: .75rem; }
-  .timeline::before { content:""; position:absolute; left:0; top:.2rem; bottom:.2rem; width:2px; background: #e5e7eb; }
-  .timeline-item { position: relative; margin: .75rem 0; }
-  .timeline-item::before { content:""; position:absolute; left:-9px; top:.4rem; width:10px; height:10px; border-radius:50%; background:#0d6efd; }
-
-  .social a { opacity: .85; transition: opacity .2s ease, transform .2s ease; }
-  .social a:hover { opacity: 1; transform: translateY(-1px); }
-
-  /* Flashier highlight cards (gradient border) */
-  .flash-card {
-    position: relative;
-    border-radius: 1rem;
-    padding: 1.25rem;
-    background:
-      linear-gradient(#ffffff, #ffffff) padding-box,
-      linear-gradient(135deg, #6EE7F9, #A78BFA, #F472B6) border-box;
-    border: 2px solid transparent;
-    height: 100%;
-    transition: transform .15s ease, box-shadow .2s ease;
-  }
-  .flash-card:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,.12); }
-
-  .flash-icon {
-    display:inline-flex; align-items:center; justify-content:center;
-    width: 40px; height: 40px; border-radius: 10px; margin-right: .5rem;
-    background: linear-gradient(135deg, rgba(110,231,249,.25), rgba(167,139,250,.25));
-  }
-  .flash-title { display:flex; align-items:center; font-weight:600; margin-bottom:.35rem; }
-  .flash-kicker { font-size:.85rem; letter-spacing:.02em; color:#6c757d; }
-
-  /* Buttons on dark hero */
+  .hero .badge { background: rgba(255,255,255,.15); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.25); }
   .btn-hero { border-color: rgba(255,255,255,.7); color:#fff; }
   .btn-hero:hover { background: rgba(255,255,255,.12); color:#fff; }
 
+  .glass { background: rgba(255,255,255,.85); backdrop-filter: blur(8px); border: 1px solid rgba(0,0,0,.06); border-radius: 1rem; }
+  .soft { border-radius: 1rem; }
+
+  /* Carousel */
+  .avatar-wrap { position: relative; max-width: 420px; margin-inline:auto; aspect-ratio: 1 / 1; }
+  .hero-slide {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    border-radius: 1rem; border: 4px solid rgba(255,255,255,.6); box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    opacity: 0;
+  }
+  .hero-slide.active { opacity: 1; animation: sweepReveal .8s ease-out both; }
+  @keyframes sweepReveal { 0% { clip-path: inset(0 100% 0 0); } 100% { clip-path: inset(0 0 0 0); } }
+
+  /* Tooltip for one-line messages */
   .hover-tip{
-    position: fixed;
-    z-index: 10000;
-    pointer-events: none;
-    display: none;
-    background: rgba(13,110,253,.95);
-    color: #fff;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-    white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(0,0,0,.15);
-    transform: translate(-50%, 0); /* center under cursor */
+    position: fixed; z-index: 10000; pointer-events: none; display: none;
+    background: rgba(13,110,253,.95); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 12px; white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,.15); transform: translate(-50%, 0);
   }
 
+  /* Explore grid */
+  .portal-card {
+    background: #fff; border: 1px solid #eaecef; border-radius: 14px; padding: 16px; height: 100%;
+    transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .portal-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.10); border-color:#d7dbdf; }
+  .portal-card .title { font-weight: 600; margin-bottom: .25rem; }
+  .portal-card .blurb { color: #6b7280; font-size: .95rem; }
+
+  /* Awards */
+  .awards .badge { background: linear-gradient(135deg, rgba(110,231,249,.25), rgba(167,139,250,.25)); color:#111; }
+  .award-item { padding: .75rem 1rem; border-left: 3px solid #0d6efd; background: #fff; border-radius: .5rem; margin-bottom: .5rem; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 1.25rem; margin-left: .25rem; }
+  .timeline::before { content:""; position:absolute; left:0; top:.2rem; bottom:.2rem; width:2px; background: #e5e7eb; }
+  .timeline-item { position: relative; margin: .85rem 0; }
+  .timeline-item::before { content:""; position:absolute; left:-9px; top:.45rem; width:10px; height:10px; border-radius:50%; background:#0d6efd; }
 </style>
 
 <div class="container my-5">
 
-  <!-- HERO -->
+  <!-- HERO: Carousel + About -->
   <section class="hero mb-5">
-    <div class="row align-items-center">
-      <div class="col-md-4 text-center text-md-left mb-4 mb-md-0">
-        <!-- Slideshow container -->
-          <div class="avatar-wrap" id="heroSlides"></div>
+    <div class="row align-items-center g-4">
+      <div class="col-md-4 text-center text-md-left">
+        <div class="avatar-wrap" id="heroSlides"></div>
       </div>
 
       <div class="col-md-8">
-        <div class="d-flex flex-wrap gap-2 mb-3">
+        <h1 class="display-5 mb-2">Theodore (TJ) LaGrow</h1>
+        <p class="lead mb-3">
+          Researcher, educator, and builder focused on robust ML systems, spatiotemporal brain dynamics,
+          and turning ideas into products.
+        </p>
+        <div class="d-flex flex-wrap gap-2 mb-4">
           <span class="badge">Machine Learning</span>
           <span class="badge">Computer Vision</span>
           <span class="badge">Computational Neuroscience</span>
         </div>
-
-        <h1 class="display-5 mb-2">Theodore (TJ) LaGrow</h1>
-        <p class="lead mb-4">
-          Researcher, educator, and builder focused on robust ML systems, spatiotemporal brain dynamics, and turning ideas into products.
-        </p>
-
-        <div class="d-flex flex-wrap align-items-center gap-2">
-          <a href="mailto:tlagrow@gatech.edu" class="btn btn-light btn-lg">
-            <i class="fa fa-envelope"></i> Email
-          </a>
-
-          <a href="{{ '/assets/tj-lagrow-resume.pdf' | relative_url }}" class="btn btn-outline-light btn-lg btn-hero" target="_blank" rel="noopener">
-            <i class="fa fa-download"></i> Download CV
-          </a>
-
-          <div class="ml-md-3 social">
-            <a class="mx-2 text-white" href="https://github.com/tjlagrow" target="_blank" aria-label="GitHub"><i class="fa fa-github fa-lg"></i></a>
-            <a class="mx-2 text-white" href="https://scholar.google.com/citations?user=KO7oYeAAAAAJ&hl=en" target="_blank" aria-label="Google Scholar"><i class="ai ai-google-scholar ai-lg"></i></a>
-            <a class="mx-2 text-white" href="https://www.linkedin.com/in/tjlagrow/" target="_blank" aria-label="LinkedIn"><i class="fa fa-linkedin-square fa-lg"></i></a>
-            <a class="mx-2 text-white" href="https://twitter.com/botanicalbrains" target="_blank" aria-label="Twitter"><i class="fa fa-twitter fa-lg"></i></a>
-            <a class="mx-2 text-white" href="https://www.instagram.com/botanical.brains/" target="_blank" aria-label="Instagram"><i class="fa fa-instagram fa-lg"></i></a>
+        <div class="glass p-3 soft">
+          <h2 class="h5 mb-2">About Me</h2>
+          <p class="mb-2">
+            I teach and build at the intersection of AI, neuroimaging, and product. I lead Georgia Tech’s ML course at
+            scale (1,200+ learners/term) while developing workforce-aligned programs. My work spans modeling brain
+            dynamics, medical imaging, and the operational infrastructure that makes learning rigorous <em>and</em> humane.
+          </p>
+          <div class="small">
+            <i class="fa fa-map-marker"></i> Atlanta, GA · <i class="fa fa-university"></i> Georgia Tech ·
+            <i class="fa fa-graduation-cap"></i> PhD ECE; MBA
           </div>
-        </div>
-
-        <div class="mt-3 small">
-          <span class="mr-3"><i class="fa fa-map-marker"></i> Atlanta, GA</span>
-          <span class="mr-3"><i class="fa fa-university"></i> Georgia Tech</span>
-          <span class="mr-3"><i class="fa fa-graduation-cap"></i> PhD ECE; MBA</span>
+          <div class="mt-3">
+            <a href="mailto:tlagrow@gatech.edu" class="btn btn-light btn-sm"><i class="fa fa-envelope"></i> Email</a>
+            <a href="{{ '/assets/tj-lagrow-resume.pdf' | relative_url }}" class="btn btn-outline-light btn-sm btn-hero" target="_blank" rel="noopener">
+              <i class="fa fa-download"></i> CV
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ABOUT -->
+  <!-- EXPLORE: Cards for nav tabs with small highlights -->
   <section class="mb-5">
+    <h2 class="h4 text-center mb-4">Explore</h2>
     <div class="row">
-      <div class="col-lg-10 mx-auto glass p-4 p-md-5">
-        <h2 class="h4 mb-3">About</h2>
-        <p>
-          I am a Lecturer with Georgia Tech Professional Education and the College of Lifetime Learning, where I develop and teach applied, high-impact courses in the FlexStack program. My teaching covers artificial intelligence, data analytics, cybersecurity, and other emerging technologies shaped by workforce and industry demand.
-        </p>
-        <p>
-          In parallel, I serve as Instructor of Record for Georgia Tech’s graduate Machine Learning course, CS7641. Each term, I lead more than 1,200 students supported by a staff of over 30 graduate teaching assistants and industry professionals. I oversee curriculum design, pedagogical strategy, and large-scale operations across three semesters per year.
-        </p>
-        <p>
-          My background spans engineering, business, and research. I hold a PhD in Electrical and Computer Engineering and an MBA from Georgia Tech. I have published work in neuroimaging and optimization, and co-founded a medical imaging startup that holds a patent and has secured millions of dollars in funding.
-        </p>
-        <p class="mb-0">
-          Whether I am building educational programs, deploying machine learning solutions, or mentoring teams, my focus is on creating systems that are rigorous, scalable, and human-centered.
-        </p>
+      {% for p in page.portal %}
+      <div class="col-md-4 mb-3">
+        <a class="text-decoration-none d-block h-100" href="{{ p.url | relative_url }}">
+          <div class="portal-card">
+            <div class="title">{{ p.title }}</div>
+            <div class="blurb">{{ p.blurb }}</div>
+          </div>
+        </a>
       </div>
+      {% endfor %}
     </div>
   </section>
 
-  <!-- HIGHLIGHTS -->
-  <section class="mb-5">
-    <h2 class="h4 text-center mb-4">Highlights</h2>
+  <!-- AWARDS -->
+  <section class="mb-5 awards">
+    <h2 class="h4 text-center mb-3">Grants, Fellowships, Honors & Awards</h2>
     <div class="row">
-      <div class="col-md-4 mb-3">
-        <div class="flash-card">
-          <div class="flash-title">
-            <span class="flash-icon"><i class="fa fa-users"></i></span>
-            Teaching @ Scale
-          </div>
-          <div class="flash-kicker">Instructor of Record — CS7641</div>
-          <p class="mb-2">1,200+ students per term; 30+ TAs/industry staff. Built reproducible workflows, diagnostics, and feedback loops.</p>
-          <div class="small text-muted">Georgia Tech · OMSCS · On-campus</div>
-        </div>
-      </div>
+      <div class="col-lg-10 mx-auto">
+        <div class="mb-2"><span class="badge">Scholarships & Fellowships</span></div>
+        <div class="award-item">United Way Metropolitan Dallas Healthcare Innovation Grant (Insight Optics, 2022–2023) — $500k/year non-dilutive.</div>
+        <div class="award-item">Graduate Research Assistantship Fellowship (2017–2019), GT/Emory BME.</div>
+        <div class="award-item">Presidential Undergraduate Research Scholarship (2016–2017), University of Oregon.</div>
+        <div class="award-item">UO Presidential Scholarship (2013–2017) · Summit Scholarship (2013–2017) · Intel Scholarship (2013).</div>
 
-      <div class="col-md-4 mb-3">
-        <div class="flash-card">
-          <div class="flash-title">
-            <span class="flash-icon"><i class="fa fa-cubes"></i></span>
-            FlexStack Programs
-          </div>
-          <div class="flash-kicker">Applied, workforce-driven courses</div>
-          <p class="mb-2">AI, data analytics, cybersecurity, and emerging tech—built for immediate impact and career mobility.</p>
-          <div class="small text-muted">GT Professional Education · College of Lifetime Learning</div>
-        </div>
-      </div>
+        <div class="mt-3 mb-2"><span class="badge">Awards</span></div>
+        <div class="award-item">Institutional Winner — Online TA of the Year (2023).</div>
+        <div class="award-item">Outstanding Graduate Teaching Assistant Award (College of Computing & ECE: 2020, 2021, 2023).</div>
+        <div class="award-item">NSF GRFP Honorable Mention (2019).</div>
 
-      <div class="col-md-4 mb-3">
-        <div class="flash-card">
-          <div class="flash-title">
-            <span class="flash-icon"><i class="fa fa-medkit"></i></span>
-            Research & Products
-          </div>
-          <div class="flash-kicker">Neuroimaging → medical imaging</div>
-          <p class="mb-2">Publications in fMRI/optimization; co-founded a startup with a patent and multi-million-dollar funding.</p>
-          <div class="small text-muted">Functional connectivity · CV · ML systems</div>
-        </div>
+        <div class="mt-3 mb-2"><span class="badge">Other Recognitions</span></div>
+        <div class="award-item">Sigma Xi Associate Member (2019).</div>
+        <div class="award-item">First Place (Team Lead) — NYU/MLB Media Lab Hackathon (2017).</div>
       </div>
     </div>
   </section>
 
-  <!-- LATEST -->
+  <!-- TIMELINE -->
   <section class="mb-5">
+    <h2 class="h4 text-center mb-3">Timeline</h2>
     <div class="row">
       <div class="col-lg-8 mx-auto glass p-4 p-md-5">
-        <h2 class="h4 mb-3">Latest</h2>
         <div class="timeline">
           <div class="timeline-item">
             <div class="small text-muted">2025</div>
-            <div><strong>Updated ML course infrastructure</strong> for CS7641 to scale assessment and diagnostics across sections.</div>
+            <div><strong>Scaled CS7641 infrastructure</strong> for diagnostics and assessment; dissertation defense and wrap-up.</div>
           </div>
           <div class="timeline-item">
             <div class="small text-muted">2024</div>
-            <div>Wrapped multi-year R&amp;D applying CV to ophthalmic imaging; shipped features and lots of Python.</div>
+            <div>Finished multi-year ophthalmic CV R&amp;D; OHBM presentations; shipped tooling for course ops.</div>
           </div>
           <div class="timeline-item">
             <div class="small text-muted">2023</div>
-            <div>Teaching recognition; continued Alzheimer’s connectivity analysis work.</div>
+            <div>Recognition for online teaching; expanded ML course capacity and TA development.</div>
           </div>
-        </div>
-        <div class="mt-3">
-          <a class="btn btn-sm btn-outline-secondary" href="/news/">See all updates</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- TEACHING -->
+  <!-- CONNECT -->
   <section class="mb-5">
-    <h2 class="h4 text-center mb-4">Teaching</h2>
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <div class="glass p-4 h-100">
-          <h3 class="h6 mb-2"><a href="https://omscs.gatech.edu/cs-7641-machine-learning" target="_blank">CS 7641: Machine Learning</a></h3>
-          <p class="mb-1">Instructor of Record. Emphasis on reproducibility, diagnostics, and high-quality feedback at scale.</p>
-          <div class="small text-muted">Georgia Institute of Technology</div>
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <div class="glass p-4 h-100">
-          <h3 class="h6 mb-2"><a href="https://www.omscs.gatech.edu/cs-7642-reinforcement-learning" target="_blank">CS 7642: Reinforcement Learning</a></h3>
-          <p class="mb-1">Instructor / Staff. Analysis-first approach to policy/value methods and experimental rigor.</p>
-          <div class="small text-muted">Georgia Institute of Technology</div>
+    <h2 class="h4 text-center mb-3">How to Connect</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <div class="glass p-4 soft">
+          <p class="mb-3">Speaking, collaboration, consulting, or just curious? I’m easy to reach.</p>
+          <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <a href="mailto:tlagrow@gatech.edu" class="btn btn-primary"><i class="fa fa-envelope"></i> Email</a>
+            <a href="https://github.com/tjlagrow" class="btn btn-outline-secondary" target="_blank"><i class="fa fa-github"></i> GitHub</a>
+            <a href="https://scholar.google.com/citations?user=KO7oYeAAAAAJ&hl=en" class="btn btn-outline-secondary" target="_blank"><i class="ai ai-google-scholar"></i> Scholar</a>
+            <a href="https://www.linkedin.com/in/tjlagrow/" class="btn btn-outline-secondary" target="_blank"><i class="fa fa-linkedin-square"></i> LinkedIn</a>
+            <a href="https://twitter.com/botanicalbrains" class="btn btn-outline-secondary" target="_blank"><i class="fa fa-twitter"></i> X/Twitter</a>
+          </div>
         </div>
       </div>
     </div>
@@ -279,15 +201,13 @@ title: Theodore LaGrow Online
   </div>
 </div>
 
-<!-- Slideshow JS -->
+<!-- Slideshow JS: random order without repeats, reshuffle each cycle, 6s cadence -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const wrap = document.getElementById('heroSlides');
     if (!wrap) return;
 
-    // Cache-bust so deploys invalidate CDN/browser cache
-    const ver = '{{ site.time | date: "%s" }}';
-
+    const ver = '{{ site.time | date: "%s" }}'; // cache-bust on deploy
     const sources = [
       "{{ 'images/tlagrow_hs_01.jpg'  | relative_url }}?v=" + ver,
       "{{ 'images/tlagrow_hs_02.jpg'  | relative_url }}?v=" + ver,
@@ -302,7 +222,6 @@ title: Theodore LaGrow Online
       "{{ 'images/tlagrow_hs_11.jpg'  | relative_url }}?v=" + ver
     ];
 
-    // One-line messages (same order as sources)
     const messages = [
       "Gimme a head with hair, long beautiful hair",
       "Are those Chihuly's behind you?",
@@ -317,7 +236,6 @@ title: Theodore LaGrow Online
       "Captain LaGrow Buccaneer of Brains and Business"
     ];
 
-    // Build slides
     const slides = sources.map((src, i) => {
       const img = document.createElement('img');
       img.src = src;
@@ -330,13 +248,11 @@ title: Theodore LaGrow Online
     });
     if (!slides.length) return;
 
-    // Tooltip element (uses your .hover-tip CSS already on the page)
     const tip = document.createElement('div');
     tip.className = 'hover-tip';
     tip.setAttribute('role','tooltip');
     document.body.appendChild(tip);
 
-    // Shuffle helper: Fisher–Yates; ensure first !== avoidStart if possible
     function shuffledOrder(n, avoidStart) {
       const arr = Array.from({ length: n }, (_, i) => i);
       for (let i = n - 1; i > 0; i--) {
@@ -344,63 +260,39 @@ title: Theodore LaGrow Online
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       if (n > 1 && avoidStart != null && arr[0] === avoidStart) {
-        let k = 1;
-        while (k < n && arr[k] === avoidStart) k++;
+        let k = 1; while (k < n && arr[k] === avoidStart) k++;
         if (k < n) [arr[0], arr[k]] = [arr[k], arr[0]];
       }
       return arr;
     }
 
-    // Start with a random order and position
     let order = shuffledOrder(slides.length, null);
     let pos = 0;
     let idx = order[pos];
     slides[idx].classList.add('active');
 
-    const intervalMs = 6000; // 6 seconds
-
+    const intervalMs = 6000;
     function advance() {
       const prev = slides[idx];
-
-      // Step forward; reshuffle at end, avoiding boundary repeat
       pos++;
-      if (pos >= order.length) {
-        order = shuffledOrder(slides.length, idx);
-        pos = 0;
-      }
+      if (pos >= order.length) { order = shuffledOrder(slides.length, idx); pos = 0; }
       idx = order[pos];
       const next = slides[idx];
-
       prev.classList.remove('active');
-      next.classList.remove('active'); // reset to retrigger animation
-      void next.offsetWidth;           // force reflow
-      next.classList.add('active');
-
-      // If tooltip is visible (hovering), update text to match current slide
-      if (tip.style.display === 'block') {
-        tip.textContent = messages[idx] || '';
-      }
+      next.classList.remove('active'); void next.offsetWidth; next.classList.add('active');
+      if (tip.style.display === 'block') tip.textContent = messages[idx] || '';
     }
 
-    // Keep running even when hovered
     const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!prefersReduced) setInterval(advance, intervalMs);
 
-    // Tooltip behavior (no pausing)
-    wrap.addEventListener('mouseenter', () => {
-      tip.textContent = messages[idx] || '';
-      tip.style.display = 'block';
-    });
+    // Tooltip (no pause on hover)
+    wrap.addEventListener('mouseenter', () => { tip.textContent = messages[idx] || ''; tip.style.display = 'block'; });
     wrap.addEventListener('mousemove', (e) => {
-      const x = e.clientX, y = e.clientY;
-      tip.style.left = x + 'px';
-      tip.style.top  = (y + 20) + 'px';
+      tip.style.left = e.clientX + 'px'; tip.style.top = (e.clientY + 20) + 'px';
       const rect = tip.getBoundingClientRect();
-      if (rect.right > window.innerWidth - 8) {
-        tip.style.left = (window.innerWidth - 8 - rect.width / 2) + 'px';
-      }
+      if (rect.right > window.innerWidth - 8) tip.style.left = (window.innerWidth - 8 - rect.width / 2) + 'px';
     });
     wrap.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
   });
 </script>
-
