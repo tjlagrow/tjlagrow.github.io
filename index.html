@@ -285,7 +285,7 @@ title: Theodore LaGrow Online
     const wrap = document.getElementById('heroSlides');
     if (!wrap) return;
 
-    // Cache-bust so deploys invalidate the CDN/browser cache
+    // Cache-bust so deploys invalidate CDN/browser cache
     const ver = '{{ site.time | date: "%s" }}';
 
     const sources = [
@@ -302,6 +302,7 @@ title: Theodore LaGrow Online
       "{{ 'images/tlagrow_hs_11.jpg'  | relative_url }}?v=" + ver
     ];
 
+    // One-line messages (same order as sources)
     const messages = [
       "Gimme a head with hair, long beautiful hair",
       "Are those Chihuly's behind you?",
@@ -329,7 +330,7 @@ title: Theodore LaGrow Online
     });
     if (!slides.length) return;
 
-    // Tooltip element (for your existing hover-tip CSS)
+    // Tooltip element (uses your .hover-tip CSS already on the page)
     const tip = document.createElement('div');
     tip.className = 'hover-tip';
     tip.setAttribute('role','tooltip');
@@ -356,16 +357,15 @@ title: Theodore LaGrow Online
     let idx = order[pos];
     slides[idx].classList.add('active');
 
-    const intervalMs = 4000;
-    let timer = null;
+    const intervalMs = 6000; // 6 seconds
 
     function advance() {
       const prev = slides[idx];
 
-      // Move forward in the current shuffle; reshuffle when we reach the end
+      // Step forward; reshuffle at end, avoiding boundary repeat
       pos++;
       if (pos >= order.length) {
-        order = shuffledOrder(slides.length, idx); // avoid immediate repeat across cycles
+        order = shuffledOrder(slides.length, idx);
         pos = 0;
       }
       idx = order[pos];
@@ -376,15 +376,18 @@ title: Theodore LaGrow Online
       void next.offsetWidth;           // force reflow
       next.classList.add('active');
 
-      if (tip.style.display === 'block') tip.textContent = messages[idx] || '';
+      // If tooltip is visible (hovering), update text to match current slide
+      if (tip.style.display === 'block') {
+        tip.textContent = messages[idx] || '';
+      }
     }
 
-    function start() { if (!timer) timer = setInterval(advance, intervalMs); }
-    function stop()  { if (timer) { clearInterval(timer); timer = null; } }
+    // Keep running even when hovered
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReduced) setInterval(advance, intervalMs);
 
-    // Pause on hover + show tooltip that follows cursor
+    // Tooltip behavior (no pausing)
     wrap.addEventListener('mouseenter', () => {
-      stop();
       tip.textContent = messages[idx] || '';
       tip.style.display = 'block';
     });
@@ -397,10 +400,7 @@ title: Theodore LaGrow Online
         tip.style.left = (window.innerWidth - 8 - rect.width / 2) + 'px';
       }
     });
-    wrap.addEventListener('mouseleave', () => { tip.style.display = 'none'; start(); });
-
-    // Respect reduced motion
-    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!prefersReduced) start();
+    wrap.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
   });
 </script>
+
