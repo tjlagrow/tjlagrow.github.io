@@ -2,19 +2,26 @@
   url: /
   external: false
 
+- title: Newsletter
+  url: /newsletter/
+  external: false
+
 - title: Publications
-  url: /research/
+  url: /publications/
   external: false
 
 - title: Teaching
   url: /teaching/
   external: false
 
-- title: Media
-  url: /media/
-  external: false
-
 - title: Blog
   url: /blog/
   external: false
 
+- title: Consulting
+  url: /consulting/
+  external: false
+
+- title: Contact
+  url: /contact/
+  external: false
