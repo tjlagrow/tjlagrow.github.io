@@ -273,25 +273,15 @@ title: Theodore LaGrow Website
 <!-- Slideshow JS -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    const sources = [
+      "{{ 'images/tlagrow_hs_01.jpg' | relative_url }}",
+      "{{ 'images/tlagrow_hs_02.jpg' | relative_url }}",
+      "{{ 'images/tlagrow_hs_03.jpg' | relative_url }}",
+      "{{ 'images/tlagrow_hs_04.jpeg' | relative_url }}",
+      "{{ 'images/tlagrow_hs_05.jpeg' | relative_url }}"
+    ];
+
     const wrap = document.getElementById('heroSlides');
-
-    // Parse sources injected by Liquid
-    let sources = [];
-    try {
-      sources = JSON.parse(wrap.dataset.sources || '[]');
-    } catch (e) {
-      sources = [];
-    }
-
-    // Fallback if none were found
-    if (!Array.isArray(sources) || sources.length === 0) {
-      sources = ["{{ 'images/tlagrow_hs_01.jpg' | relative_url }}"];
-    }
-
-    // Stable, numeric-aware sort (handles 1,2,10 correctly)
-    sources.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
-
-    // Build slides
     const slides = sources.map((src, i) => {
       const img = document.createElement('img');
       img.src = src;
@@ -303,13 +293,7 @@ title: Theodore LaGrow Website
       return img;
     });
 
-    if (slides.length <= 1) return; // nothing to rotate
-
-    // Respect reduced motion
-    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const intervalMs = 4000;
-
-    if (prefersReduced) return;
+    if (slides.length <= 1) return;
 
     let idx = 0;
     setInterval(() => {
@@ -318,10 +302,9 @@ title: Theodore LaGrow Website
       const next = slides[idx];
 
       prev.classList.remove('active');
-      // Re-trigger sweep on the incoming slide
-      next.classList.remove('active');
-      void next.offsetWidth; // force reflow to restart animation
+      next.classList.remove('active'); // reset to retrigger animation
+      void next.offsetWidth;           // force reflow
       next.classList.add('active');
-    }, intervalMs);
+    }, 4000); // every 4 seconds
   });
 </script>
