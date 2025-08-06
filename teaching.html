@@ -1,0 +1,427 @@
+---
+layout: default
+title: Teaching
+permalink: /teaching/
+---
+
+<style>
+  /* ===== Page Styling (flashy but clean) ===== */
+  .teach-hero {
+    position: relative;
+    padding: 4rem 2rem;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    color: #fff;
+    background:
+      radial-gradient(1200px 600px at 5% -20%, rgba(80,126,255,.25), transparent 60%),
+      radial-gradient(1000px 500px at 100% 0%, rgba(255,170,90,.25), transparent 50%),
+      linear-gradient(135deg, #0f1223, #0a0c18);
+  }
+  .teach-hero .glow { position:absolute; inset:-40%;
+    background: conic-gradient(from 90deg at 50% 50%, rgba(110,231,249,.35), rgba(167,139,250,.35), rgba(244,114,182,.35), rgba(110,231,249,.35));
+    filter: blur(80px); opacity: .35; animation: spin 18s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hero-title { font-weight: 800; letter-spacing: .3px; }
+  .hero-sub { opacity: .92; max-width: 70ch; }
+  .hero-updated { opacity: .8; font-size: .95rem; }
+
+  .stat {
+    position: relative; border-radius: 1rem; padding: 1.25rem;
+    background:
+      linear-gradient(#ffffff, #ffffff) padding-box,
+      linear-gradient(135deg, #6EE7F9, #A78BFA, #F472B6) border-box;
+    border: 2px solid transparent;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    height: 100%;
+  }
+  .stat .num { font-size: 2rem; font-weight: 800; line-height: 1; }
+  .stat .label { color: #6c757d; font-weight: 500; }
+
+  .flash-card {
+    position: relative; border-radius: 1rem; padding: 1.25rem;
+    background:
+      linear-gradient(#ffffff, #ffffff) padding-box,
+      linear-gradient(135deg, #6EE7F9, #A78BFA, #F472B6) border-box;
+    border: 2px solid transparent; height: 100%;
+    transition: transform .15s ease, box-shadow .2s ease;
+  }
+  .flash-card:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,.12); }
+  .flash-title { display:flex; align-items:center; font-weight:700; margin-bottom:.35rem; }
+  .flash-icon {
+    display:inline-flex; align-items:center; justify-content:center;
+    width: 40px; height: 40px; border-radius: 10px; margin-right: .5rem;
+    background: linear-gradient(135deg, rgba(110,231,249,.25), rgba(167,139,250,.25));
+  }
+  .flash-kicker { font-size:.85rem; letter-spacing:.02em; color:#6c757d; }
+
+  /* Section headings */
+  .section-title { font-weight:800; }
+  .kicker { font-size:.9rem; color:#6c757d; font-weight:600; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* Timeline */
+  .timeline { position: relative; margin-left: .5rem; padding-left: 1.25rem; }
+  .timeline::before { content:""; position:absolute; left:0; top:.4rem; bottom:.4rem; width:2px; background:#e5e7eb; }
+  .t-item { position: relative; margin: 1rem 0; }
+  .t-item::before { content:""; position:absolute; left:-9px; top:.6rem; width:10px; height:10px; border-radius:50%; background:#0d6efd; }
+  .t-header { display:flex; gap:.5rem; align-items:baseline; flex-wrap:wrap; }
+  .t-title { font-weight:700; }
+  .t-meta { font-size:.9rem; color:#6c757d; }
+  details.t-body { margin-top:.35rem; background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:.75rem; padding:.75rem 1rem; }
+
+  /* Statement blocks */
+  .pillars .card { border-radius: 1rem; border: 1px solid rgba(0,0,0,.06); padding: 1rem; height:100%; }
+  .quote {
+    border-left: 4px solid #0d6efd; padding-left: .9rem; color: #334155; background: #f8fafc;
+    border-radius: .5rem; margin: .75rem 0; padding-top:.6rem; padding-bottom:.6rem;
+  }
+  .callout {
+    background: linear-gradient(180deg, rgba(13,110,253,.07), rgba(13,110,253,.03));
+    border: 1px solid rgba(13,110,253,.15);
+    border-radius: .9rem; padding: 1rem;
+  }
+
+  /* Reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(12px); transition: opacity .5s ease, transform .5s ease; }
+  .reveal.show { opacity: 1; transform: none; }
+
+  /* Utilities */
+  .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,.7); color: #fff; }
+  .btn-ghost:hover { background: rgba(255,255,255,.12); color:#fff; }
+</style>
+
+<div class="container my-5">
+  <!-- HERO -->
+  <section class="teach-hero mb-5">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <div class="kicker mb-2">Teaching</div>
+        <h1 class="display-5 hero-title mb-3">Scaling rigorous, human-centered learning</h1>
+        <p class="lead hero-sub mb-3">
+          I teach machine learning and reinforcement learning at Georgia Tech with a student-first, evidence-based approach—
+          reproducibility, diagnostics, transparent rubrics, and timely feedback at scale.
+        </p>
+        <div class="hero-updated">Teaching Statement — Updated: <strong>April 8, 2025</strong></div>
+        <div class="mt-3 d-flex flex-wrap gap-2">
+          <a href="mailto:tlagrow@gatech.edu" class="btn btn-light btn-lg"><i class="fa fa-envelope"></i> Invite me to speak</a>
+          <button class="btn btn-ghost btn-lg" onclick="window.print()"><i class="fa fa-print"></i> Print</button>
+        </div>
+      </div>
+      <div class="col-lg-4 mt-4 mt-lg-0">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="stat text-center reveal">
+              <div class="num" data-count="1400">0</div>
+              <div class="label">Students / term</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="stat text-center reveal">
+              <div class="num" data-count="30">0</div>
+              <div class="label">TAs led</div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="stat text-center reveal">
+              <div class="num" data-count="2">0</div>
+              <div class="label">Graduate ML & RL Courses</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED COURSES -->
+  <section class="mb-5">
+    <h2 class="section-title h3 text-center mb-4 reveal">Featured Courses & Roles</h2>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <div class="flash-card reveal h-100">
+          <div class="flash-title"><span class="flash-icon"><i class="fa fa-cogs"></i></span>OMSCS 7641: Machine Learning</div>
+          <div class="flash-kicker mb-2">Instructor of Record — Spring 2023–Present</div>
+          <p class="mb-2">1400+ students/term. Directed 30+ TAs, revamped structure with student-centered pedagogy and TA professional development, and launched a public blog for transparency and methods.</p>
+          <a class="btn btn-sm btn-outline-secondary" href="https://omscs.gatech.edu/cs-7641-machine-learning" target="_blank" rel="noopener">Course page</a>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <div class="flash-card reveal h-100">
+          <div class="flash-title"><span class="flash-icon"><i class="fa fa-gamepad"></i></span>OMSCS 7642: Reinforcement Learning</div>
+          <div class="flash-kicker mb-2">Instructor of Record — Fall 2023; TA — Spring 2020–Summer 2023</div>
+          <p class="mb-2">Led multi-section operations while continuing curriculum improvements and student support. Prior TA work emphasized analysis-first approaches to policy/value methods.</p>
+          <a class="btn btn-sm btn-outline-secondary" href="https://www.omscs.gatech.edu/cs-7642-reinforcement-learning" target="_blank" rel="noopener">Course page</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE TIMELINE -->
+  <section class="mb-5">
+    <h2 class="section-title h3 text-center mb-4 reveal">Experience Timeline</h2>
+    <div class="glass p-4 p-md-5">
+      <div class="timeline">
+
+        <div class="t-item reveal">
+          <div class="t-header">
+            <div class="t-title">Instructor of Record — OMSCS 7641: Machine Learning</div>
+            <div class="t-meta">Georgia Institute of Technology · Spring 2023 – Present</div>
+          </div>
+          <details class="t-body"><summary>Details</summary>
+            <ul class="mb-0">
+              <li>1400+ students per term; directed 30+ TAs; managed content and student learning.</li>
+              <li>Overhauled course structure with student-oriented pedagogy and TA professional development.</li>
+              <li>Developed a public blog to share updates and teaching methodology insights.</li>
+            </ul>
+          </details>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-header">
+            <div class="t-title">Instructor of Record — OMSCS 7641 & 7642</div>
+            <div class="t-meta">Georgia Institute of Technology · Fall 2023</div>
+          </div>
+          <details class="t-body"><summary>Details</summary>
+            <p class="mb-0">Led instructional teams across both courses, continuing curriculum improvements and high-touch student support.</p>
+          </details>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-header">
+            <div class="t-title">Instructor of Record — CETL 8000: GTA Preparation</div>
+            <div class="t-meta">Georgia Institute of Technology · Fall 2020 – Spring 2022</div>
+          </div>
+          <details class="t-body"><summary>Details</summary>
+            <p class="mb-0">Designed and delivered GTA pedagogy and classroom practice foundations.</p>
+          </details>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-header">
+            <div class="t-title">Teaching Assistant — OMSCS 7642: Reinforcement Learning</div>
+            <div class="t-meta">Georgia Institute of Technology · Spring 2020 – Summer 2023</div>
+          </div>
+          <details class="t-body"><summary>Details</summary>
+            <p class="mb-0">Supported instruction, assessment, and student mentoring across multiple semesters.</p>
+          </details>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-header">
+            <div class="t-title">Peer Assistant Teaching Assistant — Berlin Travel Abroad Program</div>
+            <div class="t-meta">Georgia Institute of Technology · Summer 2022</div>
+          </div>
+          <details class="t-body"><summary>Details</summary>
+            <p class="mb-0">Facilitated hands-on learning and international cohort coordination.</p>
+          </details>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-header">
+            <div class="t-title">Head TA — ECE 6254: Statistical Machine Learning</div>
+            <div class="t-meta">Georgia Institute of Technology · Spring 2020</div>
+          </div>
+          <details class="t-body"><summary>Details</summary>
+            <ul class="mb-0">
+              <li>Awarded ECE Departmental Outstanding GTA Award.</li>
+              <li>Contact: Dr. Matthieu Bloch.</li>
+            </ul>
+          </details>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-header">
+            <div class="t-title">Head TA — ECE 4122/6122: Advanced Programming Techniques</div>
+            <div class="t-meta">Georgia Institute of Technology · Fall 2019</div>
+          </div>
+          <details class="t-body"><summary>Details</summary>
+            <ul class="mb-0">
+              <li>Led a team of 9 TAs, developed assignments for 300 students.</li>
+              <li>Nominated for ECE Departmental Outstanding GTA Award.</li>
+              <li>Contact: Dr. Jeffery Hurley (jeffery.hurley@gtri.gatech.edu).</li>
+            </ul>
+          </details>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-header">
+            <div class="t-title">Head TA — CS 4400: Introduction to Databases</div>
+            <div class="t-meta">Georgia Institute of Technology · Summer 2019</div>
+          </div>
+          <details class="t-body"><summary>Details</summary>
+            <ul class="mb-0">
+              <li>Led course development, managed exams and student communication.</li>
+              <li>Delivered a 2-hour lecture on Storage Systems and Indexing.</li>
+              <li>Nominated for CoC Departmental Outstanding GTA Award.</li>
+              <li>Contact: Dr. Aibek Musaev (aibek.musaev@gatech.edu).</li>
+            </ul>
+          </details>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-header">
+            <div class="t-title">Grand Challenge Facilitator</div>
+            <div class="t-meta">Georgia Institute of Technology · August 2017 – Present</div>
+          </div>
+          <details class="t-body"><summary>Details</summary>
+            <p class="mb-0">Mentored incoming freshmen on innovation projects and problem-solving.
+              Contacts: Dr. Wes Wynens, Dr. Jeff Davis (wes.wynens@gatech.edu, jeff.davis@ece.gatech.edu).</p>
+          </details>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-header">
+            <div class="t-title">Undergraduate TA/Grader — CIS 315 & CIS 330</div>
+            <div class="t-meta">University of Oregon · Winter – Spring 2017</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TEACHING STATEMENT (REFActored) -->
+  <section class="mb-5">
+    <h2 class="section-title h3 text-center mb-4 reveal">Teaching Statement</h2>
+
+    <!-- Pillars -->
+    <div class="row pillars mb-3">
+      <div class="col-md-4 mb-3">
+        <div class="card h-100 reveal">
+          <h3 class="h6 mb-2">Student-Centered & Equitable</h3>
+          <p class="mb-2">Design in service of diverse learners with transparent structures, multiple modalities, and inclusive norms.</p>
+          <div class="quote small">“Teaching should be evaluated by what students genuinely learn, not what is covered.”</div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card h-100 reveal">
+          <h3 class="h6 mb-2">Backward Design & Evidence</h3>
+          <p class="mb-2">Align outcomes, activities, and assessments (Wiggins & McTighe, 2005) and ground methods in how learning works (Ambrose et al., 2010).</p>
+          <div class="quote small">Outcomes → aligned practice → authentic assessment.</div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card h-100 reveal">
+          <h3 class="h6 mb-2">Rigor with Compassion</h3>
+          <p class="mb-2">High expectations paired with scaffolding, timely feedback, opportunities for recovery, and metacognitive reflection.</p>
+          <div class="quote small">Challenge without exclusion.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Methods & Scale -->
+    <div class="glass p-4 p-md-5 reveal">
+      <div class="row">
+        <div class="col-md-6">
+          <h3 class="h6 mb-2">Instructional Methods & Learning Design</h3>
+          <ul class="mb-3">
+            <li><strong>Active & flipped:</strong> prebaked materials; live time for application, discussion, and problem-solving.</li>
+            <li><strong>Scaffolded assignments:</strong> accessible entry points → layered challenges → open-ended, industry-relevant projects.</li>
+            <li><strong>Formative feedback:</strong> concept checks, auto-graded quizzes, self-assessments; summatives with clear rubrics and space for creativity.</li>
+            <li><strong>Metacognition:</strong> reflection prompts to surface strategy, not just answers.</li>
+          </ul>
+
+          <h3 class="h6 mb-2">Supporting Student Growth & Inclusion</h3>
+          <ul class="mb-0">
+            <li>Universal design: multiple modalities; transparent expectations; exemplars of high-quality work.</li>
+            <li>Normalize help-seeking and iteration; design for belonging in large/asynchronous settings.</li>
+          </ul>
+        </div>
+
+        <div class="col-md-6">
+          <h3 class="h6 mb-2">Teaching at Scale & Online</h3>
+          <p class="mb-2">As IoR for CS7641 and CS7642 in OMSCS, I’ve supported thousands of graduate students. I lead large TA teams, run data-informed course ops, and maintain predictable rhythms (weekly updates, checkpoints, dependable office hours).</p>
+          <div class="callout">
+            <strong>Operations as pedagogy:</strong> consistency in grading and communication; performance data to identify friction points; targeted interventions that improve learning across formats.
+          </div>
+
+          <h3 class="h6 mt-3 mb-2">Outcomes I Aim For</h3>
+          <ul class="mb-0">
+            <li>Curiosity, confidence, and the ability to solve hard problems thoughtfully.</li>
+            <li>Graduates who see themselves as capable learners and agile thinkers.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full text (expandable) -->
+    <details class="mt-3 reveal">
+      <summary class="h6">Read the full statement</summary>
+      <div class="mt-3">
+        <p>I teach because I believe learning is transformative. Whether in person or online, higher education is a unique space where students expand their ways of thinking, develop critical skills, and redefine their sense of what is possible. As an instructor, my core philosophy is that teaching must be designed in service of the student. This means recognizing that learners come from diverse backgrounds with varied levels of preparation, confidence, and motivation, and intentionally building pathways that support each student’s success. Effective instruction begins not with content delivery, but with a commitment to students’ growth and intellectual development.</p>
+
+        <p>My teaching philosophy is grounded in student-centered design and equity-minded pedagogy. I draw on the framework of backward design as articulated by Wiggins and McTighe (2005), which emphasizes identifying clear learning outcomes and then aligning instruction and assessment strategies with those goals. This model ensures that every component of a course—lectures, assignments, feedback—supports the specific skills and knowledge students are expected to develop. It also reinforces the principle that teaching should be evaluated by what students genuinely learn, not simply by what is “covered.”</p>
+
+        <p>Equally important is acknowledging that students do not all start in the same place. As Ambrose et al. (2010) emphasize in <em>How Learning Works</em>, students bring a wide range of prior knowledge, beliefs, identities, and experiences that shape their learning. My responsibility is to recognize these differences and create inclusive environments in which all students have the opportunity to thrive. This includes maintaining clear and transparent course structures, offering flexible modes of engagement, and combining foundational support with meaningful academic challenge.</p>
+
+        <h4 class="h6 mt-4">Instructional Methods and Learning Design</h4>
+        <p>My instructional approach emphasizes active learning, frequent feedback, and metacognitive reflection. I design courses around a flipped classroom model, where students engage with core materials—such as readings, video lectures, or guided walkthroughs—before synchronous sessions like class meetings or office hours. This design ensures that our live interactions focus on application, clarification, and collaborative problem-solving. In both in-person and online formats, I incorporate short in-class quizzes, breakout discussions, and structured peer activities to reinforce core concepts and promote engaged learning.</p>
+
+        <p>Assignments are scaffolded to support deep learning and sustained intellectual growth. Early-stage exercises provide accessible entry points into complex material, meeting students at various levels of experience. As the course progresses, students encounter layered challenges that involve synthesis, abstraction, and independent exploration. Major assignments serve as low-stakes practicums, encouraging students to apply course content to industry-relevant problems. These projects are intentionally sequenced: students move from learning how to read and critique research papers, to articulating hypotheses, designing experiments, and developing nuanced discussions grounded in theory. Graduates frequently report that this structured, open-ended project model builds both confidence and competence in their professional applications of machine learning.</p>
+
+        <p>Formative assessment is central to my teaching practice. I integrate frequent, low-stakes opportunities such as concept checks, self-assessments, and auto-graded quizzes to provide continuous feedback. These tools help students reflect on their progress and adjust their learning strategies. While summative assessments are more comprehensive, I design them with openness and flexibility in mind. Assignments include clearly defined goals and grading rubrics, but also leave space for creative exploration. This encourages students to go beyond minimum requirements, collaborate with peers, and engage with the teaching team—resulting in deeper, more authentic learning.</p>
+
+        <h4 class="h6 mt-4">Teaching at Scale and in Online Environments</h4>
+        <p>In my role as Instructor of Record for CS7641: Machine Learning and CS7642: Reinforcement Learning in Georgia Tech’s OMSCS program, I have taught and supported thousands of graduate students. These courses are integral to the Machine Learning specialization and are consistently among the largest and most active offerings at Georgia Tech, with a high volume of students progressing through them each semester. Leading these courses has deepened my understanding of how to deliver rigorous, high-quality instruction at scale while maintaining personal connection and responsiveness.</p>
+
+        <p>My responsibilities extend beyond teaching content. I lead large instructional teams, oversee ongoing curriculum development, and mentor new teaching assistants as they enter the program. I work closely with TAs to ensure consistency in grading and communication, and I routinely analyze student performance data to identify common challenges and adapt our support strategies. This feedback-driven process allows me to refine both course materials and the overall learning experience across diverse delivery formats and learner backgrounds.</p>
+
+        <p>Teaching at scale has also reinforced the importance of accessibility and inclusion. In asynchronous, online environments, students may feel disconnected from their peers and instructors. To address this, I establish clear and predictable rhythms: weekly updates, structured checkpoints, and dependable office hour availability. I also create space for student voice through discussion prompts, mid-course surveys, and reflective check-ins at the end of each module. These channels provide insight into students’ needs while reinforcing a sense of belonging and support, even in large, distributed classrooms.</p>
+
+        <h4 class="h6 mt-4">Supporting Student Growth and Inclusive Teaching</h4>
+        <p>At the core of my teaching philosophy is the belief that intellectual rigor and compassionate support must coexist. I design courses that are challenging but not exclusionary. Students are asked to engage with open-ended, real-world problems that require sustained effort, and I pair these expectations with timely feedback, structured scaffolding, and opportunities for recovery and reflection.</p>
+
+        <p>Equity and inclusion are essential to this process. I regularly review my materials and assessments to ensure clarity and fairness, and I actively seek student feedback to evaluate the effectiveness of my teaching. I apply universal design principles, providing content and assessments in multiple modalities. I strive to make expectations transparent and to demystify success by sharing models of high-quality work. I also acknowledge the challenges students may face and actively normalize help-seeking, iterative learning, and resilience.</p>
+
+        <p>Ultimately, I want students to leave my courses with more than technical knowledge. I hope they develop curiosity, confidence, and a capacity to solve hard problems thoughtfully. Whether they become researchers, engineers, or educators, I want them to view themselves as capable learners and agile thinkers, prepared to contribute meaningfully in their fields.</p>
+
+        <h4 class="h6 mt-4">Call to Action</h4>
+        <p>Looking ahead, I am excited to contribute this teaching philosophy to institutions that prioritize equity, innovation, and academic excellence. I seek environments where pedagogy is treated as a scholarly, collaborative process—where instructors are encouraged to reflect, adapt, and contribute to the evolving goals of the academic community. I am eager to collaborate with fellow educators, help shape inclusive curricula, and support students in developing not only mastery of content but confidence and purpose in their intellectual work.</p>
+
+        <p>Whether designing new courses, mentoring instructional teams, or supporting cross-departmental teaching initiatives, I am prepared to contribute meaningfully to a culture of engaged, student-centered learning. I look forward to joining a community committed to impactful teaching, continuous improvement, and transformative educational experiences.</p>
+
+        <h4 class="h6 mt-4">References</h4>
+        <ol class="mb-0">
+          <li>Wiggins, G., &amp; McTighe, J. (2005). <em>Understanding by Design</em>. ASCD.</li>
+          <li>Ambrose, S. A., et al. (2010). <em>How Learning Works: Seven Research-Based Principles for Smart Teaching</em>. Jossey-Bass.</li>
+        </ol>
+      </div>
+    </details>
+  </section>
+
+  <!-- FOOTER MINI -->
+  <div class="col d-flex justify-content-center mt-4">
+    <div class="inner text-muted">
+      <i class="fa fa-code" aria-hidden="true"></i> with <i class="fa fa-heart" aria-hidden="true"></i>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries)=> {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Lightweight stat counter (once)
+  function countUp(el, to) {
+    const dur = 1200, start = performance.now(), from = 0;
+    function tick(t) {
+      const p = Math.min((t - start) / dur, 1);
+      el.textContent = Math.floor(from + (to - from) * (0.5 - Math.cos(Math.PI*p)/2)).toLocaleString();
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const stats = document.querySelectorAll('.stat .num');
+  const statsObs = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const to = parseInt(e.target.getAttribute('data-count'), 10);
+        countUp(e.target, to);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.6 });
+  stats.forEach(s => statsObs.observe(s));
+</script>
