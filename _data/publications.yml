@@ -1,41 +1,156 @@
 - title: "Functional connectivity of the brain across rodents and humans"
-  authors:  Nan Xu,  Theodore J. LaGrow, Nmachi Anumba, Azalea Lee, Xiaodi Zhang, Behnaz Yousefi, Yasmine Bassil, Gloria P. Clavijo, Vahid Khalilzad Sharghi, Eric Maltbie, Lisa Meyer-Baese, Maysam Nezafati1, Wen-Ju Pan, Shella Keilholz
-  venue: Frontiers In Neuroscience
+  type: Journal
+  authors: Nan Xu, Theodore J. LaGrow, Nmachi Anumba, Azalea Lee, Xiaodi Zhang, Behnaz Yousefi, Yasmine Bassil, Gloria P. Clavijo, Vahid Khalilzad Sharghi, Eric Maltbie, Lisa Meyer-Baese, Maysam Nezafati, Wen-Ju Pan, Shella Keilholz
+  venue: Frontiers in Neuroscience
   date: 2022
-  links: 
-    Frontiers Link: https://www.frontiersin.org/articles/10.3389/fnins.2022.816331/abstract
+  keywords: [rs-fMRI, functional connectivity, cross-species, rodents, humans, translational]
+  links:
+    - [Full Text, https://www.frontiersin.org/articles/10.3389/fnins.2022.816331/full]
+    - [DOI, https://doi.org/10.3389/fnins.2022.816331]
+    - [PMC, https://pmc.ncbi.nlm.nih.gov/articles/PMC8957796/]
+  abstract: >
+    Review of resting-state fMRI features across rodents and humans, comparing acquisition,
+    preprocessing, and analysis choices that influence functional connectivity. The paper surveys
+    time-averaged and time-varying metrics (e.g., sliding windows, quasi-periodic and co-activation
+    patterns), links them to structural connectivity, and discusses applications to neurological
+    and psychiatric disorders. It closes with open problems to make rodent-to-human translation more
+    reliable.
+  bibtex: |
+    @article{Xu2022FunctionalConnectivity,
+      author  = {Xu, Nan and LaGrow, Theodore J. and Anumba, Nmachi and Lee, Azalea and Zhang, Xiaodi and Yousefi, Behnaz and Bassil, Yasmine and Clavijo, Gloria P. and Khalilzad Sharghi, Vahid and Maltbie, Eric and Meyer-Baese, Lisa and Nezafati, Maysam and Pan, Wen-Ju and Keilholz, Shella},
+      title   = {Functional Connectivity of the Brain Across Rodents and Humans},
+      journal = {Frontiers in Neuroscience},
+      year    = {2022},
+      volume  = {16},
+      pages   = {816331},
+      doi     = {10.3389/fnins.2022.816331}
+    }
 
 - title: "Relationship between the frequency profile of BOLD fluctuations and calculated metrics of complexity in the Human Connectome Project"
-  authors: Shella Keilholz, Eric A Maltbie, Xiaodi Zhang, Behnaz Yousefi, Wen-Ju Pan, Nan Xu, Maysam Nezafati, Theodore J. LaGrow,  Ying Guo
-  venue: Frontiers In Neuroscience
+  type: Journal
+  authors: Shella Keilholz, Eric A. Maltbie, Xiaodi Zhang, Behnaz Yousefi, Wen-Ju Pan, Nan Xu, Maysam Nezafati, Theodore J. LaGrow, Ying Guo
+  venue: Frontiers in Neuroscience
   date: 2020
-  links: 
-    Frontiers Link: https://www.frontiersin.org/articles/10.3389/fnins.2020.550923/full
+  keywords: [rs-fMRI, complexity, entropy, Lyapunov exponent, frequency spectrum, HCP]
+  links:
+    - [Full Text, https://www.frontiersin.org/articles/10.3389/fnins.2020.550923/full]
+    - [DOI, https://doi.org/10.3389/fnins.2020.550923]
+    - [PMC, https://pmc.ncbi.nlm.nih.gov/articles/PMC7522447/]
+  abstract: >
+    Using Human Connectome Project data, the authors test whether parcel-wise complexity metrics
+    (correlation dimension, approximate entropy, Lyapunov exponent) mainly reflect neural dynamics
+    or are driven by basic BOLD properties. They find these complexity measures are reliable across
+    scans and strongly tied to each region’s frequency profile, indicating that frequency content
+    can confound interpretations of “complexity” in rs-fMRI.
+  bibtex: |
+    @article{Keilholz2020ComplexityHCP,
+      author  = {Keilholz, Shella and Maltbie, Eric A. and Zhang, Xiaodi and Yousefi, Behnaz and Pan, Wen-Ju and Xu, Nan and Nezafati, Maysam and LaGrow, Theodore J. and Guo, Ying},
+      title   = {Relationship Between Basic Properties of BOLD Fluctuations and Calculated Metrics of Complexity in the Human Connectome Project},
+      journal = {Frontiers in Neuroscience},
+      year    = {2020},
+      volume  = {14},
+      pages   = {550923},
+      doi     = {10.3389/fnins.2020.550923}
+    }
 
-- title: "Toward a Reproducible, Scalable, Framework for Processing Large Neuroimaging Datasets"
-  authors: Erik C. Johnson, Miller Wilt, Luis M. Rodriguez, Raphael Norman-Tenazas, Corban Rivera, Nathan Drenkow, Dean Kleissas, Theodore J. LaGrow, Hannah Cowley, Joseph Downs, Jordan Matelsky, Marisa Hughes, Elizabeth Reilly, Brock Wester, Eva Dyer, Konrad Kording, William Gray-Roncal
-  venue: biorXiv
-  date: 2019
-  links: 
-    Giga Science link: https://academic.oup.com/gigascience/article/9/12/giaa147/6042730
+- title: "Toward a reproducible, scalable framework for processing large neuroimaging datasets"
+  type: Journal
+  authors: Erik C. Johnson, Miller Wilt, Luis M. Rodriguez, Raphael Norman-Tenazas, Corban Rivera, Nathan Drenkow, Dean Kleissas, Theodore J. LaGrow, Hannah P. Cowley, Joseph Downs, Jordan K. Matelsky, Marisa J. Hughes, Elizabeth P. Reilly, Brock A. Wester, Eva L. Dyer, Konrad P. Kording, William R. Gray-Roncal
+  venue: GigaScience
+  date: 2020
+  keywords: [reproducibility, workflows, neuroimaging, EM, XRM, pipelines, SABER]
+  links:
+    - [DOI, https://doi.org/10.1093/gigascience/giaa147]
+    - [PMC, https://pmc.ncbi.nlm.nih.gov/articles/PMC7751400/]
+    - [PubMed, https://pubmed.ncbi.nlm.nih.gov/33347572/]
+  abstract: >
+    Presents a modular ecosystem of containerized tools and workflows for petascale neuroimaging,
+    enabling reproducible end-to-end processing across modalities like electron microscopy and
+    X-ray microtomography. The framework standardizes storage, execution, and optimization and is
+    demonstrated on synapse-level connectome estimation and large-scale cell density mapping.
+  bibtex: |
+    @article{Johnson2020ScalableFramework,
+      author  = {Johnson, Erik C. and Wilt, Miller and Rodriguez, Luis M. and Norman-Tenazas, Raphael and Rivera, Corban and Drenkow, Nathan and Kleissas, Dean and LaGrow, Theodore J. and Cowley, Hannah P. and Downs, Joseph and Matelsky, Jordan K. and Hughes, Marisa J. and Reilly, Elizabeth P. and Wester, Brock A. and Dyer, Eva L. and Kording, Konrad P. and Gray-Roncal, William R.},
+      title   = {Toward a scalable framework for reproducible processing of volumetric, nanoscale neuroimaging datasets},
+      journal = {GigaScience},
+      year    = {2020},
+      volume  = {9},
+      number  = {12},
+      pages   = {giaa147},
+      doi     = {10.1093/gigascience/giaa147}
+    }
 
 - title: "Sparse Recovery Methods for Cell Detection and Layer Estimation"
+  type: Preprint
   authors: Theodore J. LaGrow, Michael G. Moore, Judy A. Prasad, Alexis Webber, Mark A. Davenport, Eva L. Dyer
-  venue: biorXiv
+  venue: bioRxiv
   date: 2018
-  links: 
-    biorXiv link: https://www.biorxiv.org/content/10.1101/445742v4
+  keywords: [cell detection, cytoarchitecture, sparse recovery, Poisson, TV regularization]
+  links:
+    - [bioRxiv, https://www.biorxiv.org/content/10.1101/445742v4]
+    - [DOI, https://doi.org/10.1101/445742]
+  abstract: >
+    Introduces an automated pipeline for estimating cellular densities and identifying laminar
+    transitions in neuroanatomical images. The method combines patch extraction, cell detection,
+    and sparse approximation for count data using total-variation regularization to robustly recover
+    layer boundaries and density profiles across cortical and retinal samples.
+  bibtex: |
+    @article{LaGrow2018SparseRecovery,
+      author  = {LaGrow, Theodore J. and Moore, Michael G. and Prasad, Judy A. and Webber, Alexis and Davenport, Mark A. and Dyer, Eva L.},
+      title   = {Sparse Recovery Methods for Cell Detection and Layer Estimation},
+      journal = {bioRxiv},
+      year    = {2018},
+      doi     = {10.1101/445742},
+      url     = {https://www.biorxiv.org/content/10.1101/445742v4}
+    }
 
 - title: "Approximating Cellular Densities from High-Resolution Neuroanatomical Imaging Data"
+  type: Conference
   authors: Theodore J. LaGrow, Michael G. Moore, Judy A. Prasad, Mark A. Davenport, Eva L. Dyer
-  venue: IEEE Engineering in Medicine and Biology Society Annual Conference (EMBC)
+  venue: IEEE Engineering in Medicine and Biology Society (EMBC)
   date: 2018
+  keywords: [ArCaDe, cellular density, layer detection, sparse methods, neuroanatomy]
   links:
-    IEEE link: https://ieeexplore.ieee.org/document/8512220
+    - [IEEE, https://ieeexplore.ieee.org/document/8512220]
+    - [DOI, https://doi.org/10.1109/EMBC.2018.8512220]
+    - [PMC, https://pmc.ncbi.nlm.nih.gov/articles/PMC8449853/]
+  abstract: >
+    Proposes ArCaDe, an automated approach to estimate spatially varying cell densities and detect
+    laminar structure in cortical and retinal tissue. By modeling counts with a sparse, TV-regularized
+    estimator and coupling it with patch-wise cell detection, the method recovers cytoarchitectonic
+    transitions without manual annotation.
+  bibtex: |
+    @inproceedings{LaGrow2018ArCaDeEMBC,
+      author    = {LaGrow, Theodore J. and Moore, Michael G. and Prasad, Judy A. and Davenport, Mark A. and Dyer, Eva L.},
+      title     = {Approximating Cellular Densities from High-Resolution Neuroanatomical Imaging Data},
+      booktitle = {2018 40th Annual International Conference of the IEEE Engineering in Medicine and Biology Society (EMBC)},
+      year      = {2018},
+      pages     = {1--4},
+      doi       = {10.1109/EMBC.2018.8512220}
+    }
 
 - title: "Do You Know Where Your Research Is Being Used? An Exploration of Scientific Literature Using Natural Language Processing"
+  type: Journal
   authors: Theodore J. LaGrow, Jacob Bieker, Boyana Norris
   venue: Oregon Undergraduate Research Journal
   date: 2017
+  keywords: [NLP, bibliometrics, arXiv, software mining]
   links:
-    OURJ link: https://scholarsbank.uoregon.edu/xmlui/handle/1794/23466
+    - [PDF, https://scholarsbank.uoregon.edu/items/7d37774e-915f-4731-a6fc-cd3281ea8152]
+    - [DOI, https://doi.org/10.5399/uo/ourj.10.1.4]
+  abstract: >
+    Demonstrates an NLP pipeline that identifies software and methods referenced in arXiv articles
+    and uses the extracted names to explore usage patterns across research areas. The study argues
+    that automated extraction at scale complements traditional literature surveys for tracking
+    technologies and methods in scientific work.
+  bibtex: |
+    @article{LaGrow2017DoYouKnow,
+      author  = {LaGrow, Theodore J. and Bieker, Jacob and Norris, Boyana},
+      title   = {Do You Know Where Your Research Is Being Used? An Exploration of Scientific Literature Using Natural Language Processing},
+      journal = {Oregon Undergraduate Research Journal},
+      year    = {2017},
+      volume  = {10},
+      number  = {1},
+      doi     = {10.5399/uo/ourj.10.1.4},
+      url     = {https://scholarsbank.uoregon.edu/items/7d37774e-915f-4731-a6fc-cd3281ea8152}
+    }
