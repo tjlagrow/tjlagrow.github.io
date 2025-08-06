@@ -4,55 +4,165 @@ title: Research
 permalink: /research/
 ---
 
-<div class="row">
-    <h4 class="col-10 ml-auto mr-auto">Publications</h4>
-    <div class="col-10 ml-auto mr-auto">* indicates equal contribution</div>
-    <div><br /><br /></div>
+<style>
+  /* Flair without new deps */
+  .glass { background: rgba(255,255,255,.75); border:1px solid rgba(0,0,0,.06); border-radius: .75rem; padding:1rem 1.25rem; }
+  .glass:hover { box-shadow: 0 10px 24px rgba(0,0,0,.06); }
+  .pub-title { font-weight: 600; }
+  details summary { cursor: pointer; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::after { content:" ▼"; font-size:.85em; opacity:.7; }
+  details[open] summary::after { content:" ▲"; }
+  .meta { color:#6c757d; }
+  .link-pill { display:inline-block; padding:.15rem .5rem; border-radius:999px; background:#f2f4f7; margin-right:.4rem; font-size:.85em; }
+  .toolbar .form-control { max-width: 360px; }
+  .badge-soft { background: #eef2ff; color:#3441d9; border:1px solid #dfe3ff; }
+  /* dark mode friendly if your layout toggles a .dark class */
+  body.dark .glass { background: rgba(28,30,38,.85); border-color: rgba(255,255,255,.08); }
+  body.dark .link-pill { background:#32384a; color:#ced4da; }
+</style>
 
-    <div class="col-10 ml-auto mr-auto">
-        <ul class="">
-            {% for paper in site.data.publications %}
-            <li>
-                <div class="paper-title">
-                    {{paper.title}}{% if paper.type %}, {{paper.type}}{% endif %}</div>
-                {% for link in paper.links %}
-                {% if link %}
-                [<a href="{{link[1]}}">{{link[0]}}</a>]
-                {% endif %}
-                {% endfor %}
-                <br />
-                {{paper.authors}}
-                <br />
-                <i>{{paper.venue}}</i>, {{paper.date}}
-            </li>
-            <br />
-            {% endfor %}
-        </ul>
+<div class="container">
+
+  <!-- Header + Scholar -->
+  <div class="row mb-3">
+    <div class="col-12 d-flex align-items-center justify-content-between">
+      <h1 class="h3 mb-0">Research</h1>
+      <div class="d-flex align-items-center">
+        <!-- Update your Scholar user ID below -->
+        <a class="btn btn-outline-primary btn-sm mr-2" target="_blank"
+           href="https://scholar.google.com/citations?user=KO7oYeAAAAAJ&hl=en" aria-label="Google Scholar">
+          <i class="ai ai-google-scholar"></i> Google Scholar
+        </a>
+        {% if site.data.scholar and site.data.scholar.citations %}
+          <span class="badge badge-soft">Citations: {{site.data.scholar.citations}} <span class="meta">({{site.data.scholar.updated}})</span></span>
+        {% endif %}
+      </div>
     </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="row toolbar mb-4">
+    <div class="col-12 d-flex align-items-center">
+      <input id="pubSearch" class="form-control mr-2" type="search" placeholder="Search by title, author, venue, keyword…">
+      <button id="expandAll" class="btn btn-sm btn-light mr-2">Expand abstracts</button>
+      <button id="collapseAll" class="btn btn-sm btn-light">Collapse abstracts</button>
+    </div>
+  </div>
+
+  <!-- Publications -->
+  <div class="row">
+    <div class="col-12">
+      <h4>Publications <span class="meta ml-1">* indicates equal contribution</span></h4>
+      <div class="mt-3" id="pubList">
+        <ul class="list-unstyled m-0">
+          {% for paper in site.data.publications %}
+          <li class="mb-3 pub-item" 
+              data-search="{{paper.title}} {{paper.authors}} {{paper.venue}} {{paper.date}} {% if paper.keywords %}{{paper.keywords | join: ' '}}{% endif %}">
+            <div class="glass">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <div class="pub-title">
+                    {{paper.title}}{% if paper.type %} <span class="badge badge-soft">{{paper.type}}</span>{% endif %}
+                    {% if paper.equal %}<span class="meta">*</span>{% endif %}
+                  </div>
+                  <div class="meta">{{paper.authors}}</div>
+                  <div class="meta">
+                    <i>{{paper.venue}}</i>{% if paper.date %}, {{paper.date}}{% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="mt-2">
+                {% for link in paper.links %}
+                  {% if link %}
+                    <a class="link-pill" href="{{link[1]}}" target="_blank" rel="noopener">{{link[0]}}</a>
+                  {% endif %}
+                {% endfor %}
+                {% if paper.bibtex %}
+                  <a href="#" class="link-pill copy-bib" data-bib='{{paper.bibtex | escape}}'>Copy BibTeX</a>
+                {% endif %}
+              </div>
+
+              {% if paper.abstract %}
+              <details class="mt-2">
+                <summary>Abstract</summary>
+                <p class="mb-0 mt-2">{{paper.abstract}}</p>
+              </details>
+              {% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Talks -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <h4>Talks</h4>
+      <ul class="list-unstyled mt-3">
+        {% for talk in site.data.talks %}
+        <li class="mb-3">
+          <div class="glass">
+            <div class="pub-title">
+              {{talk.title}}{% if talk.type %} <span class="badge badge-soft">{{talk.type}}</span>{% endif %}
+            </div>
+            <div class="meta"><i>{{talk.venue}}</i>{% if talk.date %}, {{talk.date}}{% endif %}</div>
+            <div class="mt-2">
+              {% for link in talk.links %}
+                {% if link %}
+                  <a class="link-pill" href="{{link[1]}}" target="_blank" rel="noopener">{{link[0]}}</a>
+                {% endif %}
+              {% endfor %}
+            </div>
+            {% if talk.abstract %}
+            <details class="mt-2">
+              <summary>Abstract</summary>
+              <p class="mb-0 mt-2">{{talk.abstract}}</p>
+            </details>
+            {% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 </div>
 
-<div class="row">
-    <h4 class="col-10 ml-auto mr-auto">Talks</h4>
-    <div><br /><br /></div>
+<script>
+  // Simple client-side search & abstract toggles
+  (function(){
+    var input = document.getElementById('pubSearch');
+    var items = Array.prototype.slice.call(document.querySelectorAll('.pub-item'));
+    function filter(){
+      var q = (input.value || '').toLowerCase().trim();
+      items.forEach(function(li){
+        var hay = li.getAttribute('data-search').toLowerCase();
+        li.style.display = hay.indexOf(q) !== -1 ? '' : 'none';
+      });
+    }
+    input.addEventListener('input', filter);
 
-    <div class="col-10 ml-auto mr-auto">
-        <ul class="">
-            {% for talk in site.data.talks %}
-            <li>
-                <div class="paper-title">
-                    {{talk.title}}{% if talk.type %}, {{talk.type}}{% endif %}</div>
-                {% for link in paper.links %}
-                {% if link %}
-                [<a href="{{link[1]}}">{{link[0]}}</a>]
-                {% endif %}
-                {% endfor %}
-                <br />
-                <i>{{talk.venue}}</i>
-                <br />
-                {{talk.date}}
-            </li>
-            <br />
-            {% endfor %}
-        </ul>
-    </div>
-</div>
+    // Expand/Collapse all abstracts
+    var expandAll = document.getElementById('expandAll');
+    var collapseAll = document.getElementById('collapseAll');
+    function setAll(open){
+      document.querySelectorAll('#pubList details').forEach(function(d){ d.open = open; });
+    }
+    expandAll.addEventListener('click', function(){ setAll(true); });
+    collapseAll.addEventListener('click', function(){ setAll(false); });
+
+    // Copy BibTeX
+    document.addEventListener('click', function(e){
+      var btn = e.target.closest('.copy-bib');
+      if(!btn) return;
+      e.preventDefault();
+      var bib = btn.getAttribute('data-bib');
+      navigator.clipboard.writeText(bib).then(function(){
+        btn.textContent = 'Copied!';
+        setTimeout(function(){ btn.textContent = 'Copy BibTeX'; }, 1500);
+      });
+    });
+  })();
+</script>
