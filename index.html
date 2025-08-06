@@ -10,9 +10,10 @@ title: Theodore LaGrow Online
     border-radius: 1.25rem;
     padding: 3rem 2rem;
     overflow: hidden;
-    background: radial-gradient(1200px 600px at 10% -20%, rgba(80,126,255,.25), transparent 60%),
-                radial-gradient(1000px 500px at 100% 0%, rgba(255,170,90,.25), transparent 50%),
-                linear-gradient(135deg, #0f1223, #0a0c18);
+    background:
+      radial-gradient(1200px 600px at 10% -20%, rgba(80,126,255,.25), transparent 60%),
+      radial-gradient(1000px 500px at 100% 0%, rgba(255,170,90,.25), transparent 50%),
+      linear-gradient(135deg, #0f1223, #0a0c18);
     color: #fff;
   }
   .hero .badge {
@@ -20,61 +21,81 @@ title: Theodore LaGrow Online
     backdrop-filter: blur(6px);
     border: 1px solid rgba(255,255,255,.25);
   }
+
   .glass {
-    background: rgba(255,255,255,.75);
+    background: rgba(255,255,255,.8);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(0,0,0,.06);
     border-radius: 1rem;
     transition: transform .2s ease, box-shadow .2s ease;
   }
   .glass:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+
+  /* Square avatar, full in its column */
+  .avatar-wrap { max-width: 420px; margin-left: auto; margin-right: auto; }
   .avatar {
-    width: 180px; height: 180px; border-radius: 50%;
-    object-fit: cover; border: 3px solid rgba(255,255,255,.6);
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 1rem;         /* square with rounded corners */
+    border: 4px solid rgba(255,255,255,.6);
     box-shadow: 0 8px 24px rgba(0,0,0,.25);
   }
+
   .icon-inline { width: 1.15em; height: 1.15em; vertical-align: -.15em; opacity: .9; }
-  .timeline {
-    position: relative; padding-left: 1.25rem; margin-left: .75rem;
-  }
-  .timeline::before {
-    content:""; position:absolute; left:0; top:.2rem; bottom:.2rem; width:2px; background: #e5e7eb;
-  }
-  .timeline-item { position: relative; margin: .75rem 0 .75rem 0; }
-  .timeline-item::before {
-    content:""; position:absolute; left:-9px; top:.4rem; width:10px; height:10px; border-radius:50%; background:#0d6efd;
-  }
+
+  .timeline { position: relative; padding-left: 1.25rem; margin-left: .75rem; }
+  .timeline::before { content:""; position:absolute; left:0; top:.2rem; bottom:.2rem; width:2px; background: #e5e7eb; }
+  .timeline-item { position: relative; margin: .75rem 0; }
+  .timeline-item::before { content:""; position:absolute; left:-9px; top:.4rem; width:10px; height:10px; border-radius:50%; background:#0d6efd; }
+
   .social a { opacity: .85; transition: opacity .2s ease, transform .2s ease; }
   .social a:hover { opacity: 1; transform: translateY(-1px); }
 
-  /* --- Dark mode --- */
-  body.dark .hero { background: linear-gradient(135deg, #0a0c16, #05060b); }
-  body.dark .glass { background: rgba(20,22,30,.7); color: #e7e9ee; border-color: rgba(255,255,255,.08); }
-  body.dark .timeline::before { background: #2b2f3a; }
-  body.dark .timeline-item::before { background: #67b0ff; }
-  .theme-toggle { cursor:pointer; border:1px solid rgba(255,255,255,.4); border-radius:999px; padding:.35rem .75rem; background:rgba(255,255,255,.15);}
+  /* Flashier highlight cards (gradient border) */
+  .flash-card {
+    position: relative;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    background:
+      linear-gradient(#ffffff, #ffffff) padding-box,
+      linear-gradient(135deg, #6EE7F9, #A78BFA, #F472B6) border-box;
+    border: 2px solid transparent;
+    height: 100%;
+    transition: transform .15s ease, box-shadow .2s ease;
+  }
+  .flash-card:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,.12); }
+
+  .flash-icon {
+    display:inline-flex; align-items:center; justify-content:center;
+    width: 40px; height: 40px; border-radius: 10px; margin-right: .5rem;
+    background: linear-gradient(135deg, rgba(110,231,249,.25), rgba(167,139,250,.25));
+  }
+  .flash-title { display:flex; align-items:center; font-weight:600; margin-bottom:.35rem; }
+  .flash-kicker { font-size:.85rem; letter-spacing:.02em; color:#6c757d; }
+
+  /* Buttons on dark hero */
+  .btn-hero { border-color: rgba(255,255,255,.7); color:#fff; }
+  .btn-hero:hover { background: rgba(255,255,255,.12); color:#fff; }
 </style>
 
 <div class="container my-5">
 
   <!-- HERO -->
   <section class="hero mb-5">
-    <div class="d-flex justify-content-end">
-      <button id="themeToggle" class="theme-toggle text-white small">
-        <span id="themeLabel">Dark mode</span>
-      </button>
-    </div>
-
     <div class="row align-items-center">
-      <div class="col-md-3 text-center text-md-left mb-4 mb-md-0">
-        <img
-          src="images/theodore_lagrow_headshot.jpg"
-          alt="Headshot of Theodore (TJ) LaGrow"
-          class="avatar"
-          loading="lazy"
-        />
+      <div class="col-md-4 text-center text-md-left mb-4 mb-md-0">
+        <div class="avatar-wrap">
+          <img
+            src="images/theodore_lagrow_headshot.jpg"
+            alt="Headshot of Theodore (TJ) LaGrow"
+            class="avatar"
+            loading="lazy"
+          />
+        </div>
       </div>
-      <div class="col-md-9">
+
+      <div class="col-md-8">
         <div class="d-flex flex-wrap gap-2 mb-3">
           <span class="badge">Machine Learning</span>
           <span class="badge">Computer Vision</span>
@@ -91,8 +112,7 @@ title: Theodore LaGrow Online
             <i class="fa fa-envelope"></i> Email
           </a>
 
-          <!-- TODO: drop your resume file at /assets/tj-lagrow-resume.pdf or similar -->
-          <a href="/assets/tj-lagrow-resume.pdf" class="btn btn-outline-light btn-lg" target="_blank" rel="noopener">
+          <a href="{{ '/assets/tj-lagrow-resume.pdf' | relative_url }}" class="btn btn-outline-light btn-lg btn-hero" target="_blank" rel="noopener">
             <i class="fa fa-download"></i> Download CV
           </a>
 
@@ -106,10 +126,9 @@ title: Theodore LaGrow Online
         </div>
 
         <div class="mt-3 small">
-          <!-- QUICK FACTS — keep these concise and durable -->
-          <span class="mr-3"><i class="fa fa-map-marker"></i> Atlanta, GA <!-- or Vancouver, WA — confirm below --></span>
+          <span class="mr-3"><i class="fa fa-map-marker"></i> Atlanta, GA</span>
           <span class="mr-3"><i class="fa fa-university"></i> Georgia Tech</span>
-          <span class="mr-3"><i class="fa fa-graduation-cap"></i> PhD ECE (in progress)</span>
+          <span class="mr-3"><i class="fa fa-graduation-cap"></i> PhD ECE; MBA</span>
         </div>
       </div>
     </div>
@@ -118,39 +137,61 @@ title: Theodore LaGrow Online
   <!-- ABOUT -->
   <section class="mb-5">
     <div class="row">
-      <div class="col-lg-8 mx-auto glass p-4 p-md-5">
+      <div class="col-lg-10 mx-auto glass p-4 p-md-5">
         <h2 class="h4 mb-3">About</h2>
+        <p>
+          I am a Lecturer with Georgia Tech Professional Education and the College of Lifetime Learning, where I develop and teach applied, high-impact courses in the FlexStack program. My teaching covers artificial intelligence, data analytics, cybersecurity, and other emerging technologies shaped by workforce and industry demand.
+        </p>
+        <p>
+          In parallel, I serve as Instructor of Record for Georgia Tech’s graduate Machine Learning course, CS7641. Each term, I lead more than 1,200 students supported by a staff of over 30 graduate teaching assistants and industry professionals. I oversee curriculum design, pedagogical strategy, and large-scale operations across three semesters per year.
+        </p>
+        <p>
+          My background spans engineering, business, and research. I hold a PhD in Electrical and Computer Engineering and an MBA from Georgia Tech. I have published work in neuroimaging and optimization, and co-founded a medical imaging startup that holds a patent and has secured millions of dollars in funding.
+        </p>
         <p class="mb-0">
-          I work at the intersection of <strong>ML/AI</strong>, <strong>computer vision</strong>, and
-          <strong>neuroscience</strong>. My current research explores spatiotemporal dynamics in
-          low-frequency fMRI signals and their relationship to neurodegenerative disease, while my teaching
-          spans large-scale <em>Machine Learning</em> and <em>Reinforcement Learning</em> courses. I’ve also
-          built and shipped medical imaging products from idea to deployment.
+          Whether I am building educational programs, deploying machine learning solutions, or mentoring teams, my focus is on creating systems that are rigorous, scalable, and human-centered.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- HIGHLIGHTS -->
+  <!-- HIGHLIGHTS (flashier) -->
   <section class="mb-5">
     <h2 class="h4 text-center mb-4">Highlights</h2>
     <div class="row">
       <div class="col-md-4 mb-3">
-        <div class="glass p-4 h-100">
-          <h3 class="h6 mb-2"><i class="fa fa-users icon-inline"></i> Teaching @ Scale</h3>
-          <p class="mb-0">Led large ML/RL courses with 1k+ students and 30+ TAs; curriculum revamps, pedagogy, and tooling.</p>
+        <div class="flash-card">
+          <div class="flash-title">
+            <span class="flash-icon"><i class="fa fa-users"></i></span>
+            Teaching @ Scale
+          </div>
+          <div class="flash-kicker">Instructor of Record — CS7641</div>
+          <p class="mb-2">1,200+ students per term; 30+ TAs/industry staff. Built reproducible workflows, diagnostics, and feedback loops.</p>
+          <div class="small text-muted">Georgia Tech · OMSCS · On-campus</div>
         </div>
       </div>
+
       <div class="col-md-4 mb-3">
-        <div class="glass p-4 h-100">
-          <h3 class="h6 mb-2"><i class="fa fa-medkit icon-inline"></i> CV in Healthcare</h3>
-          <p class="mb-0">Built image/video pipelines and diagnostic models; delivered patent-backed features into real deployments.</p>
+        <div class="flash-card">
+          <div class="flash-title">
+            <span class="flash-icon"><i class="fa fa-cubes"></i></span>
+            FlexStack Programs
+          </div>
+          <div class="flash-kicker">Applied, workforce-driven courses</div>
+          <p class="mb-2">AI, data analytics, cybersecurity, and emerging tech—built for immediate impact and career mobility.</p>
+          <div class="small text-muted">GT Professional Education · College of Lifetime Learning</div>
         </div>
       </div>
+
       <div class="col-md-4 mb-3">
-        <div class="glass p-4 h-100">
-          <h3 class="h6 mb-2"><i class="fa fa-flask icon-inline"></i> Research</h3>
-          <p class="mb-0">Functional connectivity, complex PCA, traveling waves, and cross-species methodology; publications on Scholar.</p>
+        <div class="flash-card">
+          <div class="flash-title">
+            <span class="flash-icon"><i class="fa fa-medkit"></i></span>
+            Research & Products
+          </div>
+          <div class="flash-kicker">Neuroimaging → medical imaging</div>
+          <p class="mb-2">Publications in fMRI/optimization; co-founded a startup with a patent and multi-million-dollar funding.</p>
+          <div class="small text-muted">Functional connectivity · CV · ML systems</div>
         </div>
       </div>
     </div>
@@ -162,18 +203,17 @@ title: Theodore LaGrow Online
       <div class="col-lg-8 mx-auto glass p-4 p-md-5">
         <h2 class="h4 mb-3">Latest</h2>
         <div class="timeline">
-          <!-- Replace items below as you like; newest on top -->
           <div class="timeline-item">
             <div class="small text-muted">2025</div>
-            <div><strong>Updated ML/RL course materials</strong> across GT offerings; scaling assessments + diagnostics.</div>
+            <div><strong>Updated ML course infrastructure</strong> for CS7641 to scale assessment and diagnostics across sections.</div>
           </div>
           <div class="timeline-item">
             <div class="small text-muted">2024</div>
-            <div>Wrapped multi-year R&amp;D stint applying CV to ophthalmic imaging; shipped features and wrote a lot of Python.</div>
+            <div>Wrapped multi-year R&amp;D applying CV to ophthalmic imaging; shipped features and lots of Python.</div>
           </div>
           <div class="timeline-item">
             <div class="small text-muted">2023</div>
-            <div>Multiple teaching awards; ongoing Alzheimer’s connectivity analysis work.</div>
+            <div>Teaching recognition; continued Alzheimer’s connectivity analysis work.</div>
           </div>
         </div>
         <div class="mt-3">
@@ -190,14 +230,14 @@ title: Theodore LaGrow Online
       <div class="col-md-6 mb-3">
         <div class="glass p-4 h-100">
           <h3 class="h6 mb-2"><a href="https://omscs.gatech.edu/cs-7641-machine-learning" target="_blank">CS 7641: Machine Learning</a></h3>
-          <p class="mb-1">Instructor / Staff lead; reproducibility focus, diagnostics, and better feedback loops.</p>
+          <p class="mb-1">Instructor of Record. Emphasis on reproducibility, diagnostics, and high-quality feedback at scale.</p>
           <div class="small text-muted">Georgia Institute of Technology</div>
         </div>
       </div>
       <div class="col-md-6 mb-3">
         <div class="glass p-4 h-100">
           <h3 class="h6 mb-2"><a href="https://www.omscs.gatech.edu/cs-7642-reinforcement-learning" target="_blank">CS 7642: Reinforcement Learning</a></h3>
-          <p class="mb-1">Instructor / Staff, with emphasis on analysis, policy/value diagnostics, and scaling support.</p>
+          <p class="mb-1">Instructor / Staff. Analysis-first approach to policy/value methods and experimental rigor.</p>
           <div class="small text-muted">Georgia Institute of Technology</div>
         </div>
       </div>
@@ -211,23 +251,3 @@ title: Theodore LaGrow Online
     </div>
   </div>
 </div>
-
-<script>
-  // Tiny dark mode toggle
-  (function() {
-    const btn = document.getElementById('themeToggle');
-    const label = document.getElementById('themeLabel');
-    const key = 'tj-theme';
-    const root = document.body;
-    function apply(mode) {
-      if (mode === 'dark') { root.classList.add('dark'); label.textContent = 'Light mode'; }
-      else { root.classList.remove('dark'); label.textContent = 'Dark mode'; }
-    }
-    const saved = localStorage.getItem(key) || 'light';
-    apply(saved);
-    btn.addEventListener('click', () => {
-      const next = root.classList.contains('dark') ? 'light' : 'dark';
-      localStorage.setItem(key, next); apply(next);
-    });
-  })();
-</script>
