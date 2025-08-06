@@ -3,174 +3,231 @@ layout: default
 title: Theodore LaGrow Online
 ---
 
-<div class="container">
+<style>
+  /* --- Page Flair --- */
+  .hero {
+    position: relative;
+    border-radius: 1.25rem;
+    padding: 3rem 2rem;
+    overflow: hidden;
+    background: radial-gradient(1200px 600px at 10% -20%, rgba(80,126,255,.25), transparent 60%),
+                radial-gradient(1000px 500px at 100% 0%, rgba(255,170,90,.25), transparent 50%),
+                linear-gradient(135deg, #0f1223, #0a0c18);
+    color: #fff;
+  }
+  .hero .badge {
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,.25);
+  }
+  .glass {
+    background: rgba(255,255,255,.75);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 1rem;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .glass:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+  .avatar {
+    width: 180px; height: 180px; border-radius: 50%;
+    object-fit: cover; border: 3px solid rgba(255,255,255,.6);
+    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  }
+  .icon-inline { width: 1.15em; height: 1.15em; vertical-align: -.15em; opacity: .9; }
+  .timeline {
+    position: relative; padding-left: 1.25rem; margin-left: .75rem;
+  }
+  .timeline::before {
+    content:""; position:absolute; left:0; top:.2rem; bottom:.2rem; width:2px; background: #e5e7eb;
+  }
+  .timeline-item { position: relative; margin: .75rem 0 .75rem 0; }
+  .timeline-item::before {
+    content:""; position:absolute; left:-9px; top:.4rem; width:10px; height:10px; border-radius:50%; background:#0d6efd;
+  }
+  .social a { opacity: .85; transition: opacity .2s ease, transform .2s ease; }
+  .social a:hover { opacity: 1; transform: translateY(-1px); }
 
+  /* --- Dark mode --- */
+  body.dark .hero { background: linear-gradient(135deg, #0a0c16, #05060b); }
+  body.dark .glass { background: rgba(20,22,30,.7); color: #e7e9ee; border-color: rgba(255,255,255,.08); }
+  body.dark .timeline::before { background: #2b2f3a; }
+  body.dark .timeline-item::before { background: #67b0ff; }
+  .theme-toggle { cursor:pointer; border:1px solid rgba(255,255,255,.4); border-radius:999px; padding:.35rem .75rem; background:rgba(255,255,255,.15);}
+</style>
+
+<div class="container my-5">
+
+  <!-- HERO -->
+  <section class="hero mb-5">
+    <div class="d-flex justify-content-end">
+      <button id="themeToggle" class="theme-toggle text-white small">
+        <span id="themeLabel">Dark mode</span>
+      </button>
+    </div>
+
+    <div class="row align-items-center">
+      <div class="col-md-3 text-center text-md-left mb-4 mb-md-0">
+        <img
+          src="images/theodore_lagrow_headshot.jpg"
+          alt="Headshot of Theodore (TJ) LaGrow"
+          class="avatar"
+          loading="lazy"
+        />
+      </div>
+      <div class="col-md-9">
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <span class="badge">Machine Learning</span>
+          <span class="badge">Computer Vision</span>
+          <span class="badge">Computational Neuroscience</span>
+        </div>
+
+        <h1 class="display-5 mb-2">Theodore (TJ) LaGrow</h1>
+        <p class="lead mb-4">
+          Researcher, educator, and builder focused on robust ML systems, spatiotemporal brain dynamics, and turning ideas into products.
+        </p>
+
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <a href="mailto:tlagrow@gatech.edu" class="btn btn-light btn-lg">
+            <i class="fa fa-envelope"></i> Email
+          </a>
+
+          <!-- TODO: drop your resume file at /assets/tj-lagrow-resume.pdf or similar -->
+          <a href="/assets/tj-lagrow-resume.pdf" class="btn btn-outline-light btn-lg" target="_blank" rel="noopener">
+            <i class="fa fa-download"></i> Download CV
+          </a>
+
+          <div class="ml-md-3 social">
+            <a class="mx-2 text-white" href="https://github.com/tjlagrow" target="_blank" aria-label="GitHub"><i class="fa fa-github fa-lg"></i></a>
+            <a class="mx-2 text-white" href="https://scholar.google.com/citations?user=KO7oYeAAAAAJ&hl=en" target="_blank" aria-label="Google Scholar"><i class="ai ai-google-scholar ai-lg"></i></a>
+            <a class="mx-2 text-white" href="https://www.linkedin.com/in/tjlagrow/" target="_blank" aria-label="LinkedIn"><i class="fa fa-linkedin-square fa-lg"></i></a>
+            <a class="mx-2 text-white" href="https://twitter.com/botanicalbrains" target="_blank" aria-label="Twitter"><i class="fa fa-twitter fa-lg"></i></a>
+            <a class="mx-2 text-white" href="https://www.instagram.com/botanical.brains/" target="_blank" aria-label="Instagram"><i class="fa fa-instagram fa-lg"></i></a>
+          </div>
+        </div>
+
+        <div class="mt-3 small">
+          <!-- QUICK FACTS — keep these concise and durable -->
+          <span class="mr-3"><i class="fa fa-map-marker"></i> Atlanta, GA <!-- or Vancouver, WA — confirm below --></span>
+          <span class="mr-3"><i class="fa fa-university"></i> Georgia Tech</span>
+          <span class="mr-3"><i class="fa fa-graduation-cap"></i> PhD ECE (in progress)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="mb-5">
     <div class="row">
-        <div class="col-md-4 ml-auto">
-        	<div align="left">
-	            <img style="height:500px;"
-	                 id="gravatar-img"
-	                 src="images/theodore_lagrow_headshot.jpg"
-	                 class="rounded"
-	            /><br/><br/><br/><br/>
-	            <strong>Lead Artificial Intelligence Computer Vision Engineer</strong> <br/>
-                <a href="https://io.care/">Insight Optics</a><br/>
-                Atlant, GA<br/><br/>
-            </div>
-
-        </div>
-
-        <div class="col-md-4 mr-auto d-flex align-items-center">
-
-            <div align="left">
-                <strong>PhD Student</strong> <br/>
-                <a href="https://www.ic.gatech.edu/">School of Electrical and Computer Engineering</a><br/>
-                Georgia Institute of Technology <br/><br/>
-                <strong>MBA Student</strong> <br/>
-                <a href="https://www.scheller.gatech.edu/index.html/">Scheller College of Business</a><br/>
-                Georgia Institute of Technology <br/><br/>
-                <strong>M.S. Electrical and Computer Engineering Alumnus</strong> <br/>
-                <a href="https://www.ic.gatech.edu/">School of Electrical and Computer Engineering</a><br/>
-                Georgia Institute of Technology <br/><br/>
-                <strong>B.S. Computer and Information Science </strong> <br/>
-                Alumnus [Departmental Honors]<br/>
-                <strong>B.S. Mathematics Alumnus</strong> <br/>
-                <strong>Minors in Physics and Theater Arts</strong> <br/>
-                <a href="https://www.uoregon.edu/">University of Oregon</a><br/><br/>
-                I am advised by:
-                <div>
-                    <ul>
-                        <li><a href="https://bme.gatech.edu/bme/faculty/Shella-Keilholz" target="_blank">Dr. Shella Keilholz </a> (BME Department)</li>
-                        <li><a href="https://www.ece.gatech.edu/faculty-staff-directory/jeffrey-davis" target="_blank">Dr. Jeffrey Davis </a> (ECE Department)</li>
-                    </ul>
-                </div><br/>
-
-                Email: <a data-toggle="tooltip"
-                         data-placement="right"
-                         title="without spaces">tlagrow [at] gatech [dot] edu</a><br/>
-
-                <nav class="nav">
-                    <a 
-                    class="nav-link col-2" 
-                    href="https://github.com/tjlagrow" 
-                    target="_blank"
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Github">
-                        <i class="fa fa-github fa-2x"></i>
-                    </a>
-                    <a 
-                    class="nav-link col-2"
-                    href="https://scholar.google.com/citations?user=KO7oYeAAAAAJ&hl=en" 
-                    target="_blank"
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Google Scholar">
-                        <i class="ai ai-google-scholar ai-2x"></i>
-                    </a>
-                    <a 
-                    class="nav-link col-2" 
-                    href="https://www.linkedin.com/in/tjlagrow/"
-                    target="_blank"
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="LinkedIn">
-                        <i class="fa fa-linkedin-square fa-2x"></i>
-                    </a>
-                    <a 
-                    class="nav-link col-2" 
-                    href="https://twitter.com/botanicalbrains" 
-                    target="_blank"
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Twitter">
-                        <i class="fa fa-twitter fa-2x"></i>
-                    </a>
-                    <a 
-                    class="nav-link col-2" 
-                    href="https://www.instagram.com/botanical.brains/" 
-                    target="_blank"
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                    title="Instagram">
-                        <i class="fa fa-instagram fa-2x"></i>
-                    </a>
-                </nav>
-
-            </div>
-
-        </div>
-
-        <!--<div class="col-md-4"></div>-->
-        <!--<div>-->
-        <!--<img src="images/GeorgiaTechLogo-black-gold.png"-->
-        <!--class="img-thumbnail" style="width:70%;"/>-->
-        <!--</div>-->
-
+      <div class="col-lg-8 mx-auto glass p-4 p-md-5">
+        <h2 class="h4 mb-3">About</h2>
+        <p class="mb-0">
+          I work at the intersection of <strong>ML/AI</strong>, <strong>computer vision</strong>, and
+          <strong>neuroscience</strong>. My current research explores spatiotemporal dynamics in
+          low-frequency fMRI signals and their relationship to neurodegenerative disease, while my teaching
+          spans large-scale <em>Machine Learning</em> and <em>Reinforcement Learning</em> courses. I’ve also
+          built and shipped medical imaging products from idea to deployment.
+        </p>
+      </div>
     </div>
+  </section>
 
-    <br/>
-    <!--<hr class="col-8"/>-->
-
+  <!-- HIGHLIGHTS -->
+  <section class="mb-5">
+    <h2 class="h4 text-center mb-4">Highlights</h2>
     <div class="row">
-        <div class="col col-md-8 ml-md-auto mr-md-auto">
-
-
-            My areas of research are Computer Vision, Theoretical Machine Learning, Computational Neuroscience. I am particularly interested in characterizing neurodegenerative diseases.
-
-            <br/>
-            <br/>
+      <div class="col-md-4 mb-3">
+        <div class="glass p-4 h-100">
+          <h3 class="h6 mb-2"><i class="fa fa-users icon-inline"></i> Teaching @ Scale</h3>
+          <p class="mb-0">Led large ML/RL courses with 1k+ students and 30+ TAs; curriculum revamps, pedagogy, and tooling.</p>
         </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="glass p-4 h-100">
+          <h3 class="h6 mb-2"><i class="fa fa-medkit icon-inline"></i> CV in Healthcare</h3>
+          <p class="mb-0">Built image/video pipelines and diagnostic models; delivered patent-backed features into real deployments.</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="glass p-4 h-100">
+          <h3 class="h6 mb-2"><i class="fa fa-flask icon-inline"></i> Research</h3>
+          <p class="mb-0">Functional connectivity, complex PCA, traveling waves, and cross-species methodology; publications on Scholar.</p>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <hr class="col-8"/>
-    <br/>
-    
+  <!-- LATEST -->
+  <section class="mb-5">
     <div class="row">
-        <div class="col col-md-8 ml-md-auto mr-md-auto">
-            <h6>Latest News</h6>
-            <div>
-                <ul>
-                    <li> Accepted to teach 2 courses at TU Berlin for GT's Exchange 2022 Program! </li>
-                    <li> Cross Species Review Paper accepted with Frontier's in Neuroscience! </li>
-                </ul>
-            </div>
+      <div class="col-lg-8 mx-auto glass p-4 p-md-5">
+        <h2 class="h4 mb-3">Latest</h2>
+        <div class="timeline">
+          <!-- Replace items below as you like; newest on top -->
+          <div class="timeline-item">
+            <div class="small text-muted">2025</div>
+            <div><strong>Updated ML/RL course materials</strong> across GT offerings; scaling assessments + diagnostics.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="small text-muted">2024</div>
+            <div>Wrapped multi-year R&amp;D stint applying CV to ophthalmic imaging; shipped features and wrote a lot of Python.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="small text-muted">2023</div>
+            <div>Multiple teaching awards; ongoing Alzheimer’s connectivity analysis work.</div>
+          </div>
         </div>
-
-        <!--<div class="latest-work col-6 d-flex justify-content-center">-->
-        <!--<div>-->
-        <!--<iframe src="https://githubbadge.appspot.com/tjlagrow"-->
-        <!--style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder="0"></iframe>-->
-        <!--</div>-->
-
-        <!--<section id="downloads">-->
-        <!--<a href="https://github.com/tjlagrow" class="btn btn-github">-->
-        <!--<span class="icon"></span>View on GitHub</a>-->
-        <!--</section>-->
-        <!--</div>-->
-
+        <div class="mt-3">
+          <a class="btn btn-sm btn-outline-secondary" href="/news/">See all updates</a>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <br/>
-
+  <!-- TEACHING -->
+  <section class="mb-5">
+    <h2 class="h4 text-center mb-4">Teaching</h2>
     <div class="row">
-        <div class="col col-md-8 ml-auto mr-auto">
-            <h6>Teaching</h6>
-            <ul>
-                <li><b><a href="http://www.omscs.gatech.edu/cs-7642-reinforcement-learning">OMSCS 7642: Reinforcement Learning </a>, Summer 2020 - Present </b>, TA with Prof. Charles Isbell</li>
-                <li><b>ECE 6254: Statistical Machine Learning </a>, Spring 2020</b>, TA with Prof. Matthieu Bloch</li>
-                <li><b>ECE 4122/6122: Adv. Programming Techniques, Fall 2019</b>, Head TA with Prof. Jeffrey Hurley</li>
-                <li><b>CS 4400: Intro to Databases, Summer 2019</b>, Head TA with Prof. Aibek Mustaev</li>
-            </ul>
+      <div class="col-md-6 mb-3">
+        <div class="glass p-4 h-100">
+          <h3 class="h6 mb-2"><a href="https://omscs.gatech.edu/cs-7641-machine-learning" target="_blank">CS 7641: Machine Learning</a></h3>
+          <p class="mb-1">Instructor / Staff lead; reproducibility focus, diagnostics, and better feedback loops.</p>
+          <div class="small text-muted">Georgia Institute of Technology</div>
         </div>
-    </div>
-
-    <br/>
-
-    <div class="col d-flex justify-content-center">
-        <div class="inner">
-            <i class="fa fa-code" aria-hidden="true"></i> with <i class="fa fa-heart" aria-hidden="true"></i>
+      </div>
+      <div class="col-md-6 mb-3">
+        <div class="glass p-4 h-100">
+          <h3 class="h6 mb-2"><a href="https://www.omscs.gatech.edu/cs-7642-reinforcement-learning" target="_blank">CS 7642: Reinforcement Learning</a></h3>
+          <p class="mb-1">Instructor / Staff, with emphasis on analysis, policy/value diagnostics, and scaling support.</p>
+          <div class="small text-muted">Georgia Institute of Technology</div>
         </div>
+      </div>
     </div>
+  </section>
 
+  <!-- FOOTER MINI -->
+  <div class="col d-flex justify-content-center mt-4">
+    <div class="inner text-muted">
+      <i class="fa fa-code" aria-hidden="true"></i> with <i class="fa fa-heart" aria-hidden="true"></i>
+    </div>
+  </div>
 </div>
+
+<script>
+  // Tiny dark mode toggle
+  (function() {
+    const btn = document.getElementById('themeToggle');
+    const label = document.getElementById('themeLabel');
+    const key = 'tj-theme';
+    const root = document.body;
+    function apply(mode) {
+      if (mode === 'dark') { root.classList.add('dark'); label.textContent = 'Light mode'; }
+      else { root.classList.remove('dark'); label.textContent = 'Dark mode'; }
+    }
+    const saved = localStorage.getItem(key) || 'light';
+    apply(saved);
+    btn.addEventListener('click', () => {
+      const next = root.classList.contains('dark') ? 'light' : 'dark';
+      localStorage.setItem(key, next); apply(next);
+    });
+  })();
+</script>
