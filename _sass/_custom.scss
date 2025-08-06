@@ -1,0 +1,13 @@
+/* About gallery */
+.about-gallery .shot {
+  width: 100%;
+  aspect-ratio: 1 / 1;      /* square */
+  object-fit: cover;         /* fill without distortion */
+  border-radius: 1rem;       /* rounded corners */
+  border: 1px solid rgba(0,0,0,.06);
+  background: #f6f7f9;
+  display: block;
+}
+@supports not (aspect-ratio: 1 / 1) {
+  .about-gallery .shot { height: 220px; } /* fallback if needed */
+}
