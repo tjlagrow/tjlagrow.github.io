@@ -31,15 +31,33 @@ title: Theodore LaGrow Online
   }
   .glass:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,.08); }
 
-  /* Square avatar, full in its column */
-  .avatar-wrap { max-width: 420px; margin-left: auto; margin-right: auto; }
-  .avatar {
-    display: block;
+  /* Hero avatar slideshow */
+  .avatar-wrap {
+    position: relative;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    aspect-ratio: 1 / 1;          /* keep square footprint */
+  }
+  .hero-slide {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    height: auto;
-    border-radius: 1rem;         /* square with rounded corners */
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;           /* square with rounded corners */
     border: 4px solid rgba(255,255,255,.6);
     box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    opacity: 0;
+  }
+  .hero-slide.active {
+    opacity: 1;
+    animation: sweepReveal .8s ease-out both;
+  }
+  /* Left-to-right sweep reveal */
+  @keyframes sweepReveal {
+    0%   { clip-path: inset(0 100% 0 0); }
+    100% { clip-path: inset(0 0 0 0); }
   }
 
   .icon-inline { width: 1.15em; height: 1.15em; vertical-align: -.15em; opacity: .9; }
@@ -85,14 +103,8 @@ title: Theodore LaGrow Online
   <section class="hero mb-5">
     <div class="row align-items-center">
       <div class="col-md-4 text-center text-md-left mb-4 mb-md-0">
-        <div class="avatar-wrap">
-          <img
-            src="images/theodore_lagrow_headshot.jpg"
-            alt="Headshot of Theodore (TJ) LaGrow"
-            class="avatar"
-            loading="lazy"
-          />
-        </div>
+        <!-- Slideshow container -->
+        <div class="avatar-wrap" id="heroSlides"></div>
       </div>
 
       <div class="col-md-8">
@@ -135,57 +147,26 @@ title: Theodore LaGrow Online
   </section>
 
   <!-- ABOUT -->
-<section class="mb-5">
-  <div class="row">
-    <div class="col-lg-10 mx-auto glass p-4 p-md-5">
-      <h2 class="h4 mb-3">About</h2>
-      <p>
-        I am a Lecturer with Georgia Tech Professional Education and the College of Lifetime Learning, where I develop and teach applied, high-impact courses in the FlexStack program. My teaching covers artificial intelligence, data analytics, cybersecurity, and other emerging technologies shaped by workforce and industry demand.
-      </p>
-      <p>
-        In parallel, I serve as Instructor of Record for Georgia Tech’s graduate Machine Learning course, CS7641. Each term, I lead more than 1,200 students supported by a staff of over 30 graduate teaching assistants and industry professionals. I oversee curriculum design, pedagogical strategy, and large-scale operations across three semesters per year.
-      </p>
-      <p>
-        My background spans engineering, business, and research. I hold a PhD in Electrical and Computer Engineering and an MBA from Georgia Tech. I have published work in neuroimaging and optimization, and co-founded a medical imaging startup that holds a patent and has secured millions of dollars in funding.
-      </p>
-      <p class="mb-4">
-        Whether I am building educational programs, deploying machine learning solutions, or mentoring teams, my focus is on creating systems that are rigorous, scalable, and human-centered.
-      </p>
-
-      <!-- Headshot gallery -->
-      <div class="about-gallery row">
-        <div class="col-12 col-sm-4 mb-3">
-          <a href="{{ 'images/tlagrow_headshot.jpg' | relative_url }}" target="_blank" rel="noopener">
-            <img
-              src="{{ 'images/tlagrow_headshot.jpg' | relative_url }}"
-              alt="Headshot of Theodore (TJ) LaGrow — portrait 1"
-              class="shot"
-              loading="lazy" decoding="async">
-          </a>
-        </div>
-        <div class="col-12 col-sm-4 mb-3">
-          <a href="{{ 'images/headshot2.jpeg' | relative_url }}" target="_blank" rel="noopener">
-            <img
-              src="{{ 'images/headshot2.jpeg' | relative_url }}"
-              alt="Headshot of Theodore (TJ) LaGrow — portrait 2"
-              class="shot"
-              loading="lazy" decoding="async">
-          </a>
-        </div>
-        <div class="col-12 col-sm-4 mb-3">
-          <a href="{{ 'images/headshot3.jpeg' | relative_url }}" target="_blank" rel="noopener">
-            <img
-              src="{{ 'images/headshot3.jpeg' | relative_url }}"
-              alt="Headshot of Theodore (TJ) LaGrow — portrait 3"
-              class="shot"
-              loading="lazy" decoding="async">
-          </a>
-        </div>
+  <section class="mb-5">
+    <div class="row">
+      <div class="col-lg-10 mx-auto glass p-4 p-md-5">
+        <h2 class="h4 mb-3">About</h2>
+        <p>
+          I am a Lecturer with Georgia Tech Professional Education and the College of Lifetime Learning, where I develop and teach applied, high-impact courses in the FlexStack program. My teaching covers artificial intelligence, data analytics, cybersecurity, and other emerging technologies shaped by workforce and industry demand.
+        </p>
+        <p>
+          In parallel, I serve as Instructor of Record for Georgia Tech’s graduate Machine Learning course, CS7641. Each term, I lead more than 1,200 students supported by a staff of over 30 graduate teaching assistants and industry professionals. I oversee curriculum design, pedagogical strategy, and large-scale operations across three semesters per year.
+        </p>
+        <p>
+          My background spans engineering, business, and research. I hold a PhD in Electrical and Computer Engineering and an MBA from Georgia Tech. I have published work in neuroimaging and optimization, and co-founded a medical imaging startup that holds a patent and has secured millions of dollars in funding.
+        </p>
+        <p class="mb-0">
+          Whether I am building educational programs, deploying machine learning solutions, or mentoring teams, my focus is on creating systems that are rigorous, scalable, and human-centered.
+        </p>
+        <!-- Headshot wheel removed by request -->
       </div>
     </div>
-  </div>
-</section>
-
+  </section>
 
   <!-- HIGHLIGHTS (flashier) -->
   <section class="mb-5">
@@ -283,3 +264,41 @@ title: Theodore LaGrow Online
     </div>
   </div>
 </div>
+
+<!-- Slideshow JS -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const sources = [
+      "{{ 'images/tlagrow_headshot.jpg' | relative_url }}",
+      "{{ 'images/headshot2.jpeg' | relative_url }}",
+      "{{ 'images/headshot3.jpeg' | relative_url }}"
+    ];
+
+    const wrap = document.getElementById('heroSlides');
+    const slides = sources.map((src, i) => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = 'Headshot ' + (i + 1) + ' of Theodore (TJ) LaGrow';
+      img.decoding = 'async';
+      img.loading = 'eager';
+      img.className = 'hero-slide' + (i === 0 ? ' active' : '');
+      wrap.appendChild(img);
+      return img;
+    });
+
+    let idx = 0;
+    setInterval(() => {
+      const prev = slides[idx];
+      idx = (idx + 1) % slides.length;
+      const next = slides[idx];
+
+      // Hide previous
+      prev.classList.remove('active');
+
+      // Re-trigger sweep on the incoming slide
+      next.classList.remove('active');
+      void next.offsetWidth; // force reflow
+      next.classList.add('active');
+    }, 2000); // every 2 seconds
+  });
+</script>

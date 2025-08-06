@@ -11,3 +11,56 @@
 @supports not (aspect-ratio: 1 / 1) {
   .about-gallery .shot { height: 220px; } /* fallback if needed */
 }
+
+
+/* Rotating headshot wheel */
+.about-wheel {
+  --size: 420px;         /* max diameter */
+  --img-size: 120px;     /* each image size */
+  --speed: 28s;          /* rotation period */
+  position: relative;
+  width: min(100%, var(--size));
+  aspect-ratio: 1 / 1;
+  margin: 1rem auto 0;
+}
+
+.wheel-outer {
+  position: absolute; inset: 0;
+  animation: spin var(--speed) linear infinite;
+  transform-origin: 50% 50%;
+}
+.about-wheel:hover .wheel-outer { animation-play-state: paused; }
+
+.wheel-item {
+  position: absolute;
+  left: 50%; top: 50%;
+  /* transform is set dynamically by JS to place items on the circle */
+}
+
+.wheel-item img {
+  display: block;
+  width: var(--img-size); height: var(--img-size);
+  object-fit: cover;
+  border-radius: 1rem;
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+  background: #f6f7f9;
+}
+
+/* Center badge (optional visual anchor) */
+.wheel-center {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px; height: 10px; border-radius: 999px;
+  background: #0d6efd; opacity: .4;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Respect reduced motion: show a simple grid instead */
+@media (prefers-reduced-motion: reduce) {
+  .about-wheel { animation: none; }
+  .wheel-outer { animation: none; }
+  .wheel-item { position: static; transform: none !important; display: inline-block; margin: .5rem; }
+  .wheel-center { display: none; }
+}
