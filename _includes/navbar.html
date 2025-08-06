@@ -12,14 +12,6 @@
                     <a class="nav-link" href="{{ link.url }}" {% if link.external %}target="_blank"{% endif %}>{{ link.title }}</a>
                 </li>
             {% endfor %}
-
-            <li {% if page.url == "CV" %}class="active"{% endif %}>
-                <a class="nav-link" href="/CV/CV_tlagrow.pdf" target="_blank">CV</a>
-            </li>
-
-            <li {% if page.url == "blog" %}class="active"{% endif %}>
-                <a class="nav-link" href="https://medium.com/@tjlagrow" target="_blank">Medium Posts</a>
-            </li>
         </ul>
     </div>
 </nav>
