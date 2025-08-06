@@ -94,6 +94,22 @@ title: Theodore LaGrow Online
   /* Buttons on dark hero */
   .btn-hero { border-color: rgba(255,255,255,.7); color:#fff; }
   .btn-hero:hover { background: rgba(255,255,255,.12); color:#fff; }
+
+  .hover-tip{
+    position: fixed;
+    z-index: 10000;
+    pointer-events: none;
+    display: none;
+    background: rgba(13,110,253,.95);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    transform: translate(-50%, 0); /* center under cursor */
+  }
+
 </style>
 
 <div class="container my-5">
@@ -269,7 +285,7 @@ title: Theodore LaGrow Online
     const wrap = document.getElementById('heroSlides');
     if (!wrap) return;
 
-    // Bust CDN/browser cache on each deploy
+    // Cache-bust so deploys invalidate the CDN/browser cache
     const ver = '{{ site.time | date: "%s" }}';
 
     const sources = [
@@ -286,7 +302,22 @@ title: Theodore LaGrow Online
       "{{ 'images/tlagrow_hs_11.jpg'  | relative_url }}?v=" + ver
     ];
 
-    // Build slide elements
+    // One-line messages (same order as sources)
+    const messages = [
+      "Teaching at scale, still human.",
+      "Diagnostics > vibes.",
+      "Strong baselines beat clever hacks.",
+      "Transparent rubrics, fewer surprises.",
+      "Iterate, don't speculate.",
+      "Ops are pedagogy.",
+      "Reproducible or it didn’t happen.",
+      "Good TAs are force multipliers.",
+      "Students first, always.",
+      "Feedback that moves the needle.",
+      "Rigor with compassion."
+    ];
+
+    // Build slides
     const slides = sources.map((src, i) => {
       const img = document.createElement('img');
       img.src = src;
@@ -297,20 +328,31 @@ title: Theodore LaGrow Online
       wrap.appendChild(img);
       return img;
     });
+    if (!slides.length) return;
 
-    if (slides.length === 0) return;
+    // Tooltip element
+    const tip = document.createElement('div');
+    tip.className = 'hover-tip';
+    tip.setAttribute('role','tooltip');
+    document.body.appendChild(tip);
 
-    // Start on a random slide
+    // Start at a random slide
     let idx = Math.floor(Math.random() * slides.length);
     slides[idx].classList.add('active');
 
-    const intervalMs = 4000; // 4 seconds
-    setInterval(() => {
-      // pick a random next index (with replacement), but not the same as current
-      let nextIdx;
-      do { nextIdx = Math.floor(Math.random() * slides.length); }
-      while (slides.length > 1 && nextIdx === idx);
+    const intervalMs = 4000;
+    let timer = null;
 
+    function nextRandomIndex(exclude) {
+      if (slides.length === 1) return 0;
+      let n;
+      do { n = Math.floor(Math.random() * slides.length); }
+      while (n === exclude);
+      return n;
+    }
+
+    function advance() {
+      const nextIdx = nextRandomIndex(idx);
       const prev = slides[idx];
       const next = slides[nextIdx];
 
@@ -320,7 +362,43 @@ title: Theodore LaGrow Online
       next.classList.add('active');
 
       idx = nextIdx;
-    }, intervalMs);
+
+      // If user is hovering, update tooltip text to the new slide text
+      if (tip.style.display === 'block') {
+        tip.textContent = messages[idx] || '';
+      }
+    }
+
+    function start() { if (!timer) timer = setInterval(advance, intervalMs); }
+    function stop()  { if (timer) { clearInterval(timer); timer = null; } }
+
+    // Hover: pause + show tooltip following cursor
+    wrap.addEventListener('mouseenter', () => {
+      stop();
+      tip.textContent = messages[idx] || '';
+      tip.style.display = 'block';
+    });
+    wrap.addEventListener('mousemove', (e) => {
+      // Position just below cursor; keep inside viewport if near edges
+      const x = e.clientX, y = e.clientY;
+      tip.style.left = x + 'px';
+      tip.style.top  = (y + 20) + 'px';
+
+      // simple right-edge guard
+      const rect = tip.getBoundingClientRect();
+      if (rect.right > window.innerWidth - 8) {
+        tip.style.left = (window.innerWidth - 8 - rect.width / 2) + 'px';
+      }
+    });
+    wrap.addEventListener('mouseleave', () => {
+      tip.style.display = 'none';
+      start();
+    });
+
+    // Respect reduced motion
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReduced) start();
   });
 </script>
+
 
