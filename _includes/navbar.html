@@ -1,51 +1,44 @@
 <nav class="navbar navbar-expand-md navbar-light" role="navigation">
-  <a class="navbar-brand" href="{{ '/' | relative_url }}">Theodore J. LaGrow</a>
+  <div class="container">
+    <a class="navbar-brand" href="{{ '/' | relative_url }}">Theodore J. LaGrow</a>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-main"
-          aria-controls="navbar-main" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+    <button class="navbar-toggler" type="button"
+            data-toggle="collapse" data-target="#navbar-main"
+            data-bs-toggle="collapse" data-bs-target="#navbar-main"
+            aria-controls="navbar-main" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <div id="navbar-main" class="navbar-collapse collapse">
-    <ul class="nav navbar-nav mr-auto">
-      {% for link in site.data.navbar %}
-        {%- comment -%} Build href & target {%- endcomment -%}
-        {% if link.external %}
-          {% assign href = link.url %}
-          {% assign target = ' target="_blank" rel="noopener"' %}
-        {% else %}
-          {% assign href = link.url | relative_url %}
-          {% assign target = '' %}
-        {% endif %}
+    <div id="navbar-main" class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto me-auto">
+        {% assign current = page.url | append:'/' | replace:'//','/' %}
+        {% for link in site.data.navbar %}
+          {% assign link_url = link.url | append:'/' | replace:'//','/' %}
 
-        {%- comment -%}
-          Active rules:
-          - exact match on page.url or page.url == link.url + index.html
-          - section match when current page is inside that section (and link isn’t "/")
-          Note: normalize with a trailing slash to avoid false positives (e.g., /blog/ vs /blogroll/).
-        {%- endcomment -%}
-        {% assign is_active = false %}
-        {% assign link_norm = link.url %}
-        {% unless link_norm == '/' %}
-          {% unless link_norm endswith '/' %}
-            {% assign link_norm = link_norm | append: '/' %}
-          {% endunless %}
-        {% endunless %}
+          {% if link.external %}
+            {% assign href = link.url %}
+            {% assign target = ' target="_blank" rel="noopener"' %}
+          {% else %}
+            {% assign href = link.url | relative_url %}
+            {% assign target = '' %}
+          {% endif %}
 
-        {% if page.url == link.url or page.url == link.url | append: 'index.html' %}
-          {% assign is_active = true %}
-        {% elsif link.url != '/' and page.url != '/' and page.url contains link_norm %}
-          {% assign is_active = true %}
-        {% endif %}
+          {% assign is_active = false %}
+          {% if current == link_url %}
+            {% assign is_active = true %}
+          {% elsif link_url != '/' and current contains link_url %}
+            {% assign is_active = true %}
+          {% endif %}
 
-        <li class="nav-item {% if is_active %}active{% endif %}">
-          <a class="nav-link {% if is_active %}active{% endif %}" href="{{ href }}" {{ target }}
-             {% if is_active %}aria-current="page"{% endif %}>
-            {{ link.title }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+          <li class="nav-item">
+            <a class="nav-link{% if is_active %} active{% endif %}"
+               href="{{ href }}"{{ target }}{% if is_active %} aria-current="page"{% endif %}>
+              {{ link.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 </nav>
 
@@ -57,11 +50,8 @@
   background: rgba(13,110,253,.12);
   border-radius: .5rem;
 }
-.navbar .nav-link {
-  transition: color .15s ease, background-color .15s ease;
-}
-
-/* Optional: focus-visible accessibility */
+.navbar .nav-link { transition: color .15s ease, background-color .15s ease; }
+/* Optional: focus-visible */
 .navbar .nav-link:focus-visible {
   outline: 2px solid #0d6efd;
   outline-offset: 2px;
