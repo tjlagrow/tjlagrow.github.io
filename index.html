@@ -37,13 +37,12 @@ title: Theodore LaGrow Website
     max-width: 420px;
     margin-left: auto;
     margin-right: auto;
-    aspect-ratio: 1 / 1;          /* keep square footprint */
+    aspect-ratio: 1 / 1; /* keep square footprint */
   }
   .hero-slide {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     object-fit: cover;
     border-radius: 1rem;           /* square with rounded corners */
     border: 4px solid rgba(255,255,255,.6);
@@ -103,8 +102,15 @@ title: Theodore LaGrow Website
   <section class="hero mb-5">
     <div class="row align-items-center">
       <div class="col-md-4 text-center text-md-left mb-4 mb-md-0">
-        <!-- Slideshow container -->
-        <div class="avatar-wrap" id="heroSlides"></div>
+        <!-- Slideshow container
+             We inject a JSON array of headshot paths here using Liquid.
+             It collects files in /images/ that match tlagrow_hs_*.jpg/.jpeg -->
+        {% assign _all = site.static_files | where_exp: "f", "f.path contains '/images/tlagrow_hs_'" %}
+        {% assign _jpg  = _all | where: "extname", ".jpg"  %}
+        {% assign _jpeg = _all | where: "extname", ".jpeg" %}
+        {% assign _hs   = _jpg | concat: _jpeg %}
+        {% capture _hs_json %}[{% for f in _hs %}"{{ f.path | relative_url }}"{% unless forloop.last %},{% endunless %}{% endfor %}]{% endcapture %}
+        <div class="avatar-wrap" id="heroSlides" data-sources='{{ _hs_json }}'></div>
       </div>
 
       <div class="col-md-8">
@@ -163,12 +169,11 @@ title: Theodore LaGrow Website
         <p class="mb-0">
           Whether I am building educational programs, deploying machine learning solutions, or mentoring teams, my focus is on creating systems that are rigorous, scalable, and human-centered.
         </p>
-        <!-- Headshot wheel removed by request -->
       </div>
     </div>
   </section>
 
-  <!-- HIGHLIGHTS (flashier) -->
+  <!-- HIGHLIGHTS -->
   <section class="mb-5">
     <h2 class="h4 text-center mb-4">Highlights</h2>
     <div class="row">
@@ -268,22 +273,25 @@ title: Theodore LaGrow Website
 <!-- Slideshow JS -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // Build the sources array from all images named tlagrow_hs_XX.(jpg|jpeg) in /images/
-    // Done at build time via Liquid so we don't have to hardcode filenames.
-    const sources = [
-      {% assign hs_base = site.static_files | where_exp: "f", "f.path contains '/images/' and f.name contains 'tlagrow_hs_'" %}
-      {% assign headshots = hs_base | where_exp: "f", "f.extname == '.jpg' or f.extname == '.jpeg'" | sort: "name" %}
-      {% for f in headshots %}
-        "{{ f.path | relative_url }}"{% unless forloop.last %},{% endunless %}
-      {% endfor %}
-    ];
+    const wrap = document.getElementById('heroSlides');
 
-    // Fallback if none were found (keeps layout intact)
-    if (sources.length === 0) {
-      sources.push("{{ 'images/tlagrow_hs_01.jpg' | relative_url }}");
+    // Parse sources injected by Liquid
+    let sources = [];
+    try {
+      sources = JSON.parse(wrap.dataset.sources || '[]');
+    } catch (e) {
+      sources = [];
     }
 
-    const wrap = document.getElementById('heroSlides');
+    // Fallback if none were found
+    if (!Array.isArray(sources) || sources.length === 0) {
+      sources = ["{{ 'images/tlagrow_hs_01.jpg' | relative_url }}"];
+    }
+
+    // Stable, numeric-aware sort (handles 1,2,10 correctly)
+    sources.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+
+    // Build slides
     const slides = sources.map((src, i) => {
       const img = document.createElement('img');
       img.src = src;
@@ -297,6 +305,12 @@ title: Theodore LaGrow Website
 
     if (slides.length <= 1) return; // nothing to rotate
 
+    // Respect reduced motion
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const intervalMs = 4000;
+
+    if (prefersReduced) return;
+
     let idx = 0;
     setInterval(() => {
       const prev = slides[idx];
@@ -304,9 +318,10 @@ title: Theodore LaGrow Website
       const next = slides[idx];
 
       prev.classList.remove('active');
+      // Re-trigger sweep on the incoming slide
       next.classList.remove('active');
       void next.offsetWidth; // force reflow to restart animation
       next.classList.add('active');
-    }, 4000); // every 4 seconds
+    }, intervalMs);
   });
 </script>
