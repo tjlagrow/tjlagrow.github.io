@@ -102,15 +102,8 @@ title: Theodore LaGrow Online
   <section class="hero mb-5">
     <div class="row align-items-center">
       <div class="col-md-4 text-center text-md-left mb-4 mb-md-0">
-        <!-- Slideshow container
-             We inject a JSON array of headshot paths here using Liquid.
-             It collects files in /images/ that match tlagrow_hs_*.jpg/.jpeg -->
-        {% assign _all = site.static_files | where_exp: "f", "f.path contains '/images/tlagrow_hs_'" %}
-        {% assign _jpg  = _all | where: "extname", ".jpg"  %}
-        {% assign _jpeg = _all | where: "extname", ".jpeg" %}
-        {% assign _hs   = _jpg | concat: _jpeg %}
-        {% capture _hs_json %}[{% for f in _hs %}"{{ f.path | relative_url }}"{% unless forloop.last %},{% endunless %}{% endfor %}]{% endcapture %}
-        <div class="avatar-wrap" id="heroSlides" data-sources='{{ _hs_json }}'></div>
+        <!-- Slideshow container -->
+          <div class="avatar-wrap" id="heroSlides"></div>
       </div>
 
       <div class="col-md-8">
@@ -273,38 +266,61 @@ title: Theodore LaGrow Online
 <!-- Slideshow JS -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    const wrap = document.getElementById('heroSlides');
+    if (!wrap) return;
+
+    // Bust CDN/browser cache on each deploy
+    const ver = '{{ site.time | date: "%s" }}';
+
     const sources = [
-      "{{ 'images/tlagrow_hs_01.jpg' | relative_url }}",
-      "{{ 'images/tlagrow_hs_02.jpg' | relative_url }}",
-      "{{ 'images/tlagrow_hs_03.jpg' | relative_url }}",
-      "{{ 'images/tlagrow_hs_04.jpeg' | relative_url }}",
-      "{{ 'images/tlagrow_hs_05.jpeg' | relative_url }}"
+      "{{ 'images/tlagrow_hs_01.jpg'  | relative_url }}?v=" + ver,
+      "{{ 'images/tlagrow_hs_02.jpg'  | relative_url }}?v=" + ver,
+      "{{ 'images/tlagrow_hs_03.jpg'  | relative_url }}?v=" + ver,
+      "{{ 'images/tlagrow_hs_04.jpeg' | relative_url }}?v=" + ver,
+      "{{ 'images/tlagrow_hs_05.jpeg' | relative_url }}?v=" + ver,
+      "{{ 'images/tlagrow_hs_06.jpg'  | relative_url }}?v=" + ver,
+      "{{ 'images/tlagrow_hs_07.jpg'  | relative_url }}?v=" + ver,
+      "{{ 'images/tlagrow_hs_08.jpg'  | relative_url }}?v=" + ver,
+      "{{ 'images/tlagrow_hs_09.jpg'  | relative_url }}?v=" + ver,
+      "{{ 'images/tlagrow_hs_10.jpg'  | relative_url }}?v=" + ver,
+      "{{ 'images/tlagrow_hs_11.jpg'  | relative_url }}?v=" + ver
     ];
 
-    const wrap = document.getElementById('heroSlides');
+    // Build slide elements
     const slides = sources.map((src, i) => {
       const img = document.createElement('img');
       img.src = src;
       img.alt = 'Headshot ' + (i + 1) + ' of Theodore (TJ) LaGrow';
       img.decoding = 'async';
       img.loading = i === 0 ? 'eager' : 'lazy';
-      img.className = 'hero-slide' + (i === 0 ? ' active' : '');
+      img.className = 'hero-slide';
       wrap.appendChild(img);
       return img;
     });
 
-    if (slides.length <= 1) return;
+    if (slides.length === 0) return;
 
-    let idx = 0;
+    // Start on a random slide
+    let idx = Math.floor(Math.random() * slides.length);
+    slides[idx].classList.add('active');
+
+    const intervalMs = 4000; // 4 seconds
     setInterval(() => {
+      // pick a random next index (with replacement), but not the same as current
+      let nextIdx;
+      do { nextIdx = Math.floor(Math.random() * slides.length); }
+      while (slides.length > 1 && nextIdx === idx);
+
       const prev = slides[idx];
-      idx = (idx + 1) % slides.length;
-      const next = slides[idx];
+      const next = slides[nextIdx];
 
       prev.classList.remove('active');
       next.classList.remove('active'); // reset to retrigger animation
       void next.offsetWidth;           // force reflow
       next.classList.add('active');
-    }, 4000); // every 4 seconds
+
+      idx = nextIdx;
+    }, intervalMs);
   });
 </script>
+
