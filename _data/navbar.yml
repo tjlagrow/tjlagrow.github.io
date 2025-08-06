@@ -1,33 +1,26 @@
-#- title: Home
-#  url: /
-#  external: false
-
-- title: About
-  url: /about/
+- title: Home
+  url: /
   external: false
 
-# - title: CV
-#   url: /CV/
-#   external: false
 
 - title: Publications
   url: /research/
   external: false
 
 
-# - title: Education
-#   url: /education/
-#   external: false
+ - title: Teaching
+   url: /teaching/
+   external: false
 
-# - title: Projects
-#  url: /projects/
-#  external: false
+ - title: Media
+  url: /media/
+  external: false
 
-#- title: Contact
-#  url: /contact/
-#  external: false
+- title: Blog
+  url: /blog/
+  external: false
 
 
 # - title: Guides
-#   url: https://github.com/varunagrawal/guides
+#   url: /guides/
 #   external: true
