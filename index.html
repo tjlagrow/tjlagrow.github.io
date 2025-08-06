@@ -302,7 +302,6 @@ title: Theodore LaGrow Online
       "{{ 'images/tlagrow_hs_11.jpg'  | relative_url }}?v=" + ver
     ];
 
-    // One-line messages (same order as sources)
     const messages = [
       "Gimme a head with hair, long beautiful hair",
       "Are those Chihuly's behind you?",
@@ -330,75 +329,78 @@ title: Theodore LaGrow Online
     });
     if (!slides.length) return;
 
-    // Tooltip element
+    // Tooltip element (for your existing hover-tip CSS)
     const tip = document.createElement('div');
     tip.className = 'hover-tip';
     tip.setAttribute('role','tooltip');
     document.body.appendChild(tip);
 
-    // Start at a random slide
-    let idx = Math.floor(Math.random() * slides.length);
+    // Shuffle helper: Fisher–Yates; ensure first !== avoidStart if possible
+    function shuffledOrder(n, avoidStart) {
+      const arr = Array.from({ length: n }, (_, i) => i);
+      for (let i = n - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      if (n > 1 && avoidStart != null && arr[0] === avoidStart) {
+        let k = 1;
+        while (k < n && arr[k] === avoidStart) k++;
+        if (k < n) [arr[0], arr[k]] = [arr[k], arr[0]];
+      }
+      return arr;
+    }
+
+    // Start with a random order and position
+    let order = shuffledOrder(slides.length, null);
+    let pos = 0;
+    let idx = order[pos];
     slides[idx].classList.add('active');
 
     const intervalMs = 4000;
     let timer = null;
 
-    function nextRandomIndex(exclude) {
-      if (slides.length === 1) return 0;
-      let n;
-      do { n = Math.floor(Math.random() * slides.length); }
-      while (n === exclude);
-      return n;
-    }
-
     function advance() {
-      const nextIdx = nextRandomIndex(idx);
       const prev = slides[idx];
-      const next = slides[nextIdx];
+
+      // Move forward in the current shuffle; reshuffle when we reach the end
+      pos++;
+      if (pos >= order.length) {
+        order = shuffledOrder(slides.length, idx); // avoid immediate repeat across cycles
+        pos = 0;
+      }
+      idx = order[pos];
+      const next = slides[idx];
 
       prev.classList.remove('active');
       next.classList.remove('active'); // reset to retrigger animation
       void next.offsetWidth;           // force reflow
       next.classList.add('active');
 
-      idx = nextIdx;
-
-      // If user is hovering, update tooltip text to the new slide text
-      if (tip.style.display === 'block') {
-        tip.textContent = messages[idx] || '';
-      }
+      if (tip.style.display === 'block') tip.textContent = messages[idx] || '';
     }
 
     function start() { if (!timer) timer = setInterval(advance, intervalMs); }
     function stop()  { if (timer) { clearInterval(timer); timer = null; } }
 
-    // Hover: pause + show tooltip following cursor
+    // Pause on hover + show tooltip that follows cursor
     wrap.addEventListener('mouseenter', () => {
       stop();
       tip.textContent = messages[idx] || '';
       tip.style.display = 'block';
     });
     wrap.addEventListener('mousemove', (e) => {
-      // Position just below cursor; keep inside viewport if near edges
       const x = e.clientX, y = e.clientY;
       tip.style.left = x + 'px';
       tip.style.top  = (y + 20) + 'px';
-
-      // simple right-edge guard
       const rect = tip.getBoundingClientRect();
       if (rect.right > window.innerWidth - 8) {
         tip.style.left = (window.innerWidth - 8 - rect.width / 2) + 'px';
       }
     });
-    wrap.addEventListener('mouseleave', () => {
-      tip.style.display = 'none';
-      start();
-    });
+    wrap.addEventListener('mouseleave', () => { tip.style.display = 'none'; start(); });
 
     // Respect reduced motion
     const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!prefersReduced) start();
   });
 </script>
-
-
