@@ -33,7 +33,7 @@ portal:
   .soft { border-radius: 1rem; }
 
   /* Carousel */
-  .avatar-wrap { position: relative; max-width: 420px; margin-inline:auto; aspect-ratio: 1 / 1; }
+  .avatar-wrap { position: relative; max-width: 520px; margin-inline:auto; aspect-ratio: 1 / 1; }
   .hero-slide {
     position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
     border-radius: 1rem; border: 4px solid rgba(255,255,255,.6); box-shadow: 0 8px 24px rgba(0,0,0,.25);
@@ -68,108 +68,80 @@ portal:
   .timeline-item { position: relative; margin: .85rem 0; }
   .timeline-item::before { content:""; position:absolute; left:-9px; top:.45rem; width:10px; height:10px; border-radius:50%; background:#0d6efd; }
 
+  /* Masthead at the top of the hero */
+  .masthead { margin-bottom: 1rem; text-align: center; }
+  .masthead-title{
+    font-weight: 800; line-height: 1.05; letter-spacing: .2px;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    background: linear-gradient(92deg, #b3c7ff, #6EE7F9 40%, #A78BFA 75%, #F472B6 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: 0 2px 30px rgba(0,0,0,.25);
+  }
+  .masthead-tagline{
+    font-size: clamp(1rem, 2.4vw, 1.4rem);
+    color: rgba(255,255,255,.9);
+    letter-spacing: .25px;
+  }
+
   /* Darker About box inside the hero */
   .hero .about-card{
     background: rgba(255,255,255,.07);
     backdrop-filter: blur(6px);
     border: 1px solid rgba(255,255,255,.22);
-    color: #eef2ff; /* higher contrast on dark */
+    color: #eef2ff;
   }
+  .hero .about-card p { margin-bottom: .75rem; }
   .hero .about-card .small{ color: rgba(255,255,255,.85); }
   .hero .about-card a.btn{ border-color: rgba(255,255,255,.7); color:#fff; }
   .hero .about-card a.btn:hover{ background: rgba(255,255,255,.12); color:#fff; }
-
-
-      /* Masthead at the top of the hero */
-    .masthead { margin-bottom: 1rem; }
-    .masthead-title{
-      font-weight: 800;
-      line-height: 1.05;
-      letter-spacing: .2px;
-      font-size: clamp(2.25rem, 6vw, 3.75rem);
-      background: linear-gradient(92deg, #b3c7ff, #6EE7F9 40%, #A78BFA 75%, #F472B6 100%);
-      -webkit-background-clip: text; background-clip: text;
-      color: transparent;
-      text-shadow: 0 2px 30px rgba(0,0,0,.25);
-    }
-    .masthead-tagline{
-      font-size: clamp(1rem, 2.4vw, 1.4rem);
-      color: rgba(255,255,255,.9);
-      letter-spacing: .25px;
-    }
-
-    /* Darker About box inside the hero (from earlier change) */
-    .hero .about-card{
-      background: rgba(255,255,255,.07);
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,.22);
-      color: #eef2ff;
-    }
-    .hero .about-card .small{ color: rgba(255,255,255,.85); }
-    .hero .about-card a.btn{ border-color: rgba(255,255,255,.7); color:#fff; }
-    .hero .about-card a.btn:hover{ background: rgba(255,255,255,.12); color:#fff; }
-
-    /* Tighter, friendlier paragraphs in the About card */
-    .hero .about-card p { margin-bottom: .75rem; }
-
-    /* (Optional) balance widths a bit on md screens */
-    @media (min-width: 768px) {
-      .hero .col-md-5 { flex: 0 0 auto; width: 41.6667%; }
-      .hero .col-md-7 { flex: 0 0 auto; width: 58.3333%; }
-    }
-
-
 </style>
 
 <div class="container my-5">
 
-<!-- HERO: Name + Tagline, then Carousel + About side-by-side -->
-<section class="hero mb-5">
-  <!-- Masthead -->
-  <div class="masthead text-center text-md-left">
-    <h1 class="masthead-title mb-2">Theodore J. LaGrow</h1>
-    <div class="masthead-tagline">Researcher, Educator, Computational Neuroscientist, ML Practitioner</div>
-  </div>
-
-  <!-- Side-by-side layout -->
-  <div class="row align-items-start g-4">
-    <!-- Carousel (left) -->
-    <div class="col-md-5 col-lg-4 text-center text-md-left">
-      <div class="avatar-wrap" id="heroSlides"></div>
+  <!-- HERO: Name + Tagline, then Carousel + Welcome side-by-side (equal width) -->
+  <section class="hero mb-5">
+    <!-- Masthead -->
+    <div class="masthead">
+      <h1 class="masthead-title mb-2">Theodore J. LaGrow</h1>
+      <div class="masthead-tagline">Researcher, Educator, Computational Neuroscientist, ML Practitioner</div>
     </div>
 
-    <!-- About (right) -->
-    <div class="col-md-7 col-lg-8">
-      <div class="about-card p-4 soft">
-        <p><strong>Welcome — I’m TJ.</strong> I’m a Lecturer with Georgia Tech Professional Education and the College of Lifetime Learning, where I develop and teach applied, high-impact courses in the FlexStack program. My teaching covers artificial intelligence, data analytics, cybersecurity, and other emerging technologies shaped by workforce and industry demand.</p>
-        <p>In parallel, I serve as Instructor of Record for Georgia Tech’s graduate Machine Learning course, <strong>CS7641</strong>. Each term, I lead more than <strong>1,200</strong> students supported by a staff of <strong>30+ graduate teaching assistants</strong> and industry professionals. I oversee curriculum design, pedagogical strategy, and large-scale operations across three semesters per year.</p>
-        <p>My background spans engineering, business, and research. I hold a <strong>PhD in Electrical and Computer Engineering</strong> and an <strong>MBA</strong> from Georgia Tech. I’ve published in neuroimaging and optimization, and co-founded a medical imaging startup that holds a patent and has secured multi-million-dollar funding.</p>
-        <p class="mb-0">Whether I’m building educational programs, deploying machine learning solutions, or mentoring teams, my focus is on creating systems that are <strong>rigorous</strong>, <strong>scalable</strong>, and <strong>human-centered</strong>.</p>
-
-        <div class="small mt-3">
-          <i class="fa fa-map-marker"></i> Vancouver, WA ·
-          <i class="fa fa-university"></i> Georgia Tech ·
-          <i class="fa fa-graduation-cap"></i> PhD ECE; MBA
-        </div>
-        <div class="mt-3">
-          <a href="mailto:tlagrow@gatech.edu" class="btn btn-light btn-sm"><i class="fa fa-envelope"></i> Email</a>
-          <a href="{{ '/assets/tj-lagrow-resume.pdf' | relative_url }}" class="btn btn-outline-light btn-sm btn-hero" target="_blank" rel="noopener">
-            <i class="fa fa-download"></i> CV
-          </a>
-        </div>
+    <!-- Side-by-side layout -->
+    <div class="row align-items-start g-4">
+      <!-- Carousel -->
+      <div class="col-12 col-md-6">
+        <div class="avatar-wrap" id="heroSlides"></div>
       </div>
 
-      <!-- Badges still flashy, tucked under the About card -->
-      <div class="d-flex flex-wrap gap-2 mt-3">
-        <span class="badge">Machine Learning</span>
-        <span class="badge">Computer Vision</span>
-        <span class="badge">Computational Neuroscience</span>
+      <!-- Welcome -->
+      <div class="col-12 col-md-6">
+        <div class="about-card p-4 soft">
+          <p><strong>Welcome — I’m TJ.</strong> I’m a Lecturer with Georgia Tech Professional Education and the College of Lifetime Learning, where I develop and teach applied, high-impact courses in the FlexStack program. My teaching covers artificial intelligence, data analytics, cybersecurity, and other emerging technologies shaped by workforce and industry demand.</p>
+          <p>In parallel, I serve as Instructor of Record for Georgia Tech’s graduate Machine Learning course, <strong>CS7641</strong>. Each term, I lead more than <strong>1,200</strong> students supported by a staff of <strong>30+ graduate teaching assistants</strong> and industry professionals. I oversee curriculum design, pedagogical strategy, and large-scale operations across three semesters per year.</p>
+          <p class="mb-0">My background spans engineering, business, and research; I hold a <strong>PhD in Electrical and Computer Engineering</strong> and an <strong>MBA</strong> from Georgia Tech, have published in neuroimaging and optimization, and co-founded a medical imaging startup with a patent and multi-million-dollar funding. Across teaching, ML deployment, and team mentoring, I focus on building systems that are <strong>rigorous</strong>, <strong>scalable</strong>, and <strong>human-centered</strong>.</p>
+
+          <div class="small mt-3">
+            <i class="fa fa-map-marker"></i> Vancouver, WA ·
+            <i class="fa fa-university"></i> Georgia Tech ·
+            <i class="fa fa-graduation-cap"></i> PhD ECE; MBA
+          </div>
+          <div class="mt-3">
+            <a href="mailto:tlagrow@gatech.edu" class="btn btn-light btn-sm"><i class="fa fa-envelope"></i> Email</a>
+            <a href="{{ '/assets/tj-lagrow-resume.pdf' | relative_url }}" class="btn btn-outline-light btn-sm btn-hero" target="_blank" rel="noopener">
+              <i class="fa fa-download"></i> CV
+            </a>
+          </div>
+        </div>
+
+        <!-- Badges -->
+        <div class="d-flex flex-wrap gap-2 mt-3">
+          <span class="badge">Machine Learning</span>
+          <span class="badge">Computer Vision</span>
+          <span class="badge">Computational Neuroscience</span>
+        </div>
       </div>
     </div>
-  </div>
-</section>
-
-
+  </section>
 
   <!-- EXPLORE: Cards for nav tabs with small highlights -->
   <section class="mb-5">
@@ -282,6 +254,7 @@ portal:
       "{{ 'images/tlagrow_hs_11.jpg'  | relative_url }}?v=" + ver
     ];
 
+    // One-line messages under cursor (same order as sources)
     const messages = [
       "Gimme a head with hair, long beautiful hair",
       "Are those Chihuly's behind you?",
@@ -296,6 +269,7 @@ portal:
       "Captain LaGrow Buccaneer of Brains and Business"
     ];
 
+    // Build slides
     const slides = sources.map((src, i) => {
       const img = document.createElement('img');
       img.src = src;
@@ -308,11 +282,13 @@ portal:
     });
     if (!slides.length) return;
 
+    // Tooltip element
     const tip = document.createElement('div');
     tip.className = 'hover-tip';
     tip.setAttribute('role','tooltip');
     document.body.appendChild(tip);
 
+    // Shuffle helper: Fisher–Yates; ensure first !== avoidStart when reshuffling
     function shuffledOrder(n, avoidStart) {
       const arr = Array.from({ length: n }, (_, i) => i);
       for (let i = n - 1; i > 0; i--) {
