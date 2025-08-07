@@ -67,6 +67,19 @@ portal:
   .timeline::before { content:""; position:absolute; left:0; top:.2rem; bottom:.2rem; width:2px; background: #e5e7eb; }
   .timeline-item { position: relative; margin: .85rem 0; }
   .timeline-item::before { content:""; position:absolute; left:-9px; top:.45rem; width:10px; height:10px; border-radius:50%; background:#0d6efd; }
+
+  /* Darker About box inside the hero */
+  .hero .about-card{
+    background: rgba(255,255,255,.07);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,.22);
+    color: #eef2ff; /* higher contrast on dark */
+  }
+  .hero .about-card .small{ color: rgba(255,255,255,.85); }
+  .hero .about-card a.btn{ border-color: rgba(255,255,255,.7); color:#fff; }
+  .hero .about-card a.btn:hover{ background: rgba(255,255,255,.12); color:#fff; }
+
+
 </style>
 
 <div class="container my-5">
@@ -90,7 +103,6 @@ portal:
           <span class="badge">Computational Neuroscience</span>
         </div>
         <div class="glass p-3 soft">
-          <h2 class="h5 mb-2">About Me</h2>
           <p class="mb-2">
             I teach and build at the intersection of AI, neuroimaging, and product. I lead Georgia Tech’s ML course at
             scale (1,200+ learners/term) while developing workforce-aligned programs. My work spans modeling brain
