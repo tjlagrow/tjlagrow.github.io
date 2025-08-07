@@ -80,48 +80,85 @@ portal:
   .hero .about-card a.btn:hover{ background: rgba(255,255,255,.12); color:#fff; }
 
 
+      /* Masthead at the top of the hero */
+    .masthead { margin-bottom: 1rem; }
+    .masthead-title{
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: .2px;
+      font-size: clamp(2.25rem, 6vw, 3.75rem);
+      background: linear-gradient(92deg, #b3c7ff, #6EE7F9 40%, #A78BFA 75%, #F472B6 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 30px rgba(0,0,0,.25);
+    }
+    .masthead-tagline{
+      font-size: clamp(1rem, 2.4vw, 1.4rem);
+      color: rgba(255,255,255,.9);
+      letter-spacing: .25px;
+    }
+
+    /* Darker About box inside the hero (from earlier change) */
+    .hero .about-card{
+      background: rgba(255,255,255,.07);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.22);
+      color: #eef2ff;
+    }
+    .hero .about-card .small{ color: rgba(255,255,255,.85); }
+    .hero .about-card a.btn{ border-color: rgba(255,255,255,.7); color:#fff; }
+    .hero .about-card a.btn:hover{ background: rgba(255,255,255,.12); color:#fff; }
+
 </style>
 
 <div class="container my-5">
 
-  <!-- HERO: Carousel + About -->
-  <section class="hero mb-5">
-    <div class="row align-items-center g-4">
-      <div class="col-md-4 text-center text-md-left">
-        <div class="avatar-wrap" id="heroSlides"></div>
+<!-- HERO: Name + Tagline on top, then Carousel + About -->
+<section class="hero mb-5">
+  <!-- New masthead row -->
+  <div class="masthead text-center text-md-left">
+    <h1 class="masthead-title mb-2">Theodore (TJ) LaGrow</h1>
+    <div class="masthead-tagline">
+      Researcher, Educator, Computational Neuroscientist, ML Practitioner
+    </div>
+  </div>
+
+  <!-- Carousel + About side-by-side -->
+  <div class="row align-items-center g-4">
+    <div class="col-md-4 text-center text-md-left">
+      <div class="avatar-wrap" id="heroSlides"></div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="d-flex flex-wrap gap-2 mb-4">
+        <span class="badge">Machine Learning</span>
+        <span class="badge">Computer Vision</span>
+        <span class="badge">Computational Neuroscience</span>
       </div>
 
-      <div class="col-md-8">
-        <h1 class="display-5 mb-2">Theodore (TJ) LaGrow</h1>
-        <p class="lead mb-3">
-          Researcher, educator, and builder focused on robust ML systems, spatiotemporal brain dynamics,
-          and turning ideas into products.
+      <div class="about-card p-3 soft">
+        <p class="mb-2">
+          I teach and build at the intersection of AI, neuroimaging, and product. I lead Georgia Tech’s ML course at
+          scale (1,200+ learners/term) while developing workforce-aligned programs. My work spans modeling brain
+          dynamics, medical imaging, and the operational infrastructure that makes learning rigorous <em>and</em> humane.
         </p>
-        <div class="d-flex flex-wrap gap-2 mb-4">
-          <span class="badge">Machine Learning</span>
-          <span class="badge">Computer Vision</span>
-          <span class="badge">Computational Neuroscience</span>
+        <div class="small">
+          <i class="fa fa-map-marker"></i> Atlanta, GA · <i class="fa fa-university"></i> Georgia Tech ·
+          <i class="fa fa-graduation-cap"></i> PhD ECE; MBA
         </div>
-        <div class="glass p-3 soft">
-          <p class="mb-2">
-            I teach and build at the intersection of AI, neuroimaging, and product. I lead Georgia Tech’s ML course at
-            scale (1,200+ learners/term) while developing workforce-aligned programs. My work spans modeling brain
-            dynamics, medical imaging, and the operational infrastructure that makes learning rigorous <em>and</em> humane.
-          </p>
-          <div class="small">
-            <i class="fa fa-map-marker"></i> Atlanta, GA · <i class="fa fa-university"></i> Georgia Tech ·
-            <i class="fa fa-graduation-cap"></i> PhD ECE; MBA
-          </div>
-          <div class="mt-3">
-            <a href="mailto:tlagrow@gatech.edu" class="btn btn-light btn-sm"><i class="fa fa-envelope"></i> Email</a>
-            <a href="{{ '/assets/tj-lagrow-resume.pdf' | relative_url }}" class="btn btn-outline-light btn-sm btn-hero" target="_blank" rel="noopener">
-              <i class="fa fa-download"></i> CV
-            </a>
-          </div>
+        <div class="mt-3">
+          <a href="mailto:tlagrow@gatech.edu" class="btn btn-light btn-sm">
+            <i class="fa fa-envelope"></i> Email
+          </a>
+          <a href="{{ '/assets/tj-lagrow-resume.pdf' | relative_url }}" class="btn btn-outline-light btn-sm btn-hero" target="_blank" rel="noopener">
+            <i class="fa fa-download"></i> CV
+          </a>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <!-- EXPLORE: Cards for nav tabs with small highlights -->
   <section class="mb-5">
