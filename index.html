@@ -109,48 +109,66 @@ portal:
     .hero .about-card a.btn{ border-color: rgba(255,255,255,.7); color:#fff; }
     .hero .about-card a.btn:hover{ background: rgba(255,255,255,.12); color:#fff; }
 
+    /* Tighter, friendlier paragraphs in the About card */
+    .hero .about-card p { margin-bottom: .75rem; }
+
+    /* (Optional) balance widths a bit on md screens */
+    @media (min-width: 768px) {
+      .hero .col-md-5 { flex: 0 0 auto; width: 41.6667%; }
+      .hero .col-md-7 { flex: 0 0 auto; width: 58.3333%; }
+    }
+
+
 </style>
 
 <div class="container my-5">
 
-<!-- HERO: Name + Tagline on top, then Carousel + About -->
+<!-- HERO: Name + Tagline, then Carousel + About side-by-side -->
 <section class="hero mb-5">
-  <!-- New masthead row -->
+  <!-- Masthead -->
   <div class="masthead text-center text-md-left">
     <h1 class="masthead-title mb-2">Theodore J. LaGrow</h1>
-    <div class="masthead-tagline">
-      Researcher, Educator, Computational Neuroscientist, ML Practitioner
-    </div>
+    <div class="masthead-tagline">Researcher, Educator, Computational Neuroscientist, ML Practitioner</div>
   </div>
 
-  <!-- Carousel + About side-by-side -->
-  <div class="row align-items-center g-4">
-    <div class="col-md-4 text-center text-md-left">
+  <!-- Side-by-side layout -->
+  <div class="row align-items-start g-4">
+    <!-- Carousel (left) -->
+    <div class="col-md-5 col-lg-4 text-center text-md-left">
       <div class="avatar-wrap" id="heroSlides"></div>
     </div>
 
-      <div class="about-card p-3 soft">
-        <p class="mb-2">
-          I teach and build at the intersection of AI, neuroimaging, and product. I lead Georgia Tech’s ML course at
-          scale (1,200+ learners/term) while developing workforce-aligned programs. My work spans modeling brain
-          dynamics, medical imaging, and the operational infrastructure that makes learning rigorous <em>and</em> humane.
-        </p>
-        <div class="small">
-          <i class="fa fa-map-marker"></i> Vancouver, WA · <i class="fa fa-university"></i> Georgia Tech ·
+    <!-- About (right) -->
+    <div class="col-md-7 col-lg-8">
+      <div class="about-card p-4 soft">
+        <p><strong>Welcome — I’m TJ.</strong> I’m a Lecturer with Georgia Tech Professional Education and the College of Lifetime Learning, where I develop and teach applied, high-impact courses in the FlexStack program. My teaching covers artificial intelligence, data analytics, cybersecurity, and other emerging technologies shaped by workforce and industry demand.</p>
+        <p>In parallel, I serve as Instructor of Record for Georgia Tech’s graduate Machine Learning course, <strong>CS7641</strong>. Each term, I lead more than <strong>1,200</strong> students supported by a staff of <strong>30+ graduate teaching assistants</strong> and industry professionals. I oversee curriculum design, pedagogical strategy, and large-scale operations across three semesters per year.</p>
+        <p>My background spans engineering, business, and research. I hold a <strong>PhD in Electrical and Computer Engineering</strong> and an <strong>MBA</strong> from Georgia Tech. I’ve published in neuroimaging and optimization, and co-founded a medical imaging startup that holds a patent and has secured multi-million-dollar funding.</p>
+        <p class="mb-0">Whether I’m building educational programs, deploying machine learning solutions, or mentoring teams, my focus is on creating systems that are <strong>rigorous</strong>, <strong>scalable</strong>, and <strong>human-centered</strong>.</p>
+
+        <div class="small mt-3">
+          <i class="fa fa-map-marker"></i> Vancouver, WA ·
+          <i class="fa fa-university"></i> Georgia Tech ·
           <i class="fa fa-graduation-cap"></i> PhD ECE; MBA
         </div>
         <div class="mt-3">
-          <a href="mailto:tlagrow@gatech.edu" class="btn btn-light btn-sm">
-            <i class="fa fa-envelope"></i> Email
-          </a>
+          <a href="mailto:tlagrow@gatech.edu" class="btn btn-light btn-sm"><i class="fa fa-envelope"></i> Email</a>
           <a href="{{ '/assets/tj-lagrow-resume.pdf' | relative_url }}" class="btn btn-outline-light btn-sm btn-hero" target="_blank" rel="noopener">
             <i class="fa fa-download"></i> CV
           </a>
         </div>
       </div>
+
+      <!-- Badges still flashy, tucked under the About card -->
+      <div class="d-flex flex-wrap gap-2 mt-3">
+        <span class="badge">Machine Learning</span>
+        <span class="badge">Computer Vision</span>
+        <span class="badge">Computational Neuroscience</span>
+      </div>
     </div>
   </div>
 </section>
+
 
 
   <!-- EXPLORE: Cards for nav tabs with small highlights -->
