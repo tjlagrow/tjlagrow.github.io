@@ -1,19 +1,164 @@
-- title: "Approximating Cellular Densities from High-Resolution Neuroanatomical Imaging Data"
-  venue: Graduate and Postdoc (GaP) Seminar Series, Georgia Institute of Technology, Atlanta, GA
-  date: September 26th, 2018
-  links: 
+# Talks (newest → oldest)
+
+- title: "Graph of Thoughts: Structured Reasoning with LLMs"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2025-10-10
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=1EQHj84QCi0&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=3"]
+  abstract: >
+    Explores Graph of Thoughts as a framework for non-linear, multi-step LLM reasoning, connecting it
+    to planning, search, and modern structured prompting workflows.
+
+- title: "Kolmogorov-Arnold Networks (KANs): Redefining Neural Nets?"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2024-12-06
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=b4RGlvHNimA&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=9"]
+  abstract: >
+    Breaks down the math and architecture behind KANs, evaluates empirical results, and frames where
+    they challenge or complement conventional deep nets.
+
+- title: "Unraveling Spatiotemporal Brain Patterns: QPPs & cPCA Insights"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2024-09-27
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=XZKF8GDlKhY&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=10"]
+  abstract: >
+    Deep dive into quasi-periodic patterns and complex PCA in fMRI, highlighting how these tools map
+    large-scale brain dynamics and inform connectivity analyses.
+
+- title: "Sparks of Plant Consciousness, AGI, and AI Theory: A Cage Match of Ideas"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2023-09-15
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=0yJ7LxfoIr0&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=11"]
+  abstract: >
+    A debate-style session weaving together GPT-4 "Sparks of AGI", theoretical CS views of consciousness,
+    and plant cognition to stress-test claims about intelligence.
+
+- title: "AlphaFold: Revolutionizing Protein Science with AI"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2022-02-18
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=o6VC0Zm8bpA&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=13"]
+  abstract: >
+    Explains how AlphaFold’s structure predictions reshaped structural biology, why it mattered enough
+    to influence a Nobel, and what it signals for AI in the sciences.
+
+- title: "ChatGPT & LLM Ethics: History, Architecture, and Debate"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2022-03-03
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=AFBEZ8qRX7s&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=8"]
+  abstract: >
+    Traces the evolution of LLMs, outlines ChatGPT’s architecture at a high level, and hosts a structured
+    debate on bias, deployment risk, and responsible use.
+
+- title: "Theories of Consciousness: Exploring Four Frameworks"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2022-05-20
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=mwZFGxBwqpY&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=6"]
+  abstract: >
+    Synthesizes four major theories of consciousness, their predictions, and empirical challenges, with
+    an eye toward how they intersect with AI and brain modeling.
+
+- title: "Text-to-Image AI Showdown: DALL·E 2 vs. Imagen"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2022-06-17
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=4GFvbggOzrY&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=7"]
+  abstract: >
+    Compares DALL·E 2 and Imagen on architecture, data, and evaluation; uses them as a case study in
+    generative models, alignment, and visual creativity.
+
+- title: "Somato-Cognitive Action Network: A New Homunculus in Motor Cortex"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2022-07-28
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=Y634sFVMlqg&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=12"]
+  abstract: >
+    Walks through the Nature paper revealing alternating somato-cognitive networks in motor cortex and
+    the implications for control, mapping, and neuromodulation.
+
+- title: "GATO: The All-in-One Generalist Agent"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2022-09-16
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=dADnKk3JM-s&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=5"]
+  abstract: >
+    Analyzes GATO as an early generalist agent: multi-task training, limitations, and what it taught us
+    about scaling and specialization.
+
+- title: "Upside-Down Reinforcement Learning"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2021-11-19
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=45IB_rmGB_k&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=4"]
+  abstract: >
+    Presents Upside-Down RL as a goal-conditioned, supervised framing of RL and connects it to later
+    return-conditioned and sequence-model approaches.
+
+- title: "Reinforcement Learning, Part 2: Rainbow DQN"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2021-07-16
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=oXl4WJn3Ams&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=1"]
+  abstract: >
+    Builds from fundamentals to Rainbow DQN, unpacking each component and why the combined method
+    stabilized and advanced deep value-based RL.
+
+- title: "Reinforcement Learning, Part 1: Foundations"
+  type: Reading Group
+  venue: "MLBBQ / TReNDS Friday Reading Group"
+  date: 2021-07-09
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=y1IHyR6qiIw&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=2"]
+  abstract: >
+    Introduces the RL loop, MDPs, value functions, and core intuition that grounds later deep RL methods.
 
 - title: "Approximating Cellular Densities from High-Resolution Neuroanatomical Imaging Data"
-  venue: 40th Annual International Conference of the IEEE Engineering in Medicine and Biology Society (EMBC), Honolulu, HI
-  date: July 19th, 2018
-  links:  
+  type: Seminar
+  venue: "Graduate and Postdoc (GaP) Seminar Series, Georgia Institute of Technology, Atlanta, GA"
+  date: 2018-09-26
+  links: []
+  abstract: >
+    Seminar on ArCaDe: automated estimation of cellular densities and laminar structure from neuroanatomical
+    images, bridging sparse recovery and interpretable morphometrics.
 
 - title: "Approximating Cellular Densities from High-Resolution Neuroanatomical Imaging Data"
-  venue: Biomedical Engineering Seminars, Emory University, Atlanta, GA
-  date: April 6th, 2018
-  links: 
+  type: Conference Talk
+  venue: "40th Annual International Conference of the IEEE EMBC, Honolulu, HI"
+  date: 2018-07-19
+  links: []
+  abstract: >
+    EMBC presentation introducing ArCaDe as a robust, data-driven framework for mapping cytoarchitecture
+    at scale.
 
-- title: "Do You Know Where Your Research Is Being Used? An Exploration of Scientific Literature Using Natural Language Processing"
-  venue: 7th Annual Oregon Undergraduate Research Symposium, University of Oregon, Eugene, OR
-  date: May 17th, 2017
-  links: 
+- title: "Approximating Cellular Densities from High-Resolution Neuroanatomical Imaging Data"
+  type: Seminar
+  venue: "Biomedical Engineering Seminars, Emory University, Atlanta, GA"
+  date: 2018-04-06
+  links: []
+  abstract: >
+    Research seminar on early ArCaDe results and applications to cortical and retinal tissue.
+
+- title: "Do You Know Where Your Research Is Being Used? An Exploration of Scientific Literature Using NLP"
+  type: Talk
+  venue: "7th Annual Oregon Undergraduate Research Symposium, University of Oregon, Eugene, OR"
+  date: 2017-05-17
+  links: []
+  abstract: >
+    Undergraduate talk on using NLP to trace software and method usage across scientific literature.
