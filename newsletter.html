@@ -56,58 +56,30 @@ permalink: /newsletter/
   </div>
 </div>
 
-<!-- Subscribe Form -->
+<!-- Subscribe Form (Google Forms Embed) -->
 <div class="row justify-content-center">
-  <div class="col-12 col-md-8 col-lg-6">
+  <div class="col-12 col-md-10 col-lg-8">
     <div class="glass rounded p-4 p-md-5 shadow-sm">
-      <h3 class="h5 mb-2 text-center">Stay in the Loop</h3>
+      <h3 class="h5 mb-3 text-center">Stay in the Loop</h3>
       <p class="small text-muted text-center mb-4">
-        Get new issues, deep dives, and project updates straight to your inbox. No spam, no noise.
+        Drop your email below to get new issues, deep dives, and project updates. Powered by Google Forms.
       </p>
 
-      <!--
-        Hook this form up to your provider of choice (Formspree, Netlify Forms, Mailchimp, etc.).
-        Replace the `action` URL and adjust hidden inputs as needed.
-      -->
-      <form
-        method="POST"
-        action="https://example.com/your-newsletter-endpoint"
-        class="newsletter-form"
-      >
-        <div class="form-group mb-3">
-          <label for="newsletter-name" class="small text-muted">Name (optional)</label>
-          <input
-            type="text"
-            id="newsletter-name"
-            name="name"
-            class="form-control"
-            placeholder="How you'd like to be addressed"
-          >
-        </div>
+      <div class="newsletter-embed-wrapper">
+        <iframe
+          src="https://docs.google.com/forms/d/e/1FAIpQLScxMUzWowGH6O9C7sgAxKR2vYofzdJ8lJ5I27OR0TVg-7sr_A/viewform?embedded=true"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0"
+          loading="lazy"
+        >
+          Loading…
+        </iframe>
+      </div>
 
-        <div class="form-group mb-4">
-          <label for="newsletter-email" class="small text-muted">Email<span class="text-danger">*</span></label>
-          <input
-            type="email"
-            id="newsletter-email"
-            name="email"
-            class="form-control"
-            placeholder="you@example.com"
-            required
-          >
-        </div>
-
-        <!-- Example hidden field if using a specific provider -->
-        <!-- <input type="hidden" name="form-name" value="newsletter-signup"> -->
-
-        <button type="submit" class="btn btn-primary btn-block">
-          Join the Newsletter
-        </button>
-
-        <p class="small text-muted mt-2 mb-0 text-center">
-          You can unsubscribe anytime with one click.
-        </p>
-      </form>
+      <p class="small text-muted mt-3 mb-0 text-center">
+        Your information goes straight to my private mailing list. No third-party marketing platforms.
+      </p>
     </div>
   </div>
 </div>
@@ -129,11 +101,18 @@ permalink: /newsletter/
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   }
 
-  .newsletter-form .form-control {
-    border-radius: 0.5rem;
+  .newsletter-embed-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    border-radius: 0.75rem;
+    background: #ffffff;
   }
 
-  .newsletter-form .btn-primary {
-    border-radius: 999px;
+  .newsletter-embed-wrapper iframe {
+    width: 100%;
+    height: 100%;
   }
 </style>
