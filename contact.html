@@ -5,41 +5,143 @@ permalink: /contact/
 ---
 
 <div class="row">
-    <div class="col-8 ml-auto mr-auto">
-        <!--<h5 class="cover-heading">You can find me on</h5>-->
-        <br/>
-
-        <nav class="nav justify-content-center">
-            <a class="nav-link col-2" href="https://github.com/tjlagrow" target="_blank"
-               data-toggle="tooltip" data-placement="bottom"
-               title="Github">
-            <i class="fa fa-github fa-2x"></i>
-            </a>
-            <a class="nav-link col-2" href="https://www.linkedin.com/in/tjlagrow/"
-               target="_blank" data-toggle="tooltip"
-               data-placement="bottom" title="LinkedIn">
-                <i class="fa fa-linkedin-square fa-2x"></i>
-            </a>
-
-        </nav>
-
-        <br/>
-
-    </div>
+  <div class="col-12 text-center mb-4">
+    <h2 class="h3 mb-2">Get in Touch</h2>
+    <p class="text-muted mb-0">
+      Speaking, teaching, collaborations, AI strategy, or just a thoughtful question — drop a note below.
+    </p>
+  </div>
 </div>
 
-        <!--<div class="row">-->
-            <!--<div class="col-md-4 col-sm-4 col-xs-4 lead"><a href="https://www.flickr.com/photos/126023352@N02/"-->
-                                                            <!--target="_blank" data-toggle="tooltip"-->
-                                                            <!--data-placement="bottom" title="Flickr"><i-->
-                    <!--class="fa fa-flickr fa-2x"></i></a></div>-->
-            <!--<div class="col-md-4 col-sm-4 col-xs-4 lead"><a href="https://soundcloud.com/tjlagrow" target="_blank"-->
-                                                            <!--data-toggle="tooltip" data-placement="bottom"-->
-                                                            <!--title="Soundcloud"><i-->
-                    <!--class="fa fa-soundcloud fa-2x"></i></a></div>-->
-            <!--<div class="col-md-4 col-sm-4 col-xs-4 lead"><a-->
-                    <!--href="https://www.youtube.com/channel/UCQvfDUNkyesFOPReH37r7QA" target="_blank"-->
-                    <!--data-toggle="tooltip" data-placement="bottom" title="Youtube"><i-->
-                    <!--class="fa fa-youtube fa-2x"></i></a></div>-->
-        <!--</div>-->
-        <!--<br/>-->
+<!-- Social Links -->
+<div class="row mb-4">
+  <div class="col-10 col-md-8 mx-auto">
+    <nav class="nav justify-content-center">
+      <a class="nav-link" href="https://github.com/tjlagrow" target="_blank"
+         data-toggle="tooltip" data-placement="bottom" title="GitHub">
+        <i class="fa fa-github fa-2x"></i>
+      </a>
+      <a class="nav-link" href="https://www.linkedin.com/in/tjlagrow/" target="_blank"
+         data-toggle="tooltip" data-placement="bottom" title="LinkedIn">
+        <i class="fa fa-linkedin-square fa-2x"></i>
+      </a>
+      <a class="nav-link" href="https://www.youtube.com/channel/UCQvfDUNkyesFOPReH37r7QA" target="_blank"
+         data-toggle="tooltip" data-placement="bottom" title="YouTube">
+        <i class="fa fa-youtube-play fa-2x"></i>
+      </a>
+    </nav>
+  </div>
+</div>
+
+<!-- Contact + Mailing List Form -->
+<div class="row mb-5">
+  <div class="col-12 col-md-8 col-lg-6 mx-auto">
+    <div class="glass rounded p-4 p-md-5 shadow-sm">
+      <h3 class="h5 mb-2 text-center">Send a Message</h3>
+      <p class="small text-muted text-center mb-4">
+        Use the form below to reach me directly. I read everything, even if I can’t reply to every message.
+      </p>
+
+      <!--
+        Hook this up to your form backend:
+        - Formspree:   https://formspree.io/f/your-id
+        - Netlify:     add data-netlify="true" and a hidden input 'form-name'
+        - Custom:      point `action` to your endpoint
+      -->
+      <form
+        method="POST"
+        action="https://example.com/contact-endpoint"
+        class="contact-form"
+      >
+        <!-- Netlify example:
+        <input type="hidden" name="form-name" value="contact" />
+        -->
+
+        <div class="form-group mb-3">
+          <label for="name" class="small text-muted">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-control"
+            placeholder="Your name"
+            required
+          >
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="email" class="small text-muted">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            placeholder="you@example.com"
+            required
+          >
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="subject" class="small text-muted">Subject</label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            class="form-control"
+            placeholder="What would you like to talk about?"
+          >
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="message" class="small text-muted">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="4"
+            class="form-control"
+            placeholder="Share context, links, or specifics so I can respond usefully."
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-group form-check mb-3">
+          <input
+            type="checkbox"
+            id="newsletter-optin"
+            name="newsletter_optin"
+            class="form-check-input"
+          >
+          <label for="newsletter-optin" class="form-check-label small text-muted">
+            Also add me to the newsletter for research updates and new projects.
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">
+          Send Message
+        </button>
+
+        <p class="small text-muted mt-3 mb-0 text-center">
+          No spam. No scraping. Just humans talking to humans.
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  .contact-form .form-control {
+    border-radius: 0.5rem;
+  }
+
+  .contact-form .btn-primary {
+    border-radius: 999px;
+  }
+
+  .nav .nav-link {
+    color: #444;
+  }
+
+  .nav .nav-link:hover {
+    color: #007bff;
+  }
+</style>
