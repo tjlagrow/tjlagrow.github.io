@@ -61,11 +61,42 @@ portal:
   .awards .badge { background: linear-gradient(135deg, rgba(110,231,249,.25), rgba(167,139,250,.25)); color:#111; }
   .award-item { padding: .75rem 1rem; border-left: 3px solid #0d6efd; background: #fff; border-radius: .5rem; margin-bottom: .5rem; }
 
-  /* Timeline */
-  .timeline { position: relative; padding-left: 1.25rem; margin-left: .25rem; }
-  .timeline::before { content:""; position:absolute; left:0; top:.2rem; bottom:.2rem; width:2px; background: #e5e7eb; }
-  .timeline-item { position: relative; margin: .85rem 0; }
-  .timeline-item::before { content:""; position:absolute; left:-9px; top:.45rem; width:10px; height:10px; border-radius:50%; background:#0d6efd; }
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+/* Remove old vertical line */
+.timeline::before {
+  content: none;
+}
+
+/* Clean timeline items: no dots, no extra indent */
+.timeline-item {
+  position: static;
+  margin: 0.5rem 0;
+  padding-left: 0;
+}
+
+.timeline-item::before {
+  content: none !important;
+}
+
+/* Stage styling for the abstract life phases */
+.timeline-stage {
+  border-left: 2px solid #e5e7eb;
+  padding-left: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.timeline-stage-label {
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.15rem;
+  text-transform: uppercase;
+}
 
   /* Masthead at the top of the hero */
   .masthead { margin-bottom: 1rem; text-align: center; }
