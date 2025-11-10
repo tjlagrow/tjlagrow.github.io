@@ -1,0 +1,139 @@
+---
+layout: page
+title: "Newsletter"
+permalink: /newsletter/
+---
+
+<div class="row">
+  <div class="col-12 text-center mb-4">
+    <h2 class="h3 mb-2">Newsletter</h2>
+    <p class="text-muted mb-0">
+      Essays, research breakdowns, and behind-the-scenes notes on AI, neuroscience, and teaching at scale.
+    </p>
+  </div>
+</div>
+
+<!-- Newsletter List -->
+<div class="row justify-content-center mb-5">
+  <div class="col-12 col-lg-10">
+    <div class="d-flex flex-wrap justify-content-start">
+
+      {%- assign newsletters = site.posts | where_exp: "post", "post.tags contains 'newsletter'" -%}
+      {%- for post in newsletters -%}
+      <a href="{{ post.url }}" class="text-reset text-decoration-none newsletter-card-link">
+        <div class="newsletter-card glass rounded shadow-sm p-3 m-2 d-flex flex-column justify-content-between">
+          <div>
+            <div class="small text-muted">
+              {{ post.date | date: "%b %-d, %Y" }}
+            </div>
+            <h3 class="h6 mb-2">
+              {{ post.title }}
+            </h3>
+            <p class="small text-muted mb-0">
+              {%- if post.description -%}
+                {{ post.description }}
+              {%- elsif post.excerpt -%}
+                {{ post.excerpt | strip_html | strip_newlines | truncate: 120 }}
+              {%- else -%}
+                {{ post.content | strip_html | strip_newlines | truncate: 120 }}
+              {%- endif -%}
+            </p>
+          </div>
+          <div class="mt-3 text-right">
+            <span class="small text-primary">Read &rarr;</span>
+          </div>
+        </div>
+      </a>
+      {%- endfor -%}
+
+      {%- if newsletters == empty -%}
+      <div class="w-100 text-center text-muted mt-4">
+        No newsletters yet. First issue coming soon.
+      </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</div>
+
+<!-- Subscribe Form -->
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="glass rounded p-4 p-md-5 shadow-sm">
+      <h3 class="h5 mb-2 text-center">Stay in the Loop</h3>
+      <p class="small text-muted text-center mb-4">
+        Get new issues, deep dives, and project updates straight to your inbox. No spam, no noise.
+      </p>
+
+      <!--
+        Hook this form up to your provider of choice (Formspree, Netlify Forms, Mailchimp, etc.).
+        Replace the `action` URL and adjust hidden inputs as needed.
+      -->
+      <form
+        method="POST"
+        action="https://example.com/your-newsletter-endpoint"
+        class="newsletter-form"
+      >
+        <div class="form-group mb-3">
+          <label for="newsletter-name" class="small text-muted">Name (optional)</label>
+          <input
+            type="text"
+            id="newsletter-name"
+            name="name"
+            class="form-control"
+            placeholder="How you'd like to be addressed"
+          >
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="newsletter-email" class="small text-muted">Email<span class="text-danger">*</span></label>
+          <input
+            type="email"
+            id="newsletter-email"
+            name="email"
+            class="form-control"
+            placeholder="you@example.com"
+            required
+          >
+        </div>
+
+        <!-- Example hidden field if using a specific provider -->
+        <!-- <input type="hidden" name="form-name" value="newsletter-signup"> -->
+
+        <button type="submit" class="btn btn-primary btn-block">
+          Join the Newsletter
+        </button>
+
+        <p class="small text-muted mt-2 mb-0 text-center">
+          You can unsubscribe anytime with one click.
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  .newsletter-card-link {
+    flex: 1 1 260px;
+    max-width: 320px;
+  }
+
+  .newsletter-card {
+    min-height: 150px;
+    transition: all 0.18s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .newsletter-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+
+  .newsletter-form .form-control {
+    border-radius: 0.5rem;
+  }
+
+  .newsletter-form .btn-primary {
+    border-radius: 999px;
+  }
+</style>
