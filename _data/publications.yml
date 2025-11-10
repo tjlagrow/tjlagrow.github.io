@@ -154,3 +154,118 @@
       doi     = {10.5399/uo/ourj.10.1.4},
       url     = {https://scholarsbank.uoregon.edu/items/7d37774e-915f-4731-a6fc-cd3281ea8152}
     }
+
+
+
+
+- title: "Evidence for white matter intrinsic connectivity networks at rest and during a task: A large-scale study and templates"
+  type: Journal
+  authors: Vaibhavi S. Itkyal, Armin Iraji, K. M. Jensen, Theodore J. LaGrow, et al.
+  venue: Network Neuroscience
+  date: 2025
+  keywords: [white matter, intrinsic connectivity networks, QPP, large-scale, task fMRI]
+  links:
+    - [Journal, https://direct.mit.edu/netn]
+    - [Preprint, https://www.biorxiv.org/content/10.1101/2024.12.16.628798v1]
+  abstract: >
+    Demonstrates robust large-scale intrinsic connectivity networks in white matter at rest and
+    during task, providing templates for future network and clinical studies.
+
+- title: "Exploration of Spatiotemporal Dynamics in Neurodegenerative Functional Brain Networks"
+  type: Thesis
+  authors: Theodore J. LaGrow
+  venue: PhD Dissertation, Georgia Institute of Technology
+  date: 2025
+  keywords: [Alzheimer's disease, QPP, dynamic connectivity, spatiotemporal patterns]
+  links:
+    - [PDF, /assets/papers/lagrow_phd_dissertation.pdf]
+  abstract: >
+    Dissertation on quasi-periodic patterns and dynamic network biomarkers across the Alzheimer's
+    disease spectrum.
+
+- title: "Infraslow dynamic patterns in human cortical networks track a spectrum of external to internal attention"
+  type: Journal
+  authors: Harrison Watters, Aleah Davis, Abia Fazili, Lauren Daley, Theodore J. LaGrow, Eric H. Schumacher, Shella Keilholz
+  venue: Human Brain Mapping
+  date: 2025
+  keywords: [infraslow activity, attention, QPP, human cortex]
+  links:
+    - [Journal, https://onlinelibrary.wiley.com/journal/10970193]
+  abstract: >
+    Links infraslow cortical dynamics and quasi-periodic patterns to shifts between externally and
+    internally oriented attention states.
+
+- title: "QPPLab: A generally applicable software package for detecting, analyzing, and visualizing large-scale quasiperiodic spatiotemporal patterns (QPPs) of brain activity"
+  type: Software
+  authors: Nan Xu, Behnaz Yousefi, Nmachi Anumba, Theodore J. LaGrow, Xiaodi Zhang, Shella Keilholz
+  venue: SoftwareX
+  date: 2025
+  keywords: [QPP, software, fMRI, spatiotemporal dynamics, open-source]
+  links:
+    - [Journal, https://www.sciencedirect.com/science/article/pii/S2352711025000342]
+    - [Code, https://github.com/KeilholzLab/QPPLab]
+  abstract: >
+    Introduces QPPLab, an open-source toolbox for robust detection and visualization of quasi-periodic
+    patterns across diverse fMRI datasets.
+
+- title: "Variation in the distribution of large-scale spatiotemporal patterns of activity across brain states"
+  type: Journal
+  authors: Lisa Meyer-Baese, Nmachi Anumba, Thomas Bolt, Lauren Daley, Theodore J. LaGrow, Xiaodi Zhang, Nan Xu, Wen-Ju Pan, Eric H. Schumacher, Shella Keilholz
+  venue: Frontiers in Systems Neuroscience
+  date: 2024
+  keywords: [QPP, brain states, anesthesia, task, resting-state, dynamics]
+  links:
+    - [Full Text, https://www.frontiersin.org/articles/10.3389/fnsys.2024.1425491/full]
+    - [DOI, https://doi.org/10.3389/fnsys.2024.1425491]
+  abstract: >
+    Compares quasi-periodic pattern distributions across multiple brain states, highlighting state-
+    dependent reconfiguration of large-scale dynamics.
+
+- title: "Voxelwise Intensity Projection for the Spatial Representation of Resting State Functional MRI Networks and Multimodal Deep Learning"
+  type: Conference
+  authors: Vaibhavi S. Itkyal, Anees Abrol, Theodore J. LaGrow, Vince D. Calhoun
+  venue: IEEE International Symposium on Biomedical Imaging (ISBI)
+  date: 2024
+  keywords: [rs-fMRI, deep learning, multimodal, voxelwise projection]
+  links:
+    - [ISBI, https://ieeexplore.ieee.org]
+  abstract: >
+    Proposes a voxelwise projection method to better encode resting-state networks for multimodal
+    deep learning pipelines.
+
+- title: "Creative tempo: Spatiotemporal dynamics of the default mode network in improvisational musicians"
+  type: Preprint
+  authors: Harrison Watters, Abia Fazili, Lauren Daley, Alexander Belden, Theodore J. LaGrow, Thomas Bolt, Psyche Loui, Shella Keilholz
+  venue: bioRxiv
+  date: 2024
+  keywords: [default mode network, creativity, QPP, music]
+  links:
+    - [bioRxiv, https://www.biorxiv.org/content/10.1101/2024.04.07.588391v1]
+  abstract: >
+    Examines how default mode network dynamics and QPPs differ in improvisational musicians during
+    creative tasks.
+
+- title: "Voxel-wise Fusion of Resting fMRI Networks and Gray Matter Volume for Alzheimer’s Disease Classification using Deep Multimodal Learning"
+  type: Preprint
+  authors: Vaibhavi S. Itkyal, Anees Abrol, Theodore J. LaGrow, Alex Fedorov, Vince D. Calhoun
+  venue: Research Square
+  date: 2023
+  keywords: [Alzheimer's disease, multimodal, deep learning, rs-fMRI, gray matter]
+  links:
+    - [Research Square, https://www.researchsquare.com/article/rs-3740218]
+    - [PMC, https://pmc.ncbi.nlm.nih.gov/articles/PMC10760243/]
+  abstract: >
+    Uses voxel-wise fusion of functional networks and gray matter volume within a deep learning
+    framework to classify Alzheimer’s disease.
+
+- title: "Spatial and Spectral Components of the BOLD Global Signal in Rat Resting-State Functional MRI"
+  type: Journal
+  authors: Nmachi Anumba, Eric Maltbie, Wen-Ju Pan, Theodore J. LaGrow, Nan Xu, Shella Keilholz
+  venue: Magnetic Resonance in Medicine
+  date: 2023
+  keywords: [global signal, rat fMRI, spectral analysis, resting-state]
+  links:
+    - [Journal, https://onlinelibrary.wiley.com/doi/10.1002/mrm.29824]
+  abstract: >
+    Decomposes spatial and spectral contributions to the BOLD global signal in rats, clarifying its
+    neural and non-neural components.
