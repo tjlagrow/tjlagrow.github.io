@@ -1,23 +1,25 @@
 # Site settings
 title: Theodore LaGrow Online
 email: tjlagrow@gmail.com
-description: > # this means to ignore newlines until "baseurl:"
+description: >
   This is the website of Theodore LaGrow. Created by yours truly!
-baseurl: "" # the subpath of your site, e.g. /blog/
+baseurl: ""                       # the subpath of your site, e.g. /blog/
 url: "https://tjlagrow.github.io" # the base hostname & protocol for your site
-github_username:  tjlagrow
+github_username: tjlagrow
 
 name: Theodore LaGrow
-timezone: EST
-lsi: true
+timezone: America/New_York        # more precise than "EST"
 
 # Build settings
 markdown: kramdown
 kramdown:
-   math_engine: mathjax
+  math_engine: mathjax
 highlighter: rouge
 
 permalink: pretty
 
+# Collections
 collections:
-- collection
+  newsletters:
+    output: true
+    permalink: /newsletter/:name/

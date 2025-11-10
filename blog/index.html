@@ -8,9 +8,7 @@ permalink: /blog/
   <div class="col-10 col-md-8 mx-auto">
     <h3 class="cover-heading text-center mb-4">Blog Posts</h3>
 
-    {%- assign blog_posts = site.posts | where_exp: "post", "post.tags contains 'newsletter' == false" -%}
-
-    {%- for post in blog_posts -%}
+    {% for post in site.posts %}
     <a href="{{ post.url }}" class="text-reset text-decoration-none">
       <div class="d-flex align-items-center mb-3 p-3 glass rounded shadow-sm blog-card hover-lift">
 
@@ -46,7 +44,7 @@ permalink: /blog/
 
       </div>
     </a>
-    {%- endfor -%}
+    {% endfor %}
   </div>
 </div>
 

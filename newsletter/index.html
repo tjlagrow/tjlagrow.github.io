@@ -18,24 +18,25 @@ permalink: /newsletter/
   <div class="col-12 col-lg-10">
     <div class="d-flex flex-wrap justify-content-start">
 
-      {%- assign newsletters = site.posts | where_exp: "post", "post.tags contains 'newsletter'" -%}
-      {%- for post in newsletters -%}
-      <a href="{{ post.url }}" class="text-reset text-decoration-none newsletter-card-link">
+      {%- assign newsletters = site.newsletters | sort: "date" | reverse -%}
+
+      {%- for newsletter in newsletters -%}
+      <a href="{{ newsletter.url }}" class="text-reset text-decoration-none newsletter-card-link">
         <div class="newsletter-card glass rounded shadow-sm p-3 m-2 d-flex flex-column justify-content-between">
           <div>
             <div class="small text-muted">
-              {{ post.date | date: "%b %-d, %Y" }}
+              {{ newsletter.date | date: "%b %-d, %Y" }}
             </div>
             <h3 class="h6 mb-2">
-              {{ post.title }}
+              {{ newsletter.title }}
             </h3>
             <p class="small text-muted mb-0">
-              {%- if post.description -%}
-                {{ post.description }}
-              {%- elsif post.excerpt -%}
-                {{ post.excerpt | strip_html | strip_newlines | truncate: 120 }}
+              {%- if newsletter.description -%}
+                {{ newsletter.description }}
+              {%- elsif newsletter.excerpt -%}
+                {{ newsletter.excerpt | strip_html | strip_newlines | truncate: 120 }}
               {%- else -%}
-                {{ post.content | strip_html | strip_newlines | truncate: 120 }}
+                {{ newsletter.content | strip_html | strip_newlines | truncate: 120 }}
               {%- endif -%}
             </p>
           </div>
