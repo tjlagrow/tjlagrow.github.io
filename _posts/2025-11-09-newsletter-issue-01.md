@@ -16,7 +16,7 @@ You’re busy, the timeline is noisy, and you don’t need fifty press-release r
 
 This week's biggest signal wasn't a new model, it was a new strategy. Microsoft announced the **MAI Superintelligence Team**, led by heavy-hitters Mustafa Suleyman and Karen Simonyan.
 
-http://googleusercontent.com/image_collection/image_retrieval/16037384534819028705_0
+http://googleusercontent.com/image_collection/image_retrieval/1563293803838865416_0
 
 Their stated goal is *not* a god-like AGI. Instead, they're targeting **domain-specific superintelligence**—systems that can outperform the best human experts in a single, high-value field.
 
@@ -32,7 +32,7 @@ Expect a massive spend on models tuned for radiology, preventive care, and molec
 
 The other quiet-but-loud trend this week: **AI infra & chips keep centralizing.**
 
-http://googleusercontent.com/image_collection/image_retrieval/16782017532048037426_0
+http://googleusercontent.com/image_collection/image_retrieval/14159367291760108587_0
 
 The ongoing mega-deals for custom accelerators (from NVIDIA, Google, and a dozen startups) and the eye-watering cost of AI datacenter buildouts mean one thing: the price of "serious" frontier model training is drifting further out of reach for small labs.
 
@@ -53,7 +53,10 @@ http://googleusercontent.com/image_collection/image_retrieval/127293763551711410
 
 The carnage was led by the sector's darling, **Nvidia**. The chipmaker saw **hundreds of billions in market value evaporate** in a matter of days. Other AI-centric stocks, like Palantir and the rest of the "Magnificent Seven," all followed suit, tumbling from their lofty highs.
 
-http://googleusercontent.com/image_collection/image_retrieval/18368423574461354974_0
+
+
+http://googleusercontent.com/image_collection/image_retrieval/16502630611866916066_0
+
 
 * **Why You Should Care:** This wasn't a random dip; it was a crisis of confidence. Analysts are pointing to the massive, widening gap between sky-high valuations and *actual* company earnings. The Guardian noted that even Michael Burry (of "The Big Short" fame) has been betting against Nvidia and Palantir.
 * **The Takeaway:** The market is (finally) asking: "When does all this investment turn into profit?" This week's crash suggests investors are getting impatient, and the era of funding "AI for AI's sake" may be slamming shut. Expect a massive flight to quality, where only companies with real revenue and clear profits will be rewarded.
@@ -66,7 +69,7 @@ http://googleusercontent.com/image_collection/image_retrieval/183684235744613549
 
 Independent benchmarking pieces this week confirm what we all suspected: the top of the LLM leaderboard is a muddled mess. **Claude Sonnet 4.5** and current **GPT-class** models trade blows for the #1 spot in complex coding and agentic tasks, with a half-dozen open and closed models clustered right behind them.
 
-http://googleusercontent.com/image_collection/image_retrieval/18355640475057269169_0
+http://googleusercontent.com/image_collection/image_retrieval/12603047803483270685_0
 
 * **Translation:** Stop fetishizing one logo. The "best" model is a myth. The *smart* play is to pick your model like a procurement manager, not a fan. Your choice should be based on:
     * **Latency:** How fast do you need the answer?
@@ -87,9 +90,9 @@ This is the shift from "prompt vibes" to "provable engineering."
 
 ### Brains Are More Efficient Than GPUs. Hardware Is Trying to Catch Up.
 
-Tucked away in the hardware journals was a fascinating paper on **voltage-responsive biomimetic membranes**.
+Tucked away in the hardware journals was a fascinating paper on **voltage-responsive biomimetic membranes**. Here is a photo of **Intel's "Loihi 2" neuromorphic chip**, a real-world example of this brain-inspired design.
 
-http://googleusercontent.com/image_collection/image_retrieval/4119661237296504837_0
+http://googleusercontent.com/image_collection/image_retrieval/17170461303355842214_0
 
 This is a (very) early-stage hint at hardware that natively supports dense, brain-like dynamics. It's not coming to production tomorrow, but it's part of a slow, steady march toward hardware that will one day make today’s transformer stacks look comically wasteful.
 
@@ -122,9 +125,9 @@ Industry, especially players like Apple, is pushing hard for **on-device and pri
 
 Vision headlines were quiet, but that's the point. Vision is no longer the star of the show; it's a feature, a data stream, a sensor.
 
-http://googleusercontent.com/image_collection/image_retrieval/3199368345945458395_0
+http://googleusercontent.com/image_collection/image_retrieval/13290760967031198277_0
 
-The real work is in **multimodal models** that treat images/video as just one part of a broader reasoning context. The money is in:
+The real work is in **multimodal models** that treat images/video as just one part of a broader reasoning context (like the diagram above from a recent paper). The money is in:
 
 * Medical imaging (as Microsoft proved)
 * Industrial inspection
@@ -149,7 +152,7 @@ The key constraint is **reliability > cleverness**. Any robot powered by a chat 
 
 The "Copilot-era" of analytics is now normal. Every BI and cloud vendor is nudging you into a "natural language to SQL/dashboard" flow.
 
-http://googleusercontent.com/image_collection/image_retrieval/7787464633707794895_0
+http://googleusercontent.com/image_collection/image_retrieval/15527791743997270124_0
 
 This only works if you do the *un-hyped* work first. The most useful shift is building **semantic layers and data catalogs** that encode your business definitions ("what is an 'active user'?" "how do we define 'churn'?").
 
@@ -161,7 +164,7 @@ The biggest ethics news: reports indicate the European Commission is considering
 
 
 
-http://googleusercontent.com/image_collection/image_retrieval/7437179953315476608_0
+http://googleusercontent.com/image_collection/image_retrieval/10098661557463605752_0
 
 
 * **Practical Takeaway:** Do not treat "delay" as "holiday." This doesn't kill the Act; it just pushes enforcement.
