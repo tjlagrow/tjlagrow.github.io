@@ -31,11 +31,15 @@ permalink: /blog/
           <div class="font-weight-semibold">
             {{ post.title }}
           </div>
-          {% if post.description %}
-            <div class="small text-muted mt-1">
+          <div class="small text-muted mt-1">
+            {% if post.description %}
               {{ post.description }}
-            </div>
-          {% endif %}
+            {% elsif post.excerpt %}
+              {{ post.excerpt | strip_html | strip_newlines | truncate: 140 }}
+            {% else %}
+              {{ post.content | strip_html | strip_newlines | truncate: 140 }}
+            {% endif %}
+          </div>
         </div>
 
       </div>
