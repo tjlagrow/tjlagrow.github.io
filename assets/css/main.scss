@@ -1,8 +1,4 @@
----
-# Only the main Sass file needs front matter (the dashes are enough)
----
-
-@charset "utf-8";
+--- # Only the main Sass file needs front matter (the dashes are enough) --- @charset "utf-8";
 
 // Our variables
 $base-font-family: 'Nunito', Helvetica, Arial, sans-serif;
@@ -42,7 +38,10 @@ $on-laptop: 800px;
 // Import partials from `sass_dir` (defaults to `_sass`)
 @import "base",
 "syntax-highlighting",
-"custom";
-
-
-
+"custom",
+"theme",
+"hero",
+"cards",
+"components",
+"forms",
+"chatbot";

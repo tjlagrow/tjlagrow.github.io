@@ -1,0 +1,40 @@
+// Glassmorphism Theme Variables & Mixins
+
+// Colors
+$bg-dark: #0f1223;
+$bg-gradient-start: #0f1223;
+$bg-gradient-end: #0a0c18;
+
+$glass-bg: rgba(255, 255, 255, 0.07);
+$glass-border: rgba(255, 255, 255, 0.12);
+$glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+$accent-primary: #6EE7F9;
+$accent-secondary: #A78BFA;
+$accent-tertiary: #F472B6;
+
+// Mixins
+@mixin glass-panel {
+  background: $glass-bg;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid $glass-border;
+  box-shadow: $glass-shadow;
+  border-radius: 1rem;
+}
+
+@mixin hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    border-color: rgba(255,255,255, 0.3);
+  }
+}
+
+@mixin text-gradient {
+  background: linear-gradient(92deg, #b3c7ff, $accent-primary 40%, $accent-secondary 75%, $accent-tertiary 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

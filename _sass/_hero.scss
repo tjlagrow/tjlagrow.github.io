@@ -1,0 +1,183 @@
+// Hero Section Styles
+
+.hero {
+    position: relative;
+    border-radius: 1.25rem;
+    padding: 3rem 2rem;
+    overflow: hidden;
+    background:
+        radial-gradient(1200px 600px at 10% -20%, rgba(80, 126, 255, 0.15), transparent 60%),
+        radial-gradient(1000px 500px at 100% 0%, rgba(255, 170, 90, 0.15), transparent 50%),
+        linear-gradient(135deg, $bg-dark, $bg-gradient-end);
+    color: #fff;
+    margin-bottom: 3rem;
+
+    // The simplified mesh background container
+    #hero-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    .hero-interactive-glow {
+        position: absolute;
+        top: -150px;
+        left: -150px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(110, 231, 249, 0.4) 0%, rgba(167, 139, 250, 0.1) 60%, transparent 100%);
+        border-radius: 50%;
+        filter: blur(40px);
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0; // Hidden by default, shown by JS
+        transition: opacity 0.5s ease;
+        mix-blend-mode: screen;
+    }
+
+    .content-wrapper {
+        position: relative;
+        z-index: 1;
+    }
+}
+
+.masthead {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    &-title {
+        font-weight: 800;
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        line-height: 1.1;
+        @include text-gradient;
+        margin-bottom: 0.5rem;
+    }
+
+    &-tagline {
+        font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 300;
+        letter-spacing: 0.5px;
+    }
+}
+
+.avatar-wrap {
+    position: relative;
+    max-width: 480px;
+    margin: 0 auto;
+    aspect-ratio: 1 / 1;
+
+    .hero-slide {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 1rem;
+        border: 4px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        opacity: 0;
+        transition: opacity 1s ease;
+
+        &.active {
+            opacity: 1;
+            // animation: sweepReveal .8s ease-out both; // Optional: replaced with simple fade for smoother loop
+        }
+    }
+}
+
+.about-card {
+    @include glass-panel;
+    padding: 2rem;
+    height: 100%;
+    color: #eef2ff;
+
+    p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+        font-size: 1.05rem;
+    }
+
+    .small {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+    }
+
+    .btn-hero {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #fff;
+        background: rgba(255, 255, 255, 0.05);
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #fff;
+        }
+    }
+}
+
+.badge-glass {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    backdrop-filter: blur(4px);
+    padding: 0.4em 0.8em;
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+// Teach Hero Variant
+.teach-hero {
+    @extend .hero;
+    background:
+        radial-gradient(1200px 600px at 5% -20%, rgba(80, 126, 255, 0.25), transparent 60%),
+        radial-gradient(1000px 500px at 100% 0%, rgba(255, 170, 90, 0.25), transparent 50%),
+        linear-gradient(135deg, #0f1223, #0a0c18);
+
+    .glow {
+        position: absolute;
+        inset: -40%;
+        background: conic-gradient(from 90deg at 50% 50%, rgba($accent-primary, 0.2), rgba($accent-secondary, 0.2), rgba($accent-tertiary, 0.2), rgba($accent-primary, 0.2));
+        filter: blur(80px);
+        opacity: 0.4;
+        animation: spin 20s linear infinite;
+        z-index: 0;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .row {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-title {
+        font-weight: 800;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        letter-spacing: -1px;
+        margin-bottom: 1rem;
+    }
+
+    .hero-sub {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.9);
+        max-width: 65ch;
+        font-weight: 300;
+        line-height: 1.6;
+    }
+
+    .hero-updated {
+        font-size: 0.9rem;
+        opacity: 0.7;
+        margin-top: 1rem;
+        font-family: monospace;
+    }
+}

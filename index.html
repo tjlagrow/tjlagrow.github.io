@@ -3,137 +3,25 @@ layout: default
 title: Theodore LaGrow Online
 # Cards under the "Explore" section—edit here without touching _data/navbar.yml
 portal:
-  - { title: "Home",        url: "/",              blurb: "Start here. Overview & recent work." }
-  - { title: "Newsletter",  url: "/newsletter/",   blurb: "Occasional updates. No spam." }
-  - { title: "Publications",url: "/research/",     blurb: "Peer-reviewed papers, preprints & software." }
-  - { title: "Teaching",    url: "/teaching/",     blurb: "Courses, syllabi, pedagogy, and resources." }
-  - { title: "Blog",        url: "/blog/",         blurb: "Short, opinionated notes on ML & teaching." }
-  - { title: "Contact",     url: "/contact/",      blurb: "Email, booking, and office hours." }
+- { title: "Home", url: "/", blurb: "Start here. Overview & recent work." }
+- { title: "Newsletter", url: "/newsletter/", blurb: "Occasional updates. No spam." }
+- { title: "Publications",url: "/research/", blurb: "Peer-reviewed papers, preprints & software." }
+- { title: "Teaching", url: "/teaching/", blurb: "Courses, syllabi, pedagogy, and resources." }
+- { title: "Blog", url: "/blog/", blurb: "Short, opinionated notes on ML & teaching." }
+- { title: "Contact", url: "/contact/", blurb: "Email, booking, and office hours." }
 ---
 
-<style>
-  /* --- Page Flair --- */
-  .hero {
-    position: relative;
-    border-radius: 1.25rem;
-    padding: 2.25rem;
-    overflow: hidden;
-    background:
-      radial-gradient(1200px 600px at 10% -20%, rgba(80,126,255,.25), transparent 60%),
-      radial-gradient(1000px 500px at 100% 0%, rgba(255,170,90,.25), transparent 50%),
-      linear-gradient(135deg, #0f1223, #0a0c18);
-    color: #fff;
-  }
-  .hero .badge { background: rgba(255,255,255,.15); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.25); }
-  .btn-hero { border-color: rgba(255,255,255,.7); color:#fff; }
-  .btn-hero:hover { background: rgba(255,255,255,.12); color:#fff; }
-
-  .glass { background: rgba(255,255,255,.85); backdrop-filter: blur(8px); border: 1px solid rgba(0,0,0,.06); border-radius: 1rem; }
-  .soft { border-radius: 1rem; }
-
-  /* Carousel */
-  .avatar-wrap { position: relative; max-width: 520px; margin-inline:auto; aspect-ratio: 1 / 1; }
-  .hero-slide {
-    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-    border-radius: 1rem; border: 4px solid rgba(255,255,255,.6); box-shadow: 0 8px 24px rgba(0,0,0,.25);
-    opacity: 0;
-  }
-  .hero-slide.active { opacity: 1; animation: sweepReveal .8s ease-out both; }
-  @keyframes sweepReveal { 0% { clip-path: inset(0 100% 0 0); } 100% { clip-path: inset(0 0 0 0); } }
-
-  /* Tooltip for one-line messages */
-  .hover-tip{
-    position: fixed; z-index: 10000; pointer-events: none; display: none;
-    background: rgba(13,110,253,.95); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 12px; white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(0,0,0,.15); transform: translate(-50%, 0);
-  }
-
-  /* Explore grid */
-  .portal-card {
-    background: #fff; border: 1px solid #eaecef; border-radius: 14px; padding: 16px; height: 100%;
-    transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
-  }
-  .portal-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.10); border-color:#d7dbdf; }
-  .portal-card .title { font-weight: 600; margin-bottom: .25rem; }
-  .portal-card .blurb { color: #6b7280; font-size: .95rem; }
-
-  /* Awards */
-  .awards .badge { background: linear-gradient(135deg, rgba(110,231,249,.25), rgba(167,139,250,.25)); color:#111; }
-  .award-item { padding: .75rem 1rem; border-left: 3px solid #0d6efd; background: #fff; border-radius: .5rem; margin-bottom: .5rem; }
-
-/* Timeline */
-.timeline {
-  position: relative;
-  padding-left: 0;
-  margin-left: 0;
-}
-
-/* Remove old vertical line */
-.timeline::before {
-  content: none;
-}
-
-/* Clean timeline items: no dots, no extra indent */
-.timeline-item {
-  position: static;
-  margin: 0.5rem 0;
-  padding-left: 0;
-}
-
-.timeline-item::before {
-  content: none !important;
-}
-
-/* Stage styling for the abstract life phases */
-.timeline-stage {
-  border-left: 2px solid #e5e7eb;
-  padding-left: 0.85rem;
-  margin-bottom: 1.25rem;
-}
-
-.timeline-stage-label {
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  margin-bottom: 0.15rem;
-  text-transform: uppercase;
-}
-
-  /* Masthead at the top of the hero */
-  .masthead { margin-bottom: 1rem; text-align: center; }
-  .masthead-title{
-    font-weight: 800; line-height: 1.05; letter-spacing: .2px;
-    font-size: clamp(2.4rem, 6vw, 4rem);
-    background: linear-gradient(92deg, #b3c7ff, #6EE7F9 40%, #A78BFA 75%, #F472B6 100%);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    text-shadow: 0 2px 30px rgba(0,0,0,.25);
-  }
-  .masthead-tagline{
-    font-size: clamp(1rem, 2.4vw, 1.4rem);
-    color: rgba(255,255,255,.9);
-    letter-spacing: .25px;
-  }
-
-  /* Darker About box inside the hero */
-  .hero .about-card{
-    background: rgba(255,255,255,.07);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,.22);
-    color: #eef2ff;
-  }
-  .hero .about-card p { margin-bottom: .75rem; }
-  .hero .about-card .small{ color: rgba(255,255,255,.85); }
-  .hero .about-card a.btn{ border-color: rgba(255,255,255,.7); color:#fff; }
-  .hero .about-card a.btn:hover{ background: rgba(255,255,255,.12); color:#fff; }
-</style>
+<!-- Styles moved to _sass/ -->
 
 <div class="container my-5">
 
   <!-- HERO: Name + Tagline, then Carousel + Welcome side-by-side (equal width) -->
   <section class="hero mb-5">
     <!-- Masthead -->
+    <div class="hero-interactive-glow"></div>
     <div class="masthead">
       <h1 class="masthead-title mb-2">Theodore J. LaGrow</h1>
-      <div class="masthead-tagline">Researcher, Educator, ML Practitioner, Computational Neuroscientist</div>
+      <div class="masthead-tagline">Building systems that learn, teaching at scale, and exploring the brain.</div>
     </div>
 
     <!-- Side-by-side layout -->
@@ -146,9 +34,20 @@ portal:
       <!-- Welcome -->
       <div class="col-12 col-md-6">
         <div class="about-card p-4 soft">
-          <p><strong>Hi, I’m TJ, welcome!!</strong> This site covers machine learning, teaching at scale, and product minded research. I am a Lecturer with Georgia Tech Professional Education and the College of Lifetime Learning, where I develop and teach applied, high-impact courses in the FlexStack program. My teaching spans artificial intelligence, data analytics, cybersecurity, and other emerging technologies shaped by workforce and industry demand.</p>
-          <p>In parallel, I serve as Instructor of Record for Georgia Tech’s graduate Machine Learning course, CS7641. Each term, I lead more than 1,200 students supported by a staff of over 30 graduate teaching assistants and industry professionals. I oversee curriculum design, pedagogical strategy, and large-scale operations across three semesters each year.</p>
-          <p>My background spans engineering, business, and research. I hold a PhD in Electrical and Computer Engineering and an MBA from Georgia Tech. I have published work in neuroimaging and optimization, and I co-founded a medical imaging startup that holds a patent and has secured millions of dollars in funding.</p>
+          <p class="lead"><strong>Hi, I’m TJ.</strong> I am an <strong>Instructor at Georgia Tech</strong> passionate
+            about AI, neuroscience, and education at scale.</p>
+          <p>Whether I'm training large language models, teaching thousands of students in Georgia Tech's OMSCS program,
+            or studying brain dynamics, I build things that bridge the gap between complex theory and real-world impact.
+          </p>
+          <p>This site is my digital garden—a collection of my research, teaching resources, and thoughts on the future
+            of learning and machine intelligence.</p>
+          <p>In parallel, I serve as Instructor of Record for Georgia Tech’s graduate Machine Learning course, CS7641.
+            Each term, I lead more than 1,200 students supported by a staff of over 30 graduate teaching assistants and
+            industry professionals. I oversee curriculum design, pedagogical strategy, and large-scale operations across
+            three semesters each year.</p>
+          <p>My background spans engineering, business, and research. I hold a PhD in Electrical and Computer
+            Engineering and an MBA from Georgia Tech. I have published work in neuroimaging and optimization, and I
+            co-founded a medical imaging startup that holds a patent and has secured millions of dollars in funding.</p>
 
           <div class="small mt-3">
             <i class="fa fa-map-marker"></i> Vancouver, WA ·
@@ -157,7 +56,8 @@ portal:
           </div>
           <div class="mt-3">
             <a href="mailto:tlagrow@gatech.edu" class="btn btn-light btn-sm"><i class="fa fa-envelope"></i> Email</a>
-            <a href="{{ '/assets/resume_tlagrow.pdf' | relative_url }}" class="btn btn-outline-light btn-sm btn-hero" target="_blank" rel="noopener">
+            <a href="{{ '/assets/resume_tlagrow.pdf' | relative_url }}" class="btn btn-outline-light btn-sm btn-hero"
+              target="_blank" rel="noopener">
               <i class="fa fa-download"></i> CV
             </a>
           </div>
@@ -191,284 +91,37 @@ portal:
     </div>
   </section>
 
-  <!-- AWARDS -->
-  <section class="mb-5 awards">
-    <h2 class="h4 text-center mb-3">Grants, Fellowships, Honors & Awards</h2>
+  <!-- LATEST NOTES (Fresh from the Garden) -->
+  <section class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="h4 mb-0">Latest Notes</h2>
+      <a href="{{ '/blog/' | relative_url }}" class="small text-muted text-decoration-none">View All <i
+          class="fa fa-arrow-right"></i></a>
+    </div>
+
     <div class="row">
-      <div class="col-lg-10 mx-auto">
-        <div class="mb-2"><span class="badge">Scholarships & Fellowships</span></div>
-        <div class="award-item">United Way Metropolitan Dallas Healthcare Innovation Grant (Insight Optics, 2022–2023) — $500k/year non-dilutive.</div>
-        <div class="award-item">Graduate Research Assistantship Fellowship (2017–2019), GT/Emory BME.</div>
-        <div class="award-item">Presidential Undergraduate Research Scholarship (2016–2017), University of Oregon.</div>
-        <div class="award-item">UO Presidential Scholarship (2013–2017) · Summit Scholarship (2013–2017) · Intel Scholarship (2013).</div>
-
-        <div class="mt-3 mb-2"><span class="badge">Awards</span></div>
-        <div class="award-item">Institutional Winner — Online TA of the Year (2023).</div>
-        <div class="award-item">Outstanding Graduate Teaching Assistant Award (College of Computing & ECE: 2020, 2021, 2023).</div>
-        <div class="award-item">NSF GRFP Honorable Mention (2019).</div>
-
-        <div class="mt-3 mb-2"><span class="badge">Other Recognitions</span></div>
-        <div class="award-item">Sigma Xi Associate Member (2019).</div>
-        <div class="award-item">First Place (Team Lead) — NYU/MLB Media Lab Hackathon (2017).</div>
+      {% for post in site.posts limit:3 %}
+      <div class="col-md-4 mb-3">
+        <a href="{{ post.url | relative_url }}" class="text-decoration-none h-100 d-block">
+          <div class="glass p-4 soft h-100 hover-lift">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-light text-dark border">{{ post.tags | first }}</span>
+              <span class="small text-muted">
+                {% assign words = post.content | number_of_words %}
+                {% if words < 360 %}1 min{% else %}{{ words | divided_by:180 }} min{% endif %} read </span>
+            </div>
+            <h3 class="h5 text-dark fw-bold mb-2">{{ post.title }}</h3>
+            <p class="small text-muted mb-0">
+              {{ post.excerpt | strip_html | truncatewords: 20 }}
+            </p>
+          </div>
+        </a>
       </div>
+      {% endfor %}
     </div>
   </section>
 
-<!-- TIMELINE -->
-<section class="mb-5">
-  <h2 class="h4 text-center mb-3">Timeline</h2>
-  <div class="row">
-    <div class="col-lg-8 mx-auto glass p-4 p-md-5">
-      <div class="timeline">
-
-        <!-- Stage 1: AI Systems & Large-Scale Teaching -->
-        <div class="timeline-stage">
-          <div class="timeline-stage-label text-uppercase small text-muted">
-            AI Systems & Large-Scale Teaching
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-meta small text-muted">
-              2025 – Present · Georgia Tech
-            </div>
-            <div class="timeline-title">
-              <strong>Faculty & Lead AI/LLM Expert.</strong>
-            </div>
-            <div class="timeline-body small">
-              Leads FlexStack AI and generative AI initiatives; designs production-grade course infrastructure
-              so thousands of professionals can learn modern AI with telemetry, reliability, and sane operations.
-            </div>
-            <div class="timeline-tags small">
-              <span>AI strategy</span><span>LLM systems</span><span>program design</span><span>scale</span>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-meta small text-muted">
-              2020 – Present · OMSCS / CS7641 & CS7642
-            </div>
-            <div class="timeline-title">
-              <strong>Operating ML/RL at 1,000+ learner scale.</strong>
-            </div>
-            <div class="timeline-body small">
-              Architect for flagship ML/RL courses: 30+ TAs, 1,000–1,400+ learners/term, structured TA pipelines,
-              robust grading, and continuous experimentation instead of folklore.
-            </div>
-            <div class="timeline-tags small">
-              <span>ML education</span><span>ops & tooling</span><span>evaluation</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Stage 2: Brain Networks, Signals & Scientific Rigor -->
-        <div class="timeline-stage">
-          <div class="timeline-stage-label text-uppercase small text-muted">
-            Brain Networks, Signals & Scientific Rigor
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-meta small text-muted">
-              2019 – 2025 · Georgia Tech / Keilholz MIND Lab
-            </div>
-            <div class="timeline-title">
-              <strong>PhD in ECE · Spatiotemporal brain dynamics & neurodegeneration.</strong>
-            </div>
-            <div class="timeline-body small">
-              Developed methods for quasi-periodic patterns, cross-species connectivity, and AD progression;
-              co-authored tools like QPPLab and multi-site studies that care about robustness, not just pretty plots.
-            </div>
-            <div class="timeline-tags small">
-              <span>fMRI</span><span>signal processing</span><span>networks</span><span>methodology</span>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-meta small text-muted">
-              2019 – 2023
-            </div>
-            <div class="timeline-title">
-              <strong>M.S. ECE & research scientist.</strong>
-            </div>
-            <div class="timeline-body small">
-              Built end-to-end pipelines (acquisition → QC → modeling → interpretation) for large neuroimaging datasets.
-            </div>
-            <div class="timeline-tags small">
-              <span>pipelines</span><span>reproducibility</span><span>tooling</span>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-meta small text-muted">
-              2022 · Scheller College of Business
-            </div>
-            <div class="timeline-title">
-              <strong>MBA with a deep-tech / product lens.</strong>
-            </div>
-            <div class="timeline-body small">
-              Added venture, product, and go-to-market discipline to research and engineering instincts.
-            </div>
-            <div class="timeline-tags small">
-              <span>product</span><span>strategy</span><span>commercialization</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Stage 3: Applied AI & Clinical-Grade Products -->
-        <div class="timeline-stage">
-          <div class="timeline-stage-label text-uppercase small text-muted">
-            Applied AI & Clinical-Grade Products
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-meta small text-muted">
-              2018 – 2024 · Insight Optics
-            </div>
-            <div class="timeline-title">
-              <strong>Co-founder & Director of R&D.</strong>
-            </div>
-            <div class="timeline-body small">
-              Built ophthalmic imaging and triage systems connecting primary care and eye specialists; navigated
-              clinical workflows, privacy, and reliability so models could be trusted in front of patients.
-            </div>
-            <div class="timeline-tags small">
-              <span>computer vision</span><span>healthcare AI</span><span>regulation</span><span>startup ops</span>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-meta small text-muted">
-              2018
-            </div>
-            <div class="timeline-title">
-              <strong>Automated cytoarchitecture (ArCaDe).</strong>
-            </div>
-            <div class="timeline-body small">
-              First-author sparse-recovery methods for cellular density and layer estimation—math-heavy ideas
-              turned into usable code and peer-reviewed results.
-            </div>
-            <div class="timeline-tags small">
-              <span>optimization</span><span>neuroimaging</span><span>open tools</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Stage 4: Systems, Math & Tooling Foundations -->
-        <div class="timeline-stage">
-          <div class="timeline-stage-label text-uppercase small text-muted">
-            Systems, Math & Tooling Foundations
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-meta small text-muted">
-              2013 – 2017 · University of Oregon
-            </div>
-            <div class="timeline-title">
-              <strong>Dual B.S. in CS & Mathematics.</strong>
-            </div>
-            <div class="timeline-body small">
-              HPC, NLP, probabilistic modeling, and an early paper on scientific software usage. Learned to pair
-              technical work with clear explanation.
-            </div>
-            <div class="timeline-tags small">
-              <span>algorithms</span><span>theory</span><span>communication</span>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-meta small text-muted">
-              2015 – 2016 · ON Semiconductor
-            </div>
-            <div class="timeline-title">
-              <strong>Secure systems at industrial scale.</strong>
-            </div>
-            <div class="timeline-body small">
-              Deployed hardened Windows images to 600+ ISO 5 cleanroom systems; real constraints in uptime,
-              safety, and compliance.
-            </div>
-            <div class="timeline-tags small">
-              <span>infra</span><span>security</span><span>ops</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Stage 5: Discipline, Performance & Teaching DNA -->
-        <div class="timeline-stage">
-          <div class="timeline-stage-label text-uppercase small text-muted">
-            Discipline, Performance & Teaching DNA
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-meta small text-muted">
-              Pre-2013
-            </div>
-            <div class="timeline-title">
-              <strong>Early reps that shaped how I teach & lead.</strong>
-            </div>
-            <div class="timeline-body small">
-              Eagle Scout, 3rd degree black belt, classical bass vocalist, theatre.
-              Years of structured practice, coaching, and being on stage—carried directly into how complex ideas get
-              broken down for other people.
-            </div>
-            <div class="timeline-tags small">
-              <span>mentorship</span><span>communication</span><span>resilience</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-<style>
-  .timeline {
-    padding-left: 0;
-    margin-left: 0;
-  }
-
-  .timeline-stage {
-    border-left: 2px solid rgba(0,0,0,0.06);
-    padding-left: 0.85rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .timeline-stage-label {
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    margin-bottom: 0.25rem;
-  }
-
-  .timeline-item {
-    margin: 0.35rem 0 0.6rem;
-  }
-
-  .timeline-meta {
-    opacity: 0.7;
-  }
-
-  .timeline-title {
-    margin-bottom: 0.05rem;
-  }
-
-  .timeline-body {
-    color: #4b5563;
-  }
-
-  .timeline-tags {
-    margin-top: 0.15rem;
-  }
-
-  .timeline-tags span {
-    display: inline-block;
-    padding: 0.08rem 0.45rem;
-    margin: 0 0.15rem 0.15rem 0;
-    border-radius: 999px;
-    background: #f3f4ff;
-    color: #4f46e5;
-    font-size: 0.68rem;
-    font-weight: 500;
-  }
-</style>
+  <!-- Timeline styles moved to _sass/ -->
 
 
 
@@ -482,9 +135,12 @@ portal:
           <p class="mb-3">Speaking, collaboration, consulting, or just curious? I’m easy to reach.</p>
           <div class="d-flex justify-content-center gap-2 flex-wrap">
             <a href="mailto:tlagrow@gatech.edu" class="btn btn-primary"><i class="fa fa-envelope"></i> Email</a>
-            <a href="https://github.com/tjlagrow" class="btn btn-outline-secondary" target="_blank"><i class="fa fa-github"></i> GitHub</a>
-            <a href="https://scholar.google.com/citations?user=KO7oYeAAAAAJ&hl=en" class="btn btn-outline-secondary" target="_blank"><i class="ai ai-google-scholar"></i> Scholar</a>
-            <a href="https://www.linkedin.com/in/tjlagrow/" class="btn btn-outline-secondary" target="_blank"><i class="fa fa-linkedin-square"></i> LinkedIn</a>
+            <a href="https://github.com/tjlagrow" class="btn btn-outline-secondary" target="_blank"><i
+                class="fa fa-github"></i> GitHub</a>
+            <a href="https://scholar.google.com/citations?user=KO7oYeAAAAAJ&hl=en" class="btn btn-outline-secondary"
+              target="_blank"><i class="ai ai-google-scholar"></i> Scholar</a>
+            <a href="https://www.linkedin.com/in/tjlagrow/" class="btn btn-outline-secondary" target="_blank"><i
+                class="fa fa-linkedin-square"></i> LinkedIn</a>
           </div>
         </div>
       </div>
@@ -507,17 +163,17 @@ portal:
 
     const ver = '{{ site.time | date: "%s" }}'; // cache-bust on deploy
     const sources = [
-      "{{ 'images/tlagrow_hs_01.jpg'  | relative_url }}?v=" + ver,
-      "{{ 'images/tlagrow_hs_02.jpg'  | relative_url }}?v=" + ver,
-      "{{ 'images/tlagrow_hs_03.jpg'  | relative_url }}?v=" + ver,
-      "{{ 'images/tlagrow_hs_04.jpeg' | relative_url }}?v=" + ver,
-      "{{ 'images/tlagrow_hs_05.jpeg' | relative_url }}?v=" + ver,
-      "{{ 'images/tlagrow_hs_06.jpg'  | relative_url }}?v=" + ver,
-      "{{ 'images/tlagrow_hs_07.jpg'  | relative_url }}?v=" + ver,
-      "{{ 'images/tlagrow_hs_08.jpg'  | relative_url }}?v=" + ver,
-      "{{ 'images/tlagrow_hs_09.jpg'  | relative_url }}?v=" + ver,
-      "{{ 'images/tlagrow_hs_10.jpg'  | relative_url }}?v=" + ver,
-      "{{ 'images/tlagrow_hs_11.jpg'  | relative_url }}?v=" + ver
+      "{{ '/assets/images/tlagrow_hs_01.jpg'  | relative_url }}?v=" + ver,
+      "{{ '/assets/images/tlagrow_hs_02.jpg'  | relative_url }}?v=" + ver,
+      "{{ '/assets/images/tlagrow_hs_03.jpg'  | relative_url }}?v=" + ver,
+      "{{ '/assets/images/tlagrow_hs_04.jpeg' | relative_url }}?v=" + ver,
+      "{{ '/assets/images/tlagrow_hs_05.jpeg' | relative_url }}?v=" + ver,
+      "{{ '/assets/images/tlagrow_hs_06.jpg'  | relative_url }}?v=" + ver,
+      "{{ '/assets/images/tlagrow_hs_07.jpg'  | relative_url }}?v=" + ver,
+      "{{ '/assets/images/tlagrow_hs_08.jpg'  | relative_url }}?v=" + ver,
+      "{{ '/assets/images/tlagrow_hs_09.jpg'  | relative_url }}?v=" + ver,
+      "{{ '/assets/images/tlagrow_hs_10.jpg'  | relative_url }}?v=" + ver,
+      "{{ '/assets/images/tlagrow_hs_11.jpg'  | relative_url }}?v=" + ver
     ];
 
     // One-line messages under cursor (same order as sources)
@@ -551,7 +207,7 @@ portal:
     // Tooltip element
     const tip = document.createElement('div');
     tip.className = 'hover-tip';
-    tip.setAttribute('role','tooltip');
+    tip.setAttribute('role', 'tooltip');
     document.body.appendChild(tip);
 
     // Shuffle helper: Fisher–Yates; ensure first !== avoidStart when reshuffling
@@ -596,5 +252,57 @@ portal:
       if (rect.right > window.innerWidth - 8) tip.style.left = (window.innerWidth - 8 - rect.width / 2) + 'px';
     });
     wrap.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+  });
+
+  // Interactive Hero Glow
+  document.addEventListener('DOMContentLoaded', () => {
+    const hero = document.querySelector('.hero');
+    const glow = document.querySelector('.hero-interactive-glow');
+    if (!hero || !glow) return;
+
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      glow.style.transform = `translate(${x}px, ${y}px)`;
+      glow.style.opacity = '1';
+    });
+
+    hero.addEventListener('mouseleave', () => {
+      glow.style.opacity = '0';
+    });
+  });
+
+  // Hero Carousel Logic
+  document.addEventListener('DOMContentLoaded', () => {
+    const slideContainer = document.getElementById('heroSlides');
+    if (!slideContainer) return;
+
+    const images = [
+      'assets/images/tlagrow_hs_04.jpeg',
+      'assets/images/tlagrow_hs_05.jpeg',
+      'assets/images/tlagrow_hs_11.jpg',
+      'assets/images/tlagrow_hs_09.jpg'
+    ];
+
+    // 1. Inject images
+    images.forEach((src, index) => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.className = `hero-slide ${index === 0 ? 'active' : ''}`;
+      img.alt = "Theodore J. LaGrow";
+      slideContainer.appendChild(img);
+    });
+
+    // 2. Cycle them
+    let currentIndex = 0;
+    const slides = document.querySelectorAll('.hero-slide');
+
+    setInterval(() => {
+      slides[currentIndex].classList.remove('active');
+      currentIndex = (currentIndex + 1) % slides.length;
+      slides[currentIndex].classList.add('active');
+    }, 4000); // 4 seconds per slide
   });
 </script>

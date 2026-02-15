@@ -2,7 +2,7 @@
 title: Theodore LaGrow Online
 email: tjlagrow@gmail.com
 description: >
-  This is the website of Theodore LaGrow. Created by yours truly!
+  Theodore J. LaGrow - Researcher in Computational Neuroscience, Educator at Georgia Tech, and ML Practitioner.
 baseurl: ""                       # the subpath of your site, e.g. /blog/
 url: "https://tjlagrow.github.io" # the base hostname & protocol for your site
 github_username: tjlagrow
@@ -23,3 +23,15 @@ collections:
   newsletters:
     output: true
     permalink: /newsletter/:name/
+  pages:
+    output: true
+    permalink: /:name/
+
+include: ["_pages"]
+
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "page"

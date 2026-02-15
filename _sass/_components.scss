@@ -1,0 +1,233 @@
+// Components: Timeline, Awards, etc.
+
+// Timeline
+.timeline {
+    position: relative;
+    padding-left: 0;
+    margin-left: 0;
+
+    &::before {
+        content: none;
+    }
+
+    &-item {
+        position: static;
+        margin: 0.5rem 0;
+        padding-left: 0;
+
+        &::before {
+            content: none !important;
+        }
+    }
+
+    &-stage {
+        border-left: 2px solid rgba(0, 0, 0, 0.06);
+        padding-left: 0.85rem;
+        margin-bottom: 1.5rem;
+
+        &-label {
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: $grey-color;
+        }
+    }
+
+    &-meta {
+        font-size: 0.9rem;
+        color: $grey-color;
+        margin-bottom: 0.2rem;
+    }
+
+    &-title {
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+        color: $bg-dark;
+    }
+
+    &-body {
+        color: lighten($text-color, 15%);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    &-tags {
+        margin-top: 0.5rem;
+
+        span {
+            display: inline-block;
+            padding: 0.15rem 0.6rem;
+            margin: 0 0.25rem 0.25rem 0;
+            border-radius: 999px;
+            background: rgba($accent-primary, 0.1);
+            color: darken($accent-primary, 40%);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    }
+}
+
+// Publication & Talk Components
+.pub-title {
+    font-weight: 600;
+    color: $bg-dark;
+    margin-bottom: 0.25rem;
+}
+
+.meta {
+    color: $grey-color;
+    font-size: 0.9rem;
+}
+
+.link-pill {
+    display: inline-block;
+    padding: 0.15rem 0.65rem;
+    border-radius: 999px;
+    background: lighten($grey-color, 35%);
+    color: $grey-color-dark;
+    margin-right: 0.4rem;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: darken($grey-color, 5%);
+        color: white;
+        text-decoration: none;
+    }
+}
+
+.badge-soft {
+    background: rgba($brand-color, 0.1);
+    color: $brand-color;
+    border: 1px solid rgba($brand-color, 0.2);
+    padding: 0.2em 0.5em;
+    font-size: 0.75em;
+    border-radius: 4px;
+}
+
+details {
+    summary {
+        cursor: pointer;
+        list-style: none;
+        font-weight: 600;
+        color: $brand-color;
+        font-size: 0.9rem;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &::after {
+            content: " ▼";
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+    }
+
+    &[open] summary::after {
+        content: " ▲";
+    }
+}
+
+// Teaching Components
+.section-title {
+    font-weight: 800;
+    color: $bg-dark;
+    margin-bottom: 1.5rem;
+}
+
+.kicker {
+    font-size: 0.85rem;
+    color: $accent-secondary;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.quote {
+    border-left: 4px solid $accent-primary;
+    padding-left: 1rem;
+    color: $text-color;
+    background: rgba($accent-primary, 0.05);
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    font-style: italic;
+}
+
+.callout {
+    background: linear-gradient(135deg, rgba($brand-color, 0.05), rgba($accent-secondary, 0.05));
+    border: 1px solid rgba($brand-color, 0.1);
+    border-radius: 0.9rem;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+}
+
+// Global Utilities
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+
+    &.show {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    color: #fff;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: #fff;
+        color: #fff;
+    }
+}
+
+// Awards
+.awards {
+    .badge {
+        background: linear-gradient(135deg, rgba($accent-primary, 0.25), rgba($accent-secondary, 0.25));
+        color: #111;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .award-item {
+        padding: 0.75rem 1rem;
+        border-left: 3px solid $brand-color;
+        background: #fff;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+}
+
+// Navbar
+.navbar {
+
+    .nav-link.active,
+    .nav-item.active>.nav-link {
+        color: $brand-color !important;
+        background: rgba($brand-color, 0.12);
+        border-radius: 0.5rem;
+    }
+
+    .nav-link {
+        transition: color 0.15s ease, background-color 0.15s ease;
+
+        &:focus-visible {
+            outline: 2px solid $brand-color;
+            outline-offset: 2px;
+            border-radius: 0.5rem;
+        }
+    }
+}

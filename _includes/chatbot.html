@@ -1,0 +1,52 @@
+<div id="chatbot-container">
+    <div id="chatbot-window" style="display: none;">
+        <div class="chatbot-header">
+            <div class="d-flex align-items-center">
+                <div style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; margin-right: 8px;"></div>
+                <span>TJ's AI Assistant</span>
+            </div>
+            <button id="chatbot-close" aria-label="Close chat">×</button>
+        </div>
+        <div class="chatbot-body">
+            <div class="chatbot-message system">
+                <strong>Hello!</strong> I'm an AI model trained on TJ's research and writing.
+                <br><br>
+                I'm currently being built (scaffolding phase 🚧), but soon I'll be able to answer questions about:
+                <ul class="mb-0 pl-3 mt-1">
+                    <li>OMSCS & CS7641</li>
+                    <li>Neuroscience Research</li>
+                    <li>Speaking Availability</li>
+                </ul>
+            </div>
+        </div>
+        <div class="chatbot-input-area">
+            <input type="text" class="form-control form-control-sm" placeholder="Coming soon..." disabled>
+            <button class="btn btn-primary btn-sm" disabled><i class="fa fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <button id="chatbot-toggle" aria-label="Open chat">
+        <i class="fa fa-comments"></i>
+    </button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggle = document.getElementById('chatbot-toggle');
+        const windowEl = document.getElementById('chatbot-window');
+        const close = document.getElementById('chatbot-close');
+
+        if (toggle && windowEl && close) {
+            toggle.addEventListener('click', () => {
+                const isHidden = windowEl.style.display === 'none';
+                windowEl.style.display = isHidden ? 'flex' : 'none';
+                toggle.setAttribute('aria-expanded', !isHidden);
+            });
+
+            close.addEventListener('click', () => {
+                windowEl.style.display = 'none';
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        }
+    });
+</script>

@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    {% include head.html %}
+{% include head.html %}
 
-    <body>
+<body>
 
-        <div class="container" >
+    <div class="container">
 
-            {% include navbar.html %}
+        {% include navbar.html %}
 
-            <br/>
-
+        <div class="container mt-4">
             {{ content }}
-
-            {% include footer.html %}
-
         </div>
+    </div>
 
-    </body>
+    {% include footer.html %}
+    {% include scripts.html %}
+    {% include chatbot.html %}
+</body>
 
 </html>

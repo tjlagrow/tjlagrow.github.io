@@ -2,10 +2,8 @@
   <div class="container">
     <a class="navbar-brand" href="{{ '/' | relative_url }}">Theodore J. LaGrow</a>
 
-    <button class="navbar-toggler" type="button"
-            data-toggle="collapse" data-target="#navbar-main"
-            data-bs-toggle="collapse" data-bs-target="#navbar-main"
-            aria-controls="navbar-main" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-main"
+      aria-controls="navbar-main" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -13,48 +11,33 @@
       <ul class="navbar-nav mr-auto me-auto">
         {% assign current = page.url | append:'/' | replace:'//','/' %}
         {% for link in site.data.navbar %}
-          {% assign link_url = link.url | append:'/' | replace:'//','/' %}
+        {% assign link_url = link.url | append:'/' | replace:'//','/' %}
 
-          {% if link.external %}
-            {% assign href = link.url %}
-            {% assign target = ' target="_blank" rel="noopener"' %}
-          {% else %}
-            {% assign href = link.url | relative_url %}
-            {% assign target = '' %}
-          {% endif %}
+        {% if link.external %}
+        {% assign href = link.url %}
+        {% assign target = ' target="_blank" rel="noopener"' %}
+        {% else %}
+        {% assign href = link.url | relative_url %}
+        {% assign target = '' %}
+        {% endif %}
 
-          {% assign is_active = false %}
-          {% if current == link_url %}
-            {% assign is_active = true %}
-          {% elsif link_url != '/' and current contains link_url %}
-            {% assign is_active = true %}
-          {% endif %}
+        {% assign is_active = false %}
+        {% if current == link_url %}
+        {% assign is_active = true %}
+        {% elsif link_url != '/' and current contains link_url %}
+        {% assign is_active = true %}
+        {% endif %}
 
-          <li class="nav-item">
-            <a class="nav-link{% if is_active %} active{% endif %}"
-               href="{{ href }}"{{ target }}{% if is_active %} aria-current="page"{% endif %}>
-              {{ link.title }}
-            </a>
-          </li>
+        <li class="nav-item">
+          <a class="nav-link{% if is_active %} active{% endif %}" href="{{ href }}" {{ target }}{% if is_active %}
+            aria-current="page" {% endif %}>
+            {{ link.title }}
+          </a>
+        </li>
         {% endfor %}
       </ul>
     </div>
   </div>
 </nav>
 
-<style>
-/* Blue highlight for active page */
-.navbar .nav-link.active,
-.navbar .nav-item.active > .nav-link {
-  color: #0d6efd !important;
-  background: rgba(13,110,253,.12);
-  border-radius: .5rem;
-}
-.navbar .nav-link { transition: color .15s ease, background-color .15s ease; }
-/* Optional: focus-visible */
-.navbar .nav-link:focus-visible {
-  outline: 2px solid #0d6efd;
-  outline-offset: 2px;
-  border-radius: .5rem;
-}
-</style>
+<!-- Styles moved to _sass/ -->

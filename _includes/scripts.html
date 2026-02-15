@@ -1,0 +1,24 @@
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"
+  integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="{{ '/assets/javascript/main.js' | relative_url }}"></script>
+
+<!-- Parse the Latex divs with Katex-->
+<script type="text/javascript">
+  $("script[type='math/tex']").replaceWith(
+    function () {
+      var tex = $(this).text();
+      return katex.renderToString(tex, { displayMode: false });
+    });
+
+  $("script[type='math/tex; mode=display']").replaceWith(
+    function () {
+      var tex = $(this).text();
+      return katex.renderToString(tex.replace(/%.*/g, ''), { displayMode: true });
+    });
+</script>

@@ -1,0 +1,52 @@
+---
+layout: page
+title: Blog
+permalink: /blog/
+---
+
+<div class="row">
+  <div class="col-10 col-md-8 mx-auto">
+    <h3 class="cover-heading text-center mb-4">Blog Posts</h3>
+
+    {% for post in site.posts %}
+    <a href="{{ post.url }}" class="text-reset text-decoration-none">
+      <div class="d-flex align-items-center mb-3 p-3 glass rounded shadow-sm blog-card hover-lift">
+
+        <!-- Thumbnail -->
+        <div class="blog-thumb mr-3 flex-shrink-0">
+          {% if post.thumbnail %}
+          <img src="{{ post.thumbnail }}" alt="{{ post.title }} thumbnail" class="img-fluid rounded">
+          {% else %}
+          <div class="blog-thumb-fallback rounded d-flex align-items-center justify-content-center">
+            <span class="small text-muted">TL</span>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Content -->
+        <div class="flex-grow-1">
+          <div class="small text-muted">
+            {{ post.date | date: "%b %-d, %Y" }} •
+            {% assign words = post.content | number_of_words %}
+            {% if words < 360 %} 1 min read {% else %} {{ words | divided_by:180 }} min read {% endif %} </div>
+              <div class="font-weight-semibold">
+                {{ post.title }}
+              </div>
+              <div class="small text-muted mt-1">
+                {% if post.description %}
+                {{ post.description }}
+                {% elsif post.excerpt %}
+                {{ post.excerpt | strip_html | strip_newlines | truncate: 140 }}
+                {% else %}
+                {{ post.content | strip_html | strip_newlines | truncate: 140 }}
+                {% endif %}
+              </div>
+          </div>
+
+        </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Styles moved to _sass/ -->

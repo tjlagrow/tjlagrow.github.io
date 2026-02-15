@@ -1,0 +1,121 @@
+// Card Styles
+
+.glass {
+    @include glass-panel;
+}
+
+.soft {
+    border-radius: 1rem;
+}
+
+// Stats & Flash Cards
+.stat,
+.flash-card {
+    position: relative;
+    background:
+        linear-gradient(#ffffff, #ffffff) padding-box,
+        linear-gradient(135deg, $accent-primary, $accent-secondary, $accent-tertiary) border-box;
+    border: 2px solid transparent;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    height: 100%;
+    color: $text-color; // Fallback
+}
+
+.flash-card {
+    @include hover-lift;
+    background: rgba(255, 255, 255, 0.85); // Slightly opaque for readability
+    backdrop-filter: blur(8px);
+
+    .flash-title {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+    }
+
+    .flash-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        margin-right: 0.5rem;
+        background: linear-gradient(135deg, rgba($accent-primary, 0.25), rgba($accent-secondary, 0.25));
+        color: darken($accent-secondary, 20%);
+    }
+}
+
+// Portal Cards (Home Page)
+.portal-card {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 14px;
+    padding: 16px;
+    height: 100%;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+        border-color: darken(#eaecef, 10%);
+    }
+
+    .title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: $bg-dark;
+    }
+
+    .blurb {
+        color: $grey-color;
+        font-size: 0.95rem;
+    }
+}
+
+// Blog Cards
+.blog-card {
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.blog-thumb-fallback {
+    width: 72px;
+    height: 72px;
+    background: radial-gradient(circle at top left, #f8f9fa, #e3e7ff);
+    color: $grey-color;
+    font-weight: 600;
+}
+
+
+// Newsletter Cards
+.newsletter-card {
+    min-height: 150px;
+    @include glass-panel;
+    margin-bottom: 1rem;
+    transition: all 0.18s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.newsletter-card-link {
+    flex: 1 1 260px;
+    max-width: 320px;
+}
+
+.newsletter-embed-wrapper {
+    width: 100%;
+
+    iframe {
+        display: block;
+        width: 100%;
+        border: 0;
+    }
+}
