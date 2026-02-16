@@ -145,21 +145,28 @@ document.addEventListener('DOMContentLoaded', function () {
     // -------------------------------------------------------
     // 7. Randomize Parallax Background
     // -------------------------------------------------------
-    const parallaxBg = document.querySelector('.parallax-bg');
-    if (parallaxBg) {
-        const images = [
-            'ramon_y_cajal.png',
-            'ramon_y_cajal_1.jpg',
-            'ramon_y_cajal_2.jpg',
-            'ramon_y_cajal_3.png'
-        ];
-        const randomImage = images[Math.floor(Math.random() * images.length)];
+    // -------------------------------------------------------
+    // 7. Randomize Parallax Background (Body Root)
+    // -------------------------------------------------------
+    const images = [
+        'ramon_y_cajal.png',
+        'ramon_y_cajal_1.jpg',
+        'ramon_y_cajal_2.jpg',
+        'ramon_y_cajal_3.png'
+    ];
+    // Random selection
+    const randomImage = images[Math.floor(Math.random() * images.length)];
 
-        // Deep Teal Theme Color: #042f2e -> rgb(4, 47, 46)
-        const gradient = 'linear-gradient(180deg, rgba(4, 47, 46, 0.85) 0%, rgba(4, 47, 46, 0.6) 100%)';
-        const url = `url('/assets/images/${randomImage}')`;
+    // Deep Teal Theme Color: #042f2e -> rgb(4, 47, 46) 
+    // We apply this directly to the body to ensure correct stacking context
+    const gradient = 'linear-gradient(180deg, rgba(4, 47, 46, 0.85) 0%, rgba(4, 47, 46, 0.6) 100%)';
+    const url = `url('/assets/images/${randomImage}')`;
 
-        parallaxBg.style.backgroundImage = `${gradient}, ${url}`;
-    }
+    // Apply to body
+    document.body.style.backgroundImage = `${gradient}, ${url}`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundRepeat = 'no-repeat';
+    document.body.style.backgroundAttachment = 'fixed';
 
 });

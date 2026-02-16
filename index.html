@@ -9,6 +9,7 @@ portal:
 - { title: "Teaching", url: "/teaching/", blurb: "Courses, syllabi, pedagogy, and resources." }
 - { title: "Blog", url: "/blog/", blurb: "Short, opinionated notes on ML & teaching." }
 - { title: "Contact", url: "/contact/", blurb: "Email, booking, and office hours." }
+full_width: true
 ---
 
 <!-- Styles moved to _sass/ -->
@@ -17,29 +18,33 @@ portal:
 
 <!-- 2. Fullscreen Intro -->
 <section class="hero-fullscreen">
-  <div class="container">
-    <h1 class="display-2 fw-bold mb-3" style="font-weight: 900; letter-spacing: -2px;">Theodore J. LaGrow</h1>
-    <p class="lead mb-4" style="font-size: 1.5rem; color: #ccfbf1;">
-      <span id="auto-type-text"></span><span class="typing-cursor">&nbsp;</span>
-    </p>
+  <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="hero-box text-center">
+      <h1 class="display-2 fw-bold mb-3" style="color: #fff; letter-spacing: -2px;">Theodore J. LaGrow</h1>
+      <p class="lead mb-4" style="font-size: 1.5rem; color: #ccfbf1;">
+        <span id="auto-type-text"></span><span class="typing-cursor">&nbsp;</span>
+      </p>
 
-    <div class="mt-5 animate-bounce">
-      <p class="small text-uppercase text-muted mb-2">Explore</p>
-      <i class="fa fa-chevron-down fa-2x" style="opacity: 0.5;"></i>
+      <div class="mt-4 animate-bounce">
+        <p class="small text-uppercase text-light mb-2" style="letter-spacing: 2px; opacity: 0.8;">Explore</p>
+        <i class="fa fa-chevron-down fa-2x text-light" style="opacity: 0.8;"></i>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- 3. Scrolling Content Layer (Glassmorphism) -->
-<div class="glass-section">
-  <div class="container">
 
-    <!-- Split Layout: Carousel & Bio -->
-    <div class="row align-items-start g-5">
+<!-- 3. Scrolling Content Sections -->
+
+<!-- INTRO BANNER -->
+<section class="glass-banner py-5 my-5">
+  <div class="container">
+    <div class="row align-items-center g-5">
 
       <!-- Carousel (Left) -->
-      <div class="col-12 col-lg-6">
-        <div id="heroCarousel" class="carousel slide carousel-fade shadow-lg rounded-3 mb-4" data-bs-ride="carousel"
+      <div class="col-12 col-lg-5">
+        <div id="heroCarousel" class="carousel slide carousel-fade shadow-lg rounded-3" data-bs-ride="carousel"
           data-bs-interval="3500">
           <div class="carousel-inner rounded-3">
             <div class="carousel-item active">
@@ -95,15 +100,18 @@ portal:
       </div>
 
       <!-- Bio (Right) -->
-      <div class="col-12 col-lg-6">
-        <div class="ps-lg-4">
-          <h2 class="h3 fw-bold mb-4 text-gradient">Bridging Theory & Impact</h2>
-          <p class="lead mb-4"><strong>Hi, I’m TJ.</strong> I am an <strong>Instructor at Georgia Tech</strong>
+      <div class="col-12 col-lg-7">
+        <div class="ps-lg-4 text-light">
+          <h2 class="h2 fw-bold mb-4 text-gradient">Bridging Theory & Impact</h2>
+          <p class="lead mb-4" style="color: #ccfbf1;"><strong>Hi, I’m TJ.</strong> I am an <strong>Instructor at
+              Georgia Tech</strong>
             passionate about AI, neuroscience, and education at scale.</p>
-          <p>Whether I'm training large language models, teaching thousands of students in Georgia Tech's OMSCS program,
+          <p style="color: #e0f2fe; font-size: 1.1rem; line-height: 1.7;">Whether I'm training large language models,
+            teaching thousands of students in Georgia Tech's OMSCS program,
             or studying brain dynamics, I build things that bridge the gap between complex theory and real-world impact.
           </p>
-          <p>I serve as Instructor of Record for Georgia Tech’s graduate Machine Learning course (CS7641), leading
+          <p style="color: #e0f2fe; font-size: 1.1rem; line-height: 1.7;">I serve as Instructor of Record for Georgia
+            Tech’s graduate Machine Learning course (CS7641), leading
             1,200+ students per term. I also co-founded a medical imaging startup and hold a PhD in ECE.</p>
 
           <div class="d-flex gap-3 mt-4">
@@ -116,23 +124,28 @@ portal:
             </a>
           </div>
 
-          <div class="d-flex flex-wrap gap-2 mt-5 pt-4 border-top border-secondary">
-            <span class="badge rounded-pill bg-dark border border-secondary text-light">Machine Learning</span>
-            <span class="badge rounded-pill bg-dark border border-secondary text-light">LLMs</span>
-            <span class="badge rounded-pill bg-dark border border-secondary text-light">Computer Vision</span>
-            <span class="badge rounded-pill bg-dark border border-secondary text-light">Neuroscience</span>
+          <div class="d-flex flex-wrap gap-2 mt-5 pt-4 border-top border-secondary" style="opacity: 0.6;">
+            <span class="badge rounded-pill bg-dark border border-secondary text-info">Machine Learning</span>
+            <span class="badge rounded-pill bg-dark border border-secondary text-info">LLMs</span>
+            <span class="badge rounded-pill bg-dark border border-secondary text-info">Computer Vision</span>
+            <span class="badge rounded-pill bg-dark border border-secondary text-info">Neuroscience</span>
           </div>
         </div>
       </div>
 
     </div>
-
-    <!-- End Container for this section -->
   </div>
+</section>
 
-  <!-- EXPLORE: Cards for nav tabs with small highlights -->
-  <section class="mb-5">
-    <h2 class="h4 text-center mb-4">Explore</h2>
+<!-- EXPLORE BANNER -->
+<section class="glass-banner py-5 my-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="title-box">
+        <h2 class="h2">Explore</h2>
+      </div>
+      <p class="text-info opacity-75">Navigate through my work and resources.</p>
+    </div>
     <div class="row">
       {% for p in page.portal %}
       <div class="col-md-4 mb-3">
@@ -145,63 +158,35 @@ portal:
       </div>
       {% endfor %}
     </div>
-  </section>
+</section>
 
-  <!-- LATEST NOTES (Fresh from the Garden) -->
-  <section class="mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="h4 mb-0">Latest Notes</h2>
-      <a href="{{ '/blog/' | relative_url }}" class="small text-muted text-decoration-none">View All <i
-          class="fa fa-arrow-right"></i></a>
+
+<!-- LATEST NOTES BANNER -->
+<section class="glass-banner py-5 my-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <div class="title-box me-3">
+          <h2 class="h2 mb-0">Latest Notes</h2>
+        </div>
+        <span class="text-info opacity-75">Fresh from the garden.</span>
+      </div>
+      <a href="{{ '/blog/' | relative_url }}" class="btn btn-outline-info rounded-pill btn-sm">View All <i
+          class="fa fa-arrow-right list-inline-item"></i></a>
     </div>
 
     <div class="row">
       {% for post in site.posts limit:3 %}
       <div class="col-md-4 mb-3">
         <a href="{{ post.url | relative_url }}" class="text-decoration-none h-100 d-block">
-          <div class="glass p-4 soft h-100 hover-lift">
+          <div class="portal-card">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <span class="badge bg-light text-dark border">{{ post.tags | first }}</span>
               <span class="small text-muted">
                 {% assign words = post.content | number_of_words %}
                 {% if words < 360 %}1 min{% else %}{{ words | divided_by:180 }} min{% endif %} read </span>
             </div>
-            <h3 class="h5 text-dark fw-bold mb-2">{{ post.title }}</h3>
-            <p class="small text-muted mb-0">
-              {{ post.excerpt | strip_html | truncatewords: 20 }}
-            </p>
-            <div class="col-md-4 mb-3">
-              <a class="text-decoration-none d-block h-100" href="{{ p.url | relative_url }}">
-                <div class="portal-card">
-                  <div class="title">{{ p.title }}</div>
-                  <div class="blurb">{{ p.blurb }}</div>
-                </div>
-              </a>
-            </div>
-            {% endfor %}
-          </div>
-  </section>
-
-  <!-- LATEST NOTES (Fresh from the Garden) -->
-  <section class="mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="h4 mb-0">Latest Notes</h2>
-      <a href="{{ '/blog/' | relative_url }}" class="small text-muted text-decoration-none">View All <i
-          class="fa fa-arrow-right"></i></a>
-    </div>
-
-    <div class="row">
-      {% for post in site.posts limit:3 %}
-      <div class="col-md-4 mb-3">
-        <a href="{{ post.url | relative_url }}" class="text-decoration-none h-100 d-block">
-          <div class="glass p-4 soft h-100 hover-lift">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <span class="badge bg-light text-dark border">{{ post.tags | first }}</span>
-              <span class="small text-muted">
-                {% assign words = post.content | number_of_words %}
-                {% if words < 360 %}1 min{% else %}{{ words | divided_by:180 }} min{% endif %} read </span>
-            </div>
-            <h3 class="h5 text-dark fw-bold mb-2">{{ post.title }}</h3>
+            <h3 class="title h5">{{ post.title }}</h3>
             <p class="small text-muted mb-0">
               {{ post.excerpt | strip_html | truncatewords: 20 }}
             </p>
@@ -210,18 +195,19 @@ portal:
       </div>
       {% endfor %}
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Timeline styles moved to _sass/ -->
+<!-- Timeline styles moved to _sass/ -->
 
 
 
 
-  <!-- CONNECT -->
-  <section class="mb-5">
-    <!-- Connect & Mini Footer Removed -->
-</div>
+<!-- CONNECT -->
+<section class="mb-5">
+  <!-- Connect & Mini Footer Removed -->
+  </div>
 
-<!-- Slideshow JS: random order without repeats, reshuffle each cycle, 6s cadence -->
+  <!-- Slideshow JS: random order without repeats, reshuffle each cycle, 6s cadence -->
 
-</script>
+  </script>
