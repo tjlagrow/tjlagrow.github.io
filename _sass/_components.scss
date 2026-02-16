@@ -142,3 +142,30 @@ details {
         transform: rotate(90deg);
     }
 }
+
+/* --- CELEBRATION --- */
+.celebration {
+    display: inline-block;
+    margin: 60px auto 40px;
+    text-align: left;
+    line-height: 1.2;
+    font-family: monospace;
+    white-space: pre;
+    color: #e0f2fe; // Matches main paragraph text
+    font-weight: bold;
+    font-size: 1.1em;
+    animation: bounce 2s infinite ease-in-out;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px); // Subtle bounce as requested
+    }
+}
