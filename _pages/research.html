@@ -1,0 +1,362 @@
+---
+layout: page
+title: Research
+permalink: /research/
+full_width: true
+---
+
+<!-- HEADER BANNER -->
+<section class="glass-banner py-5 mb-5">
+  <div class="container text-center">
+    <div class="title-box mb-3">
+      <h1 class="display-4 fw-bold mb-0" style="color: #ccfbf1;">Research</h1>
+    </div>
+    <p class="lead text-info opacity-75">Peer-reviewed papers, preprints & software.</p>
+
+    <div class="mt-4">
+      <a class="btn btn-outline-light rounded-pill btn-sm" target="_blank"
+        href="https://scholar.google.com/citations?user=KO7oYeAAAAAJ&hl=en" aria-label="Google Scholar">
+        <i class="ai ai-google-scholar me-1"></i> Google Scholar
+      </a>
+      {% if site.data.scholar and site.data.scholar.citations %}
+      <span class="badge rounded-pill bg-dark border border-secondary text-info ms-2">
+        Citations: {{site.data.scholar.citations}}
+      </span>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<div class="container mb-5">
+  <style>
+    /* Force hide all default details markers */
+    details>summary {
+      list-style: none !important;
+      list-style-type: none !important;
+      list-style-image: none !important;
+    }
+
+    details>summary::-webkit-details-marker,
+    details>summary::marker {
+      display: none !important;
+      content: "" !important;
+      color: transparent !important;
+    }
+
+    /* Ensure no pseudo-elements are creating arrows */
+    details>summary::after,
+    details>summary::before {
+      content: none !important;
+      display: none !important;
+      background: none !important;
+    }
+  </style>
+
+  <!-- Toolbar -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="p-3 rounded-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+        <div class="d-flex flex-wrap align-items-center gap-3">
+          <input id="pubSearch" class="form-control form-control-sm bg-transparent text-light border-secondary"
+            type="search" placeholder="Search by title, author, venue, keyword…" style="max-width: 300px;">
+
+          <div class="vr bg-secondary opacity-50 mx-2 d-none d-md-block"></div>
+
+          <span class="text-white small me-2">Sort by:</span>
+          <div class="btn-group" role="group" aria-label="Sort options">
+            <button type="button" class="btn btn-sm btn-outline-light active" data-sort="year">Year</button>
+            <button type="button" class="btn btn-sm btn-outline-light" data-sort="citations">Citations</button>
+            <button type="button" class="btn btn-sm btn-outline-light" data-sort="title">Title</button>
+          </div>
+
+          <div class="ms-auto d-flex gap-2">
+            <button id="expandAll" class="btn btn-sm btn-outline-light">Expand abstracts</button>
+            <button id="collapseAll" class="btn btn-sm btn-outline-light">Collapse abstracts</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Publications -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm mb-5"
+        style="background: rgba(17, 94, 89, 0.85); border: 1px solid rgba(204, 251, 241, 0.1); border-radius: 1rem;">
+        <div class="card-body p-4">
+          <details open>
+            <summary class="d-flex align-items-center cursor-pointer list-style-none mb-4">
+              <i class="fa fa-chevron-right me-3 text-info transition-transform fa-lg"></i>
+              <h2 class="h3 fw-bold text-light mb-0 me-3">Publications</h2>
+              <span class="badge bg-transparent border border-secondary text-muted small">* indicates equal
+                contribution</span>
+            </summary>
+
+            <div id="pubList">
+              <ul class="list-unstyled m-0" id="researchConfigContainer">
+                {% for paper in site.data.research %}
+                <li class="mb-3 pub-item" data-year="{{paper.date | default: 0}}"
+                  data-citations="{{paper.citations | default: 0}}" data-title="{{paper.title | downcase}}"
+                  data-search="{{paper.title}} {{paper.authors}} {{paper.venue}} {{paper.date}} {% if paper.keywords %}{{paper.keywords | join: ' '}}{% endif %}">
+
+                  <details class="card glass border-0 shadow-sm transition-hover"
+                    style="background: rgba(255,255,255,0.03);">
+                    <summary
+                      class="card-header bg-transparent border-0 p-3 d-flex align-items-center cursor-pointer list-style-none">
+                      <i class="fa fa-chevron-right me-3 text-info small transition-transform flex-shrink-0"></i>
+
+                      <div class="text-nowrap me-3 text-info small fw-bold flex-shrink-0" style="min-width: 45px;">
+                        {% if paper.date %}{{paper.date | split: ' ' | last}}{% endif %}
+                      </div>
+
+                      <div class="d-flex align-items-center overflow-hidden w-100">
+                        <span class="h6 fw-bold text-white mb-0 text-truncate me-2">{{paper.title}}</span>
+                        {% if paper.type %}
+                        <span class="badge bg-secondary text-light rounded-pill smaller-badge ms-2"
+                          style="font-size: 0.6em;">{{paper.type}}</span>
+                        {% endif %}
+
+                        {% if paper.citations and paper.citations > 0 %}
+                        <span
+                          class="badge bg-dark border border-secondary text-secondary rounded-pill smaller-badge ms-auto"
+                          style="font-size: 0.7em;" title="{{paper.citations}} citations">
+                          {{paper.citations}} cites
+                        </span>
+                        {% endif %}
+                      </div>
+                    </summary>
+
+                    <div class="card-body px-4 pb-4 pt-0">
+                      <div class="ps-4 ms-1 border-start border-secondary border-opacity-25">
+                        <div class="mb-2 text-white">
+                          {{paper.authors | replace: 'T. J. LaGrow', '<b>T. J. LaGrow</b>'}}
+                        </div>
+
+                        <div class="mb-3 text-info small">
+                          <i class="fa fa-map-marker-alt me-1"></i> {{paper.venue}}{% if paper.date %}, {{paper.date}}{%
+                          endif
+                          %}
+                        </div>
+
+                        {% if paper.abstract %}
+                        <div class="mb-3 p-3 rounded" style="background: rgba(0,0,0,0.2);">
+                          <h6 class="text-uppercase text-muted small fw-bold mb-1">Abstract</h6>
+                          <p class="mb-0 small text-light opacity-75" style="line-height: 1.6;">{{paper.abstract}}</p>
+                        </div>
+                        {% endif %}
+
+                        <div class="d-flex flex-wrap gap-2">
+                          {% for link in paper.links %}
+                          {% if link %}
+                          <a class="btn btn-sm btn-outline-light rounded-pill px-3 py-1" style="font-size: 0.8rem;"
+                            href="{{link[1]}}" target="_blank" rel="noopener">{{link[0]}}</a>
+                          {% endif %}
+                          {% endfor %}
+                          {% if paper.bibtex %}
+                          <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 copy-bib"
+                            style="font-size: 0.8rem;" data-bib='{{paper.bibtex | escape}}'>BibTeX</a>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Talks -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm mb-5"
+        style="background: rgba(17, 94, 89, 0.85); border: 1px solid rgba(204, 251, 241, 0.1); border-radius: 1rem;">
+        <div class="card-body p-4">
+          <details open>
+            <summary class="d-flex align-items-center cursor-pointer list-style-none mb-4">
+              <i class="fa fa-chevron-right me-3 text-info transition-transform fa-lg"></i>
+              <h2 class="h3 fw-bold text-light mb-0 me-3">Talks</h2>
+              <a href="https://www.youtube.com/@UnderstandingMachineLearning" target="_blank"
+                class="btn btn-sm btn-outline-light rounded-pill">
+                <i class="fab fa-youtube me-1"></i> Subscribe
+              </a>
+            </summary>
+            <ul class="list-unstyled">
+              {% for talk in site.data.talks %}
+              <li class="mb-3">
+                <details class="card glass border-0 shadow-sm transition-hover"
+                  style="background: rgba(255,255,255,0.03);">
+                  <summary
+                    class="card-header bg-transparent border-0 p-3 d-flex align-items-center cursor-pointer list-style-none">
+                    <i class="fa fa-chevron-right me-3 text-info small transition-transform flex-shrink-0"></i>
+
+                    <div class="text-nowrap me-3 text-info small fw-bold flex-shrink-0" style="min-width: 45px;">
+                      {% if talk.date %}{{talk.date | split: ' ' | last}}{% endif %}
+                    </div>
+
+                    <div class="d-flex align-items-center overflow-hidden w-100">
+                      <span class="h6 fw-bold text-white mb-0 text-truncate me-2">{{talk.title}}</span>
+                    </div>
+                  </summary>
+
+                  <div class="card-body px-4 pb-4 pt-0">
+                    <div class="ps-4 ms-1 border-start border-secondary border-opacity-25">
+                      <div class="mb-3 text-info small">
+                        {{talk.venue}}{% if talk.date %}, {{talk.date}}{% endif %}
+                      </div>
+
+                      {% if talk.abstract %}
+                      <div class="mb-3 p-3 rounded" style="background: rgba(0,0,0,0.2);">
+                        <p class="mb-0 small text-light opacity-75" style="line-height: 1.6;">{{talk.abstract}}</p>
+                      </div>
+                      {% endif %}
+
+                      <div class="d-flex flex-wrap gap-2">
+                        {% for link in talk.links %}
+                        {% if link %}
+                        <a class="btn btn-sm btn-outline-light rounded-pill px-3 py-1" style="font-size: 0.8rem;"
+                          href="{{link[1]}}" target="_blank" rel="noopener">{{link[0]}}</a>
+                        {% endif %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              </li>
+              {% endfor %}
+            </ul>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Defense & Proposal -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm mb-5"
+        style="background: rgba(17, 94, 89, 0.85); border: 1px solid rgba(204, 251, 241, 0.1); border-radius: 1rem;">
+        <div class="card-body p-4">
+          <details open>
+            <summary class="d-flex align-items-center cursor-pointer list-style-none mb-4">
+              <i class="fa fa-chevron-right me-3 text-info transition-transform fa-lg"></i>
+              <h2 class="h3 fw-bold text-light mb-0">PhD Defense & Proposal</h2>
+            </summary>
+            <ul class="list-unstyled">
+              {% for talk in site.data.defense %}
+              <li class="mb-3">
+                <details class="card glass border-0 shadow-sm transition-hover"
+                  style="background: rgba(255,255,255,0.03);">
+                  <summary
+                    class="card-header bg-transparent border-0 p-3 d-flex align-items-center cursor-pointer list-style-none">
+                    <i class="fa fa-chevron-right me-3 text-info small transition-transform flex-shrink-0"></i>
+
+                    <div class="text-nowrap me-3 text-info small fw-bold flex-shrink-0" style="min-width: 45px;">
+                      {% if talk.date %}{{talk.date}}{% endif %}
+                    </div>
+
+                    <div class="d-flex align-items-center overflow-hidden w-100">
+                      <span class="h6 fw-bold text-white mb-0 text-truncate me-2">{{talk.title}}</span>
+                    </div>
+                  </summary>
+
+                  <div class="card-body px-4 pb-4 pt-0">
+                    <div class="ps-4 ms-1 border-start border-secondary border-opacity-25">
+                      <div class="mb-3 text-info small">
+                        {{talk.venue}}{% if talk.date %}, {{talk.date}}{% endif %}
+                      </div>
+
+                      {% if talk.abstract %}
+                      <div class="mb-3 p-3 rounded" style="background: rgba(0,0,0,0.2);">
+                        <p class="mb-0 small text-light opacity-75" style="line-height: 1.6;">{{talk.abstract}}</p>
+                      </div>
+                      {% endif %}
+
+                      <div class="d-flex flex-wrap gap-2">
+                        {% for link in talk.links %}
+                        {% if link %}
+                        <a class="btn btn-sm btn-outline-light rounded-pill px-3 py-1" style="font-size: 0.8rem;"
+                          href="{{link[1]}}" target="_blank" rel="noopener">{{link[0]}}</a>
+                        {% endif %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              </li>
+              {% endfor %}
+            </ul>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // SEARCH
+    const searchInput = document.getElementById('pubSearch');
+    const items = document.querySelectorAll('.pub-item');
+
+    searchInput.addEventListener('input', function (e) {
+      const term = e.target.value.toLowerCase();
+      items.forEach(item => {
+        const text = item.getAttribute('data-search').toLowerCase();
+        item.style.display = text.includes(term) ? '' : 'none';
+      });
+    });
+
+    // EXPAND/COLLAPSE
+    document.getElementById('expandAll').addEventListener('click', () => {
+      document.querySelectorAll('details').forEach(d => d.open = true);
+    });
+    document.getElementById('collapseAll').addEventListener('click', () => {
+      document.querySelectorAll('details').forEach(d => d.open = false);
+    });
+
+    // SORTING logic
+    const sortButtons = document.querySelectorAll('[data-sort]');
+    const list = document.getElementById('researchConfigContainer');
+
+    // Convert NodeList to Array for sorting
+    let listItems = Array.from(list.children);
+
+    sortButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Toggle active class
+        sortButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const criteria = btn.getAttribute('data-sort');
+
+        listItems.sort((a, b) => {
+          let valA = a.getAttribute(`data-${criteria}`);
+          let valB = b.getAttribute(`data-${criteria}`);
+
+          if (criteria === 'year' || criteria === 'citations') {
+            // Numeric sort (Descending)
+            return parseInt(valB) - parseInt(valA);
+          } else {
+            // String sort (Ascending) for Title
+            return valA.localeCompare(valB);
+          }
+        });
+
+        // Re-append sorted items
+        listItems.forEach(item => list.appendChild(item));
+      });
+    });
+
+    // Initial Sort (Year Descending) - data-year might need parsing if it has non-numeric chars
+    // But for now, reliance on data-year attribute is fine.
+  });
+</script>

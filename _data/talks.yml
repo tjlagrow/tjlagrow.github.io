@@ -17,7 +17,6 @@
   links:
     - [YouTube, "https://www.youtube.com/watch?v=b4RGlvHNimA&list=PLTJmIS-rVX3NRIacJb73ejHj993vx5_kq&index=9"]
   abstract: >
-    Breaks down the math and architecture behind KANs, evaluates empirical results, and frames where
     they challenge or complement conventional deep nets.
 
 - title: "Unraveling Spatiotemporal Brain Patterns: QPPs & cPCA Insights"
@@ -29,6 +28,17 @@
   abstract: >
     Deep dive into quasi-periodic patterns and complex PCA in fMRI, highlighting how these tools map
     large-scale brain dynamics and inform connectivity analyses.
+
+- title: "Mastering Research Papers: 10 Rules for Reading and Writing Effectively"
+  type: Talk
+  venue: "MLBBQ / TReNDS"
+  date: 2024-05-15
+  links:
+    - [YouTube, "https://www.youtube.com/watch?v=Lco6QJG6rpc"]
+  abstract: >
+    Unlock the secrets to academic success with these 10 simple rules for reading and writing research papers!
+    Based on insights from Carey et al. and Kording & mensh.
+
 
 - title: "Sparks of Plant Consciousness, AGI, and AI Theory: A Cage Match of Ideas"
   type: Reading Group

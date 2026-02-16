@@ -1,0 +1,503 @@
+- title: Investigating White Matter Functional Network Connectivity Across the Alzheimers
+    Disease Spectrum Using Resting-State fMRI
+  type: Preprint
+  citations: 0
+  authors: Vaibhavi S. Itkyal, Theodore J. LaGrow, K. M. Jensen, Armin Iraji, Vince
+    Calhoun
+  venue: bioRxiv
+  date: 2026
+  keywords:
+  - white matter
+  - functional connectivity
+  - Alzheimer's
+  - fMRI
+  links:
+  - - bioRxiv
+    - https://www.biorxiv.org/content/10.1101/2026.02.04.703913
+  abstract: 'Investigates white matter (WM) functional network connectivity across the Alzheimer''s spectrum using ADNI data. Finds specific WM-WM and WM-GM dysconnectivity patterns (subcortical, frontal, sensorimotor) that track disease progression, providing a complementary biomarker to gray matter changes.'
+- title: Fidelity of Spatiotemporal Patterns of Brain Activity Across Sampling Rate,
+    Scan Duration, and Frequency Content
+  type: Preprint
+  citations: 0
+  authors: Theodore J. LaGrow, Harrison Watters, Lauren Daley, Vaibhavi S. Itkyal,
+    D. Seeburger, Nmachi Anumba, Shella Keilholz
+  venue: bioRxiv
+  date: 2026
+  keywords:
+  - spatiotemporal patterns
+  - sampling rate
+  - scan duration
+  - fMRI
+  links:
+  - - bioRxiv
+    - https://www.biorxiv.org/content/10.1101/2026.01.02.697199
+  abstract: 'Systematically evaluates how scan parameters (duration, TR) and frequency bands affect the reliability of spatiotemporal patterns (QPPs, cPCA). Finds that QPPs are robust in shorter scans while cPCA requires longer durations, and that frequency choice (Slow-4 vs Slow-5) significantly alters detected network dynamics.'
+- title: Spatiotemporal Network Dynamics Reveal Alzheimer’s Disease Progression
+  type: Preprint
+  citations: 0
+  authors: Theodore J. LaGrow, Vaibhavi S. Itkyal, Harrison Watters, K. M. Jensen,
+    R. Ballem, Wen-Ju Pan, Armin Iraji, Shella Keilholz
+  venue: bioRxiv
+  date: 2025
+  keywords:
+  - Alzheimer's
+  - spatiotemporal dynamics
+  - disease progression
+  links:
+  - - bioRxiv
+    - https://www.biorxiv.org/content/10.1101/2025.12.09.692653
+  abstract: 'Leverages QPPs and cPCA on longitudinal ADNI data to map network disruption trajectories. Reveals a structured breakdown starting with early limbic/subcortical changes and progressing to visual/sensorimotor/executive decline, often arguably detectable before clinical conversion.'
+- title: Capturing diagnosable video content using a client device
+  type: Patent
+  citations: 0
+  authors: A. C. Enten, Theodore J. LaGrow
+  venue: US Patent 12,419,516
+  date: 2025
+  keywords:
+  - video content
+  - diagnosable
+  - client device
+  - patent
+  links: []
+  abstract: 'Systems and methods for capturing and processing video content on a client device to facilitate remote medical diagnosis, ensuring video quality and metadata compliance for clinical review.'
+- title: 'Functional network connectivity in white matter: A spatially-guided ICA-based
+    network approach'
+  type: Conference
+  citations: 0
+  authors: Vaibhavi S. Itkyal, Theodore J. LaGrow, K. M. Jensen, Armin Iraji, Z. Fu,
+    Vince D. Calhoun
+  venue: IEEE EMBC
+  date: 2025
+  keywords:
+  - white matter
+  - ICA
+  - functional connectivity
+  links: []
+  abstract: 'Investigates white matter (WM) functional connectivity in schizophrenia using a robust multi-scale WM intrinsic connectivity network (ICN) template. The study reveals significant dysconnectivity in subcortical-paralimbic, sensorimotor, and frontal networks, underscoring WM''s critical role in maintaining functional network stability.'
+- title: Widespread Spatiotemporal Patterns of Functional Brain Networks in Longitudinal
+    Progression of Alzheimer's Disease
+  type: Conference
+  citations: 2
+  authors: Theodore J. LaGrow, Vaibhavi S. Itkyal, Harrison Watters, K. M. Jensen,
+    R. Ballem, Wen-Ju Pan, Armin Iraji, Shella Keilholz
+  venue: IEEE EMBC
+  date: 2025
+  keywords:
+  - Alzheimer's
+  - longitudinal
+  - functional networks
+  - EMBC
+  links: []
+  abstract: 'Investigates the role of Quasi-Periodic Patterns (QPPs) in identifying disease-related connectivity changes across Alzheimer''s Disease stages. The study finds a progressive decline in functional connectivity integrity, with early impairments in subcortical and executive networks, followed by widespread disconnection in higher cognition, sensorimotor, and visual networks.'
+- title: Infraslow dynamic patterns in human cortical networks track a spectrum of
+    external to internal attention
+  type: Journal
+  citations: 4
+  authors: Harrison Watters, Aleah Davis, Abia Fazili, Lauren Daley, Theodore J. LaGrow,
+    Eric H. Schumacher, Shella Keilholz
+  venue: Human Brain Mapping
+  date: 2025
+  keywords:
+  - infraslow
+  - attention
+  - cortical networks
+  links:
+  - - Journal
+    - https://onlinelibrary.wiley.com/doi/10.1002/hbm.70049
+  abstract: 'Demonstrates that cortical network dynamics shift along an axis of external-to-internal attention. Shows that networks dynamically reconfigure relative to the Default Mode Network based on attentional demands, rather than simply activating or deactivating as fixed rigid units.'
+- title: Functional connectivity of the brain across rodents and humans
+  type: Journal
+  authors: Nan Xu, Theodore J. LaGrow, Nmachi Anumba, Azalea Lee, Xiaodi Zhang, Behnaz
+    Yousefi, Yasmine Bassil, Gloria P. Clavijo, Vahid Khalilzad Sharghi, Eric Maltbie,
+    Lisa Meyer-Baese, Maysam Nezafati, Wen-Ju Pan, Shella Keilholz
+  venue: Frontiers in Neuroscience
+  date: 2022
+  keywords:
+  - rs-fMRI
+  - functional connectivity
+  - cross-species
+  - rodents
+  - humans
+  - translational
+  links:
+  - - Full Text
+    - https://www.frontiersin.org/articles/10.3389/fnins.2022.816331/full
+  - - DOI
+    - https://doi.org/10.3389/fnins.2022.816331
+  - - PMC
+    - https://pmc.ncbi.nlm.nih.gov/articles/PMC8957796/
+  abstract: 'Review of resting-state fMRI features across rodents and humans, comparing
+    acquisition, preprocessing, and analysis choices that influence functional connectivity.
+    The paper surveys time-averaged and time-varying metrics (e.g., sliding windows,
+    quasi-periodic and co-activation patterns), links them to structural connectivity,
+    and discusses applications to neurological and psychiatric disorders. It closes
+    with open problems to make rodent-to-human translation more reliable.
+
+    '
+  bibtex: "@article{Xu2022FunctionalConnectivity,\n  author  = {Xu, Nan and LaGrow,\
+    \ Theodore J. and Anumba, Nmachi and Lee, Azalea and Zhang, Xiaodi and Yousefi,\
+    \ Behnaz and Bassil, Yasmine and Clavijo, Gloria P. and Khalilzad Sharghi, Vahid\
+    \ and Maltbie, Eric and Meyer-Baese, Lisa and Nezafati, Maysam and Pan, Wen-Ju\
+    \ and Keilholz, Shella},\n  title   = {Functional Connectivity of the Brain Across\
+    \ Rodents and Humans},\n  journal = {Frontiers in Neuroscience},\n  year    =\
+    \ {2022},\n  volume  = {16},\n  pages   = {816331},\n  doi     = {10.3389/fnins.2022.816331}\n\
+    }\n"
+  citations: 119
+- title: Relationship between the frequency profile of BOLD fluctuations and calculated
+    metrics of complexity in the Human Connectome Project
+  type: Journal
+  authors: Shella Keilholz, Eric A. Maltbie, Xiaodi Zhang, Behnaz Yousefi, Wen-Ju
+    Pan, Nan Xu, Maysam Nezafati, Theodore J. LaGrow, Ying Guo
+  venue: Frontiers in Neuroscience
+  date: 2020
+  keywords:
+  - rs-fMRI
+  - complexity
+  - entropy
+  - Lyapunov exponent
+  - frequency spectrum
+  - HCP
+  links:
+  - - Full Text
+    - https://www.frontiersin.org/articles/10.3389/fnins.2020.550923/full
+  - - DOI
+    - https://doi.org/10.3389/fnins.2020.550923
+  - - PMC
+    - https://pmc.ncbi.nlm.nih.gov/articles/PMC7522447/
+  abstract: 'Using Human Connectome Project data, the authors test whether parcel-wise
+    complexity metrics (correlation dimension, approximate entropy, Lyapunov exponent)
+    mainly reflect neural dynamics or are driven by basic BOLD properties. They find
+    these complexity measures are reliable across scans and strongly tied to each
+    region’s frequency profile, indicating that frequency content can confound interpretations
+    of “complexity” in rs-fMRI.
+
+    '
+  bibtex: "@article{Keilholz2020ComplexityHCP,\n  author  = {Keilholz, Shella and\
+    \ Maltbie, Eric A. and Zhang, Xiaodi and Yousefi, Behnaz and Pan, Wen-Ju and Xu,\
+    \ Nan and Nezafati, Maysam and LaGrow, Theodore J. and Guo, Ying},\n  title  \
+    \ = {Relationship Between Basic Properties of BOLD Fluctuations and Calculated\
+    \ Metrics of Complexity in the Human Connectome Project},\n  journal = {Frontiers\
+    \ in Neuroscience},\n  year    = {2020},\n  volume  = {14},\n  pages   = {550923},\n\
+    \  doi     = {10.3389/fnins.2020.550923}\n}\n"
+  citations: 19
+- title: Toward a reproducible, scalable framework for processing large neuroimaging
+    datasets
+  type: Journal
+  authors: Erik C. Johnson, Miller Wilt, Luis M. Rodriguez, Raphael Norman-Tenazas,
+    Corban Rivera, Nathan Drenkow, Dean Kleissas, Theodore J. LaGrow, Hannah P. Cowley,
+    Joseph Downs, Jordan K. Matelsky, Marisa J. Hughes, Elizabeth P. Reilly, Brock
+    A. Wester, Eva L. Dyer, Konrad P. Kording, William R. Gray-Roncal
+  venue: GigaScience
+  date: 2020
+  keywords:
+  - reproducibility
+  - workflows
+  - neuroimaging
+  - EM
+  - XRM
+  - pipelines
+  - SABER
+  links:
+  - - DOI
+    - https://doi.org/10.1093/gigascience/giaa147
+  - - PMC
+    - https://pmc.ncbi.nlm.nih.gov/articles/PMC7751400/
+  - - PubMed
+    - https://pubmed.ncbi.nlm.nih.gov/33347572/
+  abstract: 'Presents a modular ecosystem of containerized tools and workflows for
+    petascale neuroimaging, enabling reproducible end-to-end processing across modalities
+    like electron microscopy and X-ray microtomography. The framework standardizes
+    storage, execution, and optimization and is demonstrated on synapse-level connectome
+    estimation and large-scale cell density mapping.
+
+    '
+  bibtex: "@article{Johnson2020ScalableFramework,\n  author  = {Johnson, Erik C. and\
+    \ Wilt, Miller and Rodriguez, Luis M. and Norman-Tenazas, Raphael and Rivera,\
+    \ Corban and Drenkow, Nathan and Kleissas, Dean and LaGrow, Theodore J. and Cowley,\
+    \ Hannah P. and Downs, Joseph and Matelsky, Jordan K. and Hughes, Marisa J. and\
+    \ Reilly, Elizabeth P. and Wester, Brock A. and Dyer, Eva L. and Kording, Konrad\
+    \ P. and Gray-Roncal, William R.},\n  title   = {Toward a scalable framework for\
+    \ reproducible processing of volumetric, nanoscale neuroimaging datasets},\n \
+    \ journal = {GigaScience},\n  year    = {2020},\n  volume  = {9},\n  number  =\
+    \ {12},\n  pages   = {giaa147},\n  doi     = {10.1093/gigascience/giaa147}\n}\n"
+  citations: 0
+- title: Sparse Recovery Methods for Cell Detection and Layer Estimation
+  type: Preprint
+  authors: Theodore J. LaGrow, Michael G. Moore, Judy A. Prasad, Alexis Webber, Mark
+    A. Davenport, Eva L. Dyer
+  venue: bioRxiv
+  date: 2018
+  keywords:
+  - cell detection
+  - cytoarchitecture
+  - sparse recovery
+  - Poisson
+  - TV regularization
+  links:
+  - - bioRxiv
+    - https://www.biorxiv.org/content/10.1101/445742v4
+  - - DOI
+    - https://doi.org/10.1101/445742
+  abstract: 'Introduces an automated pipeline for estimating cellular densities and
+    identifying laminar transitions in neuroanatomical images. The method combines
+    patch extraction, cell detection, and sparse approximation for count data using
+    total-variation regularization to robustly recover layer boundaries and density
+    profiles across cortical and retinal samples.
+
+    '
+  bibtex: "@article{LaGrow2018SparseRecovery,\n  author  = {LaGrow, Theodore J. and\
+    \ Moore, Michael G. and Prasad, Judy A. and Webber, Alexis and Davenport, Mark\
+    \ A. and Dyer, Eva L.},\n  title   = {Sparse Recovery Methods for Cell Detection\
+    \ and Layer Estimation},\n  journal = {bioRxiv},\n  year    = {2018},\n  doi \
+    \    = {10.1101/445742},\n  url     = {https://www.biorxiv.org/content/10.1101/445742v4}\n\
+    }\n"
+  citations: 2
+- title: Approximating Cellular Densities from High-Resolution Neuroanatomical Imaging
+    Data
+  type: Conference
+  authors: Theodore J. LaGrow, Michael G. Moore, Judy A. Prasad, Mark A. Davenport,
+    Eva L. Dyer
+  venue: IEEE Engineering in Medicine and Biology Society (EMBC)
+  date: 2018
+  keywords:
+  - ArCaDe
+  - cellular density
+  - layer detection
+  - sparse methods
+  - neuroanatomy
+  links:
+  - - IEEE
+    - https://ieeexplore.ieee.org/document/8512220
+  - - DOI
+    - https://doi.org/10.1109/EMBC.2018.8512220
+  - - PMC
+    - https://pmc.ncbi.nlm.nih.gov/articles/PMC8449853/
+  abstract: 'Proposes ArCaDe, an automated approach to estimate spatially varying
+    cell densities and detect laminar structure in cortical and retinal tissue. By
+    modeling counts with a sparse, TV-regularized estimator and coupling it with patch-wise
+    cell detection, the method recovers cytoarchitectonic transitions without manual
+    annotation.
+
+    '
+  bibtex: "@inproceedings{LaGrow2018ArCaDeEMBC,\n  author    = {LaGrow, Theodore J.\
+    \ and Moore, Michael G. and Prasad, Judy A. and Davenport, Mark A. and Dyer, Eva\
+    \ L.},\n  title     = {Approximating Cellular Densities from High-Resolution Neuroanatomical\
+    \ Imaging Data},\n  booktitle = {2018 40th Annual International Conference of\
+    \ the IEEE Engineering in Medicine and Biology Society (EMBC)},\n  year      =\
+    \ {2018},\n  pages     = {1--4},\n  doi       = {10.1109/EMBC.2018.8512220}\n\
+    }\n"
+  citations: 13
+- title: Do You Know Where Your Research Is Being Used? An Exploration of Scientific
+    Literature Using Natural Language Processing
+  type: Journal
+  authors: Theodore J. LaGrow, Jacob Bieker, Boyana Norris
+  venue: Oregon Undergraduate Research Journal
+  date: 2017
+  keywords:
+  - NLP
+  - bibliometrics
+  - arXiv
+  - software mining
+  links:
+  - - PDF
+    - https://scholarsbank.uoregon.edu/items/7d37774e-915f-4731-a6fc-cd3281ea8152
+  - - DOI
+    - https://doi.org/10.5399/uo/ourj.10.1.4
+  abstract: 'Demonstrates an NLP pipeline that identifies software and methods referenced
+    in arXiv articles and uses the extracted names to explore usage patterns across
+    research areas. The study argues that automated extraction at scale complements
+    traditional literature surveys for tracking technologies and methods in scientific
+    work.
+
+    '
+  bibtex: "@article{LaGrow2017DoYouKnow,\n  author  = {LaGrow, Theodore J. and Bieker,\
+    \ Jacob and Norris, Boyana},\n  title   = {Do You Know Where Your Research Is\
+    \ Being Used? An Exploration of Scientific Literature Using Natural Language Processing},\n\
+    \  journal = {Oregon Undergraduate Research Journal},\n  year    = {2017},\n \
+    \ volume  = {10},\n  number  = {1},\n  doi     = {10.5399/uo/ourj.10.1.4},\n \
+    \ url     = {https://scholarsbank.uoregon.edu/items/7d37774e-915f-4731-a6fc-cd3281ea8152}\n\
+    }\n"
+  citations: 0
+- title: 'Evidence for white matter intrinsic connectivity networks at rest and during
+    a task: A large-scale study and templates'
+  type: Journal
+  authors: Vaibhavi S. Itkyal, Armin Iraji, K. M. Jensen, Theodore J. LaGrow, et al.
+  venue: Network Neuroscience
+  date: 2025
+  keywords:
+  - white matter
+  - intrinsic connectivity networks
+  - QPP
+  - large-scale
+  - task fMRI
+  links:
+  - - Journal
+    - https://direct.mit.edu/netn
+  - - Preprint
+    - https://www.biorxiv.org/content/10.1101/2024.12.16.628798v1
+  abstract: 'Demonstrates robust large-scale intrinsic connectivity networks in white
+    matter at rest and during task, providing templates for future network and clinical
+    studies.
+
+    '
+  citations: 3
+- title: Exploration of Spatiotemporal Dynamics in Neurodegenerative Functional Brain
+    Networks
+  type: Thesis
+  authors: Theodore J. LaGrow
+  venue: PhD Dissertation, Georgia Institute of Technology
+  date: 2025
+  keywords:
+  - Alzheimer's disease
+  - QPP
+  - dynamic connectivity
+  - spatiotemporal patterns
+  links:
+  - - ProQuest
+    - https://www.proquest.com/docview/3275497212?pq-origsite=gscholar&fromopenview=true&sourcetype=Dissertations%20&%20Theses
+  abstract: 'Dissertation on quasi-periodic patterns and dynamic network biomarkers
+    across the Alzheimer''s disease spectrum.
+
+    '
+  citations: 0
+- title: 'QPPLab: A generally applicable software package for detecting, analyzing,
+    and visualizing large-scale quasiperiodic spatiotemporal patterns (QPPs) of brain
+    activity'
+  type: Software
+  authors: Nan Xu, Behnaz Yousefi, Nmachi Anumba, Theodore J. LaGrow, Xiaodi Zhang,
+    Shella Keilholz
+  venue: SoftwareX
+  date: 2025
+  keywords:
+  - QPP
+  - software
+  - fMRI
+  - spatiotemporal dynamics
+  - open-source
+  links:
+  - - Journal
+    - https://www.sciencedirect.com/science/article/pii/S2352711025000342
+  - - Code
+    - https://github.com/KeilholzLab/QPPLab
+  abstract: 'Introduces QPPLab, an open-source toolbox for robust detection and visualization
+    of quasi-periodic patterns across diverse fMRI datasets.
+
+    '
+  citations: 11
+- title: Variation in the distribution of large-scale spatiotemporal patterns of activity
+    across brain states
+  type: Journal
+  authors: Lisa Meyer-Baese, Nmachi Anumba, Thomas Bolt, Lauren Daley, Theodore J.
+    LaGrow, Xiaodi Zhang, Nan Xu, Wen-Ju Pan, Eric H. Schumacher, Shella Keilholz
+  venue: Frontiers in Systems Neuroscience
+  date: 2024
+  keywords:
+  - QPP
+  - brain states
+  - anesthesia
+  - task
+  - resting-state
+  - dynamics
+  links:
+  - - Full Text
+    - https://www.frontiersin.org/articles/10.3389/fnsys.2024.1425491/full
+  - - DOI
+    - https://doi.org/10.3389/fnsys.2024.1425491
+  abstract: 'Compares quasi-periodic pattern distributions across multiple brain states,
+    highlighting state- dependent reconfiguration of large-scale dynamics.
+
+    '
+  citations: 9
+- title: Voxelwise Intensity Projection for the Spatial Representation of Resting
+    State Functional MRI Networks and Multimodal Deep Learning
+  type: Conference
+  authors: Vaibhavi S. Itkyal, Anees Abrol, Theodore J. LaGrow, Vince D. Calhoun
+  venue: IEEE International Symposium on Biomedical Imaging (ISBI)
+  date: 2024
+  keywords:
+  - rs-fMRI
+  - deep learning
+  - multimodal
+  - voxelwise projection
+  links:
+  - - ISBI
+    - https://ieeexplore.ieee.org
+  abstract: 'Proposes a voxelwise projection method to better encode resting-state
+    networks for multimodal deep learning pipelines.
+
+    '
+  citations: 1
+- title: 'Creative tempo: Spatiotemporal dynamics of the default mode network in improvisational
+    musicians'
+  type: Preprint
+  authors: Harrison Watters, Abia Fazili, Lauren Daley, Alexander Belden, Theodore
+    J. LaGrow, Thomas Bolt, Psyche Loui, Shella Keilholz
+  venue: bioRxiv
+  date: 2024
+  keywords:
+  - default mode network
+  - creativity
+  - QPP
+  - music
+  links:
+  - - bioRxiv
+    - https://www.biorxiv.org/content/10.1101/2024.04.07.588391v1
+  abstract: 'Examines how default mode network dynamics and QPPs differ in improvisational
+    musicians during creative tasks.
+
+    '
+  citations: 5
+- title: Voxel-wise Fusion of Resting fMRI Networks and Gray Matter Volume for Alzheimer’s
+    Disease Classification using Deep Multimodal Learning
+  type: Preprint
+  authors: Vaibhavi S. Itkyal, Anees Abrol, Theodore J. LaGrow, Alex Fedorov, Vince
+    D. Calhoun
+  venue: Research Square
+  date: 2023
+  keywords:
+  - Alzheimer's disease
+  - multimodal
+  - deep learning
+  - rs-fMRI
+  - gray matter
+  links:
+  - - Research Square
+    - https://www.researchsquare.com/article/rs-3740218
+  - - PMC
+    - https://pmc.ncbi.nlm.nih.gov/articles/PMC10760243/
+  abstract: 'Uses voxel-wise fusion of functional networks and gray matter volume
+    within a deep learning framework to classify Alzheimer’s disease.
+
+    '
+  citations: 9
+- title: Spatial and Spectral Components of the BOLD Global Signal in Rat Resting-State
+    Functional MRI
+  type: Journal
+  authors: Nmachi Anumba, Eric Maltbie, Wen-Ju Pan, Theodore J. LaGrow, Nan Xu, Shella
+    Keilholz
+  venue: Magnetic Resonance in Medicine
+  date: 2023
+  keywords:
+  - global signal
+  - rat fMRI
+  - spectral analysis
+  - resting-state
+  links:
+  - - Journal
+    - https://onlinelibrary.wiley.com/doi/10.1002/mrm.29824
+  abstract: 'Decomposes spatial and spectral contributions to the BOLD global signal
+    in rats, clarifying its neural and non-neural components.
+
+    '
+  citations: 7
+- title: 'Senior Inquiry: Related Chaos'
+  type: Article
+  citations: 0
+  authors: Theodore J. LaGrow, K. Q. Reyes, Z. Learned, B. Edgerly
+  venue: Senior Inquiry
+  date: 2013
+  keywords:
+  - chaos
+  - inquiry
+  links: []
+  abstract: 'A collaborative graphic summary of a year-long interdisciplinary course of study, exploring concepts of chaos and inquiry within the Senior Inquiry High School Program.'
