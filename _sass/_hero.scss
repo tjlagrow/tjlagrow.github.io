@@ -1,48 +1,67 @@
 // Hero Section Styles
 
-.hero {
-    position: relative;
-    border-radius: 1.25rem;
-    padding: 3rem 2rem;
-    overflow: hidden;
+// Parallax Background
+.parallax-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    // Deep Teal "Cyber-Neuro" Gradient with Ramon y Cajal Overlay
     background:
-        radial-gradient(1200px 600px at 10% -20%, rgba(80, 126, 255, 0.15), transparent 60%),
-        radial-gradient(1000px 500px at 100% 0%, rgba(255, 170, 90, 0.15), transparent 50%),
-        linear-gradient(135deg, $bg-dark, $bg-gradient-end);
-    color: #fff;
-    margin-bottom: 3rem;
+        linear-gradient(180deg, rgba($bg-dark, 0.85) 0%, rgba($bg-dark, 0.6) 100%), // Dark overlay for readability
+        url('../images/ramon_y_cajal.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; // Ensure parallax feel on desktop
+}
 
-    // The simplified mesh background container
-    #hero-canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        pointer-events: none;
-        opacity: 0.6;
+// Fullscreen Hero Intro
+.hero-fullscreen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+
+    // The "Typing" Cursor
+    .typing-cursor {
+        display: inline-block;
+        width: 3px;
+        background-color: $brand-color;
+        animation: blink 1s infinite;
+    }
+}
+
+// Glass Section for scrolling content
+.glass-section {
+    background: rgba($bg-dark, 0.7); // Semi-transparent dark
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba($brand-color, 0.1);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+    padding: 4rem 0;
+    border-radius: 2rem 2rem 0 0; // Rounded top appearance
+    margin-top: -2rem; // Overlap slightly
+    position: relative;
+    z-index: 2;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
     }
 
-    .hero-interactive-glow {
-        position: absolute;
-        top: -150px;
-        left: -150px;
-        width: 300px;
-        height: 300px;
-        background: radial-gradient(circle, rgba(110, 231, 249, 0.4) 0%, rgba(167, 139, 250, 0.1) 60%, transparent 100%);
-        border-radius: 50%;
-        filter: blur(40px);
-        pointer-events: none;
-        z-index: 0;
-        opacity: 0; // Hidden by default, shown by JS
-        transition: opacity 0.5s ease;
-        mix-blend-mode: screen;
-    }
-
-    .content-wrapper {
-        position: relative;
-        z-index: 1;
+    50% {
+        opacity: 0;
     }
 }
 
@@ -66,27 +85,32 @@
     }
 }
 
-.avatar-wrap {
-    position: relative;
+.hero-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
     max-width: 480px;
     margin: 0 auto;
-    aspect-ratio: 1 / 1;
+    // Removed container aspect-ratio to prevent mobile layout blowout
+    // aspect-ratio: 1 / 1; 
 
-    .hero-slide {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 1rem;
-        border: 4px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-        opacity: 0;
-        transition: opacity 1s ease;
+    .grid-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        aspect-ratio: 1 / 1; // Keep individual items square
 
-        &.active {
-            opacity: 1;
-            // animation: sweepReveal .8s ease-out both; // Optional: replaced with simple fade for smoother loop
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        &:hover img {
+            transform: scale(1.05);
         }
     }
 }
@@ -179,5 +203,100 @@
         opacity: 0.7;
         margin-top: 1rem;
         font-family: monospace;
+    }
+}
+
+// -------------------------------------------------------
+// Rotating Hero Wheel (Restored & Improved)
+// -------------------------------------------------------
+.about-wheel {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
+
+    // On mobile, scale it down slightly so it doesn't overflow
+    @media (max-width: 576px) {
+        transform: scale(0.85);
+    }
+}
+
+.wheel-orbit {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    animation: orbit-spin 40s linear infinite; // Slow rotation
+
+    &:hover {
+        animation-play-state: paused;
+
+        .wheel-item {
+            animation-play-state: paused;
+        }
+    }
+}
+
+.wheel-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80px; // reduced size for better spacing
+    height: 80px;
+    margin-left: -40px;
+    margin-top: -40px;
+    border-radius: 50%;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    // Important: Counter-rotate the items so they stay upright as the orbit spins
+    animation: orbit-counter-spin 40s linear infinite;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+// Center piece (e.g. main profile or logo)
+.wheel-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+@keyframes orbit-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes orbit-counter-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(-360deg);
     }
 }

@@ -35,3 +35,6 @@ defaults:
       type: "pages"
     values:
       layout: "page"
+
+sass:
+  sass_dir: _sass

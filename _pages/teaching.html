@@ -409,33 +409,3 @@ permalink: /teaching/
     </div>
   </div>
 </div>
-
-<script>
-  // Reveal on scroll
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
-  }, { threshold: 0.15 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-  // Lightweight stat counter (once)
-  function countUp(el, to) {
-    const dur = 1200, start = performance.now(), from = 0;
-    function tick(t) {
-      const p = Math.min((t - start) / dur, 1);
-      el.textContent = Math.floor(from + (to - from) * (0.5 - Math.cos(Math.PI * p) / 2)).toLocaleString();
-      if (p < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-  const stats = document.querySelectorAll('.stat .num');
-  const statsObs = new IntersectionObserver((entries, obs) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const to = parseInt(e.target.getAttribute('data-count'), 10);
-        countUp(e.target, to);
-        obs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.6 });
-  stats.forEach(s => statsObs.observe(s));
-</script>

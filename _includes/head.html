@@ -33,7 +33,8 @@
         site.baseurl | prepend: site.url }}" />
 
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" href="{{ " /assets/css/main.css" | relative_url }}" media="screen" />
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/index.css?v={{ site.time | date: '%s' }}"
+        media="screen" />
 
     <!-- Font Awesome icons -->
     <script src="https://use.fontawesome.com/c944ed3388.js"></script>
