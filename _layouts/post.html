@@ -1,21 +1,153 @@
 ---
 layout: default
 ---
+<style>
+  /* POST CONTAINER GLASS: Deep Dive Readability & Responsiveness */
+  .post-container-glass {
+    /* The Foundation: Solid Glass (Matches Teaching Statement Card) */
+    background-color: rgba(17, 94, 89, 0.85) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(204, 251, 241, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 20;
+
+    /* Default (Desktop) Spacing */
+    padding: 3.5rem;
+    margin-top: 3rem;
+    margin-bottom: 5rem;
+
+    /* Typography */
+    color: #e0f2fe;
+  }
+
+  /* Tablet Breakpoint */
+  @media (max-width: 992px) {
+    .post-container-glass {
+      padding: 2.5rem;
+      margin-top: 2rem;
+      border-radius: 12px;
+    }
+  }
+
+  /* Mobile Breakpoint */
+  @media (max-width: 576px) {
+    .post-container-glass {
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      margin-bottom: 3rem;
+      border-radius: 8px;
+    }
+  }
+
+  /* Headers */
+  .post-container-glass h1,
+  .post-container-glass h2,
+  .post-container-glass h3,
+  .post-container-glass h4 {
+    color: #ccfbf1 !important;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  /* Post Title Specifics */
+  .post-container-glass .post-title {
+    color: #ccfbf1 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    .post-container-glass .post-title {
+      font-size: 2.25rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .post-container-glass .post-title {
+      font-size: 1.75rem;
+    }
+  }
+
+  /* Meta Data */
+  .post-container-glass .post-meta {
+    text-align: center;
+    color: rgba(204, 251, 241, 0.7) !important;
+    margin-bottom: 3rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(204, 251, 241, 0.1);
+    padding-bottom: 2rem;
+  }
+
+  /* Body Text */
+  .post-container-glass p,
+  .post-container-glass li {
+    color: #e0f2fe !important;
+    line-height: 1.8;
+    font-size: 1.125rem;
+  }
+
+  @media (max-width: 576px) {
+
+    .post-container-glass p,
+    .post-container-glass li {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+  }
+
+  /* Links */
+  .post-container-glass a {
+    color: #5eead4 !important;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(94, 234, 212, 0.3);
+  }
+
+  /* Images */
+  .post-container-glass img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 3rem auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* Blockquotes */
+  .post-container-glass blockquote {
+    border-left: 4px solid #ccfbf1;
+    background: rgba(4, 47, 46, 0.4);
+    padding: 1.5rem 2rem;
+    color: rgba(224, 242, 254, 0.95);
+    margin: 2.5rem 0;
+    font-size: 1.2rem;
+    font-style: italic;
+    border-radius: 0 12px 12px 0;
+  }
+</style>
 
 <div class="row post">
-  <div class="col-10 ml-auto mr-auto">
-    <header class="post-header">
-      <h1 class="post-title">{{ page.title }}</h1>
-      <p class="post-meta text-muted">
-        {{ page.date | date: "%b %-d, %Y" }} •
-        {% assign words = content | number_of_words %}
-        {% if words < 360 %} 1 min read {% else %} {{ words | divided_by:180 }} min read {% endif %} {% if page.author
-          %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %} </p>
-          <p class="post-meta text-muted">{{ page.tags | join:' | ' }}</p>
-    </header>
-
-    <article class="post-content">
-      {{ content }}
-    </article>
+  <div class="col-10 col-lg-8 ml-auto mr-auto">
+    <div class="post-container-glass">
+      <header class="post-header">
+        <h1 class="post-title">{{ page.title }}</h1>
+        <p class="post-meta text-muted">
+          {{ page.date | date: "%b %-d, %Y" }} •
+          {% assign words = content | number_of_words %}
+          {% if words < 360 %} 1 min read {% else %} {{ words | divided_by:180 }} min read {% endif %} {% if page.author
+            %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %} </p>
+            <p class="post-meta text-muted">{{ page.tags | join:' | ' }}</p>
+      </header>
+      <article class="post-content">
+        {{ content }}
+      </article>
+    </div>
   </div>
 </div>

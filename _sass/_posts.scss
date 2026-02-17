@@ -1,0 +1,185 @@
+// -----------------------------------------------------------------------------
+// POST CONTAINER GLASS: "Deep Dive" Readability & Responsiveness
+// -----------------------------------------------------------------------------
+// This file controls the "Solid Card" aesthetic for blog posts.
+// It uses a high-opacity glass effect to ensure text is readable against
+// the parallax background while maintaining the site's "Glassmorphism" feel.
+// -----------------------------------------------------------------------------
+
+.post-container-glass {
+    // --- 1. THE FOUNDATION: "Solid Glass" ---
+    // High opacity (0.85) ensures text doesn't blend into complex backgrounds.
+    background-color: rgba(0, 20, 20, 0.85) !important;
+
+    // Strong blur to "frost" the background behind the card
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    // Styling the "Physical" Card
+    border: 1px solid rgba(204, 251, 241, 0.2); // Subtle teal rim
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); // Deep shadow for lift
+    position: relative;
+    z-index: 20;
+
+    // --- 2. RESPONSIVE GEOMETRY (The "Deep Dive" Formatting) ---
+    // Spacing and margins adjusted for device size
+
+    // Default (Desktop)
+    padding: 3.5rem;
+    margin-top: 3rem;
+    margin-bottom: 5rem;
+
+    // Tablet (Standard Breakpoint ~768px)
+    @media (max-width: 992px) {
+        padding: 2.5rem;
+        margin-top: 2rem;
+        border-radius: 12px;
+    }
+
+    // Phone (Mobile Breakpoint ~576px)
+    @media (max-width: 576px) {
+        padding: 1.5rem; // Maximize content width
+        margin-top: 1.5rem;
+        margin-bottom: 3rem;
+        border-radius: 8px; // Slightly sharper corners
+        border-width: 0.5px; // Thinner border on high-DPI small screens
+    }
+
+    // --- 3. TYPOGRAPHY FOR READABILITY ---
+    // Color Palette: High Contrast Light Blue on Dark Teal
+    color: #e0f2fe;
+
+    // Base Text
+    p,
+    li {
+        line-height: 1.8; // Luxurious line height for long-form reading
+        color: #e0f2fe;
+
+        // Responsive Font Sizing
+        font-size: 1.125rem; // ~18px for Desktop (Optimal)
+
+        @media (max-width: 576px) {
+            font-size: 1rem; // ~16px for Mobile (Standard)
+            line-height: 1.6; // Slightly tighter for narrow columns
+        }
+    }
+
+    // Headers
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: #ccfbf1; // Brand Light Teal
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.3;
+    }
+
+    // --- 4. SPECIFIC COMPONENT OVERRIDES ---
+
+    // Post Title (h1)
+    .post-title {
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        color: #ccfbf1;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); // Pop off the card
+
+        // Responsive Title Size
+        font-size: 3rem;
+
+        @media (max-width: 768px) {
+            font-size: 2.25rem;
+        }
+
+        @media (max-width: 576px) {
+            font-size: 1.75rem;
+        }
+    }
+
+    // Meta Data (Date, read time)
+    .post-meta {
+        text-align: center;
+        color: rgba(204, 251, 241, 0.7) !important;
+        margin-bottom: 3rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid rgba(204, 251, 241, 0.1);
+        padding-bottom: 2rem;
+    }
+
+    // Links (Interactive)
+    a {
+        color: #5eead4; // Bright Teal Accent
+        text-decoration: none;
+        border-bottom: 1px solid rgba(94, 234, 212, 0.3);
+        transition: all 0.2s ease-in-out;
+        font-weight: 500;
+
+        &:hover {
+            color: #ccfbf1;
+            border-bottom-color: #ccfbf1;
+            background: rgba(94, 234, 212, 0.15); // Highlight effect
+            border-radius: 2px;
+            padding: 0 2px;
+            margin: 0 -2px;
+        }
+    }
+
+    // Images (Visual Break)
+    img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        margin: 3rem auto; // Generous whitespace
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+
+        @media (max-width: 576px) {
+            margin: 2rem auto;
+            border-radius: 8px;
+        }
+    }
+
+    // Blockquotes (Emphasis)
+    blockquote {
+        border-left: 4px solid #ccfbf1;
+        padding: 1.5rem 2rem;
+        font-style: italic;
+        color: rgba(224, 242, 254, 0.95);
+        margin: 2.5rem 0;
+        background: rgba(4, 47, 46, 0.4); // Darker recess
+        border-radius: 0 12px 12px 0;
+        font-size: 1.2rem;
+
+        @media (max-width: 576px) {
+            padding: 1rem 1.5rem;
+            font-size: 1.05rem;
+            margin: 2rem 0;
+        }
+
+        p {
+            margin-bottom: 0;
+        }
+
+        // Remove extra margin inside quote
+    }
+
+    // Code Blocks (Technical)
+    code {
+        background: rgba(0, 0, 0, 0.4);
+        color: #ccfbf1;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        font-family: 'SF Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9em;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+}

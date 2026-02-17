@@ -4,49 +4,52 @@ title: Blog
 permalink: /blog/
 ---
 
-<div class="row">
-  <div class="col-10 col-md-8 mx-auto">
-    <h3 class="cover-heading text-center mb-4">Blog Posts</h3>
+<section class="glass-banner py-5 my-5" style="background: rgba(17, 94, 89, 0.85) !important;">
+  <div class="container">
+    <div class="col-10 col-md-8 mx-auto">
+      <h2 class="h2 text-center mb-5" style="color: #ccfbf1;">Blog Posts</h2>
 
-    {% for post in site.posts %}
-    <a href="{{ post.url }}" class="text-reset text-decoration-none">
-      <div class="d-flex align-items-center mb-3 p-3 glass rounded shadow-sm blog-card hover-lift">
+      {% for post in site.posts %}
+      <a href="{{ post.url }}" class="text-decoration-none">
+        <div class="d-flex align-items-center mb-3 p-3 blog-card-dark">
 
-        <!-- Thumbnail -->
-        <div class="blog-thumb me-3 flex-shrink-0">
-          {% if post.thumbnail %}
-          <img src="{{ post.thumbnail }}" alt="{{ post.title }} thumbnail" class="rounded">
-          {% else %}
-          <div class="blog-thumb-fallback rounded d-flex align-items-center justify-content-center">
-            <span class="small text-muted">TL</span>
-          </div>
-          {% endif %}
-        </div>
-
-        <!-- Content -->
-        <div class="flex-grow-1">
-          <div class="small text-muted">
-            {{ post.date | date: "%b %-d, %Y" }} •
-            {% assign words = post.content | number_of_words %}
-            {% if words < 360 %} 1 min read {% else %} {{ words | divided_by:180 }} min read {% endif %} </div>
-              <div class="font-weight-semibold">
-                {{ post.title }}
-              </div>
-              <div class="small text-muted mt-1">
-                {% if post.description %}
-                {{ post.description }}
-                {% elsif post.excerpt %}
-                {{ post.excerpt | strip_html | strip_newlines | truncate: 140 }}
-                {% else %}
-                {{ post.content | strip_html | strip_newlines | truncate: 140 }}
-                {% endif %}
-              </div>
+          <!-- Thumbnail -->
+          <div class="blog-thumb me-3 flex-shrink-0" style="border-color: rgba(255,255,255,0.1);">
+            {% if post.thumbnail %}
+            <img src="{{ post.thumbnail }}" alt="{{ post.title }} thumbnail">
+            {% else %}
+            <div class="blog-thumb-fallback rounded d-flex align-items-center justify-content-center"
+              style="background: rgba(255,255,255,0.05); color: #ccfbf1;">
+              <span class="small">TL</span>
+            </div>
+            {% endif %}
           </div>
 
-        </div>
-    </a>
-    {% endfor %}
+          <!-- Content -->
+          <div class="flex-grow-1">
+            <div class="small text-muted">
+              {{ post.date | date: "%b %-d, %Y" }} •
+              {% assign words = post.content | number_of_words %}
+              {% if words < 360 %} 1 min read {% else %} {{ words | divided_by:180 }} min read {% endif %} </div>
+                <div class="font-weight-semibold">
+                  {{ post.title }}
+                </div>
+                <div class="small text-muted mt-1">
+                  {% if post.description %}
+                  {{ post.description }}
+                  {% elsif post.excerpt %}
+                  {{ post.excerpt | strip_html | strip_newlines | truncate: 140 }}
+                  {% else %}
+                  {{ post.content | strip_html | strip_newlines | truncate: 140 }}
+                  {% endif %}
+                </div>
+            </div>
+
+          </div>
+      </a>
+      {% endfor %}
+    </div>
   </div>
-</div>
+</section>
 
 <!-- Styles moved to _sass/ -->

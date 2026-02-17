@@ -151,7 +151,7 @@ details {
     line-height: 1.2;
     font-family: monospace;
     white-space: pre;
-    color: #e0f2fe; // Matches main paragraph text
+    color: #ccfbf1; // Light Teal per user request
     font-weight: bold;
     font-size: 1.1em;
     animation: bounce 2s infinite ease-in-out;
@@ -169,3 +169,5 @@ details {
         transform: translateY(-6px); // Subtle bounce as requested
     }
 }
+
+// Blog Post Container moved to _posts.scss
