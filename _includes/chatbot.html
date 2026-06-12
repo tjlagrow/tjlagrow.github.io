@@ -215,6 +215,9 @@
                     // Force ONNX Runtime to fetch WASM helper files from the jsdelivr CDN rather than resolving relatively to localhost
                     env.backends.onnx.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/dist/';
 
+                    console.log("[Waddles] Hugging Face transformers.js module successfully imported.");
+                    console.log("[Waddles] Configuring ONNX settings [numThreads 1, proxy false].");
+
                     try {
                         const totalWeights = 61.0; // 23MB + 38MB
                         let embedderProgress = 0;
@@ -232,6 +235,7 @@
                         };
 
                         // 1. Load the embedder
+                        console.log("[Waddles] Starting to load embedding model [Xenova/all-MiniLM-L6-v2]...");
                         embedder = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
                             device: 'wasm',
                             progress_callback: (data) => {
@@ -245,9 +249,11 @@
                             }
                         });
                         embedderLoaded = true;
+                        console.log("[Waddles] Embedding model loaded successfully.");
 
                         // 2. Load the generator
-                        generator = await pipeline('text-generation', 'onnx-community/SmolLM-135M-Instruct', {
+                        console.log("[Waddles] Starting to load generation model [onnx-community/SmolLM-135M-Instruct-ONNX] with q4 quantization...");
+                        generator = await pipeline('text-generation', 'onnx-community/SmolLM-135M-Instruct-ONNX', {
                             device: 'wasm',
                             dtype: 'q4',
                             progress_callback: (data) => {
@@ -261,6 +267,8 @@
                             }
                         });
                         generatorLoaded = true;
+                        console.log("[Waddles] Generation model loaded successfully.");
+                        console.log("[Waddles] Local neural networks are fully operational.");
 
                         modelLoading = false;
 
