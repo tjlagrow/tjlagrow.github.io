@@ -6,8 +6,11 @@ $text-color: #f0fdfa !default;
 $brand-color: #2dd4bf !default;
 $grey-color: #99f6e4 !default;
 $grey-color-light: #134e4a !default;
+$grey-color-dark: #0f172a !default;
 $spacing-unit: 30px !default;
+$small-font-size: 14px !default;
 $content-width: 800px !default;
+$on-palm: 600px !default;
 $on-laptop: 800px !default;
 
 @mixin media-query($device) {
