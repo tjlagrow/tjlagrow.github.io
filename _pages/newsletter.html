@@ -20,15 +20,35 @@ full_width: true
   <div class="row justify-content-center">
     <div class="col-lg-8">
 
-      <!-- PAST NEWSLETTERS (Coming Soon) -->
+      <!-- PAST NEWSLETTERS (Dynamic List) -->
       <div class="text-center mb-5">
         <h3 class="h4 fw-bold text-light mb-3">Past Newsletters</h3>
+        {% if site.newsletters.size > 0 %}
+        <div class="row text-start g-3 justify-content-center">
+          {% for issue in site.newsletters %}
+          <div class="col-md-6">
+            <a href="{{ issue.url | relative_url }}" class="text-decoration-none d-block h-100">
+              <div class="portal-card h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <h4 class="title h5">{{ issue.title }}</h4>
+                  <p class="small text-muted mb-3">
+                    {{ issue.description | default: issue.content | strip_html | truncatewords: 25 }}
+                  </p>
+                </div>
+                <span class="small text-secondary fw-bold">{{ issue.date | date: "%B %d, %Y" }}</span>
+              </div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
         <div class="p-4 rounded-3 d-inline-block"
           style="background: rgba(255,255,255,0.15); border: 1px dashed rgba(255,255,255,0.3); max-width: 800px;">
           <img src="/assets/images/garden_pixel_art.png" alt="Neural Garden Pixel Art" class="img-fluid rounded mb-3"
             style="image-rendering: pixelated; width: 100%; max-height: 450px; object-fit: cover;">
           <p class="mb-0 text-light fw-bold fst-italic">Coming Soon!</p>
         </div>
+        {% endif %}
       </div>
 
       <!-- FORM CARD -->
@@ -68,7 +88,7 @@ full_width: true
                 <option value="Software Engineer">Software Engineer</option>
                 <option value="Data Scientist">Data Scientist</option>
                 <option value="AI/ML Engineer">AI/ML Engineer</option>
-                <option value="Business Learder/Manager">Business Leader/Manager</option>
+                <option value="Business Leader/Manager">Business Leader/Manager</option>
                 <option value="Enthusiast/Hobbyist">Enthusiast/Hobbyist</option>
                 <option value="Other">Other</option>
               </select>

@@ -2,51 +2,159 @@
     <div id="chatbot-window" style="display: none;">
         <div class="chatbot-header">
             <div class="d-flex align-items-center">
-                <div style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; margin-right: 8px;"></div>
+                <div style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite;"></div>
                 <span>TJ's AI Assistant</span>
             </div>
             <button id="chatbot-close" aria-label="Close chat">×</button>
         </div>
-        <div class="chatbot-body">
+        <div class="chatbot-body" id="chatbot-body">
             <div class="chatbot-message system">
-                <strong>Hello!</strong> I'm an AI model trained on TJ's research and writing.
-                <br><br>
-                I'm currently being built (scaffolding phase 🚧), but soon I'll be able to answer questions about:
-                <ul class="mb-0 pl-3 mt-1">
-                    <li>OMSCS & CS7641</li>
-                    <li>Neuroscience Research</li>
-                    <li>Speaking Availability</li>
-                </ul>
+                <strong>Hello!</strong> I'm TJ's virtual assistant. Ask me anything about TJ's teaching, research, or contact details, or select a topic below:
+                <div class="chatbot-chips">
+                    <button class="chatbot-chip" data-question="What courses does TJ teach?">🎓 OMSCS & Teaching</button>
+                    <button class="chatbot-chip" data-question="Tell me about TJ's research.">🧠 Brain Research</button>
+                    <button class="chatbot-chip" data-question="What certificates are in FlexStack?">🛠️ FlexStack Program</button>
+                    <button class="chatbot-chip" data-question="How can I contact TJ?">✉️ Contact & Speaking</button>
+                </div>
             </div>
         </div>
-        <div class="chatbot-input-area">
-            <input type="text" class="form-control form-control-sm" placeholder="Coming soon..." disabled>
-            <button class="btn btn-primary btn-sm" disabled><i class="fa fa-paper-plane"></i></button>
-        </div>
+        <form id="chatbot-form" class="chatbot-input-area">
+            <input type="text" id="chatbot-input" class="form-control form-control-sm" placeholder="Ask me a question..." aria-label="Chat input">
+            <button type="submit" id="chatbot-send" class="btn btn-primary btn-sm" aria-label="Send message"><i class="fa fa-paper-plane"></i></button>
+        </form>
     </div>
 
-    <button id="chatbot-toggle" aria-label="Open chat">
+    <button id="chatbot-toggle" aria-label="Open chat" aria-expanded="false">
         <i class="fa fa-comments"></i>
     </button>
 </div>
+
+<style>
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(46, 204, 113, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+}
+</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const toggle = document.getElementById('chatbot-toggle');
         const windowEl = document.getElementById('chatbot-window');
         const close = document.getElementById('chatbot-close');
+        const body = document.getElementById('chatbot-body');
+        const form = document.getElementById('chatbot-form');
+        const input = document.getElementById('chatbot-input');
 
-        if (toggle && windowEl && close) {
-            toggle.addEventListener('click', () => {
-                const isHidden = windowEl.style.display === 'none';
-                windowEl.style.display = isHidden ? 'flex' : 'none';
-                toggle.setAttribute('aria-expanded', !isHidden);
-            });
+        if (!toggle || !windowEl || !close || !body || !form || !input) return;
 
-            close.addEventListener('click', () => {
-                windowEl.style.display = 'none';
-                toggle.setAttribute('aria-expanded', 'false');
-            });
+        // Toggle visibility
+        toggle.addEventListener('click', () => {
+            const isHidden = windowEl.style.display === 'none';
+            windowEl.style.display = isHidden ? 'flex' : 'none';
+            toggle.setAttribute('aria-expanded', !isHidden);
+            if (isHidden) {
+                input.focus();
+                scrollToBottom();
+            }
+        });
+
+        close.addEventListener('click', () => {
+            windowEl.style.display = 'none';
+            toggle.setAttribute('aria-expanded', 'false');
+        });
+
+        // Event delegation for action chips (works dynamically)
+        body.addEventListener('click', (e) => {
+            const chip = e.target.closest('.chatbot-chip');
+            if (chip) {
+                const question = chip.getAttribute('data-question');
+                handleUserQuery(question);
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            handleUserQuery(text);
+        });
+
+        function handleUserQuery(query) {
+            // Append user message
+            appendMessage(query, 'user');
+            scrollToBottom();
+
+            // Show typing indicator
+            const indicator = showTypingIndicator();
+            scrollToBottom();
+
+            // Simulate slight delay for typing
+            setTimeout(() => {
+                // Remove typing indicator
+                indicator.remove();
+
+                // Generate response
+                const responseText = getBotResponse(query);
+                appendMessage(responseText, 'system');
+                scrollToBottom();
+            }, 750);
+        }
+
+        function appendMessage(content, sender) {
+            const msg = document.createElement('div');
+            msg.className = `chatbot-message ${sender}`;
+            msg.innerHTML = content;
+            body.appendChild(msg);
+        }
+
+        function showTypingIndicator() {
+            const indicator = document.createElement('div');
+            indicator.className = 'chatbot-message system';
+            indicator.innerHTML = `
+                <div class="typing-indicator-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            body.appendChild(indicator);
+            return indicator;
+        }
+
+        function scrollToBottom() {
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function getBotResponse(query) {
+            const text = query.toLowerCase().trim();
+
+            if (text.includes("7641") || text.includes("7642") || text.includes("teach") || text.includes("course") || text.includes("class") || text.includes("omscs") || text.includes("student") || text.includes("learning")) {
+                return `<strong>Teaching at Georgia Tech:</strong><br><br>TJ is the Lead Instructor for <strong>CS 7641: Machine Learning</strong> in Georgia Tech's OMSCS program, supporting 1,400+ graduate students and directing 30+ TAs. He also worked with <strong>CS 7642: Reinforcement Learning</strong>. He was awarded the <strong>2023 Outstanding Online TA of the Year</strong> at GT.<br><br>Read more details on the <a href="/teaching/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Teaching Page</a>.`;
+            }
+            if (text.includes("research") || text.includes("fmri") || text.includes("qpp") || text.includes("brain") || text.includes("cajal") || text.includes("neuro") || text.includes("paper") || text.includes("publication") || text.includes("science")) {
+                return `<strong>Computational Neuroscience Research:</strong><br><br>TJ's research in the Keilholz MIND Lab focuses on <strong>spatiotemporal brain dynamics</strong> using resting-state fMRI. He studies <strong>Quasi-Periodic Patterns (QPPs)</strong> to find biomarkers for diseases like Alzheimer's and Parkinson's.<br><br>Check out his papers on the <a href="/research/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Research Page</a> or view his <a href="https://scholar.google.com/citations?user=KO7oYeAAAAAJ" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Google Scholar</a>.`;
+            }
+            if (text.includes("flexstack") || text.includes("certificate") || text.includes("llm") || text.includes("agent") || text.includes("pandas") || text.includes("genai") || text.includes("generative")) {
+                return `<strong>FlexStack Certificates:</strong><br><br>TJ is the Lead AI/LLM Expert for Georgia Tech's professional education **FlexStack** program, where he developed:<br>• <strong>Data Modeling & Visualization Certificate</strong> (Decision-Ready Data, pandas, sklearn).<br>• <strong>Python AI Principles Certificate</strong> (applied LLM API architectures, generative engineering, and agentic pipelines).`;
+            }
+            if (text.includes("email") || text.includes("contact") || text.includes("speak") || text.includes("hire") || text.includes("touch") || text.includes("linkedin") || text.includes("youtube")) {
+                return `<strong>Contact & Socials:</strong><br><br>Connect with TJ via:<br>• <strong>Email:</strong> <code>tlagrow3 at gatech dot edu</code><br>• <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/tjlagrow/" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">LinkedIn Profile</a><br>• <strong>GitHub:</strong> <a href="https://github.com/tjlagrow" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">GitHub Profile</a><br>• <strong>YouTube:</strong> <a href="https://www.youtube.com/@UnderstandingMachineLearning" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">UML Channel</a><br><br>Or send a message using the form on the <a href="/contact/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Contact Page</a>!`;
+            }
+            if (text.includes("hello") || text.includes("hi") || text.includes("hey") || text.includes("greetings") || text.includes("who are you") || text.includes("who is tj")) {
+                return `<strong>Hello!</strong> I can help you find information on TJ's portfolio:<br>• <strong>CS 7641 / OMSCS Teaching</strong><br>• <strong>Neuroscience Research & fMRI</strong><br>• <strong>FlexStack Certificates</strong><br>• **Contact & Social links**<br><br>What would you like to explore?`;
+            }
+
+            // Fallback response with chips
+            return `I'm not sure about that, but I can help you with:<br>
+                <div class="chatbot-chips">
+                    <button class="chatbot-chip" data-question="What courses does TJ teach?">🎓 OMSCS & Teaching</button>
+                    <button class="chatbot-chip" data-question="Tell me about TJ's research.">🧠 Brain Research</button>
+                    <button class="chatbot-chip" data-question="What certificates are in FlexStack?">🛠️ FlexStack Program</button>
+                    <button class="chatbot-chip" data-question="How can I contact TJ?">✉️ Contact Details</button>
+                </div>`;
         }
     });
 </script>

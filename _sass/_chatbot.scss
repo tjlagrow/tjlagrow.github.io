@@ -1,4 +1,4 @@
-// Chatbot Scaffolding Styles
+// Chatbot Styles
 
 #chatbot-container {
     position: fixed;
@@ -15,20 +15,21 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: $brand-color; // Or gradient
+    background: $brand-color;
     background: linear-gradient(135deg, $brand-color, darken($brand-color, 10%));
     color: white;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
 
     &:hover {
-        transform: scale(1.1);
+        transform: scale(1.08);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
 
     &:active {
@@ -37,29 +38,29 @@
 }
 
 #chatbot-window {
-    width: 340px;
-    height: 480px;
+    width: 360px;
+    height: 500px;
     max-width: calc(100vw - 2rem);
-    max-height: 70vh;
+    max-height: 75vh;
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 
     // Glassmorphism base
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
     border-radius: 16px;
 
     // Slide animation
-    animation: slideInUp 0.3s ease-out;
+    animation: slideInUp 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
     .chatbot-header {
-        padding: 1rem;
-        background: rgba($brand-color, 0.05);
+        padding: 1rem 1.25rem;
+        background: rgba($brand-color, 0.08);
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         display: flex;
         justify-content: space-between;
@@ -74,43 +75,159 @@
             line-height: 1;
             cursor: pointer;
             color: $grey-color;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.15s ease;
 
             &:hover {
-                color: $brand-color;
+                color: darken($brand-color, 15%);
             }
         }
     }
 
     .chatbot-body {
         flex: 1;
-        padding: 1rem;
+        padding: 1.25rem;
         overflow-y: auto;
-        background: rgba(255, 255, 255, 0.4);
+        background: rgba(244, 246, 248, 0.4);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
     }
 
     .chatbot-message {
-        padding: 1rem;
-        background: white;
-        border-radius: 12px;
-        border-bottom-left-radius: 2px;
-        margin-bottom: 1rem;
-        font-size: 0.95rem;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+        padding: 0.85rem 1.1rem;
+        border-radius: 14px;
+        font-size: 0.925rem;
         line-height: 1.5;
-        color: $text-color;
+        max-width: 85%;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        word-wrap: break-word;
 
         &.system {
+            background: white;
+            color: $text-color;
+            border-bottom-left-radius: 2px;
+            align-self: flex-start;
             border-left: 3px solid $brand-color;
+        }
+
+        &.user {
+            background: rgba($brand-color, 0.15);
+            color: darken($brand-color, 25%);
+            border-bottom-right-radius: 2px;
+            align-self: flex-end;
+            border-right: 3px solid $brand-color;
+            font-weight: 500;
+        }
+
+        ul, ol {
+            padding-left: 1.2rem;
+            margin-top: 0.4rem;
+            margin-bottom: 0;
+        }
+
+        li {
+            margin-bottom: 0.25rem;
+            color: inherit !important;
+            text-shadow: none !important;
+        }
+    }
+
+    /* Action Chips */
+    .chatbot-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: 0.75rem;
+        align-self: flex-start;
+        width: 100%;
+    }
+
+    .chatbot-chip {
+        background: white;
+        border: 1px solid rgba($brand-color, 0.3);
+        color: darken($brand-color, 15%);
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+
+        &:hover {
+            background: rgba($brand-color, 0.08);
+            border-color: $brand-color;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        &:active {
+            transform: scale(0.96);
+        }
+    }
+
+    /* Typing Dots Animation */
+    .typing-indicator-dots {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        height: 12px;
+        padding: 0.2rem 0;
+
+        span {
+            width: 6px;
+            height: 6px;
+            background-color: lighten($grey-color, 10%);
+            border-radius: 50%;
+            display: inline-block;
+            animation: typing-bounce 1.4s infinite ease-in-out both;
+
+            &:nth-child(1) { animation-delay: -0.32s; }
+            &:nth-child(2) { animation-delay: -0.16s; }
         }
     }
 
     .chatbot-input-area {
-        padding: 1rem;
+        padding: 0.85rem 1rem;
         border-top: 1px solid rgba(0, 0, 0, 0.05);
         display: flex;
         gap: 0.5rem;
         background: white;
+
+        input {
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+
+            &:focus {
+                border-color: $brand-color;
+                box-shadow: 0 0 0 0.2rem rgba($brand-color, 0.15);
+            }
+        }
+
+        button {
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            flex-shrink: 0;
+        }
     }
+}
+
+@keyframes typing-bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1.0); }
 }
 
 @keyframes slideInUp {
@@ -118,7 +235,6 @@
         opacity: 0;
         transform: translateY(20px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);

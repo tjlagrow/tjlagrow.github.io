@@ -4,7 +4,7 @@ email: tjlagrow@gmail.com
 description: >
   Theodore J. LaGrow - Researcher in Computational Neuroscience, Educator at Georgia Tech, and ML Practitioner.
 baseurl: ""                       # the subpath of your site, e.g. /blog/
-url: "https://tjlagrow.github.io" # the base hostname & protocol for your site
+url: "https://www.tjlagrow.com" # the base hostname & protocol for your site
 github_username: tjlagrow
 
 name: Theodore LaGrow
