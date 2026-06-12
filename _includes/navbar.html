@@ -36,6 +36,15 @@
         </li>
         {% endfor %}
       </ul>
+      <ul class="navbar-nav ms-auto" id="pizza-nav-item" style="display: none !important;">
+        <li class="nav-item d-flex align-items-center justify-content-start justify-content-md-end py-2 py-md-0">
+          <button id="pizza-toggle-btn" class="btn btn-outline-light rounded-pill px-3 py-1 d-flex align-items-center gap-2" style="font-size: 0.825rem; border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.8); transition: all 0.2s ease; cursor: pointer;" title="Toggle Pizza Cursor Trail">
+            <span>🍕</span>
+            <span class="d-none d-lg-inline">Pizza Trail</span>
+            <span id="pizza-status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #64748b; display: inline-block; transition: background 0.3s ease;"></span>
+          </button>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>

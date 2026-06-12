@@ -119,3 +119,15 @@
     font-weight: 500;
     margin-bottom: 0;
 }
+
+/* CANVAS OVERLAY FOR PIZZA CURSOR TRAIL */
+#pizza-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    display: block;
+}
