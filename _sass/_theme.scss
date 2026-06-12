@@ -1,3 +1,21 @@
+// Minima Theme Variables & Mixins
+$base-font-family: 'Nunito', Helvetica, Arial, sans-serif !default;
+$base-font-size: 16px !default;
+$base-line-height: 1.5 !default;
+$text-color: #f0fdfa !default;
+$brand-color: #2dd4bf !default;
+$grey-color: #99f6e4 !default;
+$grey-color-light: #134e4a !default;
+$spacing-unit: 30px !default;
+$content-width: 800px !default;
+$on-laptop: 800px !default;
+
+@mixin media-query($device) {
+    @media screen and (max-width: $device) {
+        @content;
+    }
+}
+
 // Glassmorphism Theme Variables & Mixins
 
 // Colors
