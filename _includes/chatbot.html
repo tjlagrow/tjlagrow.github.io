@@ -5,7 +5,13 @@
                 <div style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite;"></div>
                 <span>Waddles</span>
             </div>
-            <button id="chatbot-close" aria-label="Close chat">×</button>
+            <div class="d-flex align-items-center" style="gap: 8px;">
+                <select id="waddles-mode-selector" class="rounded py-0 px-1" style="font-size: 0.75rem; border: 1px solid rgba(0,0,0,0.15); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #2dd4bf; font-weight: 600;">
+                    <option value="rag">🤖 WASM AI (RAG)</option>
+                    <option value="keyword">🔍 VSM Keyword</option>
+                </select>
+                <button id="chatbot-close" aria-label="Close chat">×</button>
+            </div>
         </div>
         <div class="chatbot-body" id="chatbot-body">
             <div class="chatbot-message system">
@@ -45,21 +51,24 @@
         const body = document.getElementById('chatbot-body');
         const form = document.getElementById('chatbot-form');
         const input = document.getElementById('chatbot-input');
+        const modeSelector = document.getElementById('waddles-mode-selector');
 
-        if (!toggle || !windowEl || !close || !body || !form || !input) return;
+        if (!toggle || !windowEl || !close || !body || !form || !input || !modeSelector) return;
 
-        let searchIndex = [];
-        let modelLoaded = false;
+        let embeddingsDatabase = [];
+        let embedderLoaded = false;
+        let generatorLoaded = false;
         let modelLoading = false;
+        let embedder = null;
         let generator = null;
 
-        // Asynchronously load search index (very fast and lightweight)
-        fetch('{{ "/assets/json/search.json" | relative_url }}')
+        // Asynchronously load vector embeddings database (very fast and lightweight)
+        fetch('{{ "/assets/json/embeddings.json" | relative_url }}')
             .then(response => response.json())
             .then(data => {
-                searchIndex = data;
+                embeddingsDatabase = data;
             })
-            .catch(err => console.error("Error loading Waddles search index:", err));
+            .catch(err => console.error("Error loading Waddles embeddings database:", err));
 
         // Toggle visibility
         toggle.addEventListener('click', () => {
@@ -69,7 +78,9 @@
             if (isHidden) {
                 input.focus();
                 scrollToBottom();
-                ensureModelLoaded();
+                if (modeSelector.value === 'rag') {
+                    ensureModelLoaded();
+                }
             }
         });
 
@@ -84,7 +95,9 @@
                     toggle.setAttribute('aria-expanded', 'true');
                     input.focus();
                     scrollToBottom();
-                    ensureModelLoaded();
+                    if (modeSelector.value === 'rag') {
+                        ensureModelLoaded();
+                    }
                 } else {
                     windowEl.style.display = 'none';
                     toggle.setAttribute('aria-expanded', 'false');
@@ -163,9 +176,9 @@
             body.scrollTop = body.scrollHeight;
         }
 
-        // Lazy-load the local model
+        // Lazy-load local models
         function ensureModelLoaded() {
-            if (modelLoaded || modelLoading) return;
+            if ((embedderLoaded && generatorLoaded) || modelLoading) return;
             modelLoading = true;
 
             const loadingCard = document.createElement('div');
@@ -173,11 +186,14 @@
             loadingCard.id = 'waddles-loading-card';
             loadingCard.innerHTML = `
                 <strong>Waddles is loading...</strong><br>
-                Downloading a lightweight language model (SmolLM-135M, ~85MB) to run locally in your browser. This only downloads once and will be cached.<br>
+                Downloading lightweight models to run locally in your browser:<br>
+                • Embedding Model (MiniLM, ~23MB)<br>
+                • Generation Model (SmolLM, ~85MB)<br>
+                This only downloads once and will be cached in your browser.<br>
                 <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; overflow: hidden;">
                     <div id="waddles-progress-bar" class="progress-bar" role="progressbar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #0d9488, #0ea5e9); transition: width 0.1s;"></div>
                 </div>
-                <div id="waddles-loading-percentage" class="small text-muted mt-1">Initializing loading sequence...</div>
+                <div id="waddles-loading-percentage" class="small text-muted mt-1">Initializing download sequences...</div>
             `;
             body.appendChild(loadingCard);
             scrollToBottom();
@@ -196,26 +212,57 @@
                     env.backends.onnx.wasm.numThreads = 1;
 
                     try {
+                        const totalWeights = 108.0; // 23MB + 85MB
+                        let embedderProgress = 0;
+                        let generatorProgress = 0;
+
+                        const updateProgressBar = () => {
+                            const totalProgress = ((embedderProgress * 23.0) + (generatorProgress * 85.0)) / totalWeights;
+                            const percent = Math.round(totalProgress);
+                            const progressBar = document.getElementById('waddles-progress-bar');
+                            const progressPercent = document.getElementById('waddles-loading-percentage');
+                            if (progressBar) progressBar.style.width = `${percent}%`;
+                            if (progressPercent) {
+                                progressPercent.innerText = `Downloading local brain (${percent}%) - Embedder: ${Math.round(embedderProgress)}%, Generator: ${Math.round(generatorProgress)}%`;
+                            }
+                        };
+
+                        // 1. Load the embedder
+                        embedder = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
+                            device: 'wasm',
+                            progress_callback: (data) => {
+                                if (data.status === 'progress') {
+                                    embedderProgress = data.progress;
+                                    updateProgressBar();
+                                } else if (data.status === 'ready') {
+                                    embedderProgress = 100;
+                                    updateProgressBar();
+                                }
+                            }
+                        });
+                        embedderLoaded = true;
+
+                        // 2. Load the generator
                         generator = await pipeline('text-generation', 'onnx-community/SmolLM-135M-Instruct', {
                             device: 'wasm',
                             progress_callback: (data) => {
                                 if (data.status === 'progress') {
-                                    const percent = Math.round(data.progress);
-                                    const progressBar = document.getElementById('waddles-progress-bar');
-                                    const progressPercent = document.getElementById('waddles-loading-percentage');
-                                    if (progressBar) progressBar.style.width = `${percent}%`;
-                                    if (progressPercent) progressPercent.innerText = `Downloading model (${percent}%)`;
+                                    generatorProgress = data.progress;
+                                    updateProgressBar();
+                                } else if (data.status === 'ready') {
+                                    generatorProgress = 100;
+                                    updateProgressBar();
                                 }
                             }
                         });
+                        generatorLoaded = true;
 
-                        modelLoaded = true;
                         modelLoading = false;
 
                         const lc = document.getElementById('waddles-loading-card');
                         if (lc) lc.remove();
 
-                        appendMessage(`<strong>Model loaded successfully!</strong> My local WebAssembly brain is ready in your browser. Ask me anything!`, 'system');
+                        appendMessage(`<strong>Waddles is ready!</strong> My local WebAssembly neural networks are loaded. Ask me anything!`, 'system');
                         scrollToBottom();
 
                         input.disabled = false;
@@ -223,7 +270,7 @@
                         input.focus();
                     } catch (err) {
                         console.error("ONNX initialization failed:", err);
-                        fallbackToStatic(submitBtn, `Failed to load WebAssembly model. Falling back to keyword search mode...`);
+                        fallbackToStatic(submitBtn, `Failed to load WebAssembly models. Falling back to keyword search mode...`);
                     }
                 })
                 .catch((err) => {
@@ -233,7 +280,8 @@
         }
 
         function fallbackToStatic(submitBtn, msg) {
-            modelLoaded = false;
+            embedderLoaded = false;
+            generatorLoaded = false;
             modelLoading = false;
             const lc = document.getElementById('waddles-loading-card');
             if (lc) lc.remove();
@@ -243,8 +291,8 @@
             if (submitBtn) submitBtn.disabled = false;
         }
 
-        function findSimilarityMatches(query) {
-            if (!searchIndex || searchIndex.length === 0) return [];
+        function findKeywordMatches(query) {
+            if (!embeddingsDatabase || embeddingsDatabase.length === 0) return [];
             
             const queryTokens = query.toLowerCase()
                 .replace(/[^\w\s-]/g, '')
@@ -258,27 +306,20 @@
             
             if (filteredQueryTokens.length === 0) return [];
             
-            const results = searchIndex.map(doc => {
-                const titleText = doc.title.toLowerCase();
-                const contentText = doc.content.toLowerCase();
+            const results = embeddingsDatabase.map(item => {
+                const titleText = item.title.toLowerCase();
+                const contentText = item.text.toLowerCase();
                 
                 let score = 0;
                 let matchCount = 0;
                 
                 filteredQueryTokens.forEach(token => {
-                    const titleIdx = titleText.indexOf(token);
-                    if (titleIdx !== -1) {
-                        score += 20;
+                    if (titleText.includes(token)) {
+                        score += 10;
                         matchCount++;
                     }
-                    
-                    const contentRegex = new RegExp('\\b' + token + '\\b', 'g');
-                    const matches = contentText.match(contentRegex);
-                    if (matches) {
-                        score += matches.length * 2.5;
-                        matchCount++;
-                    } else if (contentText.includes(token)) {
-                        score += 1;
+                    if (contentText.includes(token)) {
+                        score += 3;
                         matchCount++;
                     }
                 });
@@ -286,7 +327,7 @@
                 const coverage = matchCount / filteredQueryTokens.length;
                 score = score * coverage;
                 
-                return { doc, score };
+                return { doc: item, score };
             });
             
             return results
@@ -294,8 +335,7 @@
                 .sort((a, b) => b.score - a.score);
         }
 
-        function getExcerpt(content, queryTerms, maxLength = 160) {
-            const text = content;
+        function getExcerpt(text, queryTerms, maxLength = 160) {
             let matchIdx = -1;
             
             for (let term of queryTerms) {
@@ -353,31 +393,72 @@
                 return `<strong>Contact & Socials:</strong><br><br>Connect with TJ via:<br>• <strong>Email:</strong> <code>tlagrow3 at gatech dot edu</code><br>• <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/tjlagrow/" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">LinkedIn Profile</a><br>• <strong>GitHub:</strong> <a href="https://github.com/tjlagrow" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">GitHub Profile</a><br>• <strong>YouTube:</strong> <a href="https://www.youtube.com/@UnderstandingMachineLearning" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">UML Channel</a><br><br>Or send a message using the form on the <a href="/contact/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Contact Page</a>!`;
             }
 
-            // 2. Similarity search RAG context fallback
-            const matches = findSimilarityMatches(query);
+        // Mode change listener
+        modeSelector.addEventListener('change', () => {
+            const mode = modeSelector.value;
+            if (mode === 'rag') {
+                appendMessage(`<strong>System:</strong> Initializing local neural models...`, 'system');
+                ensureModelLoaded();
+            } else {
+                appendMessage(`<strong>System:</strong> Switched to legacy VSM Keyword matching mode.`, 'system');
+            }
+            scrollToBottom();
+        });
+
+            // 2. Mode-dependent search execution
+            let matches = [];
+            const searchMode = modeSelector.value;
+            
+            if (searchMode === 'rag' && embedderLoaded && embedder && embeddingsDatabase && embeddingsDatabase.length > 0) {
+                try {
+                    const output = await embedder(query, { pooling: 'mean', normalize: true });
+                    const queryVector = Array.from(output.data);
+                    
+                    const scored = embeddingsDatabase.map(doc => {
+                        let dotProduct = 0;
+                        const docVec = doc.embedding;
+                        for (let i = 0; i < queryVector.length; i++) {
+                            dotProduct += queryVector[i] * docVec[i];
+                        }
+                        return { doc, score: dotProduct };
+                    });
+                    
+                    matches = scored
+                        .filter(r => r.score > 0.38)
+                        .sort((a, b) => b.score - a.score);
+                } catch (err) {
+                    console.error("Vector search failed, falling back to keyword search:", err);
+                    matches = findKeywordMatches(query);
+                }
+            } else {
+                matches = findKeywordMatches(query);
+            }
+
             if (matches.length > 0) {
                 const bestMatch = matches[0].doc;
-                const queryTokens = query.toLowerCase().replace(/[^\w\s-]/g, '').split(/\s+/).filter(t => t.length > 2);
-                const stopWords = ['the', 'and', 'for', 'this', 'that', 'with', 'from', 'about', 'your', 'will', 'have', 'been', 'are', 'was', 'were', 'what', 'tell', 'how', 'who', 'does', 'shes', 'they'];
-                const searchTerms = queryTokens.filter(t => !stopWords.includes(t));
                 const docTypeLabel = bestMatch.type.charAt(0).toUpperCase() + bestMatch.type.slice(1);
 
-                if (modelLoaded && generator) {
-                    const contextExcerpt = getExcerpt(bestMatch.content, searchTerms, 400);
+                if (searchMode === 'rag' && generatorLoaded && generator) {
+                    let contextText = bestMatch.text;
+                    // Grab second match too if it has high confidence
+                    if (matches.length > 1 && matches[1].score > 0.42) {
+                        contextText += "\n" + matches[1].doc.text;
+                    }
+                    
                     const prompt = `<|im_start|>system
-You are Waddles, TJ's helpful virtual assistant. Answer the user's question about TJ using ONLY this context:
+You are Waddles, Theodore J. LaGrow (TJ)'s personal chatbot assistant.
+Answer the user's question about TJ's research, teaching, or background using ONLY this context:
 ---
-${contextExcerpt}
+${contextText}
 ---
-Keep your answer short, professional, and conversational. Do not mention system parameters or "based on the context".
-If the context doesn't contain the answer, say "I couldn't find that detail on the website."
+Keep your answer concise (1-3 sentences) and professional. Avoid stating "Based on the context" or "The text states". If the context doesn't contain the answer, politely tell them you couldn't find that detail on the website.
 <|im_end|>
 <|im_start|>user
 ${query}<|im_end|>
 <|im_start|>assistant
 `;
                     const output = await generator(prompt, {
-                        max_new_tokens: 100,
+                        max_new_tokens: 120,
                         temperature: 0.1,
                         do_sample: false,
                         return_full_text: false
@@ -387,9 +468,11 @@ ${query}<|im_end|>
                     responseText = responseText.replace(/<\|im_end\|>/g, '').replace(/<\|im_start\|>/g, '').trim();
                     return `${responseText}<br><br><small style="opacity:0.75;">Source: ${docTypeLabel} - <a href="${bestMatch.url}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">${bestMatch.title}</a></small>`;
                 } else {
-                    // Static fallback while loading / if failed
-                    const excerpt = getExcerpt(bestMatch.content, searchTerms, 160);
-                    return `<strong>I searched the website and found a matching section in the ${docTypeLabel} "<a href="${bestMatch.url}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">${bestMatch.title}</a>":</strong><br><br>
+                    const queryTokens = query.toLowerCase().replace(/[^\w\s-]/g, '').split(/\s+/).filter(t => t.length > 2);
+                    const stopWords = ['the', 'and', 'for', 'this', 'that', 'with', 'from', 'about', 'your', 'will', 'have', 'been', 'are', 'was', 'were', 'what', 'tell', 'how', 'who', 'does', 'shes', 'they'];
+                    const searchTerms = queryTokens.filter(t => !stopWords.includes(t));
+                    const excerpt = getExcerpt(bestMatch.text, searchTerms, 160);
+                    return `<strong>[Keyword Mode] Found a match in ${docTypeLabel} "<a href="${bestMatch.url}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">${bestMatch.title}</a>":</strong><br><br>
                     <em style="color:#94a3b8; font-size:0.95rem; display:block; padding-left:10px; border-left:2px solid #2dd4bf; margin-bottom:10px;">"${excerpt}"</em>
                     Click <a href="${bestMatch.url}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">here to read more</a>.`;
                 }
