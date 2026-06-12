@@ -3,13 +3,13 @@
         <div class="chatbot-header">
             <div class="d-flex align-items-center">
                 <div style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite;"></div>
-                <span>TJ's AI Assistant</span>
+                <span>Waddles</span>
             </div>
             <button id="chatbot-close" aria-label="Close chat">×</button>
         </div>
         <div class="chatbot-body" id="chatbot-body">
             <div class="chatbot-message system">
-                <strong>Hello!</strong> I'm TJ's virtual assistant. Ask me anything about TJ's teaching, research, or contact details, or select a topic below:
+                <strong>Hello!</strong> I'm Waddles, TJ's virtual assistant. Ask me anything about TJ's teaching, research, or contact details, or select a topic below:
                 <div class="chatbot-chips">
                     <button class="chatbot-chip" data-question="What courses does TJ teach?">🎓 OMSCS & Teaching</button>
                     <button class="chatbot-chip" data-question="Tell me about TJ's research.">🧠 Brain Research</button>
@@ -58,6 +58,24 @@
                 scrollToBottom();
             }
         });
+
+        // Navbar trigger integration
+        const navTrigger = document.getElementById('navbar-chatbot-trigger');
+        if (navTrigger) {
+            navTrigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isHidden = windowEl.style.display === 'none';
+                if (isHidden) {
+                    windowEl.style.display = 'flex';
+                    toggle.setAttribute('aria-expanded', 'true');
+                    input.focus();
+                    scrollToBottom();
+                } else {
+                    windowEl.style.display = 'none';
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
 
         close.addEventListener('click', () => {
             windowEl.style.display = 'none';
@@ -144,7 +162,7 @@
                 return `<strong>Contact & Socials:</strong><br><br>Connect with TJ via:<br>• <strong>Email:</strong> <code>tlagrow3 at gatech dot edu</code><br>• <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/tjlagrow/" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">LinkedIn Profile</a><br>• <strong>GitHub:</strong> <a href="https://github.com/tjlagrow" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">GitHub Profile</a><br>• <strong>YouTube:</strong> <a href="https://www.youtube.com/@UnderstandingMachineLearning" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">UML Channel</a><br><br>Or send a message using the form on the <a href="/contact/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Contact Page</a>!`;
             }
             if (text.includes("hello") || text.includes("hi") || text.includes("hey") || text.includes("greetings") || text.includes("who are you") || text.includes("who is tj")) {
-                return `<strong>Hello!</strong> I can help you find information on TJ's portfolio:<br>• <strong>CS 7641 / OMSCS Teaching</strong><br>• <strong>Neuroscience Research & fMRI</strong><br>• <strong>FlexStack Certificates</strong><br>• **Contact & Social links**<br><br>What would you like to explore?`;
+                return `<strong>Hello!</strong> I'm Waddles! I can help you find information on TJ's portfolio:<br>• <strong>CS 7641 / OMSCS Teaching</strong><br>• <strong>Neuroscience Research & fMRI</strong><br>• <strong>FlexStack Certificates</strong><br>• **Contact & Social links**<br><br>What would you like to explore?`;
             }
 
             // Fallback response with chips
