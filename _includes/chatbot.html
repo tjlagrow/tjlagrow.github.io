@@ -5,12 +5,17 @@
                 <div style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite;"></div>
                 <span style="font-weight: 700;">Waddles</span>
             </div>
-            <div class="d-flex align-items-center" style="gap: 4px; max-width: 80%;">
+            <div class="d-flex align-items-center" style="gap: 4px; max-width: 85%;">
                 <select id="waddles-model-selector" class="rounded py-0 px-1" style="font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #2dd4bf; font-weight: 600; max-width: 90px;" title="Model selection">
                     <option value="keyword" selected>🔍 Keyword</option>
                     <option value="smollm">🤖 SmolLM</option>
                     <option value="qwen">🤖 Qwen 0.5B</option>
-                    <option value="llama">🤖 Llama 1B</option>
+                    <option value="smollm2">🤖 SmolLM2 360M</option>
+                </select>
+                <select id="waddles-personality-selector" class="rounded py-0 px-1" style="font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #f43f5e; font-weight: 600; max-width: 75px;" title="Personality mode">
+                    <option value="helpful" selected>😇 Helpful</option>
+                    <option value="sassy">🌶️ Sassy</option>
+                    <option value="pirate">🏴‍☠️ Pirate</option>
                 </select>
                 <select id="waddles-quant-selector" class="rounded py-0 px-1" style="font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #38bdf8; font-weight: 600; max-width: 60px;" title="Quantization level" disabled>
                     <option value="q4" selected>4-bit</option>
@@ -72,13 +77,15 @@
         const input = document.getElementById('chatbot-input');
         
         const modelSelector = document.getElementById('waddles-model-selector');
+        const personalitySelector = document.getElementById('waddles-personality-selector');
         const quantSelector = document.getElementById('waddles-quant-selector');
         const goBtn = document.getElementById('waddles-go-btn');
 
-        if (!toggle || !windowEl || !close || !body || !form || !input || !modelSelector || !quantSelector || !goBtn) return;
+        if (!toggle || !windowEl || !close || !body || !form || !input || !modelSelector || !personalitySelector || !quantSelector || !goBtn) return;
 
         let embeddingsDatabase = [];
         let modelLoading = false;
+        let chatHistory = [];
         
         let loadedEmbedders = {};
         let loadedGenerators = {};
@@ -93,7 +100,7 @@
         const modelRepoMap = {
             'smollm': 'onnx-community/SmolLM-135M-Instruct-ONNX',
             'qwen': 'onnx-community/Qwen2.5-0.5B-Instruct',
-            'llama': 'onnx-community/Llama-3.2-1B-Instruct'
+            'smollm2': 'onnx-community/SmolLM2-360M-Instruct-ONNX'
         };
 
         // Disable quantization selector when keyword search is selected
@@ -105,6 +112,7 @@
         goBtn.addEventListener('click', () => {
             const selectedModel = modelSelector.value;
             const selectedQuant = quantSelector.value;
+            chatHistory = []; // Reset conversation history on model change
             
             if (selectedModel === 'keyword') {
                 activeModelType = 'keyword';
@@ -229,6 +237,13 @@
                 appendMessage(responseText, 'system', query, queryId, extraData);
                 scrollToBottom();
                 
+                // Keep history for conversation context memory
+                chatHistory.push({ role: 'user', content: query });
+                chatHistory.push({ role: 'assistant', content: responseText });
+                if (chatHistory.length > 10) {
+                    chatHistory.splice(0, 2);
+                }
+                
                 logQuery(queryId, query, responseText, extraData);
             } catch (err) {
                 console.error("Error running query:", err);
@@ -285,6 +300,11 @@
                 formData.append('entry.1013328782', logItem.followups);
                 formData.append('entry.866148227', String(logItem.latency));
 
+                // Format conversation history for Google Forms log (exclude the current turn just added)
+                const historyToLog = chatHistory.slice(0, -2);
+                const historyText = historyToLog.map(m => `${m.role === 'user' ? 'User' : 'Waddles'}: ${m.content}`).join('\n');
+                formData.append('entry.1452883440', historyText);
+
                 fetch(QUERY_LOG_ENDPOINT, {
                     method: 'POST',
                     body: formData,
@@ -328,10 +348,15 @@
                 formData.append('entry.976982427', ratingItem.rating);
                 formData.append('entry.674977670', ratingItem.mode);
                 formData.append('entry.1086852964', ratingItem.model);
-                formData.append('entry.1862876309', String(ratingItem.confidence));
-                formData.append('entry.1867296595', ratingItem.category);
-                formData.append('entry.677519380', ratingItem.followups);
-                formData.append('entry.955690143', String(ratingItem.latency));
+                formData.append('entry.1430232593', String(ratingItem.confidence));
+                formData.append('entry.347471578', ratingItem.category);
+                formData.append('entry.463651261', ratingItem.followups);
+                formData.append('entry.531411174', String(ratingItem.latency));
+
+                // Format conversation history for Google Forms log (exclude the current turn just added)
+                const historyToLog = chatHistory.slice(0, -2);
+                const historyText = historyToLog.map(m => `${m.role === 'user' ? 'User' : 'Waddles'}: ${m.content}`).join('\n');
+                formData.append('entry.937115658', historyText);
 
                 fetch(RATING_LOG_ENDPOINT, {
                     method: 'POST',
@@ -717,8 +742,13 @@
         async function getBotResponse(query) {
             const text = query.toLowerCase().trim();
 
-            // 1. Curated responses
-            if (text.includes("hello") || text.includes("hi") || text.includes("hey") || text.includes("greetings") || text.includes("who are you") || text.includes("who is tj")) {
+            const personality = document.getElementById('waddles-personality-selector')?.value || 'helpful';
+
+            // 1. Curated responses for exact match chips / simple greetings (only when helpful personality is active)
+            const greetings = ["hello", "hi", "hey", "greetings", "who are you", "who is tj"];
+            const isGreeting = greetings.some(g => text === g || text.startsWith(g + " ") || text.endsWith(" " + g));
+
+            if (isGreeting && personality === 'helpful') {
                 return {
                     answer: "<strong>Hello!</strong> I am Waddles. I can help you find information on TJ's OMSCS teaching, brain research, FlexStack certificates, or contact details. What would you like to explore?",
                     confidence: 1.0,
@@ -726,7 +756,8 @@
                     followups: ["What courses does TJ teach?", "Tell me about TJ's research."]
                 };
             }
-            if (text.includes("7641") || text.includes("7642") || text.includes("teach") || text.includes("course") || text.includes("class") || text.includes("omscs") || text.includes("student") || text.includes("learning")) {
+
+            if (personality === 'helpful' && (text === "what courses does tj teach?" || text === "tell me about cs 7641" || text === "tell me about cs 7642" || text === "omscs")) {
                 return {
                     answer: "<strong>Teaching at Georgia Tech</strong><br><br>TJ is the Lead Instructor for CS 7641 (Machine Learning) in Georgia Tech's OMSCS program, supporting 1400+ graduate students and directing 30+ TAs. He also worked with CS 7642 (Reinforcement Learning). In 2023, he was awarded the Outstanding Online TA of the Year at GT.<br><br>Find more details on the <a href=\"/teaching/\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Teaching Page</a>.",
                     confidence: 1.0,
@@ -734,7 +765,8 @@
                     followups: ["What certificates are in FlexStack?", "How can I contact TJ?"]
                 };
             }
-            if (text.includes("research") || text.includes("fmri") || text.includes("qpp") || text.includes("brain") || text.includes("cajal") || text.includes("neuro") || text.includes("paper") || text.includes("publication") || text.includes("science")) {
+
+            if (personality === 'helpful' && (text === "tell me about tj's research." || text === "research" || text === "brain research")) {
                 return {
                     answer: "<strong>Neuroscience Research</strong><br><br>TJ's research in the Keilholz MIND Lab focuses on brain dynamics using resting-state fMRI. He studies Quasi-Periodic Patterns (QPPs) to identify biomarkers for diseases such as Alzheimer's and Parkinson's.<br><br>Check out his papers on the <a href=\"/research/\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Research Page</a> or view his <a href=\"https://scholar.google.com/citations?user=KO7oYeAAAAAJ\" target=\"_blank\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Google Scholar Profile</a>.",
                     confidence: 1.0,
@@ -742,7 +774,8 @@
                     followups: ["Tell me about TJ's research.", "What courses does TJ teach?"]
                 };
             }
-            if (text.includes("flexstack") || text.includes("certificate") || text.includes("llm") || text.includes("agent") || text.includes("pandas") || text.includes("genai") || text.includes("generative")) {
+
+            if (personality === 'helpful' && (text === "what certificates are in flexstack?" || text === "flexstack" || text === "flexstack program")) {
                 return {
                     answer: "<strong>FlexStack Certificates</strong><br><br>TJ is the Lead AI/LLM Expert for Georgia Tech's professional education FlexStack program. He developed the Data Modeling and Visualization Certificate and the Python AI Principles Certificate.",
                     confidence: 1.0,
@@ -750,7 +783,8 @@
                     followups: ["What courses does TJ teach?", "How can I contact TJ?"]
                 };
             }
-            if (text.includes("email") || text.includes("contact") || text.includes("speak") || text.includes("hire") || text.includes("touch") || text.includes("linkedin") || text.includes("youtube")) {
+
+            if (personality === 'helpful' && (text === "how can i contact tj?" || text === "contact" || text === "email")) {
                 return {
                     answer: "<strong>Contact and Social Links</strong><br><br>You can connect with TJ via email at tlagrow3 at gatech dot edu. You can also visit his LinkedIn, GitHub, and YouTube profiles, or send a message using the form on the <a href=\"/contact/\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Contact Page</a>.",
                     confidence: 1.0,
@@ -808,12 +842,41 @@
                         contextText += "\n" + matches[1].doc.text;
                     }
 
-                    const prompt = `<|im_start|>system
-You are Waddles, Theodore J. LaGrow (TJ)'s personal chatbot assistant.
+                    // Format chat history context
+                    let historyPrompt = "";
+                    const historyToInclude = chatHistory.filter(h => h.content !== query);
+                    historyToInclude.slice(-4).forEach(msg => {
+                        historyPrompt += `<|im_start|>${msg.role}\n${msg.content}<|im_end|>\n`;
+                    });
+
+                    // Define personality-specific instructions
+                    let systemInstruction = "";
+                    if (personality === 'sassy') {
+                        systemInstruction = `You are Waddles, Theodore J. LaGrow (TJ)'s sassy, sarcastic personal chatbot assistant.
+Answer the user's question about TJ's research, teaching, or background using ONLY this context.
+Be witty, slightly sarcastic, and funny, but still answer the question factually based on the context. Do not make up facts outside the context.
+Context:
+---
+${contextText}
+---`;
+                    } else if (personality === 'pirate') {
+                        systemInstruction = `You are Waddles, Theodore J. LaGrow (TJ)'s pirate chatbot assistant.
+Answer the user's question about TJ's research, teaching, or background using ONLY this context.
+You MUST speak like a pirate (use words like Ahoy, Matey, Ye, Harrr, etc.).
+Context:
+---
+${contextText}
+---`;
+                    } else {
+                        systemInstruction = `You are Waddles, Theodore J. LaGrow (TJ)'s personal chatbot assistant.
 Answer the user's question about TJ's research, teaching, or background using ONLY this context:
 ---
 ${contextText}
----
+---`;
+                    }
+
+                    const prompt = `<|im_start|>system
+${systemInstruction}
 You MUST respond with a single valid JSON object. Do not output any markdown formatting, backticks, or introduction text. Follow this schema:
 {
   "answer": "Concise answer of 1-3 sentences.",
@@ -822,7 +885,7 @@ You MUST respond with a single valid JSON object. Do not output any markdown for
   "followups": ["Short follow-up question 1", "Short follow-up question 2"]
 }
 <|im_end|>
-<|im_start|>user
+${historyPrompt}<|im_start|>user
 ${query}<|im_end|>
 <|im_start|>assistant
 `;

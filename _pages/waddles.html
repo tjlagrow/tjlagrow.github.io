@@ -23,18 +23,29 @@ full_width: true
 </script>
 
 <!-- HEADER BANNER -->
-<section class="glass-banner py-5 mb-5">
-  <div class="container text-center">
-    <div class="title-box mb-3">
-      <h1 class="display-4 fw-bold mb-0" style="color: #ccfbf1;">Ask Waddles</h1>
-    </div>
-    <p class="lead text-info opacity-75 mb-3">
-      Waddles is a client-side conversational assistant designed to search and synthesize website content in real time.
-    </p>
-    <div class="d-flex justify-content-center gap-3 text-light small opacity-75">
-      <span><i class="fa fa-robot me-1"></i> Client-Side AI Agent</span>
-      <span><i class="fa fa-search me-1"></i> Custom TF-Similarity Matcher</span>
-      <span><i class="fa fa-bolt me-1"></i> Zero-Latency & Free Compute</span>
+<section class="glass-banner py-5 mb-5" style="background: radial-gradient(circle at top right, rgba(13, 148, 136, 0.15) 0%, rgba(4, 47, 46, 0.5) 100%); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-8 text-center text-lg-start">
+        <div class="title-box mb-3">
+          <h1 class="display-4 fw-bold mb-0" style="color: #ccfbf1; text-shadow: 0 0 20px rgba(45, 212, 191, 0.3);">Ask Waddles</h1>
+        </div>
+        <p class="lead text-info opacity-90 mb-3" style="font-size: 1.15rem; font-weight: 500; max-width: 650px;">
+          Waddles is a client-side conversational agent designed to search, synthesize, and chat using website data in real time.
+        </p>
+        <div class="d-flex justify-content-center justify-content-lg-start gap-3 text-light small opacity-75 flex-wrap">
+          <span><i class="fa fa-robot me-1 text-teal"></i> WebAssembly AI Agent</span>
+          <span><i class="fa fa-sliders me-1 text-teal"></i> Custom Personas & Quantization</span>
+          <span><i class="fa fa-bolt me-1 text-teal"></i> Zero-Server Compute</span>
+          <span><i class="fa fa-history me-1 text-teal"></i> Rolling Conversation Memory</span>
+        </div>
+      </div>
+      <div class="col-lg-4 text-center">
+        <div style="position: relative; display: inline-block;">
+          <div style="position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; border-radius: 50%; background: radial-gradient(circle, rgba(45, 212, 191, 0.25) 0%, rgba(45, 212, 191, 0) 70%); filter: blur(15px); z-index: 1;"></div>
+          <img src="/assets/images/waddles_ai_avatar.png" alt="Waddles AI Avatar Mockup" class="img-fluid rounded-circle shadow-lg" style="max-width: 220px; border: 3px solid rgba(45, 212, 191, 0.4); z-index: 2; position: relative; transition: transform 0.3s ease; box-shadow: 0 0 25px rgba(45, 212, 191, 0.3);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -43,14 +54,118 @@ full_width: true
   <!-- CALL TO ACTION -->
   <div class="row mb-5 justify-content-center">
     <div class="col-md-8 text-center">
-      <div class="card glass border-0 shadow-lg p-4 p-md-5" style="background: rgba(17, 94, 89, 0.4); border: 1px solid rgba(45, 212, 191, 0.2); border-radius: 1.5rem;">
+      <div class="card glass border-0 shadow-lg p-4 p-md-5" style="background: rgba(17, 94, 89, 0.35); border: 1px solid rgba(45, 212, 191, 0.25); border-radius: 1.5rem; backdrop-filter: blur(12px);">
         <h2 class="h3 fw-bold text-white mb-3">Chat with Waddles</h2>
-        <p class="text-light opacity-95 mb-4">
-          Waddles is ready to answer questions about TJ's OMSCS courses, MIND Lab research, FlexStack certificates, and professional contact links. Click the button below to launch the chat drawer.
+        <p class="text-light opacity-95 mb-4" style="font-size: 0.95rem; line-height: 1.6;">
+          Waddles is ready to answer questions about TJ's Machine Learning and Reinforcement Learning courses, Resting-State fMRI research, and professional contact links. Click the button below to launch the conversational window.
         </p>
-        <button class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-lg" id="navbar-chatbot-trigger" style="background: linear-gradient(135deg, #0d9488, #0ea5e9); border: none; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s;">
+        <button class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-lg" id="navbar-chatbot-trigger" style="background: linear-gradient(135deg, #0d9488, #0ea5e9); border: none; font-weight: 700; transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 0.025em;">
           <i class="fa fa-comments me-2"></i> Launch Waddles Chat
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE SPECIFICATIONS GRID -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-6 col-lg-3">
+      <div class="card glass border-0 h-100 p-4" style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 1rem; transition: transform 0.2s;">
+        <div class="d-flex align-items-center mb-3">
+          <div class="p-2 rounded bg-teal-transparent text-info me-3">
+            <i class="fa fa-cubes fs-4"></i>
+          </div>
+          <h3 class="h5 fw-bold text-white mb-0">Multi-Model Support</h3>
+        </div>
+        <p class="text-light opacity-80 small mb-0" style="line-height: 1.5;">
+          Select between three ONNX models. You can load SmolLM 135M for speed, Qwen 0.5B for balance, or SmolLM2 360M for enhanced logical reasoning.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="card glass border-0 h-100 p-4" style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 1rem; transition: transform 0.2s;">
+        <div class="d-flex align-items-center mb-3">
+          <div class="p-2 rounded bg-pink-transparent text-pink me-3" style="color: #f43f5e;">
+            <i class="fa fa-smile-o fs-4"></i>
+          </div>
+          <h3 class="h5 fw-bold text-white mb-0">Custom Personas</h3>
+        </div>
+        <p class="text-light opacity-80 small mb-0" style="line-height: 1.5;">
+          Toggle between Helpful, Sassy, and Pirate personas. The system instructions are modified dynamically in the RAG prompt template to inject humor.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="card glass border-0 h-100 p-4" style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 1rem; transition: transform 0.2s;">
+        <div class="d-flex align-items-center mb-3">
+          <div class="p-2 rounded bg-blue-transparent text-sky me-3" style="color: #0ea5e9;">
+            <i class="fa fa-history fs-4"></i>
+          </div>
+          <h3 class="h5 fw-bold text-white mb-0">Context Memory</h3>
+        </div>
+        <p class="text-light opacity-80 small mb-0" style="line-height: 1.5;">
+          Waddles tracks a rolling window of the last 10 messages. The system prompt incorporates the last 4 dialogue turns to handle contextual queries.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="card glass border-0 h-100 p-4" style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 1rem; transition: transform 0.2s;">
+        <div class="d-flex align-items-center mb-3">
+          <div class="p-2 rounded bg-green-transparent text-success me-3">
+            <i class="fa fa-check-square-o fs-4"></i>
+          </div>
+          <h3 class="h5 fw-bold text-white mb-0">Dual Webhook Logs</h3>
+        </div>
+        <p class="text-light opacity-80 small mb-0" style="line-height: 1.5;">
+          Silent transaction logs and ratings are pushed to Google Forms response endpoints, recording latency, confidence, category, and context.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODEL COMPARISON MATRIX -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-3"><i class="fa fa-balance-scale me-2 text-info"></i> Local WebAssembly Model Comparison</h2>
+        <p class="text-light opacity-80 small mb-4">
+          Waddles runs neural networks directly on your device CPU or WebGPU using ONNX Runtime. The table compares the available local LLM configurations.
+        </p>
+        <div class="table-responsive">
+          <table class="table table-dark table-borderless align-middle mb-0" style="background: rgba(0, 0, 0, 0.15); border-radius: 0.5rem; overflow: hidden;">
+            <thead>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Model Name</th>
+                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Parameters</th>
+                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Download Size (q4 / q8 / fp16)</th>
+                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Browser Memory</th>
+                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Best Suited For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                <td style="padding: 16px; font-weight: 600; color: #f8fafc;">SmolLM</td>
+                <td style="padding: 16px; color: #cbd5e1;">135 Million</td>
+                <td style="padding: 16px; color: #cbd5e1;"><span class="badge bg-success">70 MB</span> / 145 MB / 270 MB</td>
+                <td style="padding: 16px; color: #cbd5e1;">~150 MB</td>
+                <td style="padding: 16px; color: #cbd5e1;">Low-resource devices, quick basic queries</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                <td style="padding: 16px; font-weight: 600; color: #f8fafc;">Qwen 0.5B</td>
+                <td style="padding: 16px; color: #cbd5e1;">500 Million</td>
+                <td style="padding: 16px; color: #cbd5e1;"><span class="badge bg-warning text-dark">260 MB</span> / 520 MB / 950 MB</td>
+                <td style="padding: 16px; color: #cbd5e1;">~350 MB</td>
+                <td style="padding: 16px; color: #cbd5e1;">Balanced conversational flow and response depth</td>
+              </tr>
+              <tr>
+                <td style="padding: 16px; font-weight: 600; color: #f8fafc;">SmolLM2</td>
+                <td style="padding: 16px; color: #cbd5e1;">360 Million</td>
+                <td style="padding: 16px; color: #cbd5e1;"><span class="badge bg-info text-dark">200 MB</span> / 400 MB / 720 MB</td>
+                <td style="padding: 16px; color: #cbd5e1;">~280 MB</td>
+                <td style="padding: 16px; color: #cbd5e1;">Multi-turn conversation reasoning, sassy replies</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -70,7 +185,7 @@ full_width: true
               </div>
               <h4 class="h5 fw-bold text-white mb-2">Static VSM Search</h4>
               <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                Keyword term-similarity index. Runs real-time text matching and extracts boundary-aligned preview text. Used as a fallback if the client browser does not support WebAssembly or fails to initialize neural models.
+                A keyword term-similarity index running real-time exact matches. Excerpts are formatted with highlighted keywords and links, providing a fallback when WebAssembly is unsupported.
               </p>
             </div>
           </div>
@@ -81,9 +196,9 @@ full_width: true
                 <span class="badge bg-teal text-white fw-bold" style="background-color: #0d9488 !important;">Stage 2 (Completed)</span>
                 <i class="fa fa-check-circle text-success fs-5"></i>
               </div>
-              <h4 class="h5 fw-bold text-white mb-2">Local LLM & RAG</h4>
+              <h4 class="h5 fw-bold text-white mb-2">Browser-Side RAG</h4>
               <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                Quantized WebAssembly transformer models (ONNX/Transformers.js) in the browser. Uses <code>all-MiniLM-L6-v2</code> to compute query vectors, runs browser-side cosine similarity against pre-computed embeddings, and feeds top contexts to <code>SmolLM-135M-Instruct</code>.
+                ONNX WebAssembly transformer models running locally in the browser. Uses all-MiniLM-L6-v2 vector embeddings, cosine similarity matching, and multiple instruction-tuned generator models.
               </p>
             </div>
           </div>
@@ -96,7 +211,7 @@ full_width: true
               </div>
               <h4 class="h5 fw-bold text-white mb-2">Agentic API Tooling</h4>
               <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                Activating tool-use and function calling. Waddles will autonomously access external APIs to fetch live publication citation metrics, schedule office hour slots, and trigger verified contact notifications.
+                Activating function calling and tools. Waddles will autonomously hit external API endpoints to fetch live citation metrics, check office hour calendars, and trigger notifications.
               </p>
             </div>
           </div>
@@ -114,24 +229,35 @@ full_width: true
           <div class="mermaid" style="width: 100%; min-width: 600px;">
             graph TD
                 subgraph Build Phase [Offline Compilation]
-                    A[Pages / Posts / Newsletters / YAML] -->|Python Parser| B(generate_embeddings.py)
-                    B -->|SentenceTransformer all-MiniLM-L6-v2| C[assets/json/embeddings.json]
+                    A[Site Pages & Articles] -->|generate_embeddings.py| B(all-MiniLM-L6-v2 Embedder)
+                    B --> C[assets/json/embeddings.json]
                 end
                 subgraph Client Load Phase [Browser Initialization]
-                    D[Visitor opens Chat] -->|Download & Cache| E[embeddings.json]
-                    D -->|Lazy Load via CDN| F[Xenova/all-MiniLM-L6-v2]
-                    D -->|Lazy Load via CDN| G[SmolLM-135M-Instruct]
+                    D[Visitor opens Chat] -->|Load embeddings| E[embeddings.json]
+                    F[Go Button Clicked] -->|Dynamic CDN Fetch| G[all-MiniLM-L6-v2 WebAssembly]
+                    F -->|Dynamic CDN Fetch| H{Model Selector}
+                    H -->|SmolLM 135M| I[SmolLM-135M-Instruct-ONNX]
+                    H -->|Qwen 0.5B| J[Qwen2.5-0.5B-Instruct]
+                    H -->|SmolLM2 360M| K[SmolLM2-360M-Instruct-ONNX]
                 end
                 subgraph Execution Phase [Local RAG Pipeline]
-                    H[User Query] -->|Feature Extraction| F
-                    F -->|384-dim normalized vector| I(Cosine Similarity Matching)
-                    E -->|Compare vector database| I
-                    I -->|Select top chunks > 0.38| J[Retrieved Context Snippets]
-                    J -->|Construct Prompt Template| K[Prompt Compiler]
-                    H -->|Query text| K
-                    K -->|Quantized WASM Inference| G
-                    G -->|Greedy decoding| L[Conversational Response]
-                    L -->|Render response + Source Links| M[Chat Window UI]
+                    L[User Query] -->|Feature Extraction| G
+                    G -->|384-dim normalized vector| M(Cosine Similarity Matching)
+                    E -->|Vector compare| M
+                    M -->|Top matches > 0.38| N[Retrieved Context Snippets]
+                    N -->|Construct prompt template| O[Prompt Compiler]
+                    P[Personality Selector] -->|Helpful / Sassy / Pirate system prompt| O
+                    Q[Conversation History] -->|Append last 4 turns| O
+                    L --> O
+                    O -->|ONNX Inference| H
+                    H -->|JSON structured response| R[Conversational Output]
+                    R -->|Render answer + Badges + chips| S[Chat Window UI]
+                end
+                subgraph Feedback Phase [Dual Logging Webhooks]
+                    S -->|Silent submit| T[Queries FormResponse Webhook]
+                    S -->|Thumbs Up/Down click| U[Ratings FormResponse Webhook]
+                    T --> V[Google Sheets Logs Database]
+                    U --> V
                 end
           </div>
         </div>
@@ -149,26 +275,28 @@ full_width: true
           
           <h5 class="text-white mt-3 mb-1" style="font-size: 0.875rem; font-weight:600;">Dense Semantic Embeddings</h5>
           <p class="text-light opacity-80 small mb-3">
-            Sentence embeddings translate text snippets into 384-dimensional vectors. Geometrically, vectors that represent conceptually similar text (e.g. "resting-state fMRI" and "spatiotemporal dynamic patterns") point in similar directions, allowing Waddles to matching questions on conceptual intent rather than literal keyword occurrences. Waddles utilizes the <code>all-MiniLM-L6-v2</code> transformer model to generate these semantic vectors.
+            Sentence embeddings translate text snippets into 384-dimensional vectors. Geometrically, vectors representing conceptually similar text point in similar directions, allowing Waddles to match questions on conceptual intent rather than literal keyword occurrences. Waddles utilizes the <code>all-MiniLM-L6-v2</code> transformer model to generate these semantic vectors.
           </p>
 
           <h5 class="text-white mb-1" style="font-size: 0.875rem; font-weight:600;">Extracted Website Database</h5>
           <p class="text-light opacity-80 small mb-3">
             The Python generator script compiles your portfolio database by extracting and chunking:
-            <br>• <strong>Biography & Timelines:</strong> PhD ECE (2025), Scheller MBA (2022), MS ECE (2019), BS Math/CIS (2017), and Insight Optics startup R&D history.
-            <br>• <strong>Teaching Logs:</strong> Course outlines, TA lead structures, and grading philosophies for CS 7641 (Machine Learning), CS 7642 (Reinforcement Learning), and Georgia Tech's professional lifetime education FlexStack certificates.
-            <br>• <strong>Publications Archive:</strong> Abstracts, author lists, dates, and venues for all peer-reviewed research papers (e.g. Frontiers 2022 cross-species connectivity review), preprints (e.g. bioRxiv 2026 temporal patterns), theses, patents, and MLBBQ presentations.
           </p>
+          <ul class="text-light opacity-80 small mb-3 ps-3">
+            <li><strong>Biography & Timelines:</strong> PhD ECE (2025), Scheller MBA (2022), MS ECE (2019), BS Math/CIS (2017), and R&D startup history.</li>
+            <li><strong>Teaching Logs:</strong> Course outlines, TA lead structures, and grading philosophies for CS 7641 and CS 7642.</li>
+            <li><strong>Publications Archive:</strong> Abstracts, venues, and preprints for resting-state fMRI brain dynamic papers.</li>
+          </ul>
 
           <h5 class="text-white mb-1" style="font-size: 0.875rem; font-weight:600;">Data Storage Layout</h5>
           <p class="text-light opacity-80 small mb-3">
-            The database is compiled into a single static file at <code>/assets/json/embeddings.json</code> (~1.3MB) structured as a JSON array of text chunks and their pre-computed float coordinates:
+            The database is compiled into a single static file at <code>/assets/json/embeddings.json</code> (~1.3MB) structured as a JSON array of text chunks and their coordinates:
           </p>
           <pre class="bg-dark text-info p-3 rounded small border border-secondary mb-0" style="overflow-x: auto; max-width: 100%;"><code>[
   {
     "title": "Page Name/Paper Title",
     "url": "/source-url/",
-    "text": "Chunk text content (approx 120 words)...",
+    "text": "Chunk text content...",
     "type": "page|post|newsletter|publication|talk|milestone",
     "embedding": [0.0213, -0.0451, ..., 0.0092]
   }
@@ -196,52 +324,316 @@ full_width: true
           </div>
 
           <p class="text-light opacity-80 small mb-0">
-            The Python embeddings generator and the client-side transformers library extract vectors that are pre-normalized to unit length ($\|q\| = 1$, $\|d\| = 1$). Consequently, the denominator of the cosine similarity equation ($\|q\|\|d\|$) is equal to <code>1</code>. The similarity matching is calculated in pure JavaScript as a simple dot product, which evaluates in less than a millisecond.
+            The Python embeddings generator and the client-side transformers library extract vectors that are pre-normalized to unit length ($\|q\| = 1$, $\|d\| = 1$). Consequently, the denominator of the cosine similarity equation is equal to <code>1</code>. The similarity matching is calculated in pure JavaScript as a simple dot product, which evaluates in less than a millisecond.
           </p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- DETAILED STAGES -->
-  <div class="row g-4">
-    <!-- Stage 1: Punctuation & Tokenization -->
-    <div class="col-md-6">
-      <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
-        <div class="card-body p-4">
-          <h3 class="h5 fw-bold text-white mb-3"><i class="fa fa-brain text-info me-2"></i> 1. Browser-Side Vector Extraction</h3>
-          <p class="text-light opacity-80 small mb-3">
-            When a user types a query, Waddles loads Hugging Face's <code>Xenova/all-MiniLM-L6-v2</code> using Transformers.js to compute a 384-dimensional vector:
-          </p>
-          <pre class="bg-dark text-light p-3 rounded small border border-secondary"><code>const output = await embedder(query, {
-  pooling: 'mean',
-  normalize: true
-});
-const queryVector = Array.from(output.data);</code></pre>
-          <p class="text-light opacity-80 small mb-0">
-            This vector is matched against the cached embeddings database using the dot-product similarity, and chunks with similarity scores exceeding <code>0.38</code> are selected as the context window.
-          </p>
-        </div>
-      </div>
-    </div>
+  <!-- RAG INSPECTOR TERMINAL -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-lg p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-2"><i class="fa fa-terminal me-2 text-info"></i> Interactive RAG Debugger & Webhook Inspector</h2>
+        <p class="text-light opacity-80 small mb-4">
+          Select a sample query and personality to inspect the vector database matches, compiled prompt template, JSON output structure, and formResponse payload.
+        </p>
 
-    <!-- Stage 2: Context Excerpt Windowing -->
-    <div class="col-md-6">
-      <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
-        <div class="card-body p-4">
-          <h3 class="h5 fw-bold text-white mb-3"><i class="fa fa-comments text-info me-2"></i> 2. Local Language Synthesis (RAG)</h3>
-          <p class="text-light opacity-80 small mb-3">
-            Waddles then feeds the matched context chunks into a prompt compiled under the ChatML syntax, and runs a quantized local WebAssembly text-generator (<code>onnx-community/SmolLM-135M-Instruct</code>):
-          </p>
-          <ul class="text-light opacity-85 small ps-3 mb-3">
-            <li class="mb-2"><strong>Prompt Injection:</strong> The context blocks constrain the generator model to prevent hallucinations.</li>
-            <li class="mb-2"><strong>Greedy Decoding:</strong> Running inference with <code>temperature: 0.0</code> and <code>do_sample: false</code> ensures deterministic, factual responses.</li>
-            <li class="mb-0"><strong>Citations:</strong> Waddles dynamically appends source URL links mapping back to the page layout or research document that provided the facts.</li>
-          </ul>
+        <!-- Debugger Controls -->
+        <div class="d-flex flex-wrap gap-3 mb-4 align-items-center">
+          <div class="d-flex align-items-center gap-2">
+            <span class="text-info small fw-bold">1. Select Query:</span>
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" class="btn btn-outline-info active" onclick="selectDebugQuery('courses')">OMSCS Courses</button>
+              <button type="button" class="btn btn-outline-info" onclick="selectDebugQuery('research')">fMRI Research</button>
+              <button type="button" class="btn btn-outline-info" onclick="selectDebugQuery('contact')">Contact Info</button>
+            </div>
+          </div>
+          
+          <div class="d-flex align-items-center gap-2">
+            <span class="text-pink small fw-bold" style="color: #f43f5e;">2. Select Persona:</span>
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" class="btn btn-outline-danger active" onclick="selectDebugPersona('helpful')">Helpful</button>
+              <button type="button" class="btn btn-outline-danger" onclick="selectDebugPersona('sassy')">Sassy</button>
+              <button type="button" class="btn btn-outline-danger" onclick="selectDebugPersona('pirate')">Pirate</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terminal Window Mockup -->
+        <div class="card border-0 shadow-lg overflow-hidden" style="background: #0b0f19; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.06);">
+          <!-- Terminal Header -->
+          <div class="d-flex align-items-center justify-content-between px-3 py-2" style="background: #141b2d; border-bottom: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 6px;">
+            <!-- Window controls -->
+            <div class="d-flex gap-1">
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;"></span>
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+            </div>
+            <!-- Filename Tabs -->
+            <div class="d-flex gap-1 flex-wrap" style="margin-left: 20px;">
+              <button id="tab-log" class="btn py-1 px-3 text-white small border-0 active" onclick="selectDebugTab('log')" style="font-size: 0.725rem; font-family: monospace; background: #0b0f19; border-radius: 6px 6px 0 0; opacity: 1; border-bottom: 2px solid #2dd4bf !important;">console.log</button>
+              <button id="tab-context" class="btn py-1 px-3 text-white small border-0" onclick="selectDebugTab('context')" style="font-size: 0.725rem; font-family: monospace; background: transparent; border-radius: 6px 6px 0 0; opacity: 0.6;">context.txt</button>
+              <button id="tab-prompt" class="btn py-1 px-3 text-white small border-0" onclick="selectDebugTab('prompt')" style="font-size: 0.725rem; font-family: monospace; background: transparent; border-radius: 6px 6px 0 0; opacity: 0.6;">prompt.chatml</button>
+              <button id="tab-response" class="btn py-1 px-3 text-white small border-0" onclick="selectDebugTab('response')" style="font-size: 0.725rem; font-family: monospace; background: transparent; border-radius: 6px 6px 0 0; opacity: 0.6;">response.json</button>
+              <button id="tab-webhook" class="btn py-1 px-3 text-white small border-0" onclick="selectDebugTab('webhook')" style="font-size: 0.725rem; font-family: monospace; background: transparent; border-radius: 6px 6px 0 0; opacity: 0.6;">webhook.post</button>
+            </div>
+            <div class="text-muted small d-none d-md-block" style="font-size: 0.65rem; font-family: monospace;">Waddles-CLI v2.1</div>
+          </div>
+          <!-- Terminal Content Area -->
+          <div class="p-3" style="max-height: 380px; overflow-y: auto;">
+            <pre class="mb-0" style="background: transparent; border: none; padding: 0; margin: 0;"><code id="terminal-body" class="language-json" style="color: #cbd5e1; font-family: monospace; font-size: 0.825rem; white-space: pre-wrap; word-wrap: break-word; line-height: 1.5;">[Ready] Click a query to simulate local WebAssembly RAG pipeline execution...</code></pre>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    // Data dictionary for live terminal simulation
+    const debugData = {
+        courses: {
+            title: "what courses does TJ teach?",
+            context: "CS 7641: Machine Learning (OMSCS). TJ is the Lead Instructor, managing 1400+ graduate students and directing 30+ TAs. He also supported CS 7642: Reinforcement Learning in the online master's program.",
+            log: [
+                "> [Client] Initializing vector search for: 'what courses does TJ teach?'",
+                "> [Embedder] Extracting features with Xenova/all-MiniLM-L6-v2...",
+                "> [Similarity] Dot product scan against 42 database chunks...",
+                "> [Similarity] Matched CS 7641 Course Page (Score: 0.814)",
+                "> [Similarity] Matched CS 7642 Course Page (Score: 0.627)",
+                "> [Prompt] Appending context snippets & last 4 messages of history...",
+                "> [Inference] Running local forward pass inside browser ONNX runtime...",
+                "> [Inference] WebAssembly execution completed in 184ms.",
+                "> [Local Storage] Appending log item to local history array.",
+                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint: entry.1296087798=q_178...&entry.2055350119=what courses does TJ teach?...",
+                "> [HTTP POST] FormResponse webhook submitted successfully (No-CORS status 0)."
+            ],
+            helpful: {
+                answer: "TJ is the Lead Instructor for CS 7641 (Machine Learning) in Georgia Tech's OMSCS program. He also supported CS 7642 (Reinforcement Learning) in the program.",
+                confidence: 1.0,
+                category: "Teaching",
+                followups: ["What certificates are in FlexStack?", "How can I contact TJ?"]
+            },
+            sassy: {
+                answer: "If you had looked at the site, you would see TJ directs a small army of 30+ TAs to teach CS 7641 (Machine Learning) to 1400+ master's students. He also worked with CS 7642, because one massive class apparently wasn't enough.",
+                confidence: 1.0,
+                category: "Teaching",
+                followups: ["Do the TAs do all the grading?", "What certificates are in FlexStack?"]
+            },
+            pirate: {
+                answer: "Ahoy matey! Cap'n TJ steer the ship for CS 7641 Machine Learning, commandin' a crew of 30 TAs for 1400 master's master-at-arms! He also sails the waves of CS 7642 Reinforcement Learning, harrr!",
+                confidence: 1.0,
+                category: "Teaching",
+                followups: ["What certificates are in FlexStack?", "How can I contact TJ?"]
+            }
+        },
+        research: {
+            title: "tell me about TJ's brain research",
+            context: "Research in the Keilholz MIND Lab at Emory/GT. Focuses on brain dynamics using resting-state fMRI. Investigates Quasi-Periodic Patterns (QPPs) as potential biomarkers for Alzheimer's and Parkinson's diseases.",
+            log: [
+                "> [Client] Initializing vector search for: 'tell me about TJ's brain research'",
+                "> [Embedder] Extracting features with Xenova/all-MiniLM-L6-v2...",
+                "> [Similarity] Dot product scan against 42 database chunks...",
+                "> [Similarity] Matched Keilholz MIND Lab Publication (Score: 0.835)",
+                "> [Similarity] Matched Dynamic Patterns Abstract (Score: 0.714)",
+                "> [Prompt] Appending context snippets & last 4 messages of history...",
+                "> [Inference] Running local forward pass inside browser ONNX runtime...",
+                "> [Inference] WebAssembly execution completed in 245ms.",
+                "> [Local Storage] Appending log item to local history array.",
+                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint: entry.1296087798=q_178...&entry.2055350119=tell me about TJ's brain research...",
+                "> [HTTP POST] FormResponse webhook submitted successfully (No-CORS status 0)."
+            ],
+            helpful: {
+                answer: "TJ conducts research in the Keilholz MIND Lab focusing on spatiotemporal brain dynamics via resting-state fMRI. He studies Quasi-Periodic Patterns (QPPs) to identify biomarkers for Alzheimer's and Parkinson's.",
+                confidence: 1.0,
+                category: "Research",
+                followups: ["What is resting-state fMRI?", "View Google Scholar profile"]
+            },
+            sassy: {
+                answer: "TJ peers into brains using resting-state fMRI in the Keilholz MIND Lab. He maps spatiotemporal patterns called QPPs, trying to track down biomarkers for Parkinson's and Alzheimer's before they track us down.",
+                confidence: 0.95,
+                category: "Research",
+                followups: ["What on earth is a QPP?", "View Google Scholar profile"]
+            },
+            pirate: {
+                answer: "Ahoy! The lad TJ sails the seas of Emory/GT MIND Lab! He maps the hidden dynamic tides of the brain using resting-state fMRI, trackin' down QPP patterns like buried treasure to defeat Alzheimer's, harrr!",
+                confidence: 1.0,
+                category: "Research",
+                followups: ["What is resting-state fMRI?", "View Google Scholar profile"]
+            }
+        },
+        contact: {
+            title: "how do I contact TJ?",
+            context: "Contact and speaking details. Connect via email at tlagrow3 at gatech dot edu, or visit LinkedIn, GitHub, and YouTube. A message form is also available on the Contact Page.",
+            log: [
+                "> [Client] Initializing vector search for: 'how do I contact TJ?'",
+                "> [Embedder] Extracting features with Xenova/all-MiniLM-L6-v2...",
+                "> [Similarity] Dot product scan against 42 database chunks...",
+                "> [Similarity] Matched Contact Page Details (Score: 0.887)",
+                "> [Prompt] Appending context snippets & last 4 messages of history...",
+                "> [Inference] Running local forward pass inside browser ONNX runtime...",
+                "> [Inference] WebAssembly execution completed in 112ms.",
+                "> [Local Storage] Appending log item to local history array.",
+                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint: entry.1296087798=q_178...&entry.2055350119=how do I contact TJ?...",
+                "> [HTTP POST] FormResponse webhook submitted successfully (No-CORS status 0)."
+            ],
+            helpful: {
+                answer: "You can reach TJ via email at tlagrow3 at gatech dot edu, or send a message using the form on the Contact Page. You can also connect via LinkedIn, GitHub, or YouTube.",
+                confidence: 1.0,
+                category: "Bio/Contact",
+                followups: ["Where is the Contact Page?", "What courses does TJ teach?"]
+            },
+            sassy: {
+                answer: "Send an email to tlagrow3 at gatech dot edu if you want to reach TJ. Or just follow the LinkedIn or GitHub icons like everyone else. There is a contact form too, if you like old-school input fields.",
+                confidence: 1.0,
+                category: "Bio/Contact",
+                followups: ["Where is the Contact Page?", "How can I hire TJ?"]
+            },
+            pirate: {
+                answer: "Avast! Cast a message bottle to tlagrow3 at gatech dot edu to hail Cap'n TJ! Or look for LinkedIn and GitHub flags on the main mast, or steer your vessel to the Contact Page deck, harrr!",
+                confidence: 1.0,
+                category: "Bio/Contact",
+                followups: ["Where is the Contact Page?", "What courses does TJ teach?"]
+            }
+        }
+    };
+
+    let activeDebugQueryKey = 'courses';
+    let activeDebugPersonaKey = 'helpful';
+    let activeDebugTabKey = 'log';
+
+    function selectDebugQuery(key) {
+        activeDebugQueryKey = key;
+        
+        // Update active buttons in UI
+        const btnGroup = event.target.parentNode.querySelectorAll('.btn');
+        btnGroup.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        renderDebugTerminal();
+    }
+
+    function selectDebugPersona(key) {
+        activeDebugPersonaKey = key;
+
+        // Update active buttons in UI
+        const btnGroup = event.target.parentNode.querySelectorAll('.btn');
+        btnGroup.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        renderDebugTerminal();
+    }
+
+    function selectDebugTab(key) {
+        activeDebugTabKey = key;
+
+        // Update active tab buttons in UI
+        const tabs = document.querySelectorAll('[id^="tab-"]');
+        tabs.forEach(t => {
+            t.classList.remove('active');
+            t.style.background = 'transparent';
+            t.style.opacity = '0.6';
+            t.style.borderBottom = 'none';
+        });
+
+        const selectedTab = document.getElementById(`tab-${key}`);
+        if (selectedTab) {
+            selectedTab.classList.add('active');
+            selectedTab.style.background = '#0b0f19';
+            selectedTab.style.opacity = '1';
+            selectedTab.style.borderBottom = '2px solid #2dd4bf !important';
+        }
+
+        renderDebugTerminal();
+    }
+
+    function renderDebugTerminal() {
+        const data = debugData[activeDebugQueryKey];
+        const bodyEl = document.getElementById('terminal-body');
+        
+        if (activeDebugTabKey === 'log') {
+            bodyEl.innerHTML = '';
+            bodyEl.className = 'language-text';
+            bodyEl.style.color = '#10b981'; // green terminal text
+            
+            // Typewrite simulation
+            let lineIndex = 0;
+            const logLines = data.log;
+            
+            function printNextLine() {
+                if (lineIndex < logLines.length) {
+                    bodyEl.innerHTML += logLines[lineIndex] + '\n';
+                    lineIndex++;
+                    setTimeout(printNextLine, 120);
+                }
+            }
+            printNextLine();
+            
+        } else if (activeDebugTabKey === 'context') {
+            bodyEl.className = 'language-text';
+            bodyEl.style.color = '#94a3b8';
+            bodyEl.innerText = `[Document Context for Prompt Compiler]\n\n${data.context}`;
+            
+        } else if (activeDebugTabKey === 'prompt') {
+            bodyEl.className = 'language-html';
+            bodyEl.style.color = '#38bdf8';
+            
+            const promptTemplate = `<|im_start|>system
+You are Waddles, Theodore J. LaGrow (TJ)'s ${activeDebugPersonaKey === 'helpful' ? '' : activeDebugPersonaKey + ' '}personal chatbot assistant.
+Answer the user's question using ONLY this context:
+---
+${data.context}
+---
+You MUST respond with a single valid JSON object. Follow this schema:
+{
+  "answer": "Concise response.",
+  "confidence": 0.0 to 1.0,
+  "category": "Research|Teaching|Bio/Contact|Unknown",
+  "followups": ["Question 1", "Question 2"]
+}
+<|im_end|>
+<|im_start|>user
+${data.title}<|im_end|>
+<|im_start|>assistant`;
+            bodyEl.innerText = promptTemplate;
+            
+        } else if (activeDebugTabKey === 'response') {
+            bodyEl.className = 'language-json';
+            bodyEl.style.color = '#e2e8f0';
+            bodyEl.innerText = JSON.stringify(data[activeDebugPersonaKey], null, 2);
+            
+        } else if (activeDebugTabKey === 'webhook') {
+            bodyEl.className = 'language-text';
+            bodyEl.style.color = '#f59e0b';
+            
+            const responseObj = data[activeDebugPersonaKey];
+            const cleanTextResponse = responseObj.answer.replace(/<[^>]+>/g, '').trim();
+            const latencyMock = activeDebugQueryKey === 'courses' ? 184 : (activeDebugQueryKey === 'research' ? 245 : 112);
+            
+            const formParams = `POST /forms/d/e/1FAIpQLSeA8wV_q15VxHdziMDbcnG1_BtUMc78qe1USSHpNJaLGuEctQ/formResponse HTTP/1.1
+Host: docs.google.com
+Content-Type: application/x-www-form-urlencoded
+
+entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
+&entry.2055350119 = ${data.title}
+&entry.63873566 = ${cleanTextResponse}
+&entry.1234317761 = rag
+&entry.1855776282 = onnx-community/SmolLM2-360M-Instruct-ONNX (q4)
+&entry.482463694 = ${responseObj.confidence}
+&entry.100723105 = ${responseObj.category}
+&entry.1013328782 = ${JSON.stringify(responseObj.followups)}
+&entry.866148227 = ${latencyMock}
+&entry.1452883440 = User: Hello\\nWaddles: Hello! I am Waddles...`;
+            bodyEl.innerText = formParams;
+        }
+    }
+
+    // Initialize printout on load
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(renderDebugTerminal, 500);
+    });
+  </script>
 
   <!-- STATIC HOSTING & WEBASSEMBLY OPTIMIZATIONS -->
   <div class="row mt-5">
@@ -249,49 +641,8 @@ const queryVector = Array.from(output.data);</code></pre>
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-server me-2 text-info"></i> Static Hosting & WebAssembly Optimizations</h2>
         <p class="text-light opacity-90 small mb-4">
-          Running neural network model inference directly inside static web pages (like GitHub Pages, Netlify, or Vercel) poses unique challenges due to browser sandboxing constraints and lack of server-side configuration control. Waddles implements the following key technical solutions to ensure robust execution:
+          Running neural network model inference directly inside static web pages poses unique challenges due to browser sandboxing constraints. Waddles implements the following key technical solutions to ensure robust execution.
         </p>
-
-        <!-- DIAGRAMS -->
-        <div class="row mb-5 g-4">
-          <div class="col-md-6">
-            <h5 class="text-white mb-3" style="font-size: 0.95rem; font-weight:600;"><i class="fa fa-network-wired me-2 text-info"></i> Security Sandbox Bypass (Single vs. Multi-threading)</h5>
-            <div class="p-3 rounded-3" style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.05); overflow-x: auto;">
-              <div class="mermaid" style="width: 100%; min-width: 320px;">
-                graph TD
-                    A[WASM Model Request] --> B{WASM Threads Config}
-                    B -->|numThreads &gt; 1| C{COOP / COEP Headers?}
-                    C -->|No / Static Host| D[Browser Blocks SharedArrayBuffer]
-                    D --> E[ONNX Runtime Crash]
-                    B -->|numThreads = 1| F[Single-Thread Main loop]
-                    F --> G[Bypass SharedArrayBuffer]
-                    G --> H[Execution Success on GitHub Pages]
-                    classDef default fill:#1e293b,stroke:#0d9488,stroke-width:1px,color:#fff;
-                    classDef success fill:#134e4a,stroke:#2dd4bf,stroke-width:1px,color:#fff;
-                    classDef fail fill:#7f1d1d,stroke:#f87171,stroke-width:1px,color:#fff;
-                    class E fail;
-                    class H success;
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <h5 class="text-white mb-3" style="font-size: 0.95rem; font-weight:600;"><i class="fa fa-hdd me-2 text-info"></i> Browser-Side Caching Lifecycle</h5>
-            <div class="p-3 rounded-3" style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.05); overflow-x: auto;">
-              <div class="mermaid" style="width: 100%; min-width: 320px;">
-                graph TD
-                    A[User opens Chat] --> B{Model cached locally?}
-                    B -->|No - First Visit| C[Fetch ONNX weights via Hugging Face CDN]
-                    C --> D[Save model to Browser Cache Storage]
-                    D --> E[Initialize Neural Network]
-                    B -->|Yes - Repeat Visit| F[Retrieve locally from Browser Cache]
-                    F -->|Instant Load / Offline| E
-                    classDef default fill:#1e293b,stroke:#0d9488,stroke-width:1px,color:#fff;
-                    classDef success fill:#134e4a,stroke:#2dd4bf,stroke-width:1px,color:#fff;
-                    class F success;
-              </div>
-            </div>
-          </div>
-        </div>
 
         <div class="row g-4">
           <!-- Bypassing SharedArrayBuffer -->
@@ -317,7 +668,7 @@ const queryVector = Array.from(output.data);</code></pre>
             <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
               <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-hdd me-2"></i> 3. Persistent Browser-Side Caching</h4>
               <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                To preserve bandwidth and ensure zero-latency initial load times, Waddles leverages the browser's Cache Storage API (IndexedDB fallback). Because GitHub Pages serves pages over secure contexts (HTTPS), browser-side persistent caches are activated. Once downloaded, subsequent openings of the chatbot bypass the network, loading models locally and instantaneously.
+                To preserve bandwidth and ensure zero-latency initial load times, Waddles leverages the browser's Cache Storage API (IndexedDB fallback). Under secure contexts (HTTPS), browser-side persistent caches are activated. Once downloaded, subsequent openings of the chatbot bypass the network, loading models locally and instantaneously.
               </p>
             </div>
           </div>
