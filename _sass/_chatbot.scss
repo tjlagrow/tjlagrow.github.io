@@ -47,12 +47,12 @@
     flex-direction: column;
     overflow: hidden;
 
-    // Glassmorphism base
-    background: rgba(255, 255, 255, 0.95);
+    // Dark Glassmorphism base
+    background: rgba(15, 23, 42, 0.93);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
     border-radius: 16px;
 
     // Slide animation
@@ -60,13 +60,13 @@
 
     .chatbot-header {
         padding: 1rem 1.25rem;
-        background: rgba($brand-color, 0.08);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        background: rgba(255, 255, 255, 0.04);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         display: flex;
         justify-content: space-between;
         align-items: center;
         font-weight: 700;
-        color: $bg-dark;
+        color: #ffffff;
 
         #chatbot-close {
             background: none;
@@ -74,7 +74,7 @@
             font-size: 1.5rem;
             line-height: 1;
             cursor: pointer;
-            color: $grey-color;
+            color: rgba(255, 255, 255, 0.6);
             padding: 0;
             width: 24px;
             height: 24px;
@@ -84,7 +84,7 @@
             transition: color 0.15s ease;
 
             &:hover {
-                color: darken($brand-color, 15%);
+                color: #ffffff;
             }
         }
     }
@@ -93,7 +93,7 @@
         flex: 1;
         padding: 1.25rem;
         overflow-y: auto;
-        background: rgba(244, 246, 248, 0.4);
+        background: rgba(0, 0, 0, 0.2);
         display: flex;
         flex-direction: column;
         gap: 1rem;
@@ -105,20 +105,20 @@
         font-size: 0.925rem;
         line-height: 1.5;
         max-width: 85%;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         word-wrap: break-word;
 
         &.system {
-            background: white;
-            color: $text-color;
+            background: rgba(255, 255, 255, 0.07);
+            color: #f8fafc;
             border-bottom-left-radius: 2px;
             align-self: flex-start;
             border-left: 3px solid $brand-color;
         }
 
         &.user {
-            background: rgba($brand-color, 0.15);
-            color: darken($brand-color, 25%);
+            background: rgba($brand-color, 0.18);
+            color: #ffffff;
             border-bottom-right-radius: 2px;
             align-self: flex-end;
             border-right: 3px solid $brand-color;
@@ -149,22 +149,23 @@
     }
 
     .chatbot-chip {
-        background: white;
-        border: 1px solid rgba($brand-color, 0.3);
-        color: darken($brand-color, 15%);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba($brand-color, 0.35);
+        color: $brand-color;
         padding: 0.35rem 0.75rem;
         border-radius: 20px;
         font-size: 0.8rem;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
         &:hover {
-            background: rgba($brand-color, 0.08);
+            background: rgba($brand-color, 0.15);
             border-color: $brand-color;
+            color: #ffffff;
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         &:active {
@@ -183,7 +184,7 @@
         span {
             width: 6px;
             height: 6px;
-            background-color: lighten($grey-color, 10%);
+            background-color: $brand-color;
             border-radius: 50%;
             display: inline-block;
             animation: typing-bounce 1.4s infinite ease-in-out both;
@@ -195,20 +196,28 @@
 
     .chatbot-input-area {
         padding: 0.85rem 1rem;
-        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
         display: flex;
         gap: 0.5rem;
-        background: white;
+        background: rgba(15, 18, 35, 0.95);
 
         input {
             border-radius: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             padding: 0.4rem 1rem;
             font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.06);
+            color: #ffffff;
 
             &:focus {
                 border-color: $brand-color;
-                box-shadow: 0 0 0 0.2rem rgba($brand-color, 0.15);
+                background: rgba(255, 255, 255, 0.09);
+                box-shadow: 0 0 0 0.2rem rgba($brand-color, 0.25);
+                outline: none;
+            }
+            
+            &::placeholder {
+                color: rgba(255, 255, 255, 0.45);
             }
         }
 
@@ -221,6 +230,27 @@
             justify-content: center;
             padding: 0;
             flex-shrink: 0;
+            background: $brand-color;
+            color: #0f172a;
+            border: none;
+            cursor: pointer;
+            transition: background 0.15s ease, transform 0.1s ease;
+            
+            &:hover {
+                background: lighten($brand-color, 8%);
+                transform: scale(1.05);
+            }
+            
+            &:active {
+                transform: scale(0.95);
+            }
+            
+            &:disabled {
+                background: rgba(255, 255, 255, 0.1);
+                color: rgba(255, 255, 255, 0.3);
+                cursor: not-allowed;
+                transform: none;
+            }
         }
     }
 }
