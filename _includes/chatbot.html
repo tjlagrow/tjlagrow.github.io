@@ -188,7 +188,7 @@
                 <strong>Waddles is loading...</strong><br>
                 Downloading lightweight models to run locally in your browser:<br>
                 • Embedding Model (MiniLM, ~23MB)<br>
-                • Generation Model (SmolLM, ~85MB)<br>
+                • Generation Model (SmolLM 4-bit Quantized, ~38MB)<br>
                 This only downloads once and will be cached in your browser.<br>
                 <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; overflow: hidden;">
                     <div id="waddles-progress-bar" class="progress-bar" role="progressbar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #0d9488, #0ea5e9); transition: width 0.1s;"></div>
@@ -218,12 +218,12 @@
                     env.backends.onnx.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/dist/';
 
                     try {
-                        const totalWeights = 108.0; // 23MB + 85MB
+                        const totalWeights = 61.0; // 23MB + 38MB
                         let embedderProgress = 0;
                         let generatorProgress = 0;
 
                         const updateProgressBar = () => {
-                            const totalProgress = ((embedderProgress * 23.0) + (generatorProgress * 85.0)) / totalWeights;
+                            const totalProgress = ((embedderProgress * 23.0) + (generatorProgress * 38.0)) / totalWeights;
                             const percent = Math.round(totalProgress);
                             const progressBar = document.getElementById('waddles-progress-bar');
                             const progressPercent = document.getElementById('waddles-loading-percentage');
@@ -251,6 +251,7 @@
                         // 2. Load the generator
                         generator = await pipeline('text-generation', 'onnx-community/SmolLM-135M-Instruct', {
                             device: 'wasm',
+                            dtype: 'q4',
                             progress_callback: (data) => {
                                 if (data.status === 'progress') {
                                     generatorProgress = data.progress;
