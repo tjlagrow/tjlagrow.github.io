@@ -152,7 +152,12 @@
 
 // Teach Hero Variant
 .teach-hero {
-    @extend .hero;
+    position: relative;
+    border-radius: 1.25rem;
+    padding: 3rem 2rem;
+    overflow: hidden;
+    color: #fff;
+    margin-bottom: 3rem;
     background:
         radial-gradient(1200px 600px at 5% -20%, rgba(80, 126, 255, 0.25), transparent 60%),
         radial-gradient(1000px 500px at 100% 0%, rgba(255, 170, 90, 0.25), transparent 50%),
