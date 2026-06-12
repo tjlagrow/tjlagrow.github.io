@@ -22,6 +22,18 @@ full_width: true
   });
 </script>
 
+<!-- Load KaTeX Auto-Render Extension -->
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.9.0/dist/contrib/auto-render.min.js"
+        integrity="sha384-IiI65aU9ZYub2MY9zLtW1MBkC8SPdCGRYvy7UIMwJVJH/GoF6EMowewIM1xYiRJu" crossorigin="anonymous"
+        onload="renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ]
+        });"></script>
+
 <!-- HEADER BANNER -->
 <section class="glass-banner py-5 mb-5" style="background: radial-gradient(circle at top right, rgba(13, 148, 136, 0.15) 0%, rgba(4, 47, 46, 0.5) 100%); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
   <div class="container">
@@ -42,11 +54,181 @@ full_width: true
         </div>
       </div>
       <div class="col-lg-4 text-center">
-        <div style="position: relative; display: inline-block;">
-          <div style="position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; border-radius: 50%; background: radial-gradient(circle, rgba(45, 212, 191, 0.25) 0%, rgba(45, 212, 191, 0) 70%); filter: blur(15px); z-index: 1;"></div>
-          <img src="/assets/images/waddles_ai_avatar.png" alt="Waddles AI Avatar Mockup" class="img-fluid rounded-circle shadow-lg" style="max-width: 220px; border: 3px solid rgba(45, 212, 191, 0.4); z-index: 2; position: relative; transition: transform 0.3s ease; box-shadow: 0 0 25px rgba(45, 212, 191, 0.3);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        <div class="waddles-interactive-container">
+          <!-- Outer tech ring -->
+          <div class="waddles-tech-ring ring-outer"></div>
+          
+          <!-- Inner tech ring -->
+          <div class="waddles-tech-ring ring-inner"></div>
+          
+          <!-- Pulsing ambient glow -->
+          <div class="waddles-ambient-glow"></div>
+          
+          <!-- The avatar wrapper that handles float and 3D tilt -->
+          <div class="waddles-avatar-wrapper" id="waddles-tilt-avatar">
+            <img src="/assets/images/waddles_ai_avatar.png" alt="Waddles AI Avatar Mockup" class="waddles-avatar-img">
+            <!-- Sleek overlay glow on hover -->
+            <div class="waddles-avatar-shine"></div>
+          </div>
         </div>
       </div>
+
+<style>
+.waddles-interactive-container {
+  position: relative;
+  display: inline-block;
+  width: 260px;
+  height: 260px;
+  margin: 0 auto;
+  vertical-align: middle;
+}
+
+/* Base style for tech rings */
+.waddles-tech-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.waddles-tech-ring.ring-outer {
+  width: 250px;
+  height: 250px;
+  margin-top: -125px;
+  margin-left: -125px;
+  border: 1.5px dashed rgba(45, 212, 191, 0.4);
+  background: radial-gradient(circle, transparent 70%, rgba(45, 212, 191, 0.03) 100%);
+  animation: spin-clockwise 25s linear infinite;
+  box-shadow: 0 0 15px rgba(45, 212, 191, 0.05), inset 0 0 15px rgba(45, 212, 191, 0.05);
+}
+
+.waddles-tech-ring.ring-inner {
+  width: 230px;
+  height: 230px;
+  margin-top: -115px;
+  margin-left: -115px;
+  border: 1px dotted rgba(14, 165, 233, 0.5);
+  animation: spin-counter-clockwise 18s linear infinite;
+}
+
+/* Pulsing backdrop glow */
+.waddles-ambient-glow {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(45, 212, 191, 0.3) 0%, rgba(14, 165, 233, 0.15) 50%, rgba(99, 102, 241, 0) 70%);
+  filter: blur(20px);
+  z-index: 0;
+  animation: glow-pulse 4s ease-in-out infinite;
+}
+
+/* Floating avatar wrapper */
+.waddles-avatar-wrapper {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  z-index: 2;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  will-change: transform;
+  animation: float-avatar 5s ease-in-out infinite;
+  transition: transform 0.1s ease, box-shadow 0.3s ease;
+}
+
+/* Avatar Image */
+.waddles-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3.5px solid rgba(45, 212, 191, 0.45);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 35px rgba(45, 212, 191, 0.25);
+  object-fit: cover;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Dynamic shine effect */
+.waddles-avatar-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 60%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Animations */
+@keyframes spin-clockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-counter-clockwise {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes float-avatar {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes glow-pulse {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.08); opacity: 0.95; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+/* Hover effects */
+.waddles-avatar-wrapper:hover .waddles-avatar-img {
+  border-color: rgba(45, 212, 191, 0.85);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 50px rgba(45, 212, 191, 0.5);
+}
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.querySelector('.waddles-interactive-container');
+    const avatar = document.getElementById('waddles-tilt-avatar');
+    if (!container || !avatar) return;
+
+    // Pause the floating animation on hover so the tilt interaction isn't jerky
+    container.addEventListener('mouseenter', () => {
+      avatar.style.animationPlayState = 'paused';
+    });
+
+    container.addEventListener('mouseleave', () => {
+      avatar.style.animationPlayState = 'running';
+      avatar.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+    });
+
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left; // x coordinate relative to container
+      const y = e.clientY - rect.top;  // y coordinate relative to container
+      
+      const width = rect.width;
+      const height = rect.height;
+      
+      // Calculate rotation angles based on cursor offset from center (-1 to 1)
+      const rotateX = ((height / 2 - y) / (height / 2)) * 15; // Max 15 degrees
+      const rotateY = ((x - width / 2) / (width / 2)) * 15;   // Max 15 degrees
+      
+      avatar.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.06)`;
+    });
+  });
+</script>
     </div>
   </div>
 </section>
@@ -289,13 +471,13 @@ full_width: true
         <div class="card-body p-4">
           <h3 class="h4 fw-bold text-white mb-3"><i class="fa fa-calculator text-info me-2"></i> Reciprocal Rank Fusion (RRF) [1]</h3>
           <p class="text-light opacity-80 small mb-3">
-            To address the vocabulary mismatch problem (where semantic vector searches fail to resolve specific lexical keys like course numbers or acronyms), Waddles implements a hybrid sparse-dense retrieval architecture. The system executes BM25-style keyword search and dense embedding search in parallel, merging candidate lists using Reciprocal Rank Fusion (RRF). RRF maps ranks to scores via the following formulation:
+            To address the vocabulary mismatch problem (where semantic vector searches fail to resolve specific lexical keys like course numbers or acronyms), Waddles implements a hybrid sparse-dense retrieval architecture. The system executes BM25-style keyword search (which targets exact string matching on tokens like 'CS 7641' or 'fMRI') and dense embedding search (which captures the conceptual meaning of the query) in parallel. The results of these search systems are combined using Reciprocal Rank Fusion (RRF). RRF maps ranks to scores via the following formulation:
           </p>
           
           <div class="bg-dark p-3 rounded text-center border border-secondary mb-3" style="overflow-x: auto; max-width: 100%;">
-            <span class="text-white font-monospace" style="font-size: clamp(0.75rem, 1.8vw, 1.1rem); display: inline-block;">
-              RRF_Score(d &isin; D) = &sum;<sub>m &isin; M</sub> 1 / (k + r<sub>m</sub>(d))
-            </span>
+            <div class="text-white" style="font-size: clamp(0.75rem, 1.8vw, 1.1rem);">
+              $$\text{RRF\_Score}(d \in D) = \sum_{m \in M} \frac{1}{k + r_m(d)}$$
+            </div>
           </div>
 
           <p class="text-light opacity-80 small mb-3">
@@ -311,13 +493,13 @@ full_width: true
         <div class="card-body p-4">
           <h3 class="h4 fw-bold text-white mb-3"><i class="fa fa-compress text-info me-2"></i> Sentence Cosine Dot Products [2, 3]</h3>
           <p class="text-light opacity-80 small mb-3">
-            Waddles splits the top 3 RRF-matched document chunks into individual sentences. To isolate the most relevant context, it feeds all candidates into a parallel batch execution of the vector embedder in a single forward pass, calculating:
+            Waddles splits the top 3 RRF-matched document chunks into individual sentences using punctuation boundaries. To isolate the most relevant context and discard noisy or irrelevant sentences, the system feeds all candidates into a parallel batch execution of the vector embedder in a single forward pass. It then calculates the cosine similarity between the query vector and each candidate sentence vector:
           </p>
           
           <div class="bg-dark p-3 rounded text-center border border-secondary mb-3" style="overflow-x: auto; max-width: 100%;">
-            <span class="text-white font-monospace" style="font-size: clamp(0.75rem, 1.8vw, 1.1rem); display: inline-block;">
-              Similarity(q, s) = &sum;<sub>i=1</sub><sup>384</sup> (q<sub>i</sub> &times; s<sub>i</sub>)
-            </span>
+            <div class="text-white" style="font-size: clamp(0.75rem, 1.8vw, 1.1rem);">
+              $$\text{Similarity}(q, s) = \sum_{i=1}^{384} (q_i \times s_i)$$
+            </div>
           </div>
 
           <p class="text-light opacity-80 small mb-0">
@@ -350,6 +532,24 @@ full_width: true
             </p>
             <p class="text-light opacity-80 small mb-0">
               They also employ Grouped-Query Attention (GQA) [9]. By sharing key-value head projections across multiple query heads, GQA reduces KV cache memory consumption, lowering the RAM usage and latency of token generation on low-power client devices.
+            </p>
+          </div>
+          <div class="col-md-6">
+            <h3 class="h5 fw-bold text-white mb-2">Weight Quantization and Memory Optimization [10]</h3>
+            <p class="text-light opacity-80 small mb-3">
+              Weight quantization maps high-precision float32 values ($32$ bits) to lower-bit representations like 4-bit (q4) or 8-bit (q8) integers. For example, during execution, AWQ (Activation-aware Weight Quantization) or RTN (Round-To-Nearest) algorithms compress model weights. This maps the parameters $\mathbf{W} \in \mathbb{R}^{d_{\text{in}} \times d_{\text{out}}}$ to quantized levels, reducing memory consumption.
+            </p>
+            <p class="text-light opacity-80 small mb-0">
+              Quantization reduces the download footprint of a 500M parameter model from 950 MB to 260 MB, and lowers runtime RAM requirements. The browser can execute these models within a standard JavaScript heap budget, preventing out-of-memory crashes.
+            </p>
+          </div>
+          <div class="col-md-6">
+            <h3 class="h5 fw-bold text-white mb-2">Key-Value Caching and GQA Latency Reduction [9]</h3>
+            <p class="text-light opacity-80 small mb-3">
+              During autoregressive sequence generation, the Key-Value (KV) cache stores attention key-value activations for past tokens, avoiding $O(N^2)$ recalculation. However, standard Multi-Head Attention requires large caches. Grouped-Query Attention (GQA) groups query heads into sets that share single key-value heads, reducing cache size.
+            </p>
+            <p class="text-light opacity-80 small mb-0">
+              By reducing memory bandwidth bottlenecks during sequence inference, GQA speeds up generation on consumer device CPUs. It keeps the model responsive and prevents UI thread freezes.
             </p>
           </div>
         </div>
@@ -670,6 +870,7 @@ entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
 &entry.2055350119 = ${data.title}
 &entry.63873566 = ${cleanTextResponse}
 &entry.1234317761 = rag
+&entry.1258116016 = ${activeDebugPersonaKey}
 &entry.1855776282 = onnx-community/SmolLM2-360M-Instruct-ONNX (q4)
 &entry.482463694 = ${responseObj.confidence}
 &entry.100723105 = ${responseObj.category}
@@ -732,6 +933,33 @@ entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
               </p>
             </div>
           </div>
+          <!-- Latency Guard -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-spinner me-2"></i> 5. Input-Locking Latency Guard</h4>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                To handle local model processing latency, Waddles implements an active UI locking mechanism. Upon submission, the text field and send button are disabled, and the button icon shifts to a spinning loader. This prevents duplicate form submissions and ensures a smooth interactive workflow during model execution.
+              </p>
+            </div>
+          </div>
+          <!-- Sentence Truncation -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-align-left me-2"></i> 6. Trailing Sentence Auto-Truncation</h4>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                To prevent incomplete sentences due to generation token cuts, Waddles scans model outputs. The client finds the final sentence-ending punctuation mark (period, exclamation point, or question mark) and strips away any trailing words that do not form a complete sentence, ensuring all responses end naturally.
+              </p>
+            </div>
+          </div>
+          <!-- One-Shot Structured Persona Anchoring -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-anchor me-2"></i> 7. One-Shot Persona Anchoring</h4>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                To enforce complex stylistic personas (Helpful, Sassy, Pirate) while maintaining strict JSON schema compliance inside lightweight models, Waddles utilizes one-shot prompt anchoring. The system prompt injects a complete mock JSON response conforming to the schema. This anchor teaches the model how to structure answers and follow-ups in the active tone without failing JSON parsing.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -769,6 +997,9 @@ entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
           </p>
           <p class="mb-3">
             [9] Ainslie, J., Lee-Thorp, J., de Jong, M., Zemlyanskiy, Y., Lebron, F., and Sanghai, S. 2023. GQA: Training generalized multi-query transformer models from multi-head checkpoints. In <i>Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing</i> (EMNLP '23), 3795-3801.
+          </p>
+          <p class="mb-3">
+            [10] Dettmers, T., Lewis, M., Belkada, Y., and Zettlemoyer, L. 2022. GPT3.int8(): 8-bit Matrix Multiplication for Transformers at Scale. In <i>Advances in Neural Information Processing Systems</i> (NeurIPS '22), 35, 30341-30349.
           </p>
         </div>
       </div>

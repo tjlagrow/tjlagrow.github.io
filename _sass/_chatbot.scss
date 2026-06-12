@@ -245,11 +245,19 @@
                 transform: scale(0.95);
             }
             
-            &:disabled {
+            &:disabled:not(.loading) {
                 background: rgba(255, 255, 255, 0.1);
                 color: rgba(255, 255, 255, 0.3);
                 cursor: not-allowed;
                 transform: none;
+            }
+
+            &.loading {
+                background: $brand-color;
+                color: #0f172a;
+                cursor: wait;
+                transform: none;
+                opacity: 0.8;
             }
         }
     }

@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function spawnPizza(startX, startY, isRain = false) {
         // Randomly select pizza/topping elements
-        const items = ['🍕', '🍕', '🍅', '🍄', '🧀', '🇮🇹'];
+        const items = ['🍕', '🍕', '🍅', '🍄', '🧀', '🧅', '🌶️'];
         const text = items[Math.floor(Math.random() * items.length)];
         
         particles.push({
