@@ -7,12 +7,12 @@
             </div>
             <div class="d-flex align-items-center" style="gap: 4px; max-width: 80%;">
                 <select id="waddles-model-selector" class="rounded py-0 px-1" style="font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #2dd4bf; font-weight: 600; max-width: 90px;" title="Model selection">
-                    <option value="keyword">🔍 Keyword</option>
-                    <option value="smollm" selected>🤖 SmolLM</option>
+                    <option value="keyword" selected>🔍 Keyword</option>
+                    <option value="smollm">🤖 SmolLM</option>
                     <option value="qwen">🤖 Qwen 0.5B</option>
                     <option value="llama">🤖 Llama 1B</option>
                 </select>
-                <select id="waddles-quant-selector" class="rounded py-0 px-1" style="font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #38bdf8; font-weight: 600; max-width: 60px;" title="Quantization level">
+                <select id="waddles-quant-selector" class="rounded py-0 px-1" style="font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #38bdf8; font-weight: 600; max-width: 60px;" title="Quantization level" disabled>
                     <option value="q4" selected>4-bit</option>
                     <option value="q8">8-bit</option>
                     <option value="fp16">16-bit</option>
@@ -736,7 +736,7 @@
             }
             if (text.includes("research") || text.includes("fmri") || text.includes("qpp") || text.includes("brain") || text.includes("cajal") || text.includes("neuro") || text.includes("paper") || text.includes("publication") || text.includes("science")) {
                 return {
-                    answer: "<strong>Neuroscience Research</strong><br><br>TJ's research in the Keilholz MIND Lab focuses on brain dynamics using resting-state fMRI. He studies Quasi-Periodic Patterns (QPPs) to identify biomarkers for diseases such as Alzheimer's and Parkinson's.<br><br>Check out his papers on the <a href=\"/research/\" style="color:#2dd4bf; text-decoration:underline; font-weight:600;\">Research Page</a> or view his <a href=\"https://scholar.google.com/citations?user=KO7oYeAAAAAJ\" target=\"_blank\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Google Scholar Profile</a>.",
+                    answer: "<strong>Neuroscience Research</strong><br><br>TJ's research in the Keilholz MIND Lab focuses on brain dynamics using resting-state fMRI. He studies Quasi-Periodic Patterns (QPPs) to identify biomarkers for diseases such as Alzheimer's and Parkinson's.<br><br>Check out his papers on the <a href=\"/research/\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Research Page</a> or view his <a href=\"https://scholar.google.com/citations?user=KO7oYeAAAAAJ\" target=\"_blank\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Google Scholar Profile</a>.",
                     confidence: 1.0,
                     category: "Research",
                     followups: ["Tell me about TJ's research.", "What courses does TJ teach?"]
