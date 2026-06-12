@@ -31,13 +31,14 @@ full_width: true
           <h1 class="display-4 fw-bold mb-0" style="color: #ccfbf1; text-shadow: 0 0 20px rgba(45, 212, 191, 0.3);">Ask Waddles</h1>
         </div>
         <p class="lead text-info opacity-90 mb-3" style="font-size: 1.15rem; font-weight: 500; max-width: 650px;">
-          Waddles is a client-side conversational agent designed to search, synthesize, and chat using website data in real time.
+          Waddles is an advanced client-side conversational RAG agent executing dynamic intent classification, Reciprocal Rank Fusion, sentence compression, and neural re-ranking in real time.
         </p>
         <div class="d-flex justify-content-center justify-content-lg-start gap-3 text-light small opacity-75 flex-wrap">
-          <span><i class="fa fa-robot me-1 text-teal"></i> WebAssembly AI Agent</span>
-          <span><i class="fa fa-sliders me-1 text-teal"></i> Custom Personas & Quantization</span>
-          <span><i class="fa fa-bolt me-1 text-teal"></i> Zero-Server Compute</span>
-          <span><i class="fa fa-history me-1 text-teal"></i> Rolling Conversation Memory</span>
+          <span><i class="fa fa-robot me-1 text-teal"></i> WebAssembly ONNX Runtime</span>
+          <span><i class="fa fa-filter me-1 text-teal"></i> Query Intent Pre-filtering</span>
+          <span><i class="fa fa-sliders me-1 text-teal"></i> RRF sparse/dense search</span>
+          <span><i class="fa fa-compress me-1 text-teal"></i> Sentence-level Compression</span>
+          <span><i class="fa fa-shield me-1 text-teal"></i> Cross-Encoder Neural Reranking</span>
         </div>
       </div>
       <div class="col-lg-4 text-center">
@@ -55,12 +56,12 @@ full_width: true
   <div class="row mb-5 justify-content-center">
     <div class="col-md-8 text-center">
       <div class="card glass border-0 shadow-lg p-4 p-md-5" style="background: rgba(17, 94, 89, 0.35); border: 1px solid rgba(45, 212, 191, 0.25); border-radius: 1.5rem; backdrop-filter: blur(12px);">
-        <h2 class="h3 fw-bold text-white mb-3">Chat with Waddles</h2>
+        <h2 class="h3 fw-bold text-white mb-3">Launch Local Assistant</h2>
         <p class="text-light opacity-95 mb-4" style="font-size: 0.95rem; line-height: 1.6;">
-          Waddles is ready to answer questions about TJ's Machine Learning and Reinforcement Learning courses, Resting-State fMRI research, and professional contact links. Click the button below to launch the conversational window.
+          Waddles runs neural networks directly on your device CPU or WebGPU. Click the button below to launch the conversational window, select a model, and query portfolio data with zero-server latency.
         </p>
         <button class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-lg" id="navbar-chatbot-trigger" style="background: linear-gradient(135deg, #0d9488, #0ea5e9); border: none; font-weight: 700; transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 0.025em;">
-          <i class="fa fa-comments me-2"></i> Launch Waddles Chat
+          <i class="fa fa-comments me-2"></i> Open Chat Console
         </button>
       </div>
     </div>
@@ -72,12 +73,12 @@ full_width: true
       <div class="card glass border-0 h-100 p-4" style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 1rem; transition: transform 0.2s;">
         <div class="d-flex align-items-center mb-3">
           <div class="p-2 rounded bg-teal-transparent text-info me-3">
-            <i class="fa fa-cubes fs-4"></i>
+            <i class="fa fa-filter fs-4"></i>
           </div>
-          <h3 class="h5 fw-bold text-white mb-0">Multi-Model Support</h3>
+          <h3 class="h5 fw-bold text-white mb-0">Intent Classification</h3>
         </div>
         <p class="text-light opacity-80 small mb-0" style="line-height: 1.5;">
-          Select between three ONNX models. You can load SmolLM 135M for speed, Qwen 0.5B for balance, or SmolLM2 360M for enhanced logical reasoning.
+          Parses query syntax via token matching and regular expression checks to resolve category domains (Teaching, Research, Bio/Contact). Applies deterministic database partition constraints over the document index.
         </p>
       </div>
     </div>
@@ -85,12 +86,12 @@ full_width: true
       <div class="card glass border-0 h-100 p-4" style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 1rem; transition: transform 0.2s;">
         <div class="d-flex align-items-center mb-3">
           <div class="p-2 rounded bg-pink-transparent text-pink me-3" style="color: #f43f5e;">
-            <i class="fa fa-smile-o fs-4"></i>
+            <i class="fa fa-shuffle fs-4"></i>
           </div>
-          <h3 class="h5 fw-bold text-white mb-0">Custom Personas</h3>
+          <h3 class="h5 fw-bold text-white mb-0">Rank Fusion (RRF)</h3>
         </div>
         <p class="text-light opacity-80 small mb-0" style="line-height: 1.5;">
-          Toggle between Helpful, Sassy, and Pirate personas. The system instructions are modified dynamically in the RAG prompt template to inject humor.
+          Combines exact lexical indices (TF-IDF/BM25 approximation) and dense embedding dot-product projections. Merges disparate candidate logs using Reciprocal Rank Fusion (RRF) with $k=60$.
         </p>
       </div>
     </div>
@@ -98,12 +99,12 @@ full_width: true
       <div class="card glass border-0 h-100 p-4" style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 1rem; transition: transform 0.2s;">
         <div class="d-flex align-items-center mb-3">
           <div class="p-2 rounded bg-blue-transparent text-sky me-3" style="color: #0ea5e9;">
-            <i class="fa fa-history fs-4"></i>
+            <i class="fa fa-compress fs-4"></i>
           </div>
-          <h3 class="h5 fw-bold text-white mb-0">Context Memory</h3>
+          <h3 class="h5 fw-bold text-white mb-0">Context Compression</h3>
         </div>
         <p class="text-light opacity-80 small mb-0" style="line-height: 1.5;">
-          Waddles tracks a rolling window of the last 10 messages. The system prompt incorporates the last 4 dialogue turns to handle contextual queries.
+          Segments retrieved document chunks into discrete sentences using punctuation boundaries. Computes sentence similarity in a parallelized batch embedding call of <code>all-MiniLM-L6-v2</code>.
         </p>
       </div>
     </div>
@@ -111,12 +112,12 @@ full_width: true
       <div class="card glass border-0 h-100 p-4" style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 1rem; transition: transform 0.2s;">
         <div class="d-flex align-items-center mb-3">
           <div class="p-2 rounded bg-green-transparent text-success me-3">
-            <i class="fa fa-check-square-o fs-4"></i>
+            <i class="fa fa-shield fs-4"></i>
           </div>
-          <h3 class="h5 fw-bold text-white mb-0">Dual Webhook Logs</h3>
+          <h3 class="h5 fw-bold text-white mb-0">Cross-Encoder Rerank</h3>
         </div>
         <p class="text-light opacity-80 small mb-0" style="line-height: 1.5;">
-          Silent transaction logs and ratings are pushed to Google Forms response endpoints, recording latency, confidence, category, and context.
+          Feeds sentence pairs into a Cross-Encoder Transformer (<code>ms-marco-MiniLM-L-6-v2</code>). Scores semantic alignment via joint self-attention sequence logits to output a compressed context.
         </p>
       </div>
     </div>
@@ -126,42 +127,56 @@ full_width: true
   <div class="row mb-5">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
-        <h2 class="h4 fw-bold text-white mb-3"><i class="fa fa-balance-scale me-2 text-info"></i> Local WebAssembly Model Comparison</h2>
+        <h2 class="h4 fw-bold text-white mb-3"><i class="fa fa-balance-scale me-2 text-info"></i> In-Browser Model Parameters & Footprint</h2>
         <p class="text-light opacity-80 small mb-4">
-          Waddles runs neural networks directly on your device CPU or WebGPU using ONNX Runtime. The table compares the available local LLM configurations.
+          Waddles runs neural network models directly inside the browser using ONNX Runtime Web. The comparison matrix details the parameters, weights, and memory configurations.
         </p>
         <div class="table-responsive">
           <table class="table table-dark table-borderless align-middle mb-0" style="background: rgba(0, 0, 0, 0.15); border-radius: 0.5rem; overflow: hidden;">
             <thead>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Model Name</th>
+                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Model / Pipeline</th>
                 <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Parameters</th>
-                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Download Size (q4 / q8 / fp16)</th>
-                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Browser Memory</th>
-                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Best Suited For</th>
+                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Precision & Download Weights</th>
+                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">RAM Allocation</th>
+                <th style="padding: 12px 16px; color: #ccfbf1; font-weight: 700;">Functional Role</th>
               </tr>
             </thead>
             <tbody>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
-                <td style="padding: 16px; font-weight: 600; color: #f8fafc;">SmolLM</td>
-                <td style="padding: 16px; color: #cbd5e1;">135 Million</td>
-                <td style="padding: 16px; color: #cbd5e1;"><span class="badge bg-success">70 MB</span> / 145 MB / 270 MB</td>
-                <td style="padding: 16px; color: #cbd5e1;">~150 MB</td>
-                <td style="padding: 16px; color: #cbd5e1;">Low-resource devices, quick basic queries</td>
+                <td style="padding: 16px; font-weight: 600; color: #f8fafc;">all-MiniLM-L6-v2 (Embedder) [2]</td>
+                <td style="padding: 16px; color: #cbd5e1;">22.7 Million</td>
+                <td style="padding: 16px; color: #cbd5e1;"><span class="badge bg-success">23 MB</span> (fp32)</td>
+                <td style="padding: 16px; color: #cbd5e1;">~40 MB</td>
+                <td style="padding: 16px; color: #cbd5e1;">Generates 384-dimensional query and sentence semantic vectors</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
-                <td style="padding: 16px; font-weight: 600; color: #f8fafc;">Qwen 0.5B</td>
+                <td style="padding: 16px; font-weight: 600; color: #f8fafc;">ms-marco-MiniLM-L-6-v2 (Reranker) [2, 3]</td>
+                <td style="padding: 16px; color: #cbd5e1;">22.5 Million</td>
+                <td style="padding: 16px; color: #cbd5e1;"><span class="badge bg-info text-dark">45 MB</span> (fp16) / 80 MB (fp32)</td>
+                <td style="padding: 16px; color: #cbd5e1;">~90 MB</td>
+                <td style="padding: 16px; color: #cbd5e1;">Executes Cross-Encoder query-passage classification</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                <td style="padding: 16px; font-weight: 600; color: #f8fafc;">SmolLM2 (Generator) [4]</td>
+                <td style="padding: 16px; color: #cbd5e1;">360 Million</td>
+                <td style="padding: 16px; color: #cbd5e1;"><span class="badge bg-warning text-dark">200 MB</span> (q4) / 400 MB (q8) / 720 MB (fp16)</td>
+                <td style="padding: 16px; color: #cbd5e1;">~280 MB</td>
+                <td style="padding: 16px; color: #cbd5e1;">Generates logical answers from prompt templates</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                <td style="padding: 16px; font-weight: 600; color: #f8fafc;">Qwen2.5-0.5B (Generator) [5]</td>
                 <td style="padding: 16px; color: #cbd5e1;">500 Million</td>
-                <td style="padding: 16px; color: #cbd5e1;"><span class="badge bg-warning text-dark">260 MB</span> / 520 MB / 950 MB</td>
+                <td style="padding: 16px; color: #cbd5e1;"><span class="badge bg-danger">260 MB</span> (q4) / 520 MB (q8) / 950 MB (fp16)</td>
                 <td style="padding: 16px; color: #cbd5e1;">~350 MB</td>
-                <td style="padding: 16px; color: #cbd5e1;">Balanced conversational flow and response depth</td>
+                <td style="padding: 16px; color: #cbd5e1;">Generates fluent and highly detailed responses</td>
               </tr>
               <tr>
-                <td style="padding: 16px; font-weight: 600; color: #f8fafc;">SmolLM2</td>
-                <td style="padding: 16px; color: #cbd5e1;">360 Million</td>
-                <td style="padding: 16px; color: #cbd5e1;"><span class="badge bg-info text-dark">200 MB</span> / 400 MB / 720 MB</td>
-                <td style="padding: 16px; color: #cbd5e1;">~280 MB</td>
-                <td style="padding: 16px; color: #cbd5e1;">Multi-turn conversation reasoning, sassy replies</td>
+                <td style="padding: 16px; font-weight: 600; color: #f8fafc;">SmolLM (Generator) [4]</td>
+                <td style="padding: 16px; color: #cbd5e1;">135 Million</td>
+                <td style="padding: 16px; color: #cbd5e1;"><span class="badge bg-secondary">70 MB</span> (q4) / 145 MB (q8) / 270 MB (fp16)</td>
+                <td style="padding: 16px; color: #cbd5e1;">~150 MB</td>
+                <td style="padding: 16px; color: #cbd5e1;">Lightweight fallback model for memory-constrained clients</td>
               </tr>
             </tbody>
           </table>
@@ -174,7 +189,7 @@ full_width: true
   <div class="row mb-5">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
-        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-road me-2 text-info"></i> Waddles AI Evolution Roadmap</h2>
+        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-road me-2 text-info"></i> RAG Retrieval Evolution</h2>
         <div class="row g-3">
           <!-- Stage 1 -->
           <div class="col-md-4">
@@ -185,7 +200,7 @@ full_width: true
               </div>
               <h4 class="h5 fw-bold text-white mb-2">Static VSM Search</h4>
               <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                A keyword term-similarity index running real-time exact matches. Excerpts are formatted with highlighted keywords and links, providing a fallback when WebAssembly is unsupported.
+                A local term-frequency index utilizing exact matches over query keywords. Excerpts are isolated, highlighted, and linked as static reference cards to support browsers without WebAssembly.
               </p>
             </div>
           </div>
@@ -196,9 +211,9 @@ full_width: true
                 <span class="badge bg-teal text-white fw-bold" style="background-color: #0d9488 !important;">Stage 2 (Completed)</span>
                 <i class="fa fa-check-circle text-success fs-5"></i>
               </div>
-              <h4 class="h5 fw-bold text-white mb-2">Browser-Side RAG</h4>
+              <h4 class="h5 fw-bold text-white mb-2">Advanced WASM RAG</h4>
               <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                ONNX WebAssembly transformer models running locally in the browser. Uses all-MiniLM-L6-v2 vector embeddings, cosine similarity matching, and multiple instruction-tuned generator models.
+                Multi-model orchestration running locally. Leverages query intent pre-filtering, Reciprocal Rank Fusion, sentence-level semantic vector extraction, and neural Cross-Encoder re-ranking.
               </p>
             </div>
           </div>
@@ -209,9 +224,9 @@ full_width: true
                 <span class="badge bg-secondary text-light fw-bold">Stage 3 (Future)</span>
                 <i class="fa fa-cog text-muted x-small"></i>
               </div>
-              <h4 class="h5 fw-bold text-white mb-2">Agentic API Tooling</h4>
+              <h4 class="h5 fw-bold text-white mb-2">Autonomous Agentic Tools</h4>
               <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                Activating function calling and tools. Waddles will autonomously hit external API endpoints to fetch live citation metrics, check office hour calendars, and trigger notifications.
+                Activating function calling capabilities. Waddles will autonomously call external API endpoints to fetch live citation statistics, calendar events, or dispatch contact requests.
               </p>
             </div>
           </div>
@@ -224,40 +239,41 @@ full_width: true
   <div class="row mb-5">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
-        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-sitemap me-2 text-info"></i> Waddles RAG Pipeline Architecture</h2>
+        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-sitemap me-2 text-info"></i> Multi-Stage WebAssembly RAG Pipeline Architecture</h2>
         <div class="d-flex justify-content-center p-3" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
           <div class="mermaid" style="width: 100%; min-width: 600px;">
             graph TD
-                subgraph Build Phase [Offline Compilation]
-                    A[Site Pages & Articles] -->|generate_embeddings.py| B(all-MiniLM-L6-v2 Embedder)
+                subgraph Compilation [Offline Data Pre-Processing]
+                    A[Site Pages & Publications] -->|generate_embeddings.py| B(Xenova/all-MiniLM-L6-v2 Embedder)
                     B --> C[assets/json/embeddings.json]
                 end
-                subgraph Client Load Phase [Browser Initialization]
-                    D[Visitor opens Chat] -->|Load embeddings| E[embeddings.json]
-                    F[Go Button Clicked] -->|Dynamic CDN Fetch| G[all-MiniLM-L6-v2 WebAssembly]
-                    F -->|Dynamic CDN Fetch| H{Model Selector}
-                    H -->|SmolLM 135M| I[SmolLM-135M-Instruct-ONNX]
-                    H -->|Qwen 0.5B| J[Qwen2.5-0.5B-Instruct]
-                    H -->|SmolLM2 360M| K[SmolLM2-360M-Instruct-ONNX]
+                subgraph Classification [Client-Side Input Routing]
+                    D[User Query] -->|regex & keywords| E{Intent Classifier}
+                    E -->|Teaching / Research / Bio| F[Database Category Filter]
+                    C --> F
                 end
-                subgraph Execution Phase [Local RAG Pipeline]
-                    L[User Query] -->|Feature Extraction| G
-                    G -->|384-dim normalized vector| M(Cosine Similarity Matching)
-                    E -->|Vector compare| M
-                    M -->|Top matches > 0.38| N[Retrieved Context Snippets]
-                    N -->|Construct prompt template| O[Prompt Compiler]
-                    P[Personality Selector] -->|Helpful / Sassy / Pirate system prompt| O
-                    Q[Conversation History] -->|Append last 4 turns| O
-                    L --> O
-                    O -->|ONNX Inference| H
-                    H -->|JSON structured response| R[Conversational Output]
-                    R -->|Render answer + Badges + chips| S[Chat Window UI]
+                subgraph Retrieval [Parallel Search & Rank Fusion]
+                    F -->|Sparse BM25 Indexing| H(Sparse Keyword Ranks)
+                    F -->|Dense Dot-Product Scanning| I(Dense Vector Ranks)
+                    H & I -->|RRF Fusion Ranks| J[Reciprocal Rank Fusion]
+                    J -->|Select top 3 document chunks| K[Sentence Splitter]
                 end
-                subgraph Feedback Phase [Dual Logging Webhooks]
-                    S -->|Silent submit| T[Queries FormResponse Webhook]
-                    S -->|Thumbs Up/Down click| U[Ratings FormResponse Webhook]
-                    T --> V[Google Sheets Logs Database]
-                    U --> V
+                subgraph Compression [Sentence-Level Compression & Re-ranking]
+                    K -->|10-15 sentence candidates| L(Batch Sentence Embedder)
+                    D -->|Extract Query Vector| G[all-MiniLM-L6-v2 Embedder]
+                    G -->|Sentence Cosine Similarities| M(Dot-Product Score & Sort)
+                    L --> M
+                    M -->|Top 8 sentences| N(Cross-Encoder Rerank pipeline)
+                    D -->|Cross-Attention Scoring| N
+                    N -->|Select top 4 sentence context| O[Compressed Context block]
+                end
+                subgraph Synthesis [Generation & Webhook Log Feedback]
+                    O -->|Construct prompt template| P[Prompt Compiler]
+                    Q[Conversation History] -->|Append rolling 4 turns| P
+                    P -->|ONNX Inference| R{Generator Selector}
+                    R -->|SmolLM2 / Qwen| S[JSON Schema output parsing]
+                    S -->|Submit logs| T[Queries FormWebhook]
+                    S -->|Submit feedback rating| U[Ratings FormWebhook]
                 end
           </div>
         </div>
@@ -267,65 +283,75 @@ full_width: true
 
   <!-- CORE CONCEPTS & MATHEMATICS -->
   <div class="row g-4 mb-5">
-    <!-- Vector Database details -->
+    <!-- Reciprocal Rank Fusion Details -->
     <div class="col-md-6">
       <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <div class="card-body p-4">
-          <h3 class="h4 fw-bold text-white mb-3"><i class="fa fa-database text-info me-2"></i> Client-Side Vector Database</h3>
+          <h3 class="h4 fw-bold text-white mb-3"><i class="fa fa-calculator text-info me-2"></i> Reciprocal Rank Fusion (RRF) [1]</h3>
+          <p class="text-light opacity-80 small mb-3">
+            To address the vocabulary mismatch problem (where semantic vector searches fail to resolve specific lexical keys like course numbers or acronyms), Waddles implements a hybrid sparse-dense retrieval architecture. The system executes BM25-style keyword search and dense embedding search in parallel, merging candidate lists using Reciprocal Rank Fusion (RRF). RRF maps ranks to scores via the following formulation:
+          </p>
           
-          <h5 class="text-white mt-3 mb-1" style="font-size: 0.875rem; font-weight:600;">Dense Semantic Embeddings</h5>
-          <p class="text-light opacity-80 small mb-3">
-            Sentence embeddings translate text snippets into 384-dimensional vectors. Geometrically, vectors representing conceptually similar text point in similar directions, allowing Waddles to match questions on conceptual intent rather than literal keyword occurrences. Waddles utilizes the <code>all-MiniLM-L6-v2</code> transformer model to generate these semantic vectors.
-          </p>
+          <div class="bg-dark p-3 rounded text-center border border-secondary mb-3" style="overflow-x: auto; max-width: 100%;">
+            <span class="text-white font-monospace" style="font-size: clamp(0.75rem, 1.8vw, 1.1rem); display: inline-block;">
+              RRF_Score(d &isin; D) = &sum;<sub>m &isin; M</sub> 1 / (k + r<sub>m</sub>(d))
+            </span>
+          </div>
 
-          <h5 class="text-white mb-1" style="font-size: 0.875rem; font-weight:600;">Extracted Website Database</h5>
           <p class="text-light opacity-80 small mb-3">
-            The Python generator script compiles your portfolio database by extracting and chunking:
+            In this formulation, $M$ represents the set of retrieval systems ($M = \{\text{dense}, \text{sparse}\}$), $r_m(d)$ is the zero-indexed rank position of document $d$ within retriever $m$, and $k$ is a constant smoothing parameter, set to $60$ to prevent low-ranking candidates from disproportionately affecting scores.
           </p>
-          <ul class="text-light opacity-80 small mb-3 ps-3">
-            <li><strong>Biography & Timelines:</strong> PhD ECE (2025), Scheller MBA (2022), MS ECE (2019), BS Math/CIS (2017), and R&D startup history.</li>
-            <li><strong>Teaching Logs:</strong> Course outlines, TA lead structures, and grading philosophies for CS 7641 and CS 7642.</li>
-            <li><strong>Publications Archive:</strong> Abstracts, venues, and preprints for resting-state fMRI brain dynamic papers.</li>
-          </ul>
-
-          <h5 class="text-white mb-1" style="font-size: 0.875rem; font-weight:600;">Data Storage Layout</h5>
-          <p class="text-light opacity-80 small mb-3">
-            The database is compiled into a single static file at <code>/assets/json/embeddings.json</code> (~1.3MB) structured as a JSON array of text chunks and their coordinates:
-          </p>
-          <pre class="bg-dark text-info p-3 rounded small border border-secondary mb-0" style="overflow-x: auto; max-width: 100%;"><code>[
-  {
-    "title": "Page Name/Paper Title",
-    "url": "/source-url/",
-    "text": "Chunk text content...",
-    "type": "page|post|newsletter|publication|talk|milestone",
-    "embedding": [0.0213, -0.0451, ..., 0.0092]
-  }
-]</code></pre>
         </div>
       </div>
     </div>
 
-    <!-- Cosine Similarity -->
+    <!-- Cosine Similarity & Compression -->
     <div class="col-md-6">
       <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <div class="card-body p-4">
-          <h3 class="h4 fw-bold text-white mb-3"><i class="fa fa-calculator text-info me-2"></i> Cosine Similarity Vector Matching</h3>
+          <h3 class="h4 fw-bold text-white mb-3"><i class="fa fa-compress text-info me-2"></i> Sentence Cosine Dot Products [2, 3]</h3>
           <p class="text-light opacity-80 small mb-3">
-            To rank document relevance without an external server, Waddles implements a direct cosine similarity calculation between the user's query vector and the pre-computed document chunks.
-          </p>
-          <p class="text-light opacity-80 small mb-3">
-            For query vector $q \in \mathbb{R}^{384}$ and document chunk vector $d \in \mathbb{R}^{384}$, the cosine similarity is defined as:
+            Waddles splits the top 3 RRF-matched document chunks into individual sentences. To isolate the most relevant context, it feeds all candidates into a parallel batch execution of the vector embedder in a single forward pass, calculating:
           </p>
           
           <div class="bg-dark p-3 rounded text-center border border-secondary mb-3" style="overflow-x: auto; max-width: 100%;">
-            <span class="text-white font-monospace" style="font-size: clamp(0.75rem, 2vw, 1.15rem); display: inline-block;">
-              Similarity(q, d) = &sum;<sub>i=1</sub><sup>384</sup> (q<sub>i</sub> &times; d<sub>i</sub>)
+            <span class="text-white font-monospace" style="font-size: clamp(0.75rem, 1.8vw, 1.1rem); display: inline-block;">
+              Similarity(q, s) = &sum;<sub>i=1</sub><sup>384</sup> (q<sub>i</sub> &times; s<sub>i</sub>)
             </span>
           </div>
 
           <p class="text-light opacity-80 small mb-0">
-            The Python embeddings generator and the client-side transformers library extract vectors that are pre-normalized to unit length ($\|q\| = 1$, $\|d\| = 1$). Consequently, the denominator of the cosine similarity equation is equal to <code>1</code>. The similarity matching is calculated in pure JavaScript as a simple dot product, which evaluates in less than a millisecond.
+            Sentence vectors $s \in \mathbb{R}^{384}$ and query vector $q \in \mathbb{R}^{384}$ are pre-normalized to unit $L_2$ norm ($\|q\|_2 = 1$, $\|s\|_2 = 1$), meaning the denominator of the cosine similarity equation is equal to 1. The dot product ranks sentences, from which the top 8 are sent to the Cross-Encoder for structural verification.
           </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEURAL ARCHITECTURES -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-brain me-2 text-info"></i> In-Browser Neural Architectures & Models [2, 3, 4, 5]</h2>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <h3 class="h5 fw-bold text-white mb-2">Bi-Encoder Semantic Mapping vs Cross-Encoder Re-Ranking [3]</h3>
+            <p class="text-light opacity-80 small mb-3">
+              The embedding model (<code>all-MiniLM-L6-v2</code> [2]) acts as a Bi-Encoder. It processes queries and documents independently to project them into a shared 384-dimensional vector space, allowing fast cosine similarity searches. However, this independent mapping misses token-to-token cross-attention interactions.
+            </p>
+            <p class="text-light opacity-80 small mb-0">
+              To resolve this, the re-ranker model (<code>ms-marco-MiniLM-L-6-v2</code> [2]) acts as a Cross-Encoder. It takes the query and sentence candidates as a combined token sequence <code>[CLS] query [SEP] sentence [SEP]</code>. The self-attention layers compute cross-attention weights between every query token and sentence token. This produces highly accurate relevance classifications based on sequence logit probabilities.
+            </p>
+          </div>
+          <div class="col-md-6">
+            <h3 class="h5 fw-bold text-white mb-2">Autoregressive LLM Generator Configurations [4, 5]</h3>
+            <p class="text-light opacity-80 small mb-3">
+              The generative models (<code>SmolLM</code> [4], <code>SmolLM2</code> [4], and <code>Qwen2.5</code> [5]) utilize decoder-only autoregressive architectures optimized for client-side processing. These models implement Rotary Position Embeddings (RoPE) [6] to support dynamic context lengths, RMSNorm [7] for stable training activation, and SwiGLU [8] activation functions to enhance hidden layer representations.
+            </p>
+            <p class="text-light opacity-80 small mb-0">
+              They also employ Grouped-Query Attention (GQA) [9]. By sharing key-value head projections across multiple query heads, GQA reduces KV cache memory consumption, lowering the RAM usage and latency of token generation on low-power client devices.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -379,7 +405,7 @@ full_width: true
               <button id="tab-response" class="btn py-1 px-3 text-white small border-0" onclick="selectDebugTab('response')" style="font-size: 0.725rem; font-family: monospace; background: transparent; border-radius: 6px 6px 0 0; opacity: 0.6;">response.json</button>
               <button id="tab-webhook" class="btn py-1 px-3 text-white small border-0" onclick="selectDebugTab('webhook')" style="font-size: 0.725rem; font-family: monospace; background: transparent; border-radius: 6px 6px 0 0; opacity: 0.6;">webhook.post</button>
             </div>
-            <div class="text-muted small d-none d-md-block" style="font-size: 0.65rem; font-family: monospace;">Waddles-CLI v2.1</div>
+            <div class="text-muted small d-none d-md-block" style="font-size: 0.65rem; font-family: monospace;">Waddles-CLI v2.2</div>
           </div>
           <!-- Terminal Content Area -->
           <div class="p-3" style="max-height: 380px; overflow-y: auto;">
@@ -397,17 +423,25 @@ full_width: true
             title: "what courses does TJ teach?",
             context: "CS 7641: Machine Learning (OMSCS). TJ is the Lead Instructor, managing 1400+ graduate students and directing 30+ TAs. He also supported CS 7642: Reinforcement Learning in the online master's program.",
             log: [
-                "> [Client] Initializing vector search for: 'what courses does TJ teach?'",
-                "> [Embedder] Extracting features with Xenova/all-MiniLM-L6-v2...",
-                "> [Similarity] Dot product scan against 42 database chunks...",
-                "> [Similarity] Matched CS 7641 Course Page (Score: 0.814)",
-                "> [Similarity] Matched CS 7642 Course Page (Score: 0.627)",
-                "> [Prompt] Appending context snippets & last 4 messages of history...",
+                "> [Client] Query received: 'what courses does TJ teach?'",
+                "> [Intent] Running Query Intent Classifier...",
+                "> [Intent] Category classified: 'Teaching' (Hard constraint pre-filtering applied)",
+                "> [Search] Running sparse keyword matches in parallel with dense vector searches...",
+                "> [Search] Dense Cosine scanning completed in 12ms. Sparse keyword scanning completed in 2ms.",
+                "> [Fusion] Executing Reciprocal Rank Fusion (RRF) over retrieval ranks (k=60)...",
+                "> [Fusion] Selected top 3 candidate chunks. Extracting sentences...",
+                "> [Compression] Extracted 12 sentence candidates from top chunks.",
+                "> [Embedder] Batch embedding 12 sentences in a single parallel inference call...",
+                "> [Similarity] Scoring sentence-level dot products against query vector...",
+                "> [Rerank] Passing top 8 sentences to Cross-Encoder reranker...",
+                "> [Rerank] Evaluating ms-marco-MiniLM-L-6-v2 re-ranking classifications...",
+                "> [Compression] Retained top 4 sentences. Context size compressed to 382 characters.",
+                "> [Prompt] Compiling prompt with personality system prompt & history...",
                 "> [Inference] Running local forward pass inside browser ONNX runtime...",
                 "> [Inference] WebAssembly execution completed in 184ms.",
                 "> [Local Storage] Appending log item to local history array.",
-                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint: entry.1296087798=q_178...&entry.2055350119=what courses does TJ teach?...",
-                "> [HTTP POST] FormResponse webhook submitted successfully (No-CORS status 0)."
+                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint...",
+                "> [HTTP POST] FormResponse webhook submitted successfully."
             ],
             helpful: {
                 answer: "TJ is the Lead Instructor for CS 7641 (Machine Learning) in Georgia Tech's OMSCS program. He also supported CS 7642 (Reinforcement Learning) in the program.",
@@ -432,17 +466,25 @@ full_width: true
             title: "tell me about TJ's brain research",
             context: "Research in the Keilholz MIND Lab at Emory/GT. Focuses on brain dynamics using resting-state fMRI. Investigates Quasi-Periodic Patterns (QPPs) as potential biomarkers for Alzheimer's and Parkinson's diseases.",
             log: [
-                "> [Client] Initializing vector search for: 'tell me about TJ's brain research'",
-                "> [Embedder] Extracting features with Xenova/all-MiniLM-L6-v2...",
-                "> [Similarity] Dot product scan against 42 database chunks...",
-                "> [Similarity] Matched Keilholz MIND Lab Publication (Score: 0.835)",
-                "> [Similarity] Matched Dynamic Patterns Abstract (Score: 0.714)",
-                "> [Prompt] Appending context snippets & last 4 messages of history...",
+                "> [Client] Query received: 'tell me about TJ's brain research'",
+                "> [Intent] Running Query Intent Classifier...",
+                "> [Intent] Category classified: 'Research' (Hard constraint pre-filtering applied)",
+                "> [Search] Running sparse keyword matches in parallel with dense vector searches...",
+                "> [Search] Dense Cosine scanning completed in 15ms. Sparse keyword scanning completed in 3ms.",
+                "> [Fusion] Executing Reciprocal Rank Fusion (RRF) over retrieval ranks (k=60)...",
+                "> [Fusion] Selected top 3 candidate chunks. Extracting sentences...",
+                "> [Compression] Extracted 15 sentence candidates from top chunks.",
+                "> [Embedder] Batch embedding 15 sentences in a single parallel inference call...",
+                "> [Similarity] Scoring sentence-level dot products against query vector...",
+                "> [Rerank] Passing top 8 sentences to Cross-Encoder reranker...",
+                "> [Rerank] Evaluating ms-marco-MiniLM-L-6-v2 re-ranking classifications...",
+                "> [Compression] Retained top 4 sentences. Context size compressed to 356 characters.",
+                "> [Prompt] Compiling prompt with personality system prompt & history...",
                 "> [Inference] Running local forward pass inside browser ONNX runtime...",
                 "> [Inference] WebAssembly execution completed in 245ms.",
                 "> [Local Storage] Appending log item to local history array.",
-                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint: entry.1296087798=q_178...&entry.2055350119=tell me about TJ's brain research...",
-                "> [HTTP POST] FormResponse webhook submitted successfully (No-CORS status 0)."
+                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint...",
+                "> [HTTP POST] FormResponse webhook submitted successfully."
             ],
             helpful: {
                 answer: "TJ conducts research in the Keilholz MIND Lab focusing on spatiotemporal brain dynamics via resting-state fMRI. He studies Quasi-Periodic Patterns (QPPs) to identify biomarkers for Alzheimer's and Parkinson's.",
@@ -467,16 +509,25 @@ full_width: true
             title: "how do I contact TJ?",
             context: "Contact and speaking details. Connect via email at tlagrow3 at gatech dot edu, or visit LinkedIn, GitHub, and YouTube. A message form is also available on the Contact Page.",
             log: [
-                "> [Client] Initializing vector search for: 'how do I contact TJ?'",
-                "> [Embedder] Extracting features with Xenova/all-MiniLM-L6-v2...",
-                "> [Similarity] Dot product scan against 42 database chunks...",
-                "> [Similarity] Matched Contact Page Details (Score: 0.887)",
-                "> [Prompt] Appending context snippets & last 4 messages of history...",
+                "> [Client] Query received: 'how do I contact TJ?'",
+                "> [Intent] Running Query Intent Classifier...",
+                "> [Intent] Category classified: 'Bio/Contact' (Hard constraint pre-filtering applied)",
+                "> [Search] Running sparse keyword matches in parallel with dense vector searches...",
+                "> [Search] Dense Cosine scanning completed in 8ms. Sparse keyword scanning completed in 1ms.",
+                "> [Fusion] Executing Reciprocal Rank Fusion (RRF) over retrieval ranks (k=60)...",
+                "> [Fusion] Selected top 3 candidate chunks. Extracting sentences...",
+                "> [Compression] Extracted 8 sentence candidates from top chunks.",
+                "> [Embedder] Batch embedding 8 sentences in a single parallel inference call...",
+                "> [Similarity] Scoring sentence-level dot products against query vector...",
+                "> [Rerank] Passing top 8 sentences to Cross-Encoder reranker...",
+                "> [Rerank] Evaluating ms-marco-MiniLM-L-6-v2 re-ranking classifications...",
+                "> [Compression] Retained top 4 sentences. Context size compressed to 294 characters.",
+                "> [Prompt] Compiling prompt with personality system prompt & history...",
                 "> [Inference] Running local forward pass inside browser ONNX runtime...",
                 "> [Inference] WebAssembly execution completed in 112ms.",
                 "> [Local Storage] Appending log item to local history array.",
-                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint: entry.1296087798=q_178...&entry.2055350119=how do I contact TJ?...",
-                "> [HTTP POST] FormResponse webhook submitted successfully (No-CORS status 0)."
+                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint...",
+                "> [HTTP POST] FormResponse webhook submitted successfully."
             ],
             helpful: {
                 answer: "You can reach TJ via email at tlagrow3 at gatech dot edu, or send a message using the form on the Contact Page. You can also connect via LinkedIn, GitHub, or YouTube.",
@@ -573,7 +624,7 @@ full_width: true
         } else if (activeDebugTabKey === 'context') {
             bodyEl.className = 'language-text';
             bodyEl.style.color = '#94a3b8';
-            bodyEl.innerText = `[Document Context for Prompt Compiler]\n\n${data.context}`;
+            bodyEl.innerText = `[Sentence-Level Compressed Context for Prompt Compiler]\n\n${data.context}`;
             
         } else if (activeDebugTabKey === 'prompt') {
             bodyEl.className = 'language-html';
@@ -641,7 +692,7 @@ entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-server me-2 text-info"></i> Static Hosting & WebAssembly Optimizations</h2>
         <p class="text-light opacity-90 small mb-4">
-          Running neural network model inference directly inside static web pages poses unique challenges due to browser sandboxing constraints. Waddles implements the following key technical solutions to ensure robust execution.
+          Running multiple neural network model inferences (embedding extraction, Cross-Encoder classification, and token generation) directly inside static web pages poses unique performance and security challenges. Waddles implements the following key technical solutions to ensure robust execution.
         </p>
 
         <div class="row g-4">
@@ -681,6 +732,44 @@ entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
               </p>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-book me-2 text-info"></i> References</h2>
+        <div class="text-light opacity-80 small">
+          <p class="mb-3">
+            [1] Cormack, G. V., Clarke, C. L. A., and Büttcher, S. 2009. Reciprocal rank fusion outperforms Condorcet and individual rank learning methods. In <i>Proceedings of the 32nd annual international ACM SIGIR conference on Research and development in information retrieval</i> (SIGIR '09), 758-759.
+          </p>
+          <p class="mb-3">
+            [2] Wang, W., Wei, F., Dong, L., Bao, H., Yang, N., and Zhou, M. 2020. MiniLM: Deep self-attention distillation for task-agnostic compression of pre-trained transformers. In <i>Advances in Neural Information Processing Systems</i> (NeurIPS '20), 33, 5776-5788.
+          </p>
+          <p class="mb-3">
+            [3] Reimers, N. and Gurevych, I. 2019. Sentence-BERT: Sentence embeddings using Siamese BERT-networks. In <i>Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing</i> (EMNLP-IJCNLP '19), 3982-3992.
+          </p>
+          <p class="mb-3">
+            [4] Allal, L. B., Lozhkov, A., Beeching, E., von Werra, L., and Wolf, T. 2024. SmolLM: blazingly fast small language models. <i>Hugging Face Technical Report</i>. URL: https://github.com/huggingface/smollm
+          </p>
+          <p class="mb-3">
+            [5] Qwen Team. 2024. Qwen2.5: A family of powerful language models. <i>Qwen Technical Report</i>. URL: https://qwenlm.github.io/blog/qwen2.5/
+          </p>
+          <p class="mb-3">
+            [6] Su, J., Lu, Y., Pan, S., Wen, B., and Liu, Y. 2021. RoFormer: Enhanced transformer with rotary position embedding. <i>arXiv preprint arXiv:2104.09864</i>.
+          </p>
+          <p class="mb-3">
+            [7] Zhang, B. and Sennrich, R. 2019. Root mean square layer normalization. In <i>Advances in Neural Information Processing Systems</i> (NeurIPS '19), 32.
+          </p>
+          <p class="mb-3">
+            [8] Shazeer, N. 2020. GLU variants improve transformer. <i>arXiv preprint arXiv:2002.05202</i>.
+          </p>
+          <p class="mb-3">
+            [9] Ainslie, J., Lee-Thorp, J., de Jong, M., Zemlyanskiy, Y., Lebron, F., and Sanghai, S. 2023. GQA: Training generalized multi-query transformer models from multi-head checkpoints. In <i>Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing</i> (EMNLP '23), 3795-3801.
+          </p>
         </div>
       </div>
     </div>

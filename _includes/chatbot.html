@@ -89,9 +89,11 @@
         
         let loadedEmbedders = {};
         let loadedGenerators = {};
+        let loadedReranker = null;
         
         let activeEmbedder = null;
         let activeGenerator = null;
+        let activeReranker = null;
         
         let activeModelType = 'keyword'; // Default startup mode is lightweight keyword matching
         let activeModelKey = 'keyword';
@@ -473,13 +475,14 @@
             const modelRepo = modelRepoMap[modelKey];
             const cacheKey = `${modelKey}_${quantKey}`;
 
-            if (loadedGenerators[cacheKey] && loadedEmbedders['all-MiniLM-L6-v2']) {
+            if (loadedGenerators[cacheKey] && loadedEmbedders['all-MiniLM-L6-v2'] && loadedReranker) {
                 activeEmbedder = loadedEmbedders['all-MiniLM-L6-v2'];
                 activeGenerator = loadedGenerators[cacheKey];
+                activeReranker = loadedReranker;
                 activeModelType = 'rag';
                 activeModelKey = modelKey;
                 activeQuantKey = quantKey;
-                appendMessage(`<strong>[System]</strong> Switched to neural model ${modelKey.toUpperCase()} (${quantKey}) from cache.`, 'system');
+                appendMessage(`<strong>[System]</strong> Switched to neural model ${modelKey.toUpperCase()} (${quantKey}) and Cross-Encoder from cache.`, 'system');
                 scrollToBottom();
                 return;
             }
@@ -493,7 +496,7 @@
             loadingCard.className = 'chatbot-message system';
             loadingCard.id = 'waddles-loading-card';
             loadingCard.innerHTML = `
-                <strong>Waddles is loading ${modelKey.toUpperCase()} (${quantKey})...</strong><br>
+                <strong>Waddles is loading ${modelKey.toUpperCase()} (${quantKey}) & Cross-Encoder...</strong><br>
                 Downloading lightweight brain files to run inside your browser. Larger models may take a moment to initialize.<br>
                 <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; overflow: hidden;">
                     <div id="waddles-progress-bar" class="progress-bar" role="progressbar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #0d9488, #0ea5e9); transition: width 0.1s;"></div>
@@ -516,9 +519,10 @@
                     try {
                         let embedderProgress = 0;
                         let generatorProgress = 0;
+                        let rerankerProgress = 0;
 
                         const updateProgressBar = () => {
-                            const percent = Math.round((embedderProgress + generatorProgress) / 2);
+                            const percent = Math.round((embedderProgress + generatorProgress + rerankerProgress) / 3);
                             const progressBar = document.getElementById('waddles-progress-bar');
                             const progressPercent = document.getElementById('waddles-loading-percentage');
                             if (progressBar) progressBar.style.width = `${percent}%`;
@@ -564,6 +568,27 @@
                         });
                         loadedGenerators[cacheKey] = activeGenerator;
 
+                        // 3. Fetch Reranker
+                        if (!loadedReranker) {
+                            activeReranker = await pipeline('text-classification', 'Xenova/ms-marco-MiniLM-L-6-v2', {
+                                device: 'wasm',
+                                progress_callback: (data) => {
+                                    if (data.status === 'progress') {
+                                        rerankerProgress = data.progress;
+                                        updateProgressBar();
+                                    } else if (data.status === 'ready') {
+                                        rerankerProgress = 100;
+                                        updateProgressBar();
+                                    }
+                                }
+                            });
+                            loadedReranker = activeReranker;
+                        } else {
+                            activeReranker = loadedReranker;
+                            rerankerProgress = 100;
+                            updateProgressBar();
+                        }
+
                         activeModelType = 'rag';
                         activeModelKey = modelKey;
                         activeQuantKey = quantKey;
@@ -572,7 +597,7 @@
                         const lc = document.getElementById('waddles-loading-card');
                         if (lc) lc.remove();
 
-                        appendMessage(`<strong>Waddles is ready!</strong> Loaded neural brain model ${modelKey.toUpperCase()} (${quantKey}) successfully.`, 'system');
+                        appendMessage(`<strong>Waddles is ready!</strong> Loaded neural brain model ${modelKey.toUpperCase()} (${quantKey}) and Cross-Encoder successfully.`, 'system');
                         scrollToBottom();
 
                         input.disabled = false;
@@ -739,9 +764,34 @@
             };
         }
 
+        function getDocCategory(doc) {
+            if (doc.type === 'publication' || doc.type === 'talk') {
+                return 'Research';
+            }
+            if (doc.url.includes('/teaching') || doc.type === 'milestone') {
+                return 'Teaching';
+            }
+            return 'Bio/Contact';
+        }
+
+        function classifyQueryIntent(query) {
+            const text = query.toLowerCase();
+            const teachingKeywords = ['course', 'teach', 'class', 'student', 'grading', 'ta', 'syllabus', 'omscs', '7641', '7642', 'reinforcement', 'machine learning'];
+            const researchKeywords = ['research', 'fmri', 'brain', 'resting-state', 'cajal', 'paper', 'publication', 'mind lab', 'journal', 'quasi-periodic', 'qpp', 'dynamics'];
+            const bioKeywords = ['contact', 'email', 'social', 'linkedin', 'github', 'phone', 'youtube', 'resume', 'cv', 'office', 'schedule'];
+
+            const hasTeaching = teachingKeywords.some(kw => text.includes(kw));
+            const hasResearch = researchKeywords.some(kw => text.includes(kw));
+            const hasBio = bioKeywords.some(kw => text.includes(kw));
+
+            if (hasTeaching && !hasResearch) return 'Teaching';
+            if (hasResearch && !hasTeaching) return 'Research';
+            if (hasBio) return 'Bio/Contact';
+            return null;
+        }
+
         async function getBotResponse(query) {
             const text = query.toLowerCase().trim();
-
             const personality = document.getElementById('waddles-personality-selector')?.value || 'helpful';
 
             // 1. Curated responses for exact match chips / simple greetings (only when helpful personality is active)
@@ -793,53 +843,145 @@
                 };
             }
 
-            // 2. Dynamic hybrid retrieval matching
-            let matches = [];
-            const keywordMatches = findKeywordMatches(query);
-
-            if (activeModelType === 'rag' && activeEmbedder && activeGenerator && embeddingsDatabase && embeddingsDatabase.length > 0) {
-                try {
-                    const output = await activeEmbedder(query, { pooling: 'mean', normalize: true });
-                    const queryVector = Array.from(output.data);
-
-                    const scored = embeddingsDatabase
-                        .filter(passFilters)
-                        .map(doc => {
-                            let dotProduct = 0;
-                            const docVec = doc.embedding;
-                            for (let i = 0; i < queryVector.length; i++) {
-                                dotProduct += queryVector[i] * docVec[i];
-                            }
-
-                            // Semantic boosting for keyword matches
-                            const kwMatch = keywordMatches.find(k => k.doc.url === doc.url);
-                            let score = dotProduct;
-                            if (kwMatch) {
-                                score += 0.08;
-                            }
-
-                            return { doc, score };
-                        });
-
-                    matches = scored
-                        .filter(r => r.score > 0.38)
-                        .sort((a, b) => b.score - a.score);
-                } catch (err) {
-                    console.error("Vector search failed, falling back to keyword search:", err);
-                    matches = keywordMatches.filter(r => passFilters(r.doc));
+            // 2. Intent Pre-filtering
+            const queryIntent = classifyQueryIntent(query);
+            let databaseSubset = embeddingsDatabase.filter(passFilters);
+            if (queryIntent) {
+                const intentSubset = databaseSubset.filter(doc => getDocCategory(doc) === queryIntent);
+                if (intentSubset.length > 0) {
+                    databaseSubset = intentSubset;
                 }
-            } else {
-                matches = keywordMatches.filter(r => passFilters(r.doc));
             }
 
-            if (matches.length > 0) {
-                const bestMatch = matches[0].doc;
+            // 3. Dense Vector Search and Sparse Keyword Search
+            let denseMatches = [];
+            let queryVector = [];
+            const keywordMatches = findKeywordMatches(query);
+
+            if (activeModelType === 'rag' && activeEmbedder && activeGenerator && activeReranker && embeddingsDatabase && embeddingsDatabase.length > 0) {
+                try {
+                    const output = await activeEmbedder(query, { pooling: 'mean', normalize: true });
+                    queryVector = Array.from(output.data);
+
+                    denseMatches = databaseSubset.map(doc => {
+                        let dotProduct = 0;
+                        const docVec = doc.embedding;
+                        for (let i = 0; i < queryVector.length; i++) {
+                            dotProduct += queryVector[i] * docVec[i];
+                        }
+                        return { doc, score: dotProduct };
+                    })
+                    .filter(r => r.score > 0.38)
+                    .sort((a, b) => b.score - a.score);
+                } catch (err) {
+                    console.error("Vector search failed, falling back to keyword search subset:", err);
+                }
+            }
+
+            const sparseMatches = keywordMatches.filter(r => passFilters(r.doc));
+
+            // 4. Reciprocal Rank Fusion (RRF)
+            const denseRankMap = new Map();
+            denseMatches.forEach((item, index) => {
+                denseRankMap.set(item.doc, index);
+            });
+
+            const sparseRankMap = new Map();
+            sparseMatches.forEach((item, index) => {
+                sparseRankMap.set(item.doc, index);
+            });
+
+            const kConstant = 60;
+            const rrfScored = [];
+            const allDocs = new Set([...denseRankMap.keys(), ...sparseRankMap.keys()]);
+
+            allDocs.forEach(doc => {
+                const denseRank = denseRankMap.has(doc) ? denseRankMap.get(doc) : Infinity;
+                const sparseRank = sparseRankMap.has(doc) ? sparseRankMap.get(doc) : Infinity;
+                
+                const denseScore = denseRank !== Infinity ? (1 / (kConstant + denseRank)) : 0;
+                const sparseScore = sparseRank !== Infinity ? (1 / (kConstant + sparseRank)) : 0;
+                
+                rrfScored.push({
+                    doc: doc,
+                    score: denseScore + sparseScore
+                });
+            });
+
+            const finalRRFMatches = rrfScored.sort((a, b) => b.score - a.score);
+
+            if (finalRRFMatches.length > 0) {
+                const bestMatch = finalRRFMatches[0].doc;
                 const docTypeLabel = bestMatch.type.charAt(0).toUpperCase() + bestMatch.type.slice(1);
 
-                if (activeModelType === 'rag' && activeGenerator) {
+                if (activeModelType === 'rag' && activeGenerator && activeEmbedder && activeReranker) {
                     let contextText = bestMatch.text;
-                    if (matches.length > 1 && matches[1].score > 0.42) {
-                        contextText += "\n" + matches[1].doc.text;
+                    let finalBestMatch = bestMatch;
+
+                    // 5. Sentence-level Context Compression
+                    const topChunks = finalRRFMatches.slice(0, 3).map(r => r.doc);
+                    let allSentences = [];
+                    topChunks.forEach(doc => {
+                        const sentences = doc.text.split(/(?<=[.!?])\s+/);
+                        sentences.forEach(s => {
+                            const cleanS = s.trim();
+                            if (cleanS.length > 15) {
+                                allSentences.push({ text: cleanS, doc });
+                            }
+                        });
+                    });
+
+                    if (allSentences.length > 0) {
+                        try {
+                            const sentenceTexts = allSentences.map(s => s.text);
+                            // Batch sentence embeddings extraction
+                            const sentenceEmbeddings = await activeEmbedder(sentenceTexts, { pooling: 'mean', normalize: true });
+                            const sentenceVectorsList = sentenceEmbeddings.tolist();
+
+                            const sentenceScores = allSentences.map((s, idx) => {
+                                const sVec = sentenceVectorsList[idx];
+                                let dotProduct = 0;
+                                for (let j = 0; j < queryVector.length; j++) {
+                                    dotProduct += queryVector[j] * sVec[j];
+                                }
+                                return { ...s, score: dotProduct };
+                            });
+
+                            const topSentences = sentenceScores
+                                .filter(s => s.score > 0.40)
+                                .sort((a, b) => b.score - a.score)
+                                .slice(0, 8);
+
+                            if (topSentences.length > 0) {
+                                // 6. Cross-Encoder Re-ranking
+                                const rerankInputs = topSentences.map(s => ({
+                                    text: query,
+                                    text_pair: s.text
+                                }));
+                                
+                                const rerankOutputs = await activeReranker(rerankInputs);
+                                
+                                const finalReranked = topSentences.map((s, idx) => {
+                                    const out = rerankOutputs[idx];
+                                    let score = 0;
+                                    if (Array.isArray(out)) {
+                                        const scoreObj = out.find(o => o.label === 'LABEL_1');
+                                        score = scoreObj ? scoreObj.score : (out[0]?.score || 0);
+                                    } else {
+                                        score = out.score || 0;
+                                    }
+                                    return { ...s, score };
+                                });
+
+                                const sortedFinal = finalReranked.sort((a, b) => b.score - a.score);
+                                const compressedSentences = sortedFinal.slice(0, 4);
+                                
+                                contextText = compressedSentences.map(s => s.text).join(" ");
+                                finalBestMatch = compressedSentences[0].doc;
+                            }
+                        } catch (embedErr) {
+                            console.error("Sentence compression and reranking failed, falling back to full chunk:", embedErr);
+                        }
                     }
 
                     // Format chat history context
@@ -899,7 +1041,7 @@ ${query}<|im_end|>
                     let generatedText = output[0].generated_text.trim();
                     generatedText = generatedText.replace(/<\|im_end\|>/g, '').replace(/<\|im_start\|>/g, '').trim();
                     
-                    return parseStructuredResponse(generatedText, bestMatch);
+                    return parseStructuredResponse(generatedText, finalBestMatch);
                 } else {
                     const queryTokens = query.toLowerCase().replace(/[^\w\s-]/g, '').split(/\s+/).filter(t => t.length > 2);
                     const stopWords = ['the', 'and', 'for', 'this', 'that', 'with', 'from', 'about', 'your', 'will', 'have', 'been', 'are', 'was', 'were', 'what', 'tell', 'how', 'who', 'does', 'shes', 'they'];
