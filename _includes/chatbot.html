@@ -37,7 +37,7 @@
 }
 </style>
 
-<script>
+<script type="module">
     document.addEventListener('DOMContentLoaded', () => {
         const toggle = document.getElementById('chatbot-toggle');
         const windowEl = document.getElementById('chatbot-window');
@@ -49,8 +49,11 @@
         if (!toggle || !windowEl || !close || !body || !form || !input) return;
 
         let searchIndex = [];
+        let modelLoaded = false;
+        let modelLoading = false;
+        let generator = null;
 
-        // Asynchronously load search index
+        // Asynchronously load search index (very fast and lightweight)
         fetch('{{ "/assets/json/search.json" | relative_url }}')
             .then(response => response.json())
             .then(data => {
@@ -66,6 +69,7 @@
             if (isHidden) {
                 input.focus();
                 scrollToBottom();
+                ensureModelLoaded();
             }
         });
 
@@ -80,6 +84,7 @@
                     toggle.setAttribute('aria-expanded', 'true');
                     input.focus();
                     scrollToBottom();
+                    ensureModelLoaded();
                 } else {
                     windowEl.style.display = 'none';
                     toggle.setAttribute('aria-expanded', 'false');
@@ -110,7 +115,7 @@
             handleUserQuery(text);
         });
 
-        function handleUserQuery(query) {
+        async function handleUserQuery(query) {
             // Append user message
             appendMessage(query, 'user');
             scrollToBottom();
@@ -119,16 +124,18 @@
             const indicator = showTypingIndicator();
             scrollToBottom();
 
-            // Simulate slight delay for typing
-            setTimeout(() => {
-                // Remove typing indicator
-                indicator.remove();
-
+            try {
                 // Generate response
-                const responseText = getBotResponse(query);
+                const responseText = await getBotResponse(query);
+                indicator.remove();
                 appendMessage(responseText, 'system');
                 scrollToBottom();
-            }, 750);
+            } catch (err) {
+                console.error("Error running query:", err);
+                indicator.remove();
+                appendMessage(`Sorry, I encountered an error while processing that.`, 'system');
+                scrollToBottom();
+            }
         }
 
         function appendMessage(content, sender) {
@@ -152,15 +159,90 @@
             return indicator;
         }
 
-        // Auto-scroll logic helper
         function scrollToBottom() {
             body.scrollTop = body.scrollHeight;
+        }
+
+        // Lazy-load the local model
+        function ensureModelLoaded() {
+            if (modelLoaded || modelLoading) return;
+            modelLoading = true;
+
+            const loadingCard = document.createElement('div');
+            loadingCard.className = 'chatbot-message system';
+            loadingCard.id = 'waddles-loading-card';
+            loadingCard.innerHTML = `
+                <strong>Waddles is loading...</strong><br>
+                Downloading a lightweight language model (SmolLM-135M, ~85MB) to run locally in your browser. This only downloads once and will be cached.<br>
+                <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; overflow: hidden;">
+                    <div id="waddles-progress-bar" class="progress-bar" role="progressbar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #0d9488, #0ea5e9); transition: width 0.1s;"></div>
+                </div>
+                <div id="waddles-loading-percentage" class="small text-muted mt-1">Initializing loading sequence...</div>
+            `;
+            body.appendChild(loadingCard);
+            scrollToBottom();
+
+            // Disable input while loading
+            input.disabled = true;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) submitBtn.disabled = true;
+
+            import('https://cdn.jsdelivr.net/npm/@huggingface/transformers')
+                .then(async (m) => {
+                    const { pipeline, env } = m;
+                    env.allowLocalModels = false;
+
+                    try {
+                        generator = await pipeline('text-generation', 'onnx-community/SmolLM-135M-Instruct', {
+                            device: 'wasm',
+                            progress_callback: (data) => {
+                                if (data.status === 'progress') {
+                                    const percent = Math.round(data.progress);
+                                    const progressBar = document.getElementById('waddles-progress-bar');
+                                    const progressPercent = document.getElementById('waddles-loading-percentage');
+                                    if (progressBar) progressBar.style.width = `${percent}%`;
+                                    if (progressPercent) progressPercent.innerText = `Downloading model (${percent}%)`;
+                                }
+                            }
+                        });
+
+                        modelLoaded = true;
+                        modelLoading = false;
+
+                        const lc = document.getElementById('waddles-loading-card');
+                        if (lc) lc.remove();
+
+                        appendMessage(`<strong>Model loaded successfully!</strong> My local WebAssembly brain is ready in your browser. Ask me anything!`, 'system');
+                        scrollToBottom();
+
+                        input.disabled = false;
+                        if (submitBtn) submitBtn.disabled = false;
+                        input.focus();
+                    } catch (err) {
+                        console.error("ONNX initialization failed:", err);
+                        fallbackToStatic(submitBtn, `Failed to load WebAssembly model. Falling back to keyword search mode...`);
+                    }
+                })
+                .catch((err) => {
+                    console.error("CDN fetch failed:", err);
+                    fallbackToStatic(submitBtn, `Library import failed. Falling back to keyword search mode...`);
+                });
+        }
+
+        function fallbackToStatic(submitBtn, msg) {
+            modelLoaded = false;
+            modelLoading = false;
+            const lc = document.getElementById('waddles-loading-card');
+            if (lc) lc.remove();
+            appendMessage(`<span class="text-warning">${msg}</span>`, 'system');
+            scrollToBottom();
+            input.disabled = false;
+            if (submitBtn) submitBtn.disabled = false;
         }
 
         function findSimilarityMatches(query) {
             if (!searchIndex || searchIndex.length === 0) return [];
             
-            // Normalize and tokenize query
             const queryTokens = query.toLowerCase()
                 .replace(/[^\w\s-]/g, '')
                 .split(/\s+/)
@@ -181,34 +263,29 @@
                 let matchCount = 0;
                 
                 filteredQueryTokens.forEach(token => {
-                    // Check title match
                     const titleIdx = titleText.indexOf(token);
                     if (titleIdx !== -1) {
-                        score += 20; // High boost for title matches
+                        score += 20;
                         matchCount++;
                     }
                     
-                    // Check content occurrences
                     const contentRegex = new RegExp('\\b' + token + '\\b', 'g');
                     const matches = contentText.match(contentRegex);
                     if (matches) {
-                        score += matches.length * 2.5; // Count term frequencies
+                        score += matches.length * 2.5;
                         matchCount++;
                     } else if (contentText.includes(token)) {
-                        // substring match fallback
                         score += 1;
                         matchCount++;
                     }
                 });
                 
-                // Calculate query coverage (what % of query terms matched)
                 const coverage = matchCount / filteredQueryTokens.length;
-                score = score * coverage; // Penalize partial matches
+                score = score * coverage;
                 
                 return { doc, score };
             });
             
-            // Filter out low scores and sort by highest similarity
             return results
                 .filter(r => r.score > 2.0)
                 .sort((a, b) => b.score - a.score);
@@ -218,7 +295,6 @@
             const text = content;
             let matchIdx = -1;
             
-            // Find the first query term in the text
             for (let term of queryTerms) {
                 const idx = text.toLowerCase().indexOf(term);
                 if (idx !== -1) {
@@ -234,7 +310,6 @@
             let start = Math.max(0, matchIdx - 40);
             let end = Math.min(text.length, matchIdx + maxLength - 40);
             
-            // Adjust to align with word boundaries
             if (start > 0) {
                 const firstSpace = text.indexOf(' ', start);
                 if (firstSpace !== -1 && firstSpace < matchIdx) {
@@ -255,7 +330,7 @@
             return snippet;
         }
 
-        function getBotResponse(query) {
+        async function getBotResponse(query) {
             const text = query.toLowerCase().trim();
 
             // 1. Curated greetings and specific shortcuts
@@ -275,25 +350,46 @@
                 return `<strong>Contact & Socials:</strong><br><br>Connect with TJ via:<br>• <strong>Email:</strong> <code>tlagrow3 at gatech dot edu</code><br>• <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/tjlagrow/" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">LinkedIn Profile</a><br>• <strong>GitHub:</strong> <a href="https://github.com/tjlagrow" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">GitHub Profile</a><br>• <strong>YouTube:</strong> <a href="https://www.youtube.com/@UnderstandingMachineLearning" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">UML Channel</a><br><br>Or send a message using the form on the <a href="/contact/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Contact Page</a>!`;
             }
 
-            // 2. Fallback to similarity search index
+            // 2. Similarity search RAG context fallback
             const matches = findSimilarityMatches(query);
             if (matches.length > 0) {
                 const bestMatch = matches[0].doc;
-                
-                // Extract search terms for excerpt generator
-                const queryTokens = query.toLowerCase()
-                    .replace(/[^\w\s-]/g, '')
-                    .split(/\s+/)
-                    .filter(t => t.length > 2);
+                const queryTokens = query.toLowerCase().replace(/[^\w\s-]/g, '').split(/\s+/).filter(t => t.length > 2);
                 const stopWords = ['the', 'and', 'for', 'this', 'that', 'with', 'from', 'about', 'your', 'will', 'have', 'been', 'are', 'was', 'were', 'what', 'tell', 'how', 'who', 'does', 'shes', 'they'];
                 const searchTerms = queryTokens.filter(t => !stopWords.includes(t));
-                
-                const excerpt = getExcerpt(bestMatch.content, searchTerms);
                 const docTypeLabel = bestMatch.type.charAt(0).toUpperCase() + bestMatch.type.slice(1);
-                
-                return `<strong>I searched the website and found a matching section in the ${docTypeLabel} "<a href="${bestMatch.url}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">${bestMatch.title}</a>":</strong><br><br>
-                <em style="color:#94a3b8; font-size:0.95rem; display:block; padding-left:10px; border-left:2px solid #2dd4bf; margin-bottom:10px;">"${excerpt}"</em>
-                Would you like to visit this page? <a href="${bestMatch.url}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Click here to read more</a>.`;
+
+                if (modelLoaded && generator) {
+                    const contextExcerpt = getExcerpt(bestMatch.content, searchTerms, 400);
+                    const prompt = `<|im_start|>system
+You are Waddles, TJ's helpful virtual assistant. Answer the user's question about TJ using ONLY this context:
+---
+${contextExcerpt}
+---
+Keep your answer short, professional, and conversational. Do not mention system parameters or "based on the context".
+If the context doesn't contain the answer, say "I couldn't find that detail on the website."
+<|im_end|>
+<|im_start|>user
+${query}<|im_end|>
+<|im_start|>assistant
+`;
+                    const output = await generator(prompt, {
+                        max_new_tokens: 100,
+                        temperature: 0.1,
+                        do_sample: false,
+                        return_full_text: false
+                    });
+                    
+                    let responseText = output[0].generated_text.trim();
+                    responseText = responseText.replace(/<\|im_end\|>/g, '').replace(/<\|im_start\|>/g, '').trim();
+                    return `${responseText}<br><br><small style="opacity:0.75;">Source: ${docTypeLabel} - <a href="${bestMatch.url}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">${bestMatch.title}</a></small>`;
+                } else {
+                    // Static fallback while loading / if failed
+                    const excerpt = getExcerpt(bestMatch.content, searchTerms, 160);
+                    return `<strong>I searched the website and found a matching section in the ${docTypeLabel} "<a href="${bestMatch.url}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">${bestMatch.title}</a>":</strong><br><br>
+                    <em style="color:#94a3b8; font-size:0.95rem; display:block; padding-left:10px; border-left:2px solid #2dd4bf; margin-bottom:10px;">"${excerpt}"</em>
+                    Click <a href="${bestMatch.url}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">here to read more</a>.`;
+                }
             }
 
             // 3. True Fallback with action chips
