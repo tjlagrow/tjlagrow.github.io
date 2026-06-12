@@ -1,0 +1,20 @@
+---
+layout: null
+permalink: /assets/json/search.json
+---
+[
+  {% assign docs = site.posts | concat: site.pages | concat: site.newsletters %}
+  {% assign first = true %}
+  {% for doc in docs %}
+    {% if doc.title and doc.content and doc.url != "/assets/json/search.json" and doc.url != "/404.html" and doc.url != "/feed.xml" and doc.url != "/search.json" %}
+      {% unless first %},{% endunless %}
+      {
+        "title": {{ doc.title | jsonify }},
+        "url": {{ doc.url | relative_url | jsonify }},
+        "content": {{ doc.content | strip_html | strip_newlines | jsonify }},
+        "type": {% if doc.layout == 'post' %}"post"{% elsif doc.layout == 'newsletter' %}"newsletter"{% else %}"page"{% endif %}
+      }
+      {% assign first = false %}
+    {% endif %}
+  {% endfor %}
+]

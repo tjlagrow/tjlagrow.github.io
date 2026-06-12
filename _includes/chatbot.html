@@ -48,6 +48,16 @@
 
         if (!toggle || !windowEl || !close || !body || !form || !input) return;
 
+        let searchIndex = [];
+
+        // Asynchronously load search index
+        fetch('{{ "/assets/json/search.json" | relative_url }}')
+            .then(response => response.json())
+            .then(data => {
+                searchIndex = data;
+            })
+            .catch(err => console.error("Error loading Waddles search index:", err));
+
         // Toggle visibility
         toggle.addEventListener('click', () => {
             const isHidden = windowEl.style.display === 'none';
@@ -82,7 +92,7 @@
             toggle.setAttribute('aria-expanded', 'false');
         });
 
-        // Event delegation for action chips (works dynamically)
+        // Event delegation for action chips
         body.addEventListener('click', (e) => {
             const chip = e.target.closest('.chatbot-chip');
             if (chip) {
@@ -142,13 +152,116 @@
             return indicator;
         }
 
+        // Auto-scroll logic helper
         function scrollToBottom() {
             body.scrollTop = body.scrollHeight;
+        }
+
+        function findSimilarityMatches(query) {
+            if (!searchIndex || searchIndex.length === 0) return [];
+            
+            // Normalize and tokenize query
+            const queryTokens = query.toLowerCase()
+                .replace(/[^\w\s-]/g, '')
+                .split(/\s+/)
+                .filter(t => t.length > 2);
+                
+            if (queryTokens.length === 0) return [];
+            
+            const stopWords = ['the', 'and', 'for', 'this', 'that', 'with', 'from', 'about', 'your', 'will', 'have', 'been', 'are', 'was', 'were', 'what', 'tell', 'how', 'who', 'does', 'shes', 'they'];
+            const filteredQueryTokens = queryTokens.filter(t => !stopWords.includes(t));
+            
+            if (filteredQueryTokens.length === 0) return [];
+            
+            const results = searchIndex.map(doc => {
+                const titleText = doc.title.toLowerCase();
+                const contentText = doc.content.toLowerCase();
+                
+                let score = 0;
+                let matchCount = 0;
+                
+                filteredQueryTokens.forEach(token => {
+                    // Check title match
+                    const titleIdx = titleText.indexOf(token);
+                    if (titleIdx !== -1) {
+                        score += 20; // High boost for title matches
+                        matchCount++;
+                    }
+                    
+                    // Check content occurrences
+                    const contentRegex = new RegExp('\\b' + token + '\\b', 'g');
+                    const matches = contentText.match(contentRegex);
+                    if (matches) {
+                        score += matches.length * 2.5; // Count term frequencies
+                        matchCount++;
+                    } else if (contentText.includes(token)) {
+                        // substring match fallback
+                        score += 1;
+                        matchCount++;
+                    }
+                });
+                
+                // Calculate query coverage (what % of query terms matched)
+                const coverage = matchCount / filteredQueryTokens.length;
+                score = score * coverage; // Penalize partial matches
+                
+                return { doc, score };
+            });
+            
+            // Filter out low scores and sort by highest similarity
+            return results
+                .filter(r => r.score > 2.0)
+                .sort((a, b) => b.score - a.score);
+        }
+
+        function getExcerpt(content, queryTerms, maxLength = 160) {
+            const text = content;
+            let matchIdx = -1;
+            
+            // Find the first query term in the text
+            for (let term of queryTerms) {
+                const idx = text.toLowerCase().indexOf(term);
+                if (idx !== -1) {
+                    matchIdx = idx;
+                    break;
+                }
+            }
+            
+            if (matchIdx === -1) {
+                return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+            }
+            
+            let start = Math.max(0, matchIdx - 40);
+            let end = Math.min(text.length, matchIdx + maxLength - 40);
+            
+            // Adjust to align with word boundaries
+            if (start > 0) {
+                const firstSpace = text.indexOf(' ', start);
+                if (firstSpace !== -1 && firstSpace < matchIdx) {
+                    start = firstSpace + 1;
+                }
+            }
+            if (end < text.length) {
+                const lastSpace = text.lastIndexOf(' ', end);
+                if (lastSpace !== -1 && lastSpace > matchIdx) {
+                    end = lastSpace;
+                }
+            }
+            
+            let snippet = text.substring(start, end);
+            if (start > 0) snippet = "..." + snippet;
+            if (end < text.length) snippet = snippet + "...";
+            
+            return snippet;
         }
 
         function getBotResponse(query) {
             const text = query.toLowerCase().trim();
 
+            // 1. Curated greetings and specific shortcuts
+            if (text.includes("hello") || text.includes("hi") || text.includes("hey") || text.includes("greetings") || text.includes("who are you") || text.includes("who is tj")) {
+                return `<strong>Hello!</strong> I'm Waddles! I can help you find information on TJ's portfolio:<br>• <strong>CS 7641 / OMSCS Teaching</strong><br>• <strong>Neuroscience Research & fMRI</strong><br>• <strong>FlexStack Certificates</strong><br>• **Contact & Social links**<br><br>What would you like to explore?`;
+            }
             if (text.includes("7641") || text.includes("7642") || text.includes("teach") || text.includes("course") || text.includes("class") || text.includes("omscs") || text.includes("student") || text.includes("learning")) {
                 return `<strong>Teaching at Georgia Tech:</strong><br><br>TJ is the Lead Instructor for <strong>CS 7641: Machine Learning</strong> in Georgia Tech's OMSCS program, supporting 1,400+ graduate students and directing 30+ TAs. He also worked with <strong>CS 7642: Reinforcement Learning</strong>. He was awarded the <strong>2023 Outstanding Online TA of the Year</strong> at GT.<br><br>Read more details on the <a href="/teaching/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Teaching Page</a>.`;
             }
@@ -161,11 +274,29 @@
             if (text.includes("email") || text.includes("contact") || text.includes("speak") || text.includes("hire") || text.includes("touch") || text.includes("linkedin") || text.includes("youtube")) {
                 return `<strong>Contact & Socials:</strong><br><br>Connect with TJ via:<br>• <strong>Email:</strong> <code>tlagrow3 at gatech dot edu</code><br>• <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/tjlagrow/" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">LinkedIn Profile</a><br>• <strong>GitHub:</strong> <a href="https://github.com/tjlagrow" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">GitHub Profile</a><br>• <strong>YouTube:</strong> <a href="https://www.youtube.com/@UnderstandingMachineLearning" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">UML Channel</a><br><br>Or send a message using the form on the <a href="/contact/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Contact Page</a>!`;
             }
-            if (text.includes("hello") || text.includes("hi") || text.includes("hey") || text.includes("greetings") || text.includes("who are you") || text.includes("who is tj")) {
-                return `<strong>Hello!</strong> I'm Waddles! I can help you find information on TJ's portfolio:<br>• <strong>CS 7641 / OMSCS Teaching</strong><br>• <strong>Neuroscience Research & fMRI</strong><br>• <strong>FlexStack Certificates</strong><br>• **Contact & Social links**<br><br>What would you like to explore?`;
+
+            // 2. Fallback to similarity search index
+            const matches = findSimilarityMatches(query);
+            if (matches.length > 0) {
+                const bestMatch = matches[0].doc;
+                
+                // Extract search terms for excerpt generator
+                const queryTokens = query.toLowerCase()
+                    .replace(/[^\w\s-]/g, '')
+                    .split(/\s+/)
+                    .filter(t => t.length > 2);
+                const stopWords = ['the', 'and', 'for', 'this', 'that', 'with', 'from', 'about', 'your', 'will', 'have', 'been', 'are', 'was', 'were', 'what', 'tell', 'how', 'who', 'does', 'shes', 'they'];
+                const searchTerms = queryTokens.filter(t => !stopWords.includes(t));
+                
+                const excerpt = getExcerpt(bestMatch.content, searchTerms);
+                const docTypeLabel = bestMatch.type.charAt(0).toUpperCase() + bestMatch.type.slice(1);
+                
+                return `<strong>I searched the website and found a matching section in the ${docTypeLabel} "<a href="${bestMatch.url}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">${bestMatch.title}</a>":</strong><br><br>
+                <em style="color:#94a3b8; font-size:0.95rem; display:block; padding-left:10px; border-left:2px solid #2dd4bf; margin-bottom:10px;">"${excerpt}"</em>
+                Would you like to visit this page? <a href="${bestMatch.url}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Click here to read more</a>.`;
             }
 
-            // Fallback response with chips
+            // 3. True Fallback with action chips
             return `I'm not sure about that, but I can help you with:<br>
                 <div class="chatbot-chips">
                     <button class="chatbot-chip" data-question="What courses does TJ teach?">🎓 OMSCS & Teaching</button>

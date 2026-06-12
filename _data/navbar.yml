@@ -21,3 +21,7 @@
 - title: Contact
   url: /contact/
   external: false
+
+- title: Ask Waddles
+  url: /waddles/
+  external: false

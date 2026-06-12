@@ -1,0 +1,232 @@
+---
+layout: page
+title: Ask Waddles
+permalink: /waddles/
+full_width: true
+---
+
+<!-- Load Mermaid.js for architecture diagrams -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor: '#1e293b',
+      primaryTextColor: '#f8fafc',
+      primaryBorderColor: '#0d9488',
+      lineColor: '#2dd4bf',
+      secondaryColor: '#0f172a',
+      tertiaryColor: '#1e1b4b'
+    }
+  });
+</script>
+
+<!-- HEADER BANNER -->
+<section class="glass-banner py-5 mb-5">
+  <div class="container text-center">
+    <div class="title-box mb-3">
+      <h1 class="display-4 fw-bold mb-0" style="color: #ccfbf1;">Ask Waddles</h1>
+    </div>
+    <p class="lead text-info opacity-75 mb-3">
+      Waddles is a client-side conversational assistant designed to search and synthesize website content in real time.
+    </p>
+    <div class="d-flex justify-content-center gap-3 text-light small opacity-75">
+      <span><i class="fa fa-robot me-1"></i> Client-Side AI Agent</span>
+      <span><i class="fa fa-search me-1"></i> Custom TF-Similarity Matcher</span>
+      <span><i class="fa fa-bolt me-1"></i> Zero-Latency & Free Compute</span>
+    </div>
+  </div>
+</section>
+
+<div class="container mb-5">
+  <!-- CALL TO ACTION -->
+  <div class="row mb-5 justify-content-center">
+    <div class="col-md-8 text-center">
+      <div class="card glass border-0 shadow-lg p-4 p-md-5" style="background: rgba(17, 94, 89, 0.4); border: 1px solid rgba(45, 212, 191, 0.2); border-radius: 1.5rem;">
+        <h2 class="h3 fw-bold text-white mb-3">Chat with Waddles</h2>
+        <p class="text-light opacity-95 mb-4">
+          Waddles is ready to answer questions about TJ's OMSCS courses, MIND Lab research, FlexStack certificates, and professional contact links. Click the button below to launch the chat drawer.
+        </p>
+        <button class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-lg" id="navbar-chatbot-trigger" style="background: linear-gradient(135deg, #0d9488, #0ea5e9); border: none; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s;">
+          <i class="fa fa-comments me-2"></i> Launch Waddles Chat
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVOLUTION ROADMAP -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-road me-2 text-info"></i> Waddles AI Evolution Roadmap</h2>
+        <div class="row g-3">
+          <!-- Stage 1 -->
+          <div class="col-md-4">
+            <div class="p-3 rounded h-100" style="background: rgba(13, 148, 136, 0.15); border: 1px solid rgba(45, 212, 191, 0.4);">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-teal text-white fw-bold" style="background-color: #0d9488 !important;">Stage 1 (Current)</span>
+                <i class="fa fa-check-circle text-success fs-5"></i>
+              </div>
+              <h4 class="h5 fw-bold text-white mb-2">Static VSM Search</h4>
+              <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                Zero-dependency term-similarity index. Parses the site into a minified JSON vector space, runs real-time TF weighting, and extracts boundary-aligned preview text. 100% client-side, zero latency, free hosting compute.
+              </p>
+            </div>
+          </div>
+          <!-- Stage 2 -->
+          <div class="col-md-4">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-secondary text-light fw-bold">Stage 2 (Planned)</span>
+                <i class="fa fa-hourglass-half text-info x-small"></i>
+              </div>
+              <h4 class="h5 fw-bold text-white mb-2">Local LLM & RAG</h4>
+              <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                Deploying quantized WebAssembly transformer models (ONNX/Transformers.js) in the browser. Uses local dense vector embeddings to calculate true cosine semantic similarities and synthesizes page answers.
+              </p>
+            </div>
+          </div>
+          <!-- Stage 3 -->
+          <div class="col-md-4">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-secondary text-light fw-bold">Stage 3 (Future)</span>
+                <i class="fa fa-cog text-muted x-small"></i>
+              </div>
+              <h4 class="h5 fw-bold text-white mb-2">Agentic API Tooling</h4>
+              <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                Activating tool-use and function calling. Waddles will autonomously access external APIs to fetch live publication citation metrics, schedule office hour slots, and trigger verified contact notifications.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE DIAGRAM -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-sitemap me-2 text-info"></i> Waddles Pipeline Architecture</h2>
+        <div class="d-flex justify-content-center p-3" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
+          <div class="mermaid" style="width: 100%; min-width: 600px;">
+            graph TD
+                subgraph Build Phase [Jekyll Compilation]
+                    A[Pages / Posts / Newsletters] -->|Liquid Loops| B(search.json)
+                    B -->|strip_html & strip_newlines| C[Minified static index]
+                end
+                subgraph Client Load Phase [Browser Initialization]
+                    D[Visitor loads page] -->|Asynchronous fetch| E[Cached Local Search Index]
+                end
+                subgraph Execution Phase [Real-Time Matching]
+                    F[User Query Input] -->|normalize / strip punctuation| G[Tokenization]
+                    G -->|filter stop words| H[Filtered Search Tokens]
+                    H -->|Cosine-like scoring| I[TF-Similarity Match Engine]
+                    E -->|Read cached documents| I
+                    I -->|Boost title matches| J[Weighted Document Scores]
+                    J -->|Apply query coverage penalty| K[Confidence Filter > 2.0]
+                    K -->|Sort descending| L[Best Match Page]
+                    L -->|Extract excerpt around token| M[Conversational Response HTML]
+                end
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORE CONCEPTS & MATHEMATICS -->
+  <div class="row g-4 mb-5">
+    <!-- Search Model details -->
+    <div class="col-md-6">
+      <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <div class="card-body p-4">
+          <h3 class="h4 fw-bold text-white mb-3"><i class="fa fa-database text-info me-2"></i> The Static Document Space Model</h3>
+          <p class="text-light opacity-80 small mb-3">
+            Traditional AI chatbots rely on large embedding models or API-based vector databases (like Pinecone or Chroma) which require server setups and cause latency.
+          </p>
+          <p class="text-light opacity-80 small mb-3">
+            Waddles bypasses this constraint by representing your website as a static vector index. During compilation, Jekyll creates a single array at <code>/assets/json/search.json</code>. The index strips out HTML markup, layouts, and style parameters, and structures the content as follows:
+          </p>
+          <pre class="bg-dark text-info p-3 rounded small border border-secondary mb-0" style="overflow-x: auto; max-width: 100%;"><code>{
+  "title": "Page Name",
+  "url": "/page-url/",
+  "content": "Raw stripped text content...",
+  "type": "page|post|newsletter"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scoring Formula -->
+    <div class="col-md-6">
+      <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <div class="card-body p-4">
+          <h3 class="h4 fw-bold text-white mb-3"><i class="fa fa-calculator text-info me-2"></i> The Similarity Scoring Formula</h3>
+          <p class="text-light opacity-80 small mb-3">
+            To rank document relevance without an external server, Waddles implements a custom term-frequency (TF) search algorithm in pure JavaScript. 
+          </p>
+          <p class="text-light opacity-80 small mb-3">
+            For a normalized search query $Q$ tokenized into filtered keywords $\{t_1, t_2, \dots, t_n\}$ and a site document $D$:
+          </p>
+          
+          <div class="bg-dark p-3 rounded text-center border border-secondary mb-3" style="overflow-x: auto; white-space: nowrap; max-width: 100%;">
+            <span class="text-white font-monospace" style="font-size: clamp(0.75rem, 2vw, 1.15rem); display: inline-block;">
+              Score(D, Q) = [ &sum; (TF<sub>title</sub>(t<sub>i</sub>, D) &times; W<sub>title</sub>) + (TF<sub>content</sub>(t<sub>i</sub>, D) &times; W<sub>content</sub>) ] &times; Coverage(Q, D)
+            </span>
+          </div>
+
+          <ul class="text-light opacity-85 small ps-3">
+            <li class="mb-2"><strong>$TF_{title}(t, D)$</strong>: Binary check (1 if query token $t$ is inside the page title, 0 otherwise).</li>
+            <li class="mb-2"><strong>$W_{title}$</strong>: Title boost multiplier (fixed at <code>20</code>) to prioritize pages named after the topic.</li>
+            <li class="mb-2"><strong>$TF_{content}(t, D)$</strong>: The word-boundary frequency count of keyword $t$ in the content text (weighted at <code>2.5</code>).</li>
+            <li class="mb-0"><strong>$Coverage(Q, D)$</strong>: Matched keywords divided by total query keywords. This penalizes documents matching only a single search term in longer questions (e.g. "Matthieu Bloch ECE course").</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAILED STAGES -->
+  <div class="row g-4">
+    <!-- Stage 1: Punctuation & Tokenization -->
+    <div class="col-md-6">
+      <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <div class="card-body p-4">
+          <h3 class="h5 fw-bold text-white mb-3"><i class="fa fa-filter text-info me-2"></i> 1. Tokenization & Punctuation Filtering</h3>
+          <p class="text-light opacity-80 small mb-3">
+            When a user types a query, Waddles normalizes it using string regex operations to remove punctuation and extract alphabetic words:
+          </p>
+          <pre class="bg-dark text-light p-3 rounded small border border-secondary"><code>const tokens = query.toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .split(/\s+/)
+    .filter(t => t.length > 2);</code></pre>
+          <p class="text-light opacity-80 small mb-0">
+            A built-in stopword dictionary filters out high-frequency connectives (e.g. <code>the</code>, <code>with</code>, <code>about</code>, <code>what</code>) that carry zero search intent. This prevents false positives and concentrates weighting on terms like <code>cajal</code>, <code>7641</code>, or <code>publications</code>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 2: Context Excerpt Windowing -->
+    <div class="col-md-6">
+      <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <div class="card-body p-4">
+          <h3 class="h5 fw-bold text-white mb-3"><i class="fa fa-align-left text-info me-2"></i> 2. Boundary-Aligned Excerpt Windowing</h3>
+          <p class="text-light opacity-80 small mb-3">
+            When a matching document is selected, Waddles does not output the page's entire content. Instead, it runs a boundary-alignment previewer that locates where the matched term appears in the document:
+          </p>
+          <ul class="text-light opacity-85 small ps-3 mb-3">
+            <li class="mb-2">Locates index of the first matching query keyword.</li>
+            <li class="mb-2">Carves out a text window (40 characters before, 120 characters after the term).</li>
+            <li class="mb-0">Finds nearest space boundaries (<code>" "</code>) at the start and end of the window to ensure words aren't truncated mid-letter.</li>
+          </ul>
+          <p class="text-light opacity-80 small mb-0">
+            This excerpt is wrapped in quotes and printed dynamically, creating a contextual citation explaining <em>why</em> this page was selected.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
