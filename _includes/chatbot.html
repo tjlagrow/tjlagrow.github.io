@@ -191,6 +191,9 @@
                 .then(async (m) => {
                     const { pipeline, env } = m;
                     env.allowLocalModels = false;
+                    
+                    // Disable multi-threading to run without SharedArrayBuffer (blocked by static hosts without COOP/COEP headers)
+                    env.backends.onnx.wasm.numThreads = 1;
 
                     try {
                         generator = await pipeline('text-generation', 'onnx-community/SmolLM-135M-Instruct', {
