@@ -196,7 +196,7 @@ full_width: true
           </div>
 
           <p class="text-light opacity-80 small mb-0">
-            Because the Python embeddings generator and the client-side transformers library extract vectors that are pre-normalized to unit length ($\|q\| = 1$, $\|d\| = 1$), the denominator of the cosine similarity equation ($\|q\|\|d\|$) is equal to <code>1</code>. Thus, the similarity matching is calculated in pure JavaScript as a simple dot product, which evaluates in less than a millisecond.
+            The Python embeddings generator and the client-side transformers library extract vectors that are pre-normalized to unit length ($\|q\| = 1$, $\|d\| = 1$). Consequently, the denominator of the cosine similarity equation ($\|q\|\|d\|$) is equal to <code>1</code>. The similarity matching is calculated in pure JavaScript as a simple dot product, which evaluates in less than a millisecond.
           </p>
         </div>
       </div>

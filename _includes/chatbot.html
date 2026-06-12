@@ -186,10 +186,8 @@
             loadingCard.id = 'waddles-loading-card';
             loadingCard.innerHTML = `
                 <strong>Waddles is loading...</strong><br>
-                Downloading lightweight models to run locally in your browser:<br>
-                • Embedding Model (MiniLM, ~23MB)<br>
-                • Generation Model (SmolLM 4-bit Quantized, ~38MB)<br>
-                This only downloads once and will be cached in your browser.<br>
+                Lightweight models are downloading to run locally in your browser.
+                The package includes the Embedding Model (MiniLM, ~23MB) and the Generation Model (SmolLM 4-bit Quantized, ~38MB).<br>
                 <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; overflow: hidden;">
                     <div id="waddles-progress-bar" class="progress-bar" role="progressbar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #0d9488, #0ea5e9); transition: width 0.1s;"></div>
                 </div>
@@ -229,7 +227,7 @@
                             const progressPercent = document.getElementById('waddles-loading-percentage');
                             if (progressBar) progressBar.style.width = `${percent}%`;
                             if (progressPercent) {
-                                progressPercent.innerText = `Downloading local brain (${percent}%) - Embedder: ${Math.round(embedderProgress)}%, Generator: ${Math.round(generatorProgress)}%`;
+                                progressPercent.innerText = `Downloading local brain (${percent}%) [Embedder ${Math.round(embedderProgress)}%, Generator ${Math.round(generatorProgress)}%]`;
                             }
                         };
 
@@ -407,19 +405,19 @@
 
             // 1. Curated greetings and specific shortcuts
             if (text.includes("hello") || text.includes("hi") || text.includes("hey") || text.includes("greetings") || text.includes("who are you") || text.includes("who is tj")) {
-                return `<strong>Hello!</strong> I'm Waddles! I can help you find information on TJ's portfolio:<br>• <strong>CS 7641 / OMSCS Teaching</strong><br>• <strong>Neuroscience Research & fMRI</strong><br>• <strong>FlexStack Certificates</strong><br>• **Contact & Social links**<br><br>What would you like to explore?`;
+                return `<strong>Hello!</strong> I am Waddles. I can help you find information on TJ's OMSCS teaching, brain research, FlexStack certificates, or contact details. What would you like to explore?`;
             }
             if (text.includes("7641") || text.includes("7642") || text.includes("teach") || text.includes("course") || text.includes("class") || text.includes("omscs") || text.includes("student") || text.includes("learning")) {
-                return `<strong>Teaching at Georgia Tech:</strong><br><br>TJ is the Lead Instructor for <strong>CS 7641: Machine Learning</strong> in Georgia Tech's OMSCS program, supporting 1,400+ graduate students and directing 30+ TAs. He also worked with <strong>CS 7642: Reinforcement Learning</strong>. He was awarded the <strong>2023 Outstanding Online TA of the Year</strong> at GT.<br><br>Read more details on the <a href="/teaching/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Teaching Page</a>.`;
+                return `<strong>Teaching at Georgia Tech</strong><br><br>TJ is the Lead Instructor for CS 7641 (Machine Learning) in Georgia Tech's OMSCS program, supporting 1400+ graduate students and directing 30+ TAs. He also worked with CS 7642 (Reinforcement Learning). In 2023, he was awarded the Outstanding Online TA of the Year at GT.<br><br>Find more details on the <a href="/teaching/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Teaching Page</a>.`;
             }
             if (text.includes("research") || text.includes("fmri") || text.includes("qpp") || text.includes("brain") || text.includes("cajal") || text.includes("neuro") || text.includes("paper") || text.includes("publication") || text.includes("science")) {
-                return `<strong>Computational Neuroscience Research:</strong><br><br>TJ's research in the Keilholz MIND Lab focuses on <strong>spatiotemporal brain dynamics</strong> using resting-state fMRI. He studies <strong>Quasi-Periodic Patterns (QPPs)</strong> to find biomarkers for diseases like Alzheimer's and Parkinson's.<br><br>Check out his papers on the <a href="/research/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Research Page</a> or view his <a href="https://scholar.google.com/citations?user=KO7oYeAAAAAJ" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Google Scholar</a>.`;
+                return `<strong>Neuroscience Research</strong><br><br>TJ's research in the Keilholz MIND Lab focuses on brain dynamics using resting-state fMRI. He studies Quasi-Periodic Patterns (QPPs) to identify biomarkers for diseases such as Alzheimer's and Parkinson's.<br><br>Check out his papers on the <a href="/research/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Research Page</a> or view his <a href="https://scholar.google.com/citations?user=KO7oYeAAAAAJ" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Google Scholar Profile</a>.`;
             }
             if (text.includes("flexstack") || text.includes("certificate") || text.includes("llm") || text.includes("agent") || text.includes("pandas") || text.includes("genai") || text.includes("generative")) {
-                return `<strong>FlexStack Certificates:</strong><br><br>TJ is the Lead AI/LLM Expert for Georgia Tech's professional education **FlexStack** program, where he developed:<br>• <strong>Data Modeling & Visualization Certificate</strong> (Decision-Ready Data, pandas, sklearn).<br>• <strong>Python AI Principles Certificate</strong> (applied LLM API architectures, generative engineering, and agentic pipelines).`;
+                return `<strong>FlexStack Certificates</strong><br><br>TJ is the Lead AI/LLM Expert for Georgia Tech's professional education FlexStack program. He developed the Data Modeling and Visualization Certificate and the Python AI Principles Certificate.`;
             }
             if (text.includes("email") || text.includes("contact") || text.includes("speak") || text.includes("hire") || text.includes("touch") || text.includes("linkedin") || text.includes("youtube")) {
-                return `<strong>Contact & Socials:</strong><br><br>Connect with TJ via:<br>• <strong>Email:</strong> <code>tlagrow3 at gatech dot edu</code><br>• <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/tjlagrow/" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">LinkedIn Profile</a><br>• <strong>GitHub:</strong> <a href="https://github.com/tjlagrow" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">GitHub Profile</a><br>• <strong>YouTube:</strong> <a href="https://www.youtube.com/@UnderstandingMachineLearning" target="_blank" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">UML Channel</a><br><br>Or send a message using the form on the <a href="/contact/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Contact Page</a>!`;
+                return `<strong>Contact and Social Links</strong><br><br>You can connect with TJ via email at tlagrow3 at gatech dot edu. You can also visit his LinkedIn, GitHub, and YouTube profiles, or send a message using the form on the <a href="/contact/" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">Contact Page</a>.`;
             }
 
         // Mode change listener
@@ -519,15 +517,12 @@ ${query}<|im_end|>
                             <a href="${bestMatch.url}" style="background: rgba(45, 212, 191, 0.1); color: #2dd4bf; border: 1px solid rgba(45, 212, 191, 0.35); font-weight: 600; padding: 3px 10px; font-size: 0.775rem; border-radius: 4px; display: inline-block; transition: all 0.2s; text-decoration: none;">
                                 Read Full Document →
                             </a>
-                        </div>
-                    `;
-
-                    // Add related results if there are multiple matches
+                              // Add related results if there are multiple matches
                     if (matches.length > 1) {
                         responseHtml += `
                             <div style="margin-top: 14px; padding-top: 8px; border-top: 1px dashed rgba(255, 255, 255, 0.12);">
                                 <span style="font-size: 0.775rem; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 6px;">
-                                    🔍 Other relevant pages:
+                                    🔍 Other relevant pages
                                 </span>
                                 <ul style="margin: 0; padding-left: 16px; font-size: 0.825rem; list-style-type: disc; display: flex; flex-direction: column; gap: 4px;">
                         `;
@@ -555,9 +550,9 @@ ${query}<|im_end|>
                     return responseHtml;
                 }
             }
-
+ 
             // 3. True Fallback with action chips
-            return `I'm not sure about that, but I can help you with:<br>
+            return `I am not sure about that, but you can explore these topics<br>
                 <div class="chatbot-chips">
                     <button class="chatbot-chip" data-question="What courses does TJ teach?">🎓 OMSCS & Teaching</button>
                     <button class="chatbot-chip" data-question="Tell me about TJ's research.">🧠 Brain Research</button>
