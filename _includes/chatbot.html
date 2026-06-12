@@ -211,6 +211,9 @@
                     // Disable multi-threading to run without SharedArrayBuffer (blocked by static hosts without COOP/COEP headers)
                     env.backends.onnx.wasm.numThreads = 1;
 
+                    // Force ONNX Runtime to fetch WASM helper files from the jsdelivr CDN rather than resolving relatively to localhost
+                    env.backends.onnx.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers/dist/';
+
                     try {
                         const totalWeights = 108.0; // 23MB + 85MB
                         let embedderProgress = 0;
