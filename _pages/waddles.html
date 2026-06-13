@@ -228,82 +228,12 @@ full_width: true
       avatar.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.06)`;
     });
 
-    // Synthesize and play realistic truffle pig snort sound on click
+    // Play realistic downloaded truffle pig snort sound on click
     avatar.style.cursor = 'pointer';
     avatar.addEventListener('click', () => {
-      playTrufflePigSound();
+      const audio = new Audio('{{ "/assets/audio/pig_snort.mp3" | relative_url }}');
+      audio.play().catch(err => console.warn("Audio playback failed:", err));
     });
-
-    function playTrufflePigSound() {
-      try {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContextClass) return;
-        const ctx = new AudioContextClass();
-        
-        const now = ctx.currentTime;
-        const duration = 0.35; // short grunt duration
-        
-        // 1. Oscillator for the low-frequency grunt tone
-        const osc = ctx.createOscillator();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(110, now);
-        osc.frequency.exponentialRampToValueAtTime(75, now + duration);
-        
-        // 2. Bandpass filter to isolate the "grunt/snort" vowel formants
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'bandpass';
-        filter.frequency.setValueAtTime(160, now);
-        filter.Q.setValueAtTime(3.0, now);
-        
-        // 3. Noise node to add the snort raspiness
-        const bufferSize = ctx.sampleRate * duration;
-        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          data[i] = Math.random() * 2 - 1;
-        }
-        const noise = ctx.createBufferSource();
-        noise.buffer = buffer;
-        
-        // Noise bandpass filter
-        const noiseFilter = ctx.createBiquadFilter();
-        noiseFilter.type = 'bandpass';
-        noiseFilter.frequency.setValueAtTime(200, now);
-        noiseFilter.Q.setValueAtTime(2.0, now);
-        
-        // Gain nodes to mix and shape the envelope
-        const oscGain = ctx.createGain();
-        oscGain.gain.setValueAtTime(0.2, now);
-        oscGain.gain.exponentialRampToValueAtTime(0.01, now + duration);
-        
-        const noiseGain = ctx.createGain();
-        noiseGain.gain.setValueAtTime(0.12, now);
-        noiseGain.gain.exponentialRampToValueAtTime(0.01, now + duration);
-        
-        const mainGain = ctx.createGain();
-        mainGain.gain.setValueAtTime(0.8, now);
-        mainGain.gain.exponentialRampToValueAtTime(0.01, now + duration);
-        
-        // Connect nodes
-        osc.connect(filter);
-        filter.connect(oscGain);
-        
-        noise.connect(noiseFilter);
-        noiseFilter.connect(noiseGain);
-        
-        oscGain.connect(mainGain);
-        noiseGain.connect(mainGain);
-        mainGain.connect(ctx.destination);
-        
-        // Start sources
-        osc.start(now);
-        osc.stop(now + duration);
-        noise.start(now);
-        noise.stop(now + duration);
-      } catch (err) {
-        console.warn("Audio Context playback failed:", err);
-      }
-    }
   });
 </script>
     </div>
@@ -604,159 +534,132 @@ full_width: true
   <div class="row mb-5">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
-        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-brain me-2 text-info"></i> In-Browser Neural Architectures & Models [2, 3, 4, 5]</h2>
+        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-brain me-2 text-info"></i> In-Browser Neural Architectures &amp; Models [2, 3, 4, 5]</h2>
+        <div class="row g-4">
+          <!-- Card 1 -->
+          <div class="col-md-6">
+            <div class="neural-card neural-card-teal h-100 p-4">
+              <div class="d-flex align-items-center mb-3">
+                <div class="p-2 rounded bg-teal-transparent me-3" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;">
+                  <i class="fa fa-exchange-alt fs-4"></i>
+                </div>
+                <h3 class="h5 fw-bold text-white mb-0">Bi-Encoder Mapping vs Cross-Encoder Re-Ranking [3]</h3>
+              </div>
+              <p class="text-light opacity-80 small mb-3">
+                The embedding model (<code>all-MiniLM-L6-v2</code> [2]) acts as a Bi-Encoder. It processes queries and documents independently to project them into a shared 384-dimensional vector space, allowing fast cosine similarity searches. However, this independent mapping misses token-to-token cross-attention interactions.
+              </p>
+              <p class="text-light opacity-80 small mb-0">
+                To resolve this, the re-ranker model (<code>ms-marco-MiniLM-L-6-v2</code> [2]) acts as a Cross-Encoder. It takes the query and sentence candidates as a combined token sequence <code>[CLS] query [SEP] sentence [SEP]</code>. The self-attention layers compute cross-attention weights between every query token and sentence token. This produces highly accurate relevance classifications based on sequence logit probabilities.
+              </p>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="col-md-6">
+            <div class="neural-card neural-card-pink h-100 p-4">
+              <div class="d-flex align-items-center mb-3">
+                <div class="p-2 rounded bg-pink-transparent me-3" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;">
+                  <i class="fa fa-robot fs-4"></i>
+                </div>
+                <h3 class="h5 fw-bold text-white mb-0">Autoregressive LLM Generator Configurations [4, 5]</h3>
+              </div>
+              <p class="text-light opacity-80 small mb-3">
+                The generative models (<code>SmolLM</code> [4], <code>SmolLM2</code> [4], and <code>Qwen2.5</code> [5]) utilize decoder-only autoregressive architectures optimized for client-side processing.
+              </p>
+              <p class="text-light opacity-80 small mb-0">
+                These models implement Rotary Position Embeddings (RoPE) [6] to support dynamic context lengths, RMSNorm [7] for stable training activation, and SwiGLU [8] activation functions to enhance hidden layer representations.
+              </p>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="col-md-6">
+            <div class="neural-card neural-card-blue h-100 p-4">
+              <div class="d-flex align-items-center mb-3">
+                <div class="p-2 rounded bg-blue-transparent me-3" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;">
+                  <i class="fa fa-compress-arrows-alt fs-4"></i>
+                </div>
+                <h3 class="h5 fw-bold text-white mb-0">Weight Quantization &amp; Memory Optimization [10]</h3>
+              </div>
+              <p class="text-light opacity-80 small mb-3">
+                Weight quantization maps high-precision float32 values ($32$ bits) to lower-bit representations like 4-bit (q4) or 8-bit (q8) integers. For example, during execution, AWQ (Activation-aware Weight Quantization) or RTN (Round-To-Nearest) algorithms compress model weights, mapping parameters $\mathbf{W} \in \mathbb{R}^{d_{\text{in}} \times d_{\text{out}}}$ to quantized levels.
+              </p>
+              <p class="text-light opacity-80 small mb-0">
+                Quantization reduces the download footprint of a 500M parameter model from 950 MB to 260 MB, and lowers runtime RAM requirements. The browser can execute these models within a standard JavaScript heap budget, preventing out-of-memory crashes.
+              </p>
+            </div>
+          </div>
+          <!-- Card 4 -->
+          <div class="col-md-6">
+            <div class="neural-card neural-card-purple h-100 p-4">
+              <div class="d-flex align-items-center mb-3">
+                <div class="p-2 rounded bg-purple-transparent me-3" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;">
+                  <i class="fa fa-memory fs-4"></i>
+                </div>
+                <h3 class="h5 fw-bold text-white mb-0">Key-Value Caching &amp; GQA Latency Reduction [9]</h3>
+              </div>
+              <p class="text-light opacity-80 small mb-3">
+                During autoregressive sequence generation, the Key-Value (KV) cache stores attention key-value activations for past tokens, avoiding $O(N^2)$ recalculation. However, standard Multi-Head Attention requires large caches.
+              </p>
+              <p class="text-light opacity-80 small mb-0">
+                Grouped-Query Attention (GQA) groups query heads into sets that share single key-value heads, reducing cache size. By reducing memory bandwidth bottlenecks during sequence inference, GQA speeds up generation on consumer device CPUs, maintaining responsiveness and preventing UI thread freezes.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN CHOICES FOR MODEL OPTIMIZATION -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-sliders-h me-2 text-info"></i> Input &amp; Output Optimization Design Choices</h2>
+        <p class="text-light opacity-90 small mb-4">
+          Executing generative models fully within a client-side sandbox requires aggressive context and vocabulary tuning. Since browser runtimes restrict resources, I structured the input representations and output syntax constraints to prevent hallucinatory degradation or formatting failures in models under 1B parameters.
+        </p>
         <div class="row g-4">
           <div class="col-md-6">
-            <h3 class="h5 fw-bold text-white mb-2">Bi-Encoder Semantic Mapping vs Cross-Encoder Re-Ranking [3]</h3>
+            <h3 class="h5 fw-bold text-white mb-2"><i class="fa fa-long-arrow-alt-right text-teal me-2" style="color: #2dd4bf;"></i> Input Pipeline Optimizations</h3>
             <p class="text-light opacity-80 small mb-3">
-              The embedding model (<code>all-MiniLM-L6-v2</code> [2]) acts as a Bi-Encoder. It processes queries and documents independently to project them into a shared 384-dimensional vector space, allowing fast cosine similarity searches. However, this independent mapping misses token-to-token cross-attention interactions.
+              I mapped acronyms and common synonyms (such as ML, RL, fMRI, QPP) to their expanded portfolio definitions before vector search. This resolves lexical mismatches, ensuring the bi-encoder semantic matcher aligns the query correctly.
             </p>
             <p class="text-light opacity-80 small mb-0">
-              To resolve this, the re-ranker model (<code>ms-marco-MiniLM-L-6-v2</code> [2]) acts as a Cross-Encoder. It takes the query and sentence candidates as a combined token sequence <code>[CLS] query [SEP] sentence [SEP]</code>. The self-attention layers compute cross-attention weights between every query token and sentence token. This produces highly accurate relevance classifications based on sequence logit probabilities.
+              I also set up length-based filters. If query inputs exceed 20 words, the system preserves only the first and last sentences, preventing long-winded prompts from diluting the embedding weights during semantic matching.
             </p>
           </div>
           <div class="col-md-6">
-            <h3 class="h5 fw-bold text-white mb-2">Autoregressive LLM Generator Configurations [4, 5]</h3>
+            <h3 class="h5 fw-bold text-white mb-2"><i class="fa fa-long-arrow-alt-left text-pink me-2" style="color: #f43f5e;"></i> Output &amp; Compliance Safeguards</h3>
             <p class="text-light opacity-80 small mb-3">
-              The generative models (<code>SmolLM</code> [4], <code>SmolLM2</code> [4], and <code>Qwen2.5</code> [5]) utilize decoder-only autoregressive architectures optimized for client-side processing. These models implement Rotary Position Embeddings (RoPE) [6] to support dynamic context lengths, RMSNorm [7] for stable training activation, and SwiGLU [8] activation functions to enhance hidden layer representations.
+              I configured system instructions to demand a single valid JSON object. To keep small models aligned, I retrieve matching, pre-embedded style examples from a local database using cosine similarity, injecting them as dynamic few-shot anchors in the system prompt.
             </p>
             <p class="text-light opacity-80 small mb-0">
-              They also employ Grouped-Query Attention (GQA) [9]. By sharing key-value head projections across multiple query heads, GQA reduces KV cache memory consumption, lowering the RAM usage and latency of token generation on low-power client devices.
-            </p>
-          </div>
-          <div class="col-md-6">
-            <h3 class="h5 fw-bold text-white mb-2">Weight Quantization and Memory Optimization [10]</h3>
-            <p class="text-light opacity-80 small mb-3">
-              Weight quantization maps high-precision float32 values ($32$ bits) to lower-bit representations like 4-bit (q4) or 8-bit (q8) integers. For example, during execution, AWQ (Activation-aware Weight Quantization) or RTN (Round-To-Nearest) algorithms compress model weights. This maps the parameters $\mathbf{W} \in \mathbb{R}^{d_{\text{in}} \times d_{\text{out}}}$ to quantized levels, reducing memory consumption.
-            </p>
-            <p class="text-light opacity-80 small mb-0">
-              Quantization reduces the download footprint of a 500M parameter model from 950 MB to 260 MB, and lowers runtime RAM requirements. The browser can execute these models within a standard JavaScript heap budget, preventing out-of-memory crashes.
-            </p>
-          </div>
-          <div class="col-md-6">
-            <h3 class="h5 fw-bold text-white mb-2">Key-Value Caching and GQA Latency Reduction [9]</h3>
-            <p class="text-light opacity-80 small mb-3">
-              During autoregressive sequence generation, the Key-Value (KV) cache stores attention key-value activations for past tokens, avoiding $O(N^2)$ recalculation. However, standard Multi-Head Attention requires large caches. Grouped-Query Attention (GQA) groups query heads into sets that share single key-value heads, reducing cache size.
-            </p>
-            <p class="text-light opacity-80 small mb-0">
-              By reducing memory bandwidth bottlenecks during sequence inference, GQA speeds up generation on consumer device CPUs. It keeps the model responsive and prevents UI thread freezes.
+              I also added client-side trailing sentence cleanup filters. If the autoregressive generator reaches its output token limit and terminates abruptly, the interface automatically detects the sentence boundary and strips incomplete trailing phrases to keep the UI clean.
             </p>
           </div>
         </div>
       </div>
     </div>
-  <!-- DEVELOPER CODE SYMBOL MAPPING -->
-  <div class="row mb-5">
-    <div class="col-12">
-      <details class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;" open>
-        <summary class="h4 fw-bold text-white mb-0 d-flex align-items-center justify-content-between" style="cursor: pointer; list-style: none; outline: none;">
-          <span><i class="fa fa-code me-2 text-info"></i> Developer Code Symbol Mapping</span>
-          <span class="text-muted small"><i class="fa fa-chevron-down ms-2"></i></span>
-        </summary>
-        <div class="mt-4">
-          <p class="text-light opacity-80 small mb-4">
-            This table maps the core stages of the client-side WebAssembly RAG pipeline to the respective JavaScript functions and code blocks.
-          </p>
-          <div class="table-responsive">
-            <table class="table table-dark table-hover table-striped mb-0 align-middle" style="background: rgba(11, 15, 25, 0.5); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; overflow: hidden;">
-              <thead>
-                <tr style="border-bottom: 2px solid rgba(255, 255, 255, 0.1);">
-                  <th scope="col" style="color: #2dd4bf; width: 25%;">Pipeline Stage</th>
-                  <th scope="col" style="color: #2dd4bf; width: 45%;">JavaScript Symbol</th>
-                  <th scope="col" style="color: #2dd4bf; width: 30%;">File Location</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="fw-bold text-white">Initialization &amp; Orchestration</td>
-                  <td>
-                    <code>getBotResponse(query)</code>
-                    <div class="text-muted small mt-1">Coordinates the overall RAG retrieval flow including semantic checking, formatting, and history compilation.</div>
-                  </td>
-                  <td>
-                    <span class="text-info">_includes/chatbot.html</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="fw-bold text-white">Parallel Model Loader</td>
-                  <td>
-                    <code>ensureModelLoaded(modelKey, quantKey)</code>
-                    <div class="text-muted small mt-1">Downloads the ONNX Runtime execution graph for generator, embedder, and re-ranker models.</div>
-                  </td>
-                  <td>
-                    <span class="text-info">_includes/chatbot.html</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="fw-bold text-white">Intent Classification</td>
-                  <td>
-                    <code>classifyQueryIntent(query)</code>
-                    <div class="text-muted small mt-1">Identifies search boundaries (Teaching, Research, Bio) based on keywords.</div>
-                  </td>
-                  <td>
-                    <span class="text-info">_includes/chatbot.html</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="fw-bold text-white">Dense/Sparse Rank Fusion</td>
-                  <td>
-                    <code>findKeywordMatches(query)</code> &amp; RRF Loop
-                    <div class="text-muted small mt-1">Combines sparse index hits with bi-encoder cosine scores.</div>
-                  </td>
-                  <td>
-                    <span class="text-info">_includes/chatbot.html</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="fw-bold text-white">Sentence Context Compression</td>
-                  <td>
-                    Inline Embedding &amp; <code>activeReranker</code>
-                    <div class="text-muted small mt-1">Chunks candidates, embeds sentences, and ranks them with Cross-Encoder attention.</div>
-                  </td>
-                  <td>
-                    <span class="text-info">_includes/chatbot.html</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="fw-bold text-white">Structured Output Compliance</td>
-                  <td>
-                    <code>parseStructuredResponse(rawOutput, bestMatch)</code>
-                    <div class="text-muted small mt-1">Extracts JSON keys and provides custom fallback mechanisms if formatting is corrupted.</div>
-                  </td>
-                  <td>
-                    <span class="text-info">_includes/chatbot.html</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="fw-bold text-white">Response Sanitization</td>
-                  <td>
-                    <code>trimToCompleteSentence(text)</code>
-                    <div class="text-muted small mt-1">Truncates trailing fragments to ensure natural language termination.</div>
-                  </td>
-                  <td>
-                    <span class="text-info">_includes/chatbot.html</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="fw-bold text-white">Structured Logs Logging</td>
-                  <td>
-                    <code>logQuery(...)</code> / <code>logRating(...)</code>
-                    <div class="text-muted small mt-1">Submits parameters (confidence, latency, history) asynchronously to Google Forms webhooks.</div>
-                  </td>
-                  <td>
-                    <span class="text-info">_includes/chatbot.html</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </details>
-    </div>
   </div>
+
 
   <!-- VECTOR DATABASE VISUALIZER -->
   <style>
+    /* Neural Architecture Cards */
+    .neural-card {
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .neural-card:hover {
+      background: rgba(15, 23, 42, 0.65);
+      transform: translateY(-4px);
+    }
+    .neural-card-teal:hover { border-color: rgba(45, 212, 191, 0.3); box-shadow: 0 10px 30px rgba(45, 212, 191, 0.08); }
+    .neural-card-pink:hover { border-color: rgba(244, 63, 94, 0.3); box-shadow: 0 10px 30px rgba(244, 63, 94, 0.08); }
+    .neural-card-blue:hover { border-color: rgba(14, 165, 233, 0.3); box-shadow: 0 10px 30px rgba(14, 165, 233, 0.08); }
+    .neural-card-purple:hover { border-color: rgba(168, 85, 247, 0.3); box-shadow: 0 10px 30px rgba(168, 85, 247, 0.08); }
+
     /* Translucent layout stylings */
     .bg-teal-transparent { background: rgba(45, 212, 191, 0.08); color: #2dd4bf; }
     .bg-pink-transparent { background: rgba(244, 63, 94, 0.08); color: #f43f5e; }
