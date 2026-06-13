@@ -182,6 +182,50 @@ full_width: true
   border-color: rgba(45, 212, 191, 0.85);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 50px rgba(45, 212, 191, 0.5);
 }
+
+/* Waddles Tab Styling */
+.waddles-tabs-nav {
+  display: inline-flex !important;
+  background: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 4px;
+}
+
+.waddles-tab-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+}
+
+.waddles-tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.waddles-tab-btn.active {
+  background: linear-gradient(135deg, #0d9488 0%, #0ea5e9 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(13, 148, 136, 0.4);
+}
+
+.waddles-tab-content {
+  display: none !important;
+}
+
+.waddles-tab-content.active {
+  display: flex !important;
+}
 </style>
 
 <script>
@@ -233,6 +277,46 @@ full_width: true
       const audio = new Audio('{{ "/assets/audio/pig_snort.mp3" | relative_url }}');
       audio.play().catch(err => console.warn("Audio playback failed:", err));
     });
+
+    // Tab switching logic
+    const tabButtons = document.querySelectorAll('.waddles-tab-btn');
+    const tabContents = document.querySelectorAll('.waddles-tab-content');
+
+    function switchTab(tabId) {
+      // Deactivate all buttons and hide all contents
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      tabContents.forEach(content => content.classList.remove('active'));
+
+      // Activate selected button
+      const activeBtn = document.querySelector(`.waddles-tab-btn[data-tab="${tabId}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // Show selected contents
+      const activeContents = document.querySelectorAll(`.waddles-tab-content.tab-${tabId}`);
+      activeContents.forEach(content => content.classList.add('active'));
+      
+      // Trigger window resize event so libraries like UMAP/t-SNE/Chart redraw correctly
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 50);
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.getAttribute('data-tab');
+        switchTab(tabId);
+        // Update URL hash without jumping
+        history.replaceState(null, null, `#${tabId}`);
+      });
+    });
+
+    // Check URL hash on load
+    const initialHash = window.location.hash.substring(1);
+    if (['overview', 'architecture', 'sandbox', 'ablation'].includes(initialHash)) {
+      switchTab(initialHash);
+    } else {
+      switchTab('overview');
+    }
   });
 </script>
     </div>
@@ -240,8 +324,19 @@ full_width: true
 </section>
 
 <div class="container mb-5">
+  <!-- WADDLES TABS NAVIGATION -->
+  <div class="row mb-5 justify-content-center">
+    <div class="col-12 text-center">
+      <div class="waddles-tabs-nav">
+        <button class="waddles-tab-btn active" data-tab="overview"><i class="fa fa-comments me-2"></i>Assistant</button>
+        <button class="waddles-tab-btn" data-tab="architecture"><i class="fa fa-sitemap me-2"></i>Architecture</button>
+        <button class="waddles-tab-btn" data-tab="sandbox"><i class="fa fa-network-wired me-2"></i>Sandbox</button>
+        <button class="waddles-tab-btn" data-tab="ablation"><i class="fa fa-chart-bar me-2"></i>Ablation</button>
+      </div>
+    </div>
+  </div>
   <!-- CALL TO ACTION & PRIVACY GUARANTEE -->
-  <div class="row mb-5 justify-content-center g-4">
+  <div class="row mb-5 justify-content-center g-4 waddles-tab-content tab-overview active">
     <div class="col-md-6 text-center text-md-start">
       <div class="card glass border-0 shadow-lg h-100 p-4" style="background: rgba(17, 94, 89, 0.35); border: 1px solid rgba(45, 212, 191, 0.25); border-radius: 1.5rem; backdrop-filter: blur(12px);">
         <h2 class="h3 fw-bold text-white mb-3">Launch Local Assistant</h2>
@@ -269,7 +364,7 @@ full_width: true
   </div>
 
   <!-- INTERACTIVE SPECIFICATIONS GRID -->
-  <div class="row g-4 mb-5">
+  <div class="row g-4 mb-5 waddles-tab-content tab-overview active">
     <div class="col-md-6 col-lg-3">
       <div class="card glass border-0 h-100 p-4" style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 1rem; transition: transform 0.2s;">
         <div class="d-flex align-items-center mb-3">
@@ -324,8 +419,23 @@ full_width: true
     </div>
   </div>
 
+  <!-- KNOWLEDGE GRAPH DATA SOURCES PIPELINE -->
+  <div class="row mb-5 waddles-tab-content tab-architecture">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-2"><i class="fa fa-database me-2 text-info"></i> Ingestion Sources &amp; Knowledge Graph Flow</h2>
+        <p class="text-light opacity-80 small mb-4">
+          Waddles ingests data across several structured and unstructured external sources, processing them into 2,365 dense embedding chunks via local pipelines. See the live data provenance map below.
+        </p>
+        <div class="d-flex justify-content-center p-2" style="background: rgba(0,0,0,0.15); border-radius: 0.5rem;">
+          <img src="/assets/images/waddles_data_sources_graph.png" alt="Waddles Ingestion and Knowledge Graph Pipeline" class="img-fluid" style="border-radius: 0.5rem; max-height: 550px; object-fit: contain; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ARCHITECTURE DIAGRAM -->
-  <div class="row mb-5">
+  <div class="row mb-5 waddles-tab-content tab-architecture">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-sitemap me-2 text-info"></i> Multi-Stage WebAssembly RAG Pipeline Architecture</h2>
@@ -371,7 +481,7 @@ full_width: true
   </div>
 
   <!-- CORE CONCEPTS & MATHEMATICS -->
-  <div class="row g-4 mb-5">
+  <div class="row g-4 mb-5 waddles-tab-content tab-architecture">
     <!-- Reciprocal Rank Fusion Details -->
     <div class="col-md-6">
       <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
@@ -470,7 +580,7 @@ full_width: true
   </div>
 
   <!-- MODEL COMPARISON MATRIX -->
-  <div class="row mb-5">
+  <div class="row mb-5 waddles-tab-content tab-architecture">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-3"><i class="fa fa-balance-scale me-2 text-info"></i> In-Browser Model Parameters & Footprint</h2>
@@ -534,7 +644,7 @@ full_width: true
 
 
   <!-- NEURAL ARCHITECTURES -->
-  <div class="row mb-5">
+  <div class="row mb-5 waddles-tab-content tab-architecture">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-brain me-2 text-info"></i> In-Browser Neural Architectures &amp; Models [2, 3, 4, 5]</h2>
@@ -670,7 +780,7 @@ full_width: true
   </div>
 
   <!-- DESIGN CHOICES FOR MODEL OPTIMIZATION -->
-  <div class="row mb-5">
+  <div class="row mb-5 waddles-tab-content tab-architecture">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-sliders-h me-2 text-info"></i> Input &amp; Output Optimization Design Choices</h2>
@@ -772,7 +882,7 @@ full_width: true
   </div>
 
   <!-- STATIC HOSTING & WEBASSEMBLY OPTIMIZATIONS -->
-  <div class="row mt-5">
+  <div class="row mt-5 waddles-tab-content tab-architecture">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-server me-2 text-info"></i> Static Hosting & WebAssembly Optimizations</h2>
@@ -871,7 +981,7 @@ full_width: true
   </div>
 
   <!-- RAG RETRIEVAL EVOLUTION -->
-  <div class="row mb-5">
+  <div class="row mb-5 waddles-tab-content tab-architecture">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-road me-2 text-info"></i> RAG Retrieval Evolution</h2>
@@ -934,7 +1044,7 @@ full_width: true
   </div>
 
   <!-- DIMENSIONALITY REDUCTION & INGESTION EXPANSION -->
-  <div class="row mb-5">
+  <div class="row mb-5 waddles-tab-content tab-sandbox">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-project-diagram me-2 text-info"></i> Dimensionality Reduction &amp; Ingestion Expansion</h2>
@@ -1061,7 +1171,7 @@ full_width: true
     }
   </style>
 
-  <div class="row mb-5">
+  <div class="row mb-5 waddles-tab-content tab-sandbox">
     <div class="col-12">
       <div class="card glass border-0 shadow-lg p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-2"><i class="fa fa-network-wired me-2 text-teal" style="color: #2dd4bf;"></i> Interactive Vector Space Sandbox</h2>
@@ -1306,12 +1416,12 @@ full_width: true
         'post': '📝 Blog Post',
         'newsletter': '✉️ Newsletter',
         'publication': '🎓 Publication',
-        'talk': '🗣️ Presentation',
+        'talk': '💬 Presentation',
         'milestone': '🏆 Defense Milestone',
         'youtube_transcript': '🎥 Video Transcript',
         'omscs7641_post': '🎓 Course Article',
         'omscs7641_page': '📖 Course Page',
-        'visual_asset': '🖼️ Visual Asset'
+        'visual_asset': '🎨 Visual Asset'
       };
 
       const canvas = document.getElementById('vector-canvas');
@@ -2299,7 +2409,7 @@ full_width: true
   </script>
 
   <!-- RAG INSPECTOR TERMINAL -->
-  <div class="row mb-5">
+  <div class="row mb-5 waddles-tab-content tab-sandbox">
     <div class="col-12">
       <div class="card glass border-0 shadow-lg p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-2"><i class="fa fa-terminal me-2 text-info"></i> Interactive RAG Debugger & Webhook Inspector</h2>
@@ -2869,7 +2979,7 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
   </script>
 
   <!-- RAG RETRIEVAL ABLATION STUDIES -->
-  <div class="row mb-5">
+  <div class="row mb-5 waddles-tab-content tab-ablation">
     <div class="col-12">
       <div class="card glass border-0 shadow-lg p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-2"><i class="fa fa-chart-bar me-2 text-info"></i> Local RAG Pipeline Ablation Studies</h2>
@@ -3425,7 +3535,7 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
   </div>
 
   <!-- RAG SAFETY AND XSS PROTECTION NOTICE -->
-  <div class="row mb-5">
+  <div class="row mb-5 waddles-tab-content tab-ablation">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-3"><i class="fa fa-shield-alt me-2 text-success" style="color: #2ecc71;"></i> Ingestion Safety &amp; XSS Safeguards</h2>
@@ -3451,7 +3561,7 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
   </div>
 
   <!-- RESEARCH DATA COLLECTION DISCLAIMER -->
-  <div class="row mb-5">
+  <div class="row mb-5 waddles-tab-content tab-overview active">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-3"><i class="fa fa-info-circle me-2 text-warning"></i> Research Data Collection &amp; Consent</h2>
@@ -3463,7 +3573,7 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
   </div>
 
   <!-- REFERENCES -->
-  <div class="row mt-5">
+  <div class="row mt-5 waddles-tab-content tab-architecture">
     <div class="col-12">
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-book me-2 text-info"></i> References</h2>

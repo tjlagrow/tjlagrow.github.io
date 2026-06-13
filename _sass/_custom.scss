@@ -131,3 +131,20 @@
     z-index: 9999;
     display: block;
 }
+
+/* GLOBAL ACCESSIBLE OVERRIDES */
+.text-muted {
+    color: #94a3b8 !important; /* High-contrast slate-400 for dark backgrounds */
+}
+
+/* Context-aware overrides for light backgrounds (contrast ratio > 4.5:1) */
+.bg-white .text-muted,
+.portal-card .text-muted,
+.carousel-caption .text-muted,
+.card[style*="background: rgba(255, 255, 255"] .text-muted,
+.card[style*="background: #ffffff"] .text-muted,
+.card[style*="background:#ffffff"] .text-muted,
+.card[style*="background: white"] .text-muted,
+.card[style*="background:white"] .text-muted {
+    color: #64748b !important; /* Slate-500 for good contrast on white/light backgrounds */
+}

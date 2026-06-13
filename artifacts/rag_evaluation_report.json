@@ -1,0 +1,54 @@
+{
+  "overall": {
+    "total_queries": 65,
+    "mean_hit_at_3": 0.5230769230769231,
+    "mean_hit_at_5": 0.5384615384615384,
+    "mean_mrr": 0.4851282051282051,
+    "mean_ndcg": 0.640229810394885,
+    "mean_groundedness": 0.4664236939266708,
+    "mean_citation_fidelity": 1.0,
+    "mean_hallucination_ratio": 0.5220067645037877
+  },
+  "by_intent": {
+    "Teaching": {
+      "count": 12,
+      "hit_at_3": 0.8333333333333334,
+      "hit_at_5": 0.8333333333333334,
+      "mrr": 0.75,
+      "ndcg": 1.5371686033888825,
+      "groundedness": 0.548295774214892
+    },
+    "Research": {
+      "count": 18,
+      "hit_at_3": 0.8333333333333334,
+      "hit_at_5": 0.8333333333333334,
+      "mrr": 0.7777777777777778,
+      "ndcg": 0.7910161288119095,
+      "groundedness": 0.6340459856907225
+    },
+    "Bio/Contact": {
+      "count": 10,
+      "hit_at_3": 0.2,
+      "hit_at_5": 0.3,
+      "mrr": 0.15333333333333332,
+      "ndcg": 0.1930624116386567,
+      "groundedness": 0.27904761904761904
+    },
+    "General": {
+      "count": 10,
+      "hit_at_3": 0.7,
+      "hit_at_5": 0.7,
+      "mrr": 0.7,
+      "ndcg": 0.7,
+      "groundedness": 0.5368020215079039
+    },
+    "Out-of-Scope": {
+      "count": 15,
+      "hit_at_3": 0.0,
+      "hit_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg": 0.0,
+      "groundedness": 0.2777777777777778
+    }
+  }
+}

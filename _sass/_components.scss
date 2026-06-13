@@ -44,7 +44,7 @@
     &-title {
         font-weight: 700;
         margin-bottom: 0.25rem;
-        color: $bg-dark;
+        color: #ffffff;
     }
 
     &-body {
@@ -61,8 +61,8 @@
             padding: 0.15rem 0.6rem;
             margin: 0 0.25rem 0.25rem 0;
             border-radius: 999px;
-            background: rgba($accent-primary, 0.1);
-            color: darken($accent-primary, 40%);
+            background: rgba($accent-primary, 0.15);
+            color: $accent-primary;
             font-size: 0.75rem;
             font-weight: 600;
         }
@@ -72,7 +72,7 @@
 // Publication & Talk Components
 .pub-title {
     font-weight: 600;
-    color: $bg-dark;
+    color: #ffffff;
     margin-bottom: 0.25rem;
 }
 
@@ -94,8 +94,8 @@
     transition: all 0.2s ease;
 
     &:hover {
-        background: darken($grey-color, 5%);
-        color: white;
+        background: $brand-color;
+        color: $bg-dark;
         text-decoration: none;
     }
 }

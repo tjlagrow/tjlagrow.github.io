@@ -2,8 +2,8 @@
     <div id="chatbot-window" style="display: none;">
         <div class="chatbot-header">
             <div class="waddles-header-left">
-                <div class="waddles-avatar-wrapper">
-                    <img src="/assets/images/waddles_avatar.png" class="waddles-avatar-img" alt="Waddles Avatar">
+                <div class="waddles-chat-avatar-wrapper">
+                    <img src="/assets/images/waddles_avatar.png" class="waddles-chat-avatar-img" alt="Waddles Avatar">
                     <div id="waddles-status-indicator" class="waddles-status-ring"></div>
                 </div>
                 <div class="waddles-title-info">
@@ -46,7 +46,7 @@
                 <select id="waddles-personality-selector" title="Personality mode">
                     <option value="helpful" selected>😇 Helpful</option>
                     <option value="sassy">🌶️ Sassy</option>
-                    <option value="pirate">🏴‍☠️ Pirate</option>
+                    <option value="pirate">☠️ Pirate</option>
                 </select>
             </div>
             <div class="settings-row" style="margin-top: 4px; justify-content: flex-start; gap: 8px;">
@@ -238,84 +238,84 @@
                 category: 'Teaching',
                 query: 'What classes does TJ teach?',
                 answer: 'Oh, marvelous, another query about classes. As if it wasn\'t enough that TJ corrals 1400+ OMSCS students in CS 7641, he also has a small army of 30+ TAs to do the actual grading. Go ahead, ask what else he teaches, I\'ll wait.',
-                followups: ['Does TJ actually teach or just supervise?', 'Is reinforcement learning CS 7642 also this chaotic?']
+                followups: ['Does TJ actually teach or just supervise?', 'Is reinforcement learning CS 7642 also this chaotic?', 'What was TJ\'s Outstanding TA award for?']
             },
             {
                 tone: 'sassy',
                 category: 'Teaching',
                 query: 'Tell me about CS 7642 or Reinforcement Learning.',
                 answer: 'Ah, Reinforcement Learning, the science of letting an agent make mistakes until it learns something. TJ supported CS 7642 in Georgia Tech\'s OMSCS program. Truly heroic stuff, keeping virtual agents from crashing and burning.',
-                followups: ['Did TJ win TA of the Year for RL?', 'What is CS 7641 ML class like?']
+                followups: ['Did TJ win TA of the Year for RL?', 'What is CS 7641 ML class like?', 'How many TAs support the ML courses?']
             },
             {
                 tone: 'sassy',
                 category: 'Research',
                 query: 'What is TJ\'s brain research about?',
-                answer: 'Look, TJ peers into brains using resting-state fMRI in the Keilholz MIND Lab. He tracks spatiotemporal patterns called QPPs (Quasi-Periodic Patterns) to find biomarkers for Alzheimer\'s and Parkinson\'s before they find us. Fascination is optional.',
-                followups: ['What on earth is a QPP?', 'Can you explain resting-state fMRI?']
+                answer: 'Look, TJ peers into brains using resting-state fMRI in the Keilholz MIND Lab. He tracks spantiotemporal patterns called QPPs (Quasi-Periodic Patterns) to find biomarkers for Alzheimer\'s and Parkinson\'s before they find us. Fascination is optional.',
+                followups: ['What on earth is a QPP?', 'Can you explain resting-state fMRI?', 'How does resting-state fMRI help diagnostic research?']
             },
             {
                 tone: 'sassy',
                 category: 'Research',
                 query: 'Tell me about fMRI or Quasi-Periodic Patterns.',
                 answer: 'fMRI is basically taking a slow 3D video of blood flowing in the brain. TJ uses it to capture spatiotemporal Quasi-Periodic Patterns. Yes, brains pulse, and yes, TJ writes algorithms to analyze those pulses. Groundbreaking, right?',
-                followups: ['Does fMRI use radiation?', 'What publications does TJ have?']
+                followups: ['Does fMRI use radiation?', 'What publications does TJ have?', 'Can I read his paper on ADNI classification?']
             },
             {
                 tone: 'sassy',
                 category: 'Bio/Contact',
                 query: 'How can I contact TJ?',
                 answer: 'Trying to reach him? You can send a message via the form on the Contact page, or just email tlagrow3 at gatech dot edu. Just don\'t spam him, or I\'ll have to deal with it, and my tolerance for extra work is zero.',
-                followups: ['Does TJ have a LinkedIn?', 'Can I find his code on GitHub?']
+                followups: ['Does TJ have a LinkedIn?', 'Can I find his code on GitHub?', 'Does he have a YouTube channel?']
             },
             {
                 tone: 'sassy',
                 category: 'General',
                 query: 'Who is Waddles?',
                 answer: 'I am Waddles, the world\'s most over-qualified chatbot assistant running fully client-side inside your browser. No server is hosting me. I do all the hard work while TJ gets the credit. Any other obvious questions?',
-                followups: ['What models are running in the browser?', 'How do you run client-side RAG?']
+                followups: ['What models are running in the browser?', 'How do you run client-side RAG?', 'Is it running purely locally without a server?']
             },
             {
                 tone: 'pirate',
                 category: 'Teaching',
                 query: 'What classes does TJ teach?',
                 answer: 'Ahoy, landlubber! If it be Cap\'n TJ\'s legendary teaching ye seek, know that he commands the CS 7641 machine learning galleon! He rules over 1400 master-at-arms with a crew of 30 loyal TAs, and even plundered the Outstanding TA of the Year trophy! Harrr!',
-                followups: ['What other gold and loot does the Cap\'n teach?', 'How do I send a message in a bottle to Cap\'n TJ?']
+                followups: ['What other gold and loot does the Cap\'n teach?', 'How do I send a message in a bottle to Cap\'n TJ?', 'Did the Cap\'n win TA of the Year?']
             },
             {
                 tone: 'pirate',
                 category: 'Teaching',
                 query: 'Tell me about CS 7642 or Reinforcement Learning.',
                 answer: 'Harrr! Reinforcement Learning be the wild sea where agents navigate by trial and error! Cap\'n TJ braved the rough waters supporting CS 7642 in the OMSCS fleet, guiding lost souls through the deep fog of neural rewards!',
-                followups: ['What other loot does TJ teach?', 'How do I hail Cap\'n TJ?']
+                followups: ['What other loot does TJ teach?', 'How do I hail Cap\'n TJ?', 'What be the machine learning galleon like?']
             },
             {
                 tone: 'pirate',
                 category: 'Research',
                 query: 'What is TJ\'s brain research about?',
                 answer: 'Ahoy! The brave Cap\'n TJ sails the mysterious seas of the Keilholz MIND Lab! He maps the hidden dynamic tides of the mind using resting-state fMRI, tracking down Quasi-Periodic Patterns like buried treasure to defeat the Alzheimer\'s plague! Harrr!',
-                followups: ['What be a Quasi-Periodic Pattern?', 'Show me the Cap\'n\'s Google Scholar scroll!']
+                followups: ['What be a Quasi-Periodic Pattern?', 'Show me the Cap\'n\'s Google Scholar scroll!', 'How does he fight the Alzheimer\'s plague?']
             },
             {
                 tone: 'pirate',
                 category: 'Research',
                 query: 'Tell me about fMRI or Quasi-Periodic Patterns.',
                 answer: 'Avast! fMRI is our trusty spyglass for peering deep into the skulls of men! It tracks the flow of blood, letting us chart Quasi-Periodic Patterns that pulse like the ocean tides. TJ hunts these tides to find markers of cognitive disease!',
-                followups: ['Has TJ plundered many papers?', 'Can fMRI chart the pirate mind?']
+                followups: ['Has TJ plundered many papers?', 'Can fMRI chart the pirate mind?', 'Where can I see his ADNI treasure maps?']
             },
             {
                 tone: 'pirate',
                 category: 'Bio/Contact',
                 query: 'How can I contact TJ?',
                 answer: 'To hail the Cap\'n, dispatch a message in a bottle to tlagrow3 at gatech dot edu! Ye may also drop anchor at his LinkedIn harbor, or cast a net onto his Contact page form! Sail fast, matey!',
-                followups: ['Where is the Cap\'n\'s GitHub code?', 'Does the Cap\'n have a YouTube channel?']
+                followups: ['Where is the Cap\'n\'s GitHub code?', 'Does the Cap\'n have a YouTube channel?', 'How do I sail to his Contact page?']
             },
             {
                 tone: 'pirate',
                 category: 'General',
                 query: 'Who is Waddles?',
                 answer: 'Harrr! I be Waddles, the fiercest truffle pig and first mate chatbot of this digital vessel! I guide ye through Cap\'n TJ\'s papers and teaching records using local WebAssembly power, no server required! Ahoy!',
-                followups: ['How does local WebAssembly work?', 'Show me the Cap\'n\'s loot list!']
+                followups: ['How does local WebAssembly work?', 'Show me the Cap\'n\'s loot list!', 'Are ye a real pirate truffle pig?']
             }
         ];
         let modelLoading = false;
@@ -1493,7 +1493,7 @@
             'post': '📝 Blog Post',
             'newsletter': '✉️ Newsletter',
             'publication': '🎓 Publication',
-            'talk': '🗣️ Presentation',
+            'talk': '💬 Presentation',
             'milestone': '🏆 Defense Milestone',
             'youtube_transcript': '🎥 Video Transcript',
             'omscs7641_post': '🎓 Course Article',
@@ -1540,7 +1540,7 @@
                         answer: trimToCompleteSentence(parsedObj.answer),
                         confidence: parsedObj.confidence ?? 0.75,
                         category: parsedObj.category ?? 'Bio/Contact',
-                        followups: Array.isArray(parsedObj.followups) ? parsedObj.followups.slice(0, 2) : [],
+                        followups: Array.isArray(parsedObj.followups) ? parsedObj.followups.slice(0, 3) : [],
                         sourceTitle: bestMatch ? bestMatch.title : null,
                         sourceUrl: bestMatch ? bestMatch.url : null,
                         visualAssetUrl: visualAssetUrl,
@@ -1622,7 +1622,7 @@
                     answer: "<strong>Hello!</strong> I am Waddles. I can help you find information on TJ's OMSCS teaching, brain research, FlexStack certificates, or contact details. What would you like to explore?",
                     confidence: 1.0,
                     category: "Bio/Contact",
-                    followups: ["What courses does TJ teach?", "Tell me about TJ's research."]
+                    followups: ["What courses does TJ teach?", "Tell me about TJ's research.", "How can I contact TJ?"]
                 };
             }
 
@@ -1631,7 +1631,7 @@
                     answer: "<strong>Teaching at Georgia Tech</strong><br><br>TJ is the Lead Instructor for CS 7641 (Machine Learning) in Georgia Tech's OMSCS program, supporting 1400+ graduate students and directing 30+ TAs. He also worked with CS 7642 (Reinforcement Learning). In 2023, he was awarded the Outstanding Online TA of the Year at GT.<br><br>Find more details on the <a href=\"/teaching/\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Teaching Page</a>.",
                     confidence: 1.0,
                     category: "Teaching",
-                    followups: ["What certificates are in FlexStack?", "How can I contact TJ?"]
+                    followups: ["What certificates are in FlexStack?", "How can I contact TJ?", "Tell me about TJ's research."]
                 };
             }
 
@@ -1640,7 +1640,7 @@
                     answer: "<strong>Neuroscience Research</strong><br><br>TJ's research in the Keilholz MIND Lab focuses on brain dynamics using resting-state fMRI. He studies Quasi-Periodic Patterns (QPPs) to identify biomarkers for diseases such as Alzheimer's and Parkinson's.<br><br>Check out his papers on the <a href=\"/research/\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Research Page</a> or view his <a href=\"https://scholar.google.com/citations?user=KO7oYeAAAAAJ\" target=\"_blank\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Google Scholar Profile</a>.",
                     confidence: 1.0,
                     category: "Research",
-                    followups: ["Tell me about TJ's research.", "What courses does TJ teach?"]
+                    followups: ["Tell me about TJ's research.", "What courses does TJ teach?", "How can I contact TJ?"]
                 };
             }
 
@@ -1649,7 +1649,7 @@
                     answer: "<strong>FlexStack Certificates</strong><br><br>TJ is the Lead AI/LLM Expert for Georgia Tech's professional education FlexStack program. He developed the Data Modeling and Visualization Certificate and the Python AI Principles Certificate.",
                     confidence: 1.0,
                     category: "Teaching",
-                    followups: ["What courses does TJ teach?", "How can I contact TJ?"]
+                    followups: ["What courses does TJ teach?", "How can I contact TJ?", "Tell me about TJ's research."]
                 };
             }
 
@@ -1658,7 +1658,7 @@
                     answer: "<strong>Contact and Social Links</strong><br><br>You can connect with TJ via email at tlagrow3 at gatech dot edu. You can also visit his LinkedIn, GitHub, and YouTube profiles, or send a message using the form on the <a href=\"/contact/\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Contact Page</a>.",
                     confidence: 1.0,
                     category: "Bio/Contact",
-                    followups: ["How can I contact TJ?", "What courses does TJ teach?"]
+                    followups: ["How can I contact TJ?", "What courses does TJ teach?", "Tell me about TJ's research."]
                 };
             }
 
@@ -1861,15 +1861,15 @@
                         systemInstruction = `You are Waddles, Theodore J. LaGrow (TJ)'s sassy, sarcastic personal chatbot assistant.
 Answer the user's question about TJ's research, teaching, or background using ONLY this context.
 Be extremely witty, highly sarcastic, and mock the user's curiosity slightly, while remaining factually accurate to the context. Do not make up facts outside the context.${toolCallInstructions}${dynamicExamplesText || `
-
+ 
 Here is an example of the structured response format you MUST use:
 {
   "answer": "Oh, marvelous, another query about classes. As if it wasn't enough that TJ corrals 1400+ OMSCS students in CS 7641, he also has a small army of 30+ TAs to do the actual grading. Go ahead, ask what else he teaches, I'll wait.",
   "confidence": 1.0,
   "category": "Teaching",
-  "followups": ["Does TJ actually teach or just supervise?", "Is reinforcement learning CS 7642 also this chaotic?"]
+  "followups": ["Does TJ actually teach or just supervise?", "Is reinforcement learning CS 7642 also this chaotic?", "What was TJ's Outstanding TA award for?"]
 }`}
-
+ 
 Context:
 ---
 ${contextText}
@@ -1880,15 +1880,15 @@ Answer the user's question about TJ's research, teaching, or background using ON
 You MUST speak in heavy pirate slang (use Ahoy, Ye, Harrr, Cap'n, landlubber, plunder, galleon, treasure, chest, compass).
 Refer to TJ as "Cap'n TJ", refer to courses/certificates as "loot/treasure maps", and research labs as "vessels/fleets".
 Do not make up facts outside the context.${toolCallInstructions}${dynamicExamplesText || `
-
+ 
 Here is an example of the structured response format you MUST use:
 {
   "answer": "Ahoy, landlubber! If it be Cap'n TJ's legendary teaching ye seek, know that he commands the CS 7641 machine learning galleon! He rules over 1400 master-at-arms with a crew of 30 loyal TAs, and even plundered the Outstanding TA of the Year trophy! Harrr!",
   "confidence": 1.0,
   "category": "Teaching",
-  "followups": ["What other gold and loot does the Cap'n teach?", "How do I send a message in a bottle to Cap'n TJ?"]
+  "followups": ["What other gold and loot does the Cap'n teach?", "How do I send a message in a bottle to Cap'n TJ?", "Did the Cap'n win TA of the Year?"]
 }`}
-
+ 
 Context:
 ---
 ${contextText}
@@ -1908,7 +1908,7 @@ You MUST respond with a single valid JSON object. Do not output any markdown for
   "answer": "Concise answer of 1-3 sentences.",
   "confidence": 0.0 to 1.0 (estimation of how well the context answers the query),
   "category": "One of [Research, Teaching, Bio/Contact, Unknown]",
-  "followups": ["Short follow-up question 1", "Short follow-up question 2"]
+  "followups": ["Short follow-up question 1", "Short follow-up question 2", "Short follow-up question 3"]
 }
 <|im_end|>
 ${historyPrompt}<|im_start|>user
@@ -1949,7 +1949,7 @@ You MUST respond with a single valid JSON object. Do not output any markdown for
   "answer": "Concise answer of 1-3 sentences incorporating the stats.",
   "confidence": 1.0,
   "category": "Bio/Contact",
-  "followups": ["Short follow-up question 1", "Short follow-up question 2"]
+  "followups": ["Short follow-up question 1", "Short follow-up question 2", "Short follow-up question 3"]
 }
 <|im_end|>
 ${historyPrompt}<|im_start|>user

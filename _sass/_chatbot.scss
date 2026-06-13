@@ -72,12 +72,12 @@
             align-items: center;
             gap: 10px;
 
-            .waddles-avatar-wrapper {
+            .waddles-chat-avatar-wrapper {
                 position: relative;
                 width: 32px;
                 height: 32px;
 
-                .waddles-avatar-img {
+                .waddles-chat-avatar-img {
                     width: 32px;
                     height: 32px;
                     border-radius: 50%;
@@ -535,5 +535,62 @@
     &.disabled {
         opacity: 0.4;
         pointer-events: none;
+    }
+}
+
+/* Mobile Responsiveness Improvements */
+@media (max-width: 576px) {
+    #chatbot-container {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+    }
+
+    #chatbot-window {
+        width: 100%;
+        max-width: 100%;
+        height: calc(100vh - 7.5rem);
+        max-height: 75vh;
+        margin-bottom: 0.5rem;
+        border-radius: 12px;
+    }
+
+    #chatbot-toggle {
+        width: 52px;
+        height: 52px;
+        font-size: 1.3rem;
+    }
+
+    .chatbot-input-area {
+        padding: 0.75rem 0.85rem;
+        
+        input {
+            font-size: 1rem !important; /* Prevents auto-zoom on iOS browsers */
+            height: 36px;
+        }
+
+        button {
+            width: 36px;
+            height: 36px;
+        }
+    }
+
+    .chatbot-body {
+        padding: 0.95rem;
+    }
+
+    .chatbot-message {
+        max-width: 90%;
+        padding: 0.75rem 0.95rem;
+        font-size: 0.85rem;
+    }
+    
+    .chatbot-chips {
+        margin-top: 0.6rem;
+    }
+    
+    .chatbot-chip {
+        padding: 0.3rem 0.75rem;
+        font-size: 0.75rem;
     }
 }

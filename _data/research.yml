@@ -14,11 +14,14 @@
   links:
   - - bioRxiv
     - https://www.biorxiv.org/content/10.1101/2026.02.04.703913
-  abstract: 'Investigates white matter (WM) functional network connectivity across the Alzheimer''s spectrum using ADNI data. Finds specific WM-WM and WM-GM dysconnectivity patterns (subcortical, frontal, sensorimotor) that track disease progression, providing a complementary biomarker to gray matter changes.'
+  abstract: Investigates white matter (WM) functional network connectivity across
+    the Alzheimer's spectrum using ADNI data. Finds specific WM-WM and WM-GM dysconnectivity
+    patterns (subcortical, frontal, sensorimotor) that track disease progression,
+    providing a complementary biomarker to gray matter changes.
 - title: Fidelity of Spatiotemporal Patterns of Brain Activity Across Sampling Rate,
     Scan Duration, and Frequency Content
   type: Preprint
-  citations: 0
+  citations: 1
   authors: Theodore J. LaGrow, Harrison Watters, Lauren Daley, Vaibhavi S. Itkyal,
     D. Seeburger, Nmachi Anumba, Shella Keilholz
   venue: bioRxiv
@@ -31,10 +34,13 @@
   links:
   - - bioRxiv
     - https://www.biorxiv.org/content/10.1101/2026.01.02.697199
-  abstract: 'Systematically evaluates how scan parameters (duration, TR) and frequency bands affect the reliability of spatiotemporal patterns (QPPs, cPCA). Finds that QPPs are robust in shorter scans while cPCA requires longer durations, and that frequency choice (Slow-4 vs Slow-5) significantly alters detected network dynamics.'
+  abstract: Systematically evaluates how scan parameters (duration, TR) and frequency
+    bands affect the reliability of spatiotemporal patterns (QPPs, cPCA). Finds that
+    QPPs are robust in shorter scans while cPCA requires longer durations, and that
+    frequency choice (Slow-4 vs Slow-5) significantly alters detected network dynamics.
 - title: Spatiotemporal Network Dynamics Reveal Alzheimer’s Disease Progression
   type: Preprint
-  citations: 0
+  citations: 2
   authors: Theodore J. LaGrow, Vaibhavi S. Itkyal, Harrison Watters, K. M. Jensen,
     R. Ballem, Wen-Ju Pan, Armin Iraji, Shella Keilholz
   venue: bioRxiv
@@ -46,7 +52,10 @@
   links:
   - - bioRxiv
     - https://www.biorxiv.org/content/10.1101/2025.12.09.692653
-  abstract: 'Leverages QPPs and cPCA on longitudinal ADNI data to map network disruption trajectories. Reveals a structured breakdown starting with early limbic/subcortical changes and progressing to visual/sensorimotor/executive decline, often arguably detectable before clinical conversion.'
+  abstract: Leverages QPPs and cPCA on longitudinal ADNI data to map network disruption
+    trajectories. Reveals a structured breakdown starting with early limbic/subcortical
+    changes and progressing to visual/sensorimotor/executive decline, often arguably
+    detectable before clinical conversion.
 - title: Capturing diagnosable video content using a client device
   type: Patent
   citations: 0
@@ -59,7 +68,9 @@
   - client device
   - patent
   links: []
-  abstract: 'Systems and methods for capturing and processing video content on a client device to facilitate remote medical diagnosis, ensuring video quality and metadata compliance for clinical review.'
+  abstract: Systems and methods for capturing and processing video content on a client
+    device to facilitate remote medical diagnosis, ensuring video quality and metadata
+    compliance for clinical review.
 - title: 'Functional network connectivity in white matter: A spatially-guided ICA-based
     network approach'
   type: Conference
@@ -73,7 +84,11 @@
   - ICA
   - functional connectivity
   links: []
-  abstract: 'Investigates white matter (WM) functional connectivity in schizophrenia using a robust multi-scale WM intrinsic connectivity network (ICN) template. The study reveals significant dysconnectivity in subcortical-paralimbic, sensorimotor, and frontal networks, underscoring WM''s critical role in maintaining functional network stability.'
+  abstract: Investigates white matter (WM) functional connectivity in schizophrenia
+    using a robust multi-scale WM intrinsic connectivity network (ICN) template. The
+    study reveals significant dysconnectivity in subcortical-paralimbic, sensorimotor,
+    and frontal networks, underscoring WM's critical role in maintaining functional
+    network stability.
 - title: Widespread Spatiotemporal Patterns of Functional Brain Networks in Longitudinal
     Progression of Alzheimer's Disease
   type: Conference
@@ -88,11 +103,15 @@
   - functional networks
   - EMBC
   links: []
-  abstract: 'Investigates the role of Quasi-Periodic Patterns (QPPs) in identifying disease-related connectivity changes across Alzheimer''s Disease stages. The study finds a progressive decline in functional connectivity integrity, with early impairments in subcortical and executive networks, followed by widespread disconnection in higher cognition, sensorimotor, and visual networks.'
+  abstract: Investigates the role of Quasi-Periodic Patterns (QPPs) in identifying
+    disease-related connectivity changes across Alzheimer's Disease stages. The study
+    finds a progressive decline in functional connectivity integrity, with early impairments
+    in subcortical and executive networks, followed by widespread disconnection in
+    higher cognition, sensorimotor, and visual networks.
 - title: Infraslow dynamic patterns in human cortical networks track a spectrum of
     external to internal attention
   type: Journal
-  citations: 4
+  citations: 5
   authors: Harrison Watters, Aleah Davis, Abia Fazili, Lauren Daley, Theodore J. LaGrow,
     Eric H. Schumacher, Shella Keilholz
   venue: Human Brain Mapping
@@ -104,7 +123,10 @@
   links:
   - - Journal
     - https://onlinelibrary.wiley.com/doi/10.1002/hbm.70049
-  abstract: 'Demonstrates that cortical network dynamics shift along an axis of external-to-internal attention. Shows that networks dynamically reconfigure relative to the Default Mode Network based on attentional demands, rather than simply activating or deactivating as fixed rigid units.'
+  abstract: Demonstrates that cortical network dynamics shift along an axis of external-to-internal
+    attention. Shows that networks dynamically reconfigure relative to the Default
+    Mode Network based on attentional demands, rather than simply activating or deactivating
+    as fixed rigid units.
 - title: Functional connectivity of the brain across rodents and humans
   type: Journal
   authors: Nan Xu, Theodore J. LaGrow, Nmachi Anumba, Azalea Lee, Xiaodi Zhang, Behnaz
@@ -142,7 +164,7 @@
     \ Rodents and Humans},\n  journal = {Frontiers in Neuroscience},\n  year    =\
     \ {2022},\n  volume  = {16},\n  pages   = {816331},\n  doi     = {10.3389/fnins.2022.816331}\n\
     }\n"
-  citations: 119
+  citations: 132
 - title: Relationship between the frequency profile of BOLD fluctuations and calculated
     metrics of complexity in the Human Connectome Project
   type: Journal
@@ -179,9 +201,8 @@
     \ Metrics of Complexity in the Human Connectome Project},\n  journal = {Frontiers\
     \ in Neuroscience},\n  year    = {2020},\n  volume  = {14},\n  pages   = {550923},\n\
     \  doi     = {10.3389/fnins.2020.550923}\n}\n"
-  citations: 19
-- title: Toward a reproducible, scalable framework for processing large neuroimaging
-    datasets
+  citations: 21
+- title: Toward a scalable framework for reproducible processing of volumetric, nanoscale neuroimaging datasets
   type: Journal
   authors: Erik C. Johnson, Miller Wilt, Luis M. Rodriguez, Raphael Norman-Tenazas,
     Corban Rivera, Nathan Drenkow, Dean Kleissas, Theodore J. LaGrow, Hannah P. Cowley,
@@ -340,7 +361,7 @@
     studies.
 
     '
-  citations: 3
+  citations: 5
 - title: Exploration of Spatiotemporal Dynamics in Neurodegenerative Functional Brain
     Networks
   type: Thesis
@@ -359,7 +380,7 @@
     across the Alzheimer''s disease spectrum.
 
     '
-  citations: 0
+  citations: 2
 - title: 'QPPLab: A generally applicable software package for detecting, analyzing,
     and visualizing large-scale quasiperiodic spatiotemporal patterns (QPPs) of brain
     activity'
@@ -383,7 +404,7 @@
     of quasi-periodic patterns across diverse fMRI datasets.
 
     '
-  citations: 11
+  citations: 16
 - title: Variation in the distribution of large-scale spatiotemporal patterns of activity
     across brain states
   type: Journal
@@ -407,7 +428,7 @@
     highlighting state- dependent reconfiguration of large-scale dynamics.
 
     '
-  citations: 9
+  citations: 12
 - title: Voxelwise Intensity Projection for the Spatial Representation of Resting
     State Functional MRI Networks and Multimodal Deep Learning
   type: Conference
@@ -469,7 +490,7 @@
     within a deep learning framework to classify Alzheimer’s disease.
 
     '
-  citations: 9
+  citations: 10
 - title: Spatial and Spectral Components of the BOLD Global Signal in Rat Resting-State
     Functional MRI
   type: Journal
@@ -489,7 +510,7 @@
     in rats, clarifying its neural and non-neural components.
 
     '
-  citations: 7
+  citations: 9
 - title: 'Senior Inquiry: Related Chaos'
   type: Article
   citations: 0
@@ -499,5 +520,80 @@
   keywords:
   - chaos
   - inquiry
+  - Senior Inquiry
   links: []
-  abstract: 'A collaborative graphic summary of a year-long interdisciplinary course of study, exploring concepts of chaos and inquiry within the Senior Inquiry High School Program.'
+  abstract: A collaborative graphic summary of a year-long interdisciplinary course
+    of study, exploring concepts of chaos and inquiry within the Senior Inquiry High
+    School Program.
+- title: Evolution & Taxonomy of Clustering Algorithms
+  type: Article
+  citations: 0
+  authors: B. Kotakonda, Theodore J. LaGrow
+  venue: Evolution 2, 3
+  date: 2024
+  keywords:
+  - clustering
+  - algorithms
+  - taxonomy
+  links: []
+  abstract: 'Explores the evolution and taxonomy of clustering algorithms, categorizing classical and modern methods for data segmentation and pattern recognition.'
+- title: "Navigating Neural Networks: Exploring State-of-the-Art Activation Functions"
+  type: Article
+  citations: 0
+  authors: A. Vikram, Theodore J. LaGrow
+  venue: OMSCS Technical Report
+  date: 2024
+  keywords:
+  - neural networks
+  - activation functions
+  - deep learning
+  links: []
+  abstract: 'A comprehensive review of modern neural network activation functions, assessing their impact on training stability, convergence speed, and gradient flow.'
+- title: Beginner’s Guide to Exploratory Data Analysis
+  type: Guide
+  citations: 0
+  authors: C. Sheridan, Theodore J. LaGrow
+  venue: FlexStack Data Science Guide
+  date: 2024
+  keywords:
+  - EDA
+  - data analysis
+  - statistics
+  links: []
+  abstract: 'An introductory guide detailing exploratory data analysis methodologies, visualization techniques, and statistical profiling for data science beginners.'
+- title: "Mastering Markov Decision Processes: A Practical RL Journey with OpenAI Gym"
+  type: Guide
+  citations: 0
+  authors: A. Vikram, Theodore J. LaGrow
+  venue: OMSCS Reinforcement Learning Guide
+  date: 2024
+  keywords:
+  - MDP
+  - reinforcement learning
+  - OpenAI Gym
+  links: []
+  abstract: 'A practical handbook on Markov Decision Processes, walk-through guide on model-based and model-free reinforcement learning using OpenAI Gym environments.'
+- title: "Simulated Annealing: Methods and Real-World Applications"
+  type: Article
+  citations: 0
+  authors: A. Pal, Theodore J. LaGrow
+  venue: OMSCS Technical Report
+  date: 2024
+  keywords:
+  - simulated annealing
+  - optimization
+  - algorithms
+  links: []
+  abstract: 'Analyzes simulated annealing optimization algorithms, comparing parameter cooling schedules across classic operations research and machine learning tasks.'
+- title: Comparative Analysis of Random Search Algorithms
+  type: Article
+  citations: 0
+  authors: T. Carter, Theodore J. LaGrow
+  venue: OMSCS Technical Report
+  date: 2024
+  keywords:
+  - random search
+  - optimization
+  - randomized algorithms
+  links: []
+  abstract: 'A comparative study of randomized optimization techniques, benchmarking random search against gradient-based and heuristic solvers under diverse fitness landscapes.'
