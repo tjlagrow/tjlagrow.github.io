@@ -21,6 +21,9 @@
 
         <!-- Sliding settings drawer -->
         <div id="waddles-settings-drawer" class="waddles-settings-drawer">
+            <div id="waddles-model-recommendation" style="font-size: 0.675rem; color: #38bdf8; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.15); border-radius: 6px; padding: 6px 10px; line-height: 1.35; margin-top: 2px;">
+                Checking hardware specs...
+            </div>
             <div class="settings-row">
                 <span>Model Selector</span>
                 <select id="waddles-model-selector" title="Model selection">
@@ -370,6 +373,9 @@
             }
         }
 
+        // Auto-recommend model based on hardware specifications
+        autoRecommendModel();
+
         // Asynchronously load vector embeddings database
         fetch('{{ "/assets/json/embeddings.json" | relative_url }}')
             .then(response => response.json())
@@ -677,6 +683,61 @@
                 language: navigator.language,
                 url: window.location.href
             };
+        }
+
+        function autoRecommendModel() {
+            const specs = getClientSpecs();
+            const recEl = document.getElementById('waddles-model-recommendation');
+            const modelSelector = document.getElementById('waddles-model-selector');
+            
+            if (!recEl || !modelSelector) return;
+            
+            let recommendedModel = 'keyword';
+            let reason = '';
+            
+            const hasWebGPU = specs.webGpuSupported;
+            const ram = specs.ramMemoryGb;
+            const cores = specs.cpuCores;
+            
+            if (hasWebGPU) {
+                if (ram === "Unknown" || ram >= 8) {
+                    recommendedModel = 'smollm2';
+                    reason = `Detected WebGPU support & >=8GB RAM. <strong>SmolLM2 360M</strong> is recommended for high accuracy and fast local inference.`;
+                } else if (ram >= 4) {
+                    recommendedModel = 'qwen';
+                    reason = `Detected WebGPU & ~${ram}GB RAM. <strong>Qwen 0.5B</strong> is recommended for balanced memory footprint and speed.`;
+                } else {
+                    recommendedModel = 'smollm';
+                    reason = `Detected WebGPU with limited RAM (<4GB). <strong>SmolLM 135M</strong> is recommended to prevent browser page crashes.`;
+                }
+            } else {
+                if (ram !== "Unknown" && ram >= 8 && cores >= 8) {
+                    recommendedModel = 'qwen';
+                    reason = `No WebGPU detected, but CPU has ${cores} cores & >=8GB RAM. <strong>Qwen 0.5B (WASM CPU)</strong> is recommended (generation will be slower).`;
+                } else if (ram !== "Unknown" && ram >= 4) {
+                    recommendedModel = 'smollm';
+                    reason = `No WebGPU detected. <strong>SmolLM 135M (WASM CPU)</strong> is recommended as a lightweight option for your ${cores}-core device.`;
+                } else {
+                    recommendedModel = 'keyword';
+                    reason = `Low specifications or no WebGPU detected. Defaulting to <strong>Keyword Match</strong> to ensure lag-free page navigation.`;
+                }
+            }
+            
+            recEl.innerHTML = `💡 <strong>Device Recommendation:</strong> ${reason}`;
+            
+            Array.from(modelSelector.options).forEach(opt => {
+                if (opt.value === recommendedModel) {
+                    if (!opt.text.includes('(Recommended)')) {
+                        opt.text = opt.text + " (Recommended)";
+                    }
+                    opt.selected = true;
+                }
+            });
+            
+            const quantSelector = document.getElementById('waddles-quant-selector');
+            if (quantSelector) {
+                quantSelector.disabled = (recommendedModel === 'keyword');
+            }
         }
 
         function logQuery(queryId, queryText, responseText, extraData) {
