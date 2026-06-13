@@ -7,6 +7,8 @@ full_width: true
 
 <!-- Load Mermaid.js for architecture diagrams -->
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<!-- Load UMAP-js for client-side UMAP embeddings -->
+<script src="https://cdn.jsdelivr.net/npm/umap-js/lib/umap-js.min.js"></script>
 <script>
   mermaid.initialize({
     startOnLoad: true,
@@ -533,68 +535,7 @@ full_width: true
     </div>
   </div>
 
-  <!-- EVOLUTION ROADMAP -->
-  <div class="row mb-5">
-    <div class="col-12">
-      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
-        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-road me-2 text-info"></i> RAG Retrieval Evolution</h2>
-        <div class="row g-3">
-          <!-- Stage 1 -->
-          <div class="col-md-6 col-lg-3">
-            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-secondary text-light fw-bold">Stage 1 (Legacy Fallback)</span>
-                <i class="fa fa-check-circle text-muted fs-5"></i>
-              </div>
-              <h4 class="h5 fw-bold text-white mb-2">Static VSM Search</h4>
-              <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                A local term-frequency index utilizing exact matches over query keywords. Excerpts are isolated, highlighted, and linked as static reference cards to support browsers without WebAssembly.
-              </p>
-            </div>
-          </div>
-          <!-- Stage 2 -->
-          <div class="col-md-6 col-lg-3">
-            <div class="p-3 rounded h-100" style="background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(45, 212, 191, 0.25);">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-teal text-white fw-bold" style="background-color: #0d9488 !important;">Stage 2 (Completed)</span>
-                <i class="fa fa-check-circle text-success fs-5"></i>
-              </div>
-              <h4 class="h5 fw-bold text-white mb-2">Multimodal WASM RAG</h4>
-              <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                Multi-model orchestration running locally. Leverages query intent pre-filtering, Reciprocal Rank Fusion, sentence-level compression, and Cross-Encoder re-ranking. Integrates crawled YouTube transcripts and cached dynamic few-shot style examples.
-              </p>
-            </div>
-          </div>
-          <!-- Stage 3 -->
-          <div class="col-md-6 col-lg-3">
-            <div class="p-3 rounded h-100" style="background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(45, 212, 191, 0.25);">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-teal text-white fw-bold" style="background-color: #0d9488 !important;">Stage 3 (Completed)</span>
-                <i class="fa fa-check-circle text-success fs-5"></i>
-              </div>
-              <h4 class="h5 fw-bold text-white mb-2">Vector Space Visualizer</h4>
-              <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                An interactive 2D Principal Component Analysis (PCA) vector space sandbox running on-the-fly mathematical solver routines. Projects 587 data nodes and computes real-time nearest neighbors on mouse clicks.
-              </p>
-            </div>
-          </div>
-          <!-- Stage 4 -->
-          <div class="col-md-6 col-lg-3">
-            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-secondary text-light fw-bold">Stage 4 (Future)</span>
-                <i class="fa fa-cog text-muted x-small"></i>
-              </div>
-              <h4 class="h5 fw-bold text-white mb-2">Autonomous Agentic Tools</h4>
-              <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                Activating tool use and function calling capabilities. Waddles will autonomously call external API endpoints to fetch live publication citation statistics, calendar schedules, or dispatch email contact messages.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+
 
   <!-- NEURAL ARCHITECTURES -->
   <div class="row mb-5">
@@ -819,7 +760,7 @@ full_width: true
                       classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
                       classDef highlight fill:#0f172a,stroke:#f43f5e,stroke-width:1.5px,color:#fda4af;
                       
-                      Inference[Model Autoregressive Inference] --> SchemaCheck{Is Output Valid JSON [13]?}
+                      Inference[Model Autoregressive Inference] --> SchemaCheck{"Is Output Valid JSON [13]?"}
                       SchemaCheck -->|Yes| StructuredParser[JSON Object Parsed]
                       SchemaCheck -->|No| PlaintextFallback[Fallback Recovery Plaintext]
                       StructuredParser --> BoundaryFilter["Regex Punctuation Truncator"]
@@ -834,6 +775,167 @@ full_width: true
     </div>
   </div>
 
+  <!-- STATIC HOSTING & WEBASSEMBLY OPTIMIZATIONS -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-server me-2 text-info"></i> Static Hosting & WebAssembly Optimizations</h2>
+        <p class="text-light opacity-90 small mb-4">
+          Running multiple neural network model inferences (embedding extraction, Cross-Encoder classification, and token generation) directly inside static web pages poses unique performance and security challenges. Waddles implements the following key technical solutions to ensure robust execution.
+        </p>
+
+        <div class="row g-4">
+          <!-- Bypassing SharedArrayBuffer -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-shield-alt me-2"></i> 1. Single-Threaded WASM Fallback</h4>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                By default, ONNX Runtime Web requests multi-threaded WASM compilation, which requires <code>SharedArrayBuffer</code> support. For security (Spectre mitigations), browsers block this unless headers like <code>Cross-Origin-Opener-Policy (COOP)</code> and <code>Cross-Origin-Embedder-Policy (COEP)</code> are sent by the host. Since static hosts like GitHub Pages do not support custom headers, Waddles forces a single-threaded runtime configuration (<code>wasm.numThreads = 1</code>) to bypass this block, allowing compilation on any standard host.
+              </p>
+            </div>
+          </div>
+          <!-- CDN Model Hosting -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-cloud-upload-alt me-2"></i> 2. Dynamic CDN Model Retrieval</h4>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                To keep the website's Git repository light and performant, binary weights are not stored in the repository. Instead, Waddles dynamically retrieves pre-quantized ONNX configurations from the Hugging Face Hub CDN. Cross-Origin Resource Sharing (CORS) is enabled at the CDN level, allowing static pages to fetch files directly without triggering browser cross-origin blocks.
+              </p>
+            </div>
+          </div>
+          <!-- HTTPS Cache Storage -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-hdd me-2"></i> 3. Persistent Browser-Side Caching</h4>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                To preserve bandwidth and ensure zero-latency initial load times, Waddles leverages the browser's Cache Storage API (IndexedDB fallback). Under secure contexts (HTTPS), browser-side persistent caches are activated. Once downloaded, subsequent openings of the chatbot bypass the network, loading models locally and instantaneously.
+              </p>
+            </div>
+          </div>
+          <!-- Resilient Search Fallback -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-undo-alt me-2"></i> 4. Robust Search Mode Fallbacks</h4>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                In the event that CDN download speeds are throttled, WebAssembly execution is blocked by administrative client-side policies, or older browsers are used, Waddles implements an automated fallback routing. The client-side logic catches any model load exceptions and falls back to our high-resolution exact-match static VSM keyword index, keeping the chatbot responsive.
+              </p>
+            </div>
+          </div>
+          <!-- Latency & Rendering Guard -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-spinner me-2"></i> 5. Asynchronous DOM Yield &amp; Latency Guard</h4>
+              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Why it is needed:</strong> WebAssembly model execution runs on the browser's single main thread. Heavy CPU calculations starve the layout engine and prevent the browser from repainting the DOM.
+              </p>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Specific failures prevented:</strong> Prevents browser tab freezes, duplicate query submission race conditions, and unresponsive button states by yielding the execution thread for 50 milliseconds to paint UI spinners and typing indicators before model loading begins.
+              </p>
+            </div>
+          </div>
+          <!-- Sentence Truncation -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-align-left me-2"></i> 6. Trailing Sentence Auto-Truncation</h4>
+              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Why it is needed:</strong> Autoregressive language models generate text token-by-token and can reach generation limits mid-phrase, resulting in trailing fragments.
+              </p>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Specific failures prevented:</strong> Prevents broken syntax and abrupt, incomplete text terminations in the user interface by scanning for sentence boundaries and stripping unfinished trailing words.
+              </p>
+            </div>
+          </div>
+          <!-- Dynamic Few-Shot Structured Persona Anchoring -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-anchor me-2"></i> 7. Dynamic Few-Shot Persona Anchoring</h4>
+              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Why it is needed:</strong> Lightweight models (under 1B parameters) struggle with complex instruction adherence and formatting consistency when prompted to adopt custom styles.
+              </p>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Specific failures prevented:</strong> Prevents JSON parsing crashes, missing object keys, and style drift. Pre-embedded style examples matching the query topic are retrieved via cosine similarity and injected into system instructions to anchor the formatting.
+              </p>
+            </div>
+          </div>
+          <!-- Input Pre-processing & Autocomplete suggestions -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-keyboard me-2"></i> 8. Input Pre-processing &amp; Autocomplete Suggestions</h4>
+              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Why it is needed:</strong> Raw user inputs are prone to typos, non-standard acronyms, rambling text that dilutes embedding weights, and queries that miss the relevant indexed documents.
+              </p>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Specific failures prevented:</strong> Mitigates vector search misses and semantic misalignment by translating abbreviations (such as ML, RL, fMRI, QPP) to expanded definitions, truncating inputs exceeding 20 words to core queries, and displaying tab-completable pixel-aligned autocomplete ghost recommendations to guide user search.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAG RETRIEVAL EVOLUTION -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-road me-2 text-info"></i> RAG Retrieval Evolution</h2>
+        <div class="row g-3">
+          <!-- Stage 1 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-secondary text-light fw-bold">Stage 1 (Legacy Fallback)</span>
+                <i class="fa fa-check-circle text-muted fs-5"></i>
+              </div>
+              <h4 class="h5 fw-bold text-white mb-2">Static VSM Search</h4>
+              <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                A local term-frequency index utilizing exact matches over query keywords. Excerpts are isolated, highlighted, and linked as static reference cards to support browsers without WebAssembly.
+              </p>
+            </div>
+          </div>
+          <!-- Stage 2 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="p-3 rounded h-100" style="background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(45, 212, 191, 0.25);">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-teal text-white fw-bold" style="background-color: #0d9488 !important;">Stage 2 (Completed)</span>
+                <i class="fa fa-check-circle text-success fs-5"></i>
+              </div>
+              <h4 class="h5 fw-bold text-white mb-2">Multimodal WASM RAG</h4>
+              <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                Multi-model orchestration running locally. Leverages query intent pre-filtering, Reciprocal Rank Fusion, sentence-level compression, and Cross-Encoder re-ranking. Integrates crawled YouTube transcripts and cached dynamic few-shot style examples.
+              </p>
+            </div>
+          </div>
+          <!-- Stage 3 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="p-3 rounded h-100" style="background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(45, 212, 191, 0.25);">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-teal text-white fw-bold" style="background-color: #0d9488 !important;">Stage 3 (Completed)</span>
+                <i class="fa fa-check-circle text-success fs-5"></i>
+              </div>
+              <h4 class="h5 fw-bold text-white mb-2">Vector Space Visualizer</h4>
+              <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                An interactive 2D Principal Component Analysis (PCA) vector space sandbox running on-the-fly mathematical solver routines. Projects 587 data nodes and computes real-time nearest neighbors on mouse clicks.
+              </p>
+            </div>
+          </div>
+          <!-- Stage 4 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-secondary text-light fw-bold">Stage 4 (Future)</span>
+                <i class="fa fa-cog text-muted x-small"></i>
+              </div>
+              <h4 class="h5 fw-bold text-white mb-2">Autonomous Agentic Tools</h4>
+              <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                Activating tool use and function calling capabilities. Waddles will autonomously call external API endpoints to fetch live publication citation statistics, calendar schedules, or dispatch email contact messages.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- VECTOR DATABASE VISUALIZER -->
   <style>
@@ -917,7 +1019,7 @@ full_width: true
       <div class="card glass border-0 shadow-lg p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-2"><i class="fa fa-network-wired me-2 text-teal" style="color: #2dd4bf;"></i> Interactive Vector Space Sandbox</h2>
         <p class="text-light opacity-80 small mb-4">
-          Visualize the 587 document chunks inside the client-side portfolio database. The 384-dimensional embeddings (generated by the <code>all-MiniLM-L6-v2</code> encoder) are projected into a 2D coordinates grid using an on-the-fly Principal Component Analysis (PCA) solver. Drag to pan, scroll to zoom, click nodes to calculate top 5 nearest neighbors using real-time cosine similarity (dot products), or filter by type to trace how context is structured.
+          Visualize the 933 document chunks inside the client-side portfolio database. The 384-dimensional embeddings (generated by the <code>all-MiniLM-L6-v2</code> encoder) are projected into a 2D coordinates grid using on-the-fly Principal Component Analysis (PCA) or Uniform Manifold Approximation and Projection (UMAP) solvers. Drag to pan, scroll to zoom, click nodes to calculate top 5 nearest neighbors using real-time cosine similarity (dot products), filter by type, or tune UMAP parameters dynamically to explore semantic mapping comparisons.
         </p>
 
         <!-- Loading State -->
@@ -941,16 +1043,62 @@ full_width: true
                     <button class="btn btn-sm btn-outline-secondary text-white border-0 canvas-btn" id="btn-zoom-in" title="Zoom In"><i class="fa fa-plus"></i></button>
                     <button class="btn btn-sm btn-outline-secondary text-white border-0 canvas-btn" id="btn-zoom-out" title="Zoom Out"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-sm btn-outline-secondary text-white border-0 canvas-btn" id="btn-reset-view" title="Reset View"><i class="fa fa-sync-alt"></i></button>
+                    
+                    <!-- Projection Switcher pills -->
+                    <div class="btn-group btn-group-sm ms-2" role="group" style="border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; background: rgba(0,0,0,0.25);">
+                      <button type="button" class="btn btn-xs py-1 px-3 text-white border-0" id="btn-projection-pca" style="font-size: 0.675rem; font-weight: 700; background: #2dd4bf; color: #0f172a !important;">PCA</button>
+                      <button type="button" class="btn btn-xs py-1 px-3 text-white border-0" id="btn-projection-umap" style="font-size: 0.675rem; font-weight: 700; background: transparent; color: #94a3b8 !important;">UMAP</button>
+                    </div>
                   </div>
                   <div class="d-flex align-items-center gap-2">
-                    <input type="text" id="vector-search-input" placeholder="Search text &amp; keywords..." class="form-control form-control-sm bg-dark text-white border-secondary" style="width: 200px; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.1); outline: none;">
+                    <input type="text" id="vector-search-input" placeholder="Search text &amp; keywords..." class="form-control form-control-sm bg-dark text-white border-secondary" style="width: 170px; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.1); outline: none;">
                     <button class="btn btn-sm btn-outline-info" id="btn-recalculate-pca" style="font-size: 0.725rem; color: #2dd4bf; border-color: rgba(45,212,191,0.3); background: transparent;"><i class="fa fa-calculator"></i> Solver PCA</button>
+                    <button class="btn btn-sm btn-outline-warning" id="btn-toggle-umap-drawer" style="font-size: 0.725rem; color: #fb923c; border-color: rgba(251,146,60,0.3); background: transparent; display: none;"><i class="fa fa-sliders-h"></i> Params</button>
+                  </div>
+                </div>
+
+                <!-- UMAP Hyperparameters Drawer (Collapsible) -->
+                <div id="umap-controls-drawer" style="display: none; background: #111827; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 12px; font-size: 0.725rem;" class="text-white">
+                  <div class="row g-3 align-items-center">
+                    <div class="col-md-3">
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="opacity-75">Neighbors (n_neighbors)</span>
+                        <span id="val-umap-neighbors" class="text-teal font-monospace fw-bold" style="color: #2dd4bf;">15</span>
+                      </div>
+                      <input type="range" class="form-range" id="umap-neighbors" min="2" max="50" step="1" value="15" style="accent-color: #2dd4bf; height: 6px;">
+                    </div>
+                    <div class="col-md-3">
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="opacity-75">Min Distance (min_dist)</span>
+                        <span id="val-umap-mindist" class="text-teal font-monospace fw-bold" style="color: #2dd4bf;">0.10</span>
+                      </div>
+                      <input type="range" class="form-range" id="umap-mindist" min="0.01" max="0.99" step="0.05" value="0.10" style="accent-color: #2dd4bf; height: 6px;">
+                    </div>
+                    <div class="col-md-3">
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="opacity-75">Epochs (n_epochs)</span>
+                        <span id="val-umap-epochs" class="text-teal font-monospace fw-bold" style="color: #2dd4bf;">200</span>
+                      </div>
+                      <input type="range" class="form-range" id="umap-epochs" min="50" max="350" step="10" value="200" style="accent-color: #2dd4bf; height: 6px;">
+                    </div>
+                    <div class="col-md-3 text-end">
+                      <button class="btn btn-sm w-100" id="btn-recalculate-umap" style="background: linear-gradient(135deg, #0d9488, #0ea5e9); border: none; font-weight: 700; color: #fff; height: 28px; font-size: 0.7rem; border-radius: 4px;"><i class="fa fa-sync-alt me-1"></i> Solver UMAP</button>
+                    </div>
                   </div>
                 </div>
                 
                 <!-- Canvas viewport -->
                 <canvas id="vector-canvas" width="800" height="500" style="width: 100%; height: 500px; display: block; cursor: grab; background: radial-gradient(circle at center, #0b111e 0%, #06080e 100%);"></canvas>
                 
+                <!-- UMAP Loading Progress Overlay -->
+                <div id="umap-loading-overlay" style="position: absolute; display: none; top: 0; left: 0; right: 0; bottom: 0; background: rgba(9, 13, 22, 0.9); z-index: 100; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
+                  <div class="spinner-border text-info mb-3" style="color: #2dd4bf !important;" role="status"></div>
+                  <div class="text-white small mb-2" id="umap-loading-text" style="font-family: monospace; font-size: 0.8rem;">Solving UMAP projection...</div>
+                  <div class="progress" style="width: 250px; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden;">
+                    <div id="umap-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #2dd4bf, #38bdf8); transition: width 0.1s;"></div>
+                  </div>
+                </div>
+
                 <!-- Floating Tooltip Overlay -->
                 <div id="vector-tooltip" style="position: absolute; display: none; background: rgba(15, 23, 42, 0.92); border: 1px solid rgba(45, 212, 191, 0.3); border-radius: 8px; padding: 12px; color: #f8fafc; font-size: 0.75rem; pointer-events: none; backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.6); z-index: 1000; max-width: 260px;"></div>
 
@@ -1011,6 +1159,8 @@ full_width: true
       let hoveredNode = null;
       let neighbors = [];
       let searchQuery = "";
+      let currentProjectionMethod = 'pca';
+      let cachedUmapCoords = null;
       
       let scale = 1.0;
       let offsetX = 0;
@@ -1026,7 +1176,9 @@ full_width: true
         'publication': '#38bdf8',
         'talk': '#a855f7',
         'milestone': '#eab308',
-        'youtube_transcript': '#2dd4bf'
+        'youtube_transcript': '#2dd4bf',
+        'omscs7641_post': '#0ea5e9',
+        'omscs7641_page': '#38bdf8'
       };
       
       const typeNames = {
@@ -1036,7 +1188,9 @@ full_width: true
         'publication': '🎓 Publication',
         'talk': '🗣️ Presentation',
         'milestone': '🏆 Defense Milestone',
-        'youtube_transcript': '🎥 Video Transcript'
+        'youtube_transcript': '🎥 Video Transcript',
+        'omscs7641_post': '🎓 Course Article',
+        'omscs7641_page': '📖 Course Page'
       };
 
       const canvas = document.getElementById('vector-canvas');
@@ -1190,6 +1344,8 @@ full_width: true
           }
           node.x = x;
           node.y = y;
+          node.pcaX = x;
+          node.pcaY = y;
           
           if (x < minX) minX = x;
           if (x > maxX) maxX = x;
@@ -1524,6 +1680,174 @@ full_width: true
       
       document.getElementById('btn-reset-view').addEventListener('click', resetView);
       document.getElementById('btn-recalculate-pca').addEventListener('click', runPCAOrchestrator);
+
+      // Sliders event listeners to update text values
+      const neighborsSlider = document.getElementById('umap-neighbors');
+      const minDistSlider = document.getElementById('umap-mindist');
+      const epochsSlider = document.getElementById('umap-epochs');
+
+      if (neighborsSlider && minDistSlider && epochsSlider) {
+        neighborsSlider.addEventListener('input', (e) => {
+          document.getElementById('val-umap-neighbors').innerText = e.target.value;
+        });
+        minDistSlider.addEventListener('input', (e) => {
+          document.getElementById('val-umap-mindist').innerText = parseFloat(e.target.value).toFixed(2);
+        });
+        epochsSlider.addEventListener('input', (e) => {
+          document.getElementById('val-umap-epochs').innerText = e.target.value;
+        });
+      }
+
+      // Recalculate UMAP
+      document.getElementById('btn-recalculate-umap').addEventListener('click', runUMAPOrchestrator);
+
+      // Method switcher
+      const btnPca = document.getElementById('btn-projection-pca');
+      const btnUmap = document.getElementById('btn-projection-umap');
+      const umapDrawer = document.getElementById('umap-controls-drawer');
+      const pcaRecalcBtn = document.getElementById('btn-recalculate-pca');
+      const umapParamsBtn = document.getElementById('btn-toggle-umap-drawer');
+
+      btnPca.addEventListener('click', () => {
+        if (currentProjectionMethod === 'pca') return;
+        currentProjectionMethod = 'pca';
+        
+        btnPca.style.background = '#2dd4bf';
+        btnPca.style.color = '#0f172a';
+        btnUmap.style.background = 'transparent';
+        btnUmap.style.color = '#94a3b8';
+        
+        umapDrawer.style.display = 'none';
+        pcaRecalcBtn.style.display = 'inline-block';
+        umapParamsBtn.style.display = 'none';
+
+        switchProjectionToPCA();
+      });
+
+      btnUmap.addEventListener('click', () => {
+        if (currentProjectionMethod === 'umap') return;
+        currentProjectionMethod = 'umap';
+        
+        btnUmap.style.background = '#2dd4bf';
+        btnUmap.style.color = '#0f172a';
+        btnPca.style.background = 'transparent';
+        btnPca.style.color = '#94a3b8';
+        
+        pcaRecalcBtn.style.display = 'none';
+        umapParamsBtn.style.display = 'inline-block';
+        umapDrawer.style.display = 'block';
+
+        if (cachedUmapCoords) {
+          switchProjectionToUMAP();
+        } else {
+          runUMAPOrchestrator();
+        }
+      });
+
+      umapParamsBtn.addEventListener('click', () => {
+        const isHidden = umapDrawer.style.display === 'none';
+        umapDrawer.style.display = isHidden ? 'block' : 'none';
+      });
+
+      function switchProjectionToPCA() {
+        minX = Infinity; maxX = -Infinity; minY = Infinity; maxY = -Infinity;
+        database.forEach(node => {
+          node.x = node.pcaX;
+          node.y = node.pcaY;
+          if (node.x < minX) minX = node.x;
+          if (node.x > maxX) maxX = node.x;
+          if (node.y < minY) minY = node.y;
+          if (node.y > maxY) maxY = node.y;
+        });
+        clearInspectorSelection();
+        resetView();
+      }
+
+      function switchProjectionToUMAP() {
+        minX = Infinity; maxX = -Infinity; minY = Infinity; maxY = -Infinity;
+        database.forEach(node => {
+          node.x = node.umapX;
+          node.y = node.umapY;
+          if (node.x < minX) minX = node.x;
+          if (node.x > maxX) maxX = node.x;
+          if (node.y < minY) minY = node.y;
+          if (node.y > maxY) maxY = node.y;
+        });
+        clearInspectorSelection();
+        resetView();
+      }
+
+      async function runUMAPOrchestrator() {
+        if (!database || database.length === 0) return;
+
+        const overlay = document.getElementById('umap-loading-overlay');
+        const progress = document.getElementById('umap-progress-bar');
+        const loadingText = document.getElementById('umap-loading-text');
+
+        if (overlay) {
+          overlay.style.display = 'flex';
+          progress.style.width = '0%';
+          loadingText.innerText = 'Initializing UMAP solver...';
+        }
+
+        // Yield execution to allow progress bar to paint initially
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        const embeddings = database.map(node => node.embedding);
+        const nNeighbors = parseInt(document.getElementById('umap-neighbors').value) || 15;
+        const minDist = parseFloat(document.getElementById('umap-mindist').value) || 0.1;
+        const nEpochs = parseInt(document.getElementById('umap-epochs').value) || 200;
+
+        const UMAPClass = window.UMAP || (typeof umap !== 'undefined' ? umap.UMAP : null);
+        if (!UMAPClass) {
+          console.error("UMAP class not found.");
+          if (overlay) overlay.style.display = 'none';
+          alert("UMAP library is not loaded from CDN. Please check your network and try again.");
+          return;
+        }
+
+        try {
+          const umapSolver = new UMAPClass({
+            nNeighbors: nNeighbors,
+            minDist: minDist,
+            nEpochs: nEpochs,
+            nComponents: 2,
+            random: Math.random
+          });
+
+          const projected = await umapSolver.fitAsync(embeddings, (epochNumber) => {
+            const percent = Math.round((epochNumber / nEpochs) * 100);
+            if (progress) progress.style.width = percent + '%';
+            if (loadingText) loadingText.innerText = `Solving UMAP projection: Epoch ${epochNumber}/${nEpochs} (${percent}%)`;
+          });
+
+          const embeddingCoords = projected || umapSolver.embedding;
+
+          minX = Infinity; maxX = -Infinity; minY = Infinity; maxY = -Infinity;
+          database.forEach((node, idx) => {
+            const x = embeddingCoords[idx][0];
+            const y = embeddingCoords[idx][1];
+            node.umapX = x;
+            node.umapY = y;
+            node.x = x;
+            node.y = y;
+
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          });
+
+          cachedUmapCoords = database.map(node => ({ x: node.umapX, y: node.umapY }));
+          if (overlay) overlay.style.display = 'none';
+          clearInspectorSelection();
+          resetView();
+        } catch (err) {
+          console.error("UMAP calculation error:", err);
+          if (overlay) overlay.style.display = 'none';
+          alert("UMAP computation failed: " + (err.message || err));
+        }
+      }
 
       // Real-time Text Filtering
       searchInput.addEventListener('input', () => {
@@ -1868,103 +2192,6 @@ entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
     });
   </script>
 
-  <!-- STATIC HOSTING & WEBASSEMBLY OPTIMIZATIONS -->
-  <div class="row mt-5">
-    <div class="col-12">
-      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
-        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-server me-2 text-info"></i> Static Hosting & WebAssembly Optimizations</h2>
-        <p class="text-light opacity-90 small mb-4">
-          Running multiple neural network model inferences (embedding extraction, Cross-Encoder classification, and token generation) directly inside static web pages poses unique performance and security challenges. Waddles implements the following key technical solutions to ensure robust execution.
-        </p>
-
-        <div class="row g-4">
-          <!-- Bypassing SharedArrayBuffer -->
-          <div class="col-md-6">
-            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
-              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-shield-alt me-2"></i> 1. Single-Threaded WASM Fallback</h4>
-              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                By default, ONNX Runtime Web requests multi-threaded WASM compilation, which requires <code>SharedArrayBuffer</code> support. For security (Spectre mitigations), browsers block this unless headers like <code>Cross-Origin-Opener-Policy (COOP)</code> and <code>Cross-Origin-Embedder-Policy (COEP)</code> are sent by the host. Since static hosts like GitHub Pages do not support custom headers, Waddles forces a single-threaded runtime configuration (<code>wasm.numThreads = 1</code>) to bypass this block, allowing compilation on any standard host.
-              </p>
-            </div>
-          </div>
-          <!-- CDN Model Hosting -->
-          <div class="col-md-6">
-            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
-              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-cloud-upload-alt me-2"></i> 2. Dynamic CDN Model Retrieval</h4>
-              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                To keep the website's Git repository light and performant, binary weights are not stored in the repository. Instead, Waddles dynamically retrieves pre-quantized ONNX configurations from the Hugging Face Hub CDN. Cross-Origin Resource Sharing (CORS) is enabled at the CDN level, allowing static pages to fetch files directly without triggering browser cross-origin blocks.
-              </p>
-            </div>
-          </div>
-          <!-- HTTPS Cache Storage -->
-          <div class="col-md-6">
-            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
-              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-hdd me-2"></i> 3. Persistent Browser-Side Caching</h4>
-              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                To preserve bandwidth and ensure zero-latency initial load times, Waddles leverages the browser's Cache Storage API (IndexedDB fallback). Under secure contexts (HTTPS), browser-side persistent caches are activated. Once downloaded, subsequent openings of the chatbot bypass the network, loading models locally and instantaneously.
-              </p>
-            </div>
-          </div>
-          <!-- Resilient Search Fallback -->
-          <div class="col-md-6">
-            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
-              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-undo-alt me-2"></i> 4. Robust Search Mode Fallbacks</h4>
-              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                In the event that CDN download speeds are throttled, WebAssembly execution is blocked by administrative client-side policies, or older browsers are used, Waddles implements an automated fallback routing. The client-side logic catches any model load exceptions and falls back to our high-resolution exact-match static VSM keyword index, keeping the chatbot responsive.
-              </p>
-            </div>
-          </div>
-          <!-- Latency & Rendering Guard -->
-          <div class="col-md-6">
-            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
-              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-spinner me-2"></i> 5. Asynchronous DOM Yield &amp; Latency Guard</h4>
-              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
-                <strong>Why it is needed:</strong> WebAssembly model execution runs on the browser's single main thread. Heavy CPU calculations starve the layout engine and prevent the browser from repainting the DOM.
-              </p>
-              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                <strong>Specific failures prevented:</strong> Prevents browser tab freezes, duplicate query submission race conditions, and unresponsive button states by yielding the execution thread for 50 milliseconds to paint UI spinners and typing indicators before model loading begins.
-              </p>
-            </div>
-          </div>
-          <!-- Sentence Truncation -->
-          <div class="col-md-6">
-            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
-              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-align-left me-2"></i> 6. Trailing Sentence Auto-Truncation</h4>
-              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
-                <strong>Why it is needed:</strong> Autoregressive language models generate text token-by-token and can reach generation limits mid-phrase, resulting in trailing fragments.
-              </p>
-              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                <strong>Specific failures prevented:</strong> Prevents broken syntax and abrupt, incomplete text terminations in the user interface by scanning for sentence boundaries and stripping unfinished trailing words.
-              </p>
-            </div>
-          </div>
-          <!-- Dynamic Few-Shot Structured Persona Anchoring -->
-          <div class="col-md-6">
-            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
-              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-anchor me-2"></i> 7. Dynamic Few-Shot Persona Anchoring</h4>
-              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
-                <strong>Why it is needed:</strong> Lightweight models (under 1B parameters) struggle with complex instruction adherence and formatting consistency when prompted to adopt custom styles.
-              </p>
-              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                <strong>Specific failures prevented:</strong> Prevents JSON parsing crashes, missing object keys, and style drift. Pre-embedded style examples matching the query topic are retrieved via cosine similarity and injected into system instructions to anchor the formatting.
-            </div>
-          </div>
-          <!-- Input Pre-processing & Autocomplete suggestions -->
-          <div class="col-md-6">
-            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
-              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-keyboard me-2"></i> 8. Input Pre-processing &amp; Autocomplete Suggestions</h4>
-              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
-                <strong>Why it is needed:</strong> Raw user inputs are prone to typos, non-standard acronyms, rambling text that dilutes embedding weights, and queries that miss the relevant indexed documents.
-              </p>
-              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                <strong>Specific failures prevented:</strong> Mitigates vector search misses and semantic misalignment by translating abbreviations (such as ML, RL, fMRI, QPP) to expanded definitions, truncating inputs exceeding 20 words to core queries, and displaying tab-completable pixel-aligned autocomplete ghost recommendations to guide user search.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- RESEARCH DATA COLLECTION DISCLAIMER -->
   <div class="row mb-5">

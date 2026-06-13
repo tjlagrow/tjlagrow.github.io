@@ -459,7 +459,7 @@
             if (effectiveType === 'publication' || effectiveType === 'talk') {
                 return researchChecked;
             }
-            if (doc.url.includes('/teaching') || effectiveType === 'milestone') {
+            if (doc.url.includes('/teaching') || effectiveType === 'milestone' || effectiveType === 'omscs7641_post' || effectiveType === 'omscs7641_page') {
                 return teachingChecked;
             }
             return bioChecked;
@@ -1026,7 +1026,9 @@
             'publication': '🎓 Publication',
             'talk': '🗣️ Presentation',
             'milestone': '🏆 Defense Milestone',
-            'youtube_transcript': '🎥 Video Transcript'
+            'youtube_transcript': '🎥 Video Transcript',
+            'omscs7641_post': '🎓 Course Article',
+            'omscs7641_page': '📖 Course Page'
         };
 
         function highlightText(text, queryTerms) {
@@ -1094,7 +1096,7 @@
             if (effectiveType === 'publication' || effectiveType === 'talk') {
                 return 'Research';
             }
-            if (doc.url.includes('/teaching') || effectiveType === 'milestone') {
+            if (doc.url.includes('/teaching') || effectiveType === 'milestone' || effectiveType === 'omscs7641_post' || effectiveType === 'omscs7641_page') {
                 return 'Teaching';
             }
             return 'Bio/Contact';
@@ -1444,11 +1446,10 @@ ${query}<|im_end|>
                         </div>
                     `;
 
-                    const effectiveType = bestMatch.original_type || bestMatch.type;
                     return {
                         answer: responseHtml,
                         confidence: 1.0,
-                        category: bestMatch.url.includes('/teaching') ? 'Teaching' : (effectiveType === 'publication' || effectiveType === 'talk' ? 'Research' : 'Bio/Contact'),
+                        category: getDocCategory(bestMatch),
                         followups: [],
                         sourceTitle: bestMatch.title,
                         sourceUrl: bestMatch.url

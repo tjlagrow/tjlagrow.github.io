@@ -2,6 +2,7 @@ import os
 import re
 import json
 import yaml
+import html
 
 # Root path
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -15,6 +16,9 @@ OUTPUT_FILE = os.path.join(PROJECT_ROOT, "assets", "json", "embeddings.json")
 
 def clean_content(content):
     """Strips YAML front matter, Liquid tags, HTML, and Markdown syntax."""
+    # Decode HTML entities
+    content = html.unescape(content)
+    
     # Remove YAML front matter
     if content.startswith("---"):
         parts = content.split("---", 2)
@@ -295,6 +299,36 @@ def extract_chunks():
                     "text": chunk_text_representation,
                     "type": "youtube_transcript",
                     "original_type": original_type
+                })
+
+    # 4.5 Georgia Tech OMSCS Machine Learning (CS 7641) Course Content
+    course_path = os.path.join(DATA_DIR, "omscs7641_content.json")
+    if os.path.isfile(course_path):
+        with open(course_path, "r", encoding="utf-8") as f:
+            course_items = json.load(f) or []
+        for item in course_items:
+            title = item.get("title", "")
+            url = item.get("url", "")
+            content_html = item.get("content_html", "")
+            author = item.get("author", "")
+            date = item.get("date", "")
+            item_type = item.get("type", "omscs7641_post")
+            
+            clean_txt = clean_content(content_html)
+            if not clean_txt:
+                continue
+                
+            formatted_date = date.split("T")[0] if "T" in date else date
+            metadata_prefix = f"Georgia Tech OMSCS CS 7641 Machine Learning course site article: '{title}' written by {author} on {formatted_date}."
+            
+            sub_chunks = chunk_text(clean_txt, max_words=120)
+            for text_chunk in sub_chunks:
+                chunk_text_representation = f"{metadata_prefix} {text_chunk}"
+                chunks.append({
+                    "title": title,
+                    "url": url,
+                    "text": chunk_text_representation,
+                    "type": item_type
                 })
 
     print(f"Extracted {len(chunks)} total text chunks for embedding.")
