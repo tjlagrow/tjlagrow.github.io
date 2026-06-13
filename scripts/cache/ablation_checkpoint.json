@@ -1,0 +1,918 @@
+{
+  "System Specifications": {
+    "os": "Linux 5.15.0-84-generic",
+    "cpu": "x86_64",
+    "ram_gb": 62.61,
+    "gpu_available": true,
+    "gpu_name": "NVIDIA GeForce RTX 2080 Super with Max-Q Design",
+    "gpu_vram_gb": 7.6
+  },
+  "Phase 1: Retrieval Parameters": {
+    "chunk_Ratio A (Child 30 / Parent 150)": {
+      "hit_at_3": 0.72,
+      "mrr": 0.585
+    },
+    "chunk_Ratio B (Child 50 / Parent 200)": {
+      "hit_at_3": 0.72,
+      "mrr": 0.5823333333333333
+    },
+    "chunk_Ratio C (Child 100 / Parent 500)": {
+      "hit_at_3": 0.76,
+      "mrr": 0.6199999999999999
+    },
+    "ret_K_2": {
+      "hit_at_3": 0.64,
+      "mrr": 0.56
+    },
+    "ret_K_3": {
+      "hit_at_3": 0.68,
+      "mrr": 0.5733333333333334
+    },
+    "ret_K_5": {
+      "hit_at_3": 0.72,
+      "mrr": 0.5823333333333333
+    },
+    "ret_K_8": {
+      "hit_at_3": 0.78,
+      "mrr": 0.5910238095238095
+    },
+    "weight_dense_0.2": {
+      "hit_at_3": 0.72,
+      "mrr": 0.6
+    },
+    "weight_dense_0.5": {
+      "hit_at_3": 0.68,
+      "mrr": 0.5733333333333334
+    },
+    "weight_dense_0.8": {
+      "hit_at_3": 0.6,
+      "mrr": 0.5033333333333334
+    },
+    "quant_float32": {
+      "hit_at_3": 0.68,
+      "mrr": 0.5733333333333334
+    },
+    "quant_int8": {
+      "hit_at_3": 0.68,
+      "mrr": 0.5733333333333334
+    },
+    "quant_binary": {
+      "hit_at_3": 0.62,
+      "mrr": 0.5033333333333333
+    },
+    "rrf_const_10": {
+      "hit_at_3": 0.72,
+      "mrr": 0.6033333333333333
+    },
+    "rrf_const_30": {
+      "hit_at_3": 0.66,
+      "mrr": 0.5666666666666668
+    },
+    "rrf_const_60": {
+      "hit_at_3": 0.68,
+      "mrr": 0.5733333333333334
+    },
+    "rrf_const_100": {
+      "hit_at_3": 0.66,
+      "mrr": 0.5666666666666668
+    },
+    "rrf_const_150": {
+      "hit_at_3": 0.66,
+      "mrr": 0.5666666666666668
+    }
+  },
+  "Phase 2: Generator Model Comparison": {
+    "SmolLM2-135M": {
+      "rouge_l": 0.21330149319279754,
+      "semantic_similarity": 0.38374554986755055,
+      "length": 453.3333333333333,
+      "latency_sec": 3.084356988857811,
+      "lexical_diversity_ttr": 0.49522822220811297,
+      "groundedness": 0.14885332180590802,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.6406363166420638,
+      "verbosity_ratio": 4.5058116305255895,
+      "structure_fidelity": 0.0,
+      "judge_faithfulness": 0.5,
+      "judge_relevance": 0.7999999999999999,
+      "refusal_adherence": 0.5
+    },
+    "SmolLM2-360M": {
+      "rouge_l": 0.17893610013175232,
+      "semantic_similarity": 0.3607490472495556,
+      "length": 450.1666666666667,
+      "latency_sec": 3.386185344463835,
+      "lexical_diversity_ttr": 0.48151831905278913,
+      "groundedness": 0.139773172381868,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.6581828481547977,
+      "verbosity_ratio": 4.351965825936078,
+      "structure_fidelity": 0.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 0.8333333333333334,
+      "refusal_adherence": 0.6666666666666666
+    },
+    "Qwen2.5-0.5B": {
+      "rouge_l": 0.21828063241106718,
+      "semantic_similarity": 0.3972773738205433,
+      "length": 353.8333333333333,
+      "latency_sec": 1.7417011056871463,
+      "lexical_diversity_ttr": 0.8652344233865974,
+      "groundedness": 0.2814419524777581,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.6636746671912913,
+      "verbosity_ratio": 3.7620277002428026,
+      "structure_fidelity": 0.8333333333333334,
+      "judge_faithfulness": 0.4166666666666667,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666
+    },
+    "DeepSeek-R1-1.5B": {
+      "rouge_l": 0.35861605182257356,
+      "semantic_similarity": 0.40192508200804394,
+      "length": 594.3333333333334,
+      "latency_sec": 43.83421949592108,
+      "lexical_diversity_ttr": 0.660424900703726,
+      "groundedness": 0.24627085332967688,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.7101620275149686,
+      "verbosity_ratio": 5.878533010340791,
+      "structure_fidelity": 0.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 0.4666666666666666,
+      "refusal_adherence": 0.5
+    },
+    "Qwen2.5-1.5B": {
+      "rouge_l": 0.20346673254281947,
+      "semantic_similarity": 0.47995227699478465,
+      "length": 212.0,
+      "latency_sec": 11.297321829867238,
+      "lexical_diversity_ttr": 0.9102593699626578,
+      "groundedness": 0.3524811445864077,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.5903479561374297,
+      "verbosity_ratio": 2.075319919084221,
+      "structure_fidelity": 0.6666666666666666,
+      "judge_faithfulness": 0.8333333333333334,
+      "judge_relevance": 0.8333333333333334,
+      "refusal_adherence": 0.6666666666666666
+    },
+    "Decoding: Greedy": {
+      "rouge_l": 0.17893610013175232,
+      "semantic_similarity": 0.3607490472495556,
+      "length": 450.1666666666667,
+      "latency_sec": 3.25505368046773,
+      "lexical_diversity_ttr": 0.48151831905278913,
+      "groundedness": 0.139773172381868,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.6581828481547977,
+      "verbosity_ratio": 4.351965825936078,
+      "structure_fidelity": 0.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 0.8333333333333334,
+      "refusal_adherence": 0.6666666666666666
+    },
+    "Decoding: Top-P (temp=0.7, p=0.9)": {
+      "rouge_l": 0.1842885375494071,
+      "semantic_similarity": 0.4724789845446746,
+      "length": 419.6666666666667,
+      "latency_sec": 2.8307784916833043,
+      "lexical_diversity_ttr": 0.576140873015873,
+      "groundedness": 0.2048720755617308,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.7529577701991496,
+      "verbosity_ratio": 4.008233445933674,
+      "structure_fidelity": 0.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666
+    },
+    "Decoding: Top-K (temp=0.7, k=40)": {
+      "rouge_l": 0.24895696091348266,
+      "semantic_similarity": 0.441760736828049,
+      "length": 455.0,
+      "latency_sec": 3.006904758823415,
+      "lexical_diversity_ttr": 0.6537231352001179,
+      "groundedness": 0.15144170880465097,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.7035045649256518,
+      "verbosity_ratio": 4.085468269335546,
+      "structure_fidelity": 0.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 0.9666666666666667,
+      "refusal_adherence": 0.6666666666666666
+    },
+    "Repetition Penalty: 1.0": {
+      "rouge_l": 0.17893610013175232,
+      "semantic_similarity": 0.3607490472495556,
+      "length": 450.1666666666667,
+      "latency_sec": 3.4634983890379467,
+      "lexical_diversity_ttr": 0.48151831905278913,
+      "groundedness": 0.139773172381868,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.6581828481547977,
+      "verbosity_ratio": 4.351965825936078,
+      "structure_fidelity": 0.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 0.8333333333333334,
+      "refusal_adherence": 0.6666666666666666
+    },
+    "Repetition Penalty: 1.05": {
+      "rouge_l": 0.16951581027667983,
+      "semantic_similarity": 0.3562125364939372,
+      "length": 430.8333333333333,
+      "latency_sec": 3.4587274823182574,
+      "lexical_diversity_ttr": 0.5156181200662963,
+      "groundedness": 0.09434361766485178,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.6959313428940844,
+      "verbosity_ratio": 4.298243728049219,
+      "structure_fidelity": 0.0,
+      "judge_faithfulness": 0.16666666666666666,
+      "judge_relevance": 0.8333333333333334,
+      "refusal_adherence": 0.6666666666666666
+    },
+    "Repetition Penalty: 1.1": {
+      "rouge_l": 0.16511034255599474,
+      "semantic_similarity": 0.41489017754793167,
+      "length": 381.6666666666667,
+      "latency_sec": 2.8725239123062543,
+      "lexical_diversity_ttr": 0.7342184710484493,
+      "groundedness": 0.07346030473135524,
+      "citation_fidelity": 0.8333333333333334,
+      "hallucination_ratio": 0.8755946122545962,
+      "verbosity_ratio": 3.8740140484991747,
+      "structure_fidelity": 0.0,
+      "judge_faithfulness": 0.16666666666666666,
+      "judge_relevance": 0.8333333333333334,
+      "refusal_adherence": 0.6666666666666666
+    },
+    "Repetition Penalty: 1.15": {
+      "rouge_l": 0.1943401405357927,
+      "semantic_similarity": 0.4062500521540642,
+      "length": 427.0,
+      "latency_sec": 2.8948048694680133,
+      "lexical_diversity_ttr": 0.7785582748636936,
+      "groundedness": 0.07906178965961576,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.879217084244258,
+      "verbosity_ratio": 4.321707557634332,
+      "structure_fidelity": 0.0,
+      "judge_faithfulness": 0.16666666666666666,
+      "judge_relevance": 0.6666666666666666,
+      "refusal_adherence": 0.6666666666666666
+    },
+    "Repetition Penalty: 1.2": {
+      "rouge_l": 0.15545125164690382,
+      "semantic_similarity": 0.4002460377911727,
+      "length": 291.8333333333333,
+      "latency_sec": 2.2068907762877643,
+      "lexical_diversity_ttr": 0.8257773816597345,
+      "groundedness": 0.08282510328546135,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.8725651682077512,
+      "verbosity_ratio": 3.1975317334585074,
+      "structure_fidelity": 0.08333333333333333,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 0.8333333333333334,
+      "refusal_adherence": 0.6666666666666666
+    },
+    "Repetition Penalty: 1.25": {
+      "rouge_l": 0.09781236275801493,
+      "semantic_similarity": 0.3094013345738252,
+      "length": 278.1666666666667,
+      "latency_sec": 2.217085323218877,
+      "lexical_diversity_ttr": 0.830735789909505,
+      "groundedness": 0.04461152882205514,
+      "citation_fidelity": 1.0,
+      "hallucination_ratio": 0.9190229848124586,
+      "verbosity_ratio": 3.1986784128660557,
+      "structure_fidelity": 0.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 0.7999999999999999,
+      "refusal_adherence": 0.6666666666666666
+    }
+  },
+  "Phase 3: Persona & Few-Shot Adherence": {
+    "helpful": {
+      "shot_0": {
+        "json_conformance": 0.8333333333333334,
+        "style_density": 0.017543859649122806,
+        "groundedness": 0.28749333455215814,
+        "length": 351.3333333333333,
+        "latency_sec": 1.8078704008366913
+      },
+      "shot_1": {
+        "json_conformance": 0.0,
+        "style_density": 0.04992784992784993,
+        "groundedness": 0.19064217891054472,
+        "length": 285.0,
+        "latency_sec": 1.3404357364246
+      },
+      "shot_2": {
+        "json_conformance": 0.3333333333333333,
+        "style_density": 0.04527210203598916,
+        "groundedness": 0.1427797955340328,
+        "length": 261.5,
+        "latency_sec": 1.328773053906237
+      },
+      "shot_3": {
+        "json_conformance": 0.3333333333333333,
+        "style_density": 0.052385408458103494,
+        "groundedness": 0.12878637566137566,
+        "length": 258.5,
+        "latency_sec": 1.19588591864643
+      },
+      "shot_4": {
+        "json_conformance": 0.3333333333333333,
+        "style_density": 0.04477124183006537,
+        "groundedness": 0.12610221063089916,
+        "length": 242.5,
+        "latency_sec": 1.2176358840273072
+      },
+      "shot_5": {
+        "json_conformance": 0.5,
+        "style_density": 0.04850948509485095,
+        "groundedness": 0.23749999999999996,
+        "length": 201.0,
+        "latency_sec": 1.0257037801978488
+      },
+      "shot_6": {
+        "json_conformance": 0.5,
+        "style_density": 0.042864923747276684,
+        "groundedness": 0.13703208556149735,
+        "length": 213.83333333333334,
+        "latency_sec": 1.0767362935778995
+      },
+      "shot_7": {
+        "json_conformance": 0.5,
+        "style_density": 0.04966605496756573,
+        "groundedness": 0.16969696969696968,
+        "length": 253.5,
+        "latency_sec": 1.2276485156423103
+      },
+      "shot_8": {
+        "json_conformance": 0.5,
+        "style_density": 0.057828533598146305,
+        "groundedness": 0.1823529411764706,
+        "length": 173.0,
+        "latency_sec": 0.9489276562041292
+      },
+      "shot_9": {
+        "json_conformance": 0.5,
+        "style_density": 0.049049707602339176,
+        "groundedness": 0.21637426900584797,
+        "length": 168.33333333333334,
+        "latency_sec": 0.966582306738322
+      },
+      "shot_10": {
+        "json_conformance": 0.5,
+        "style_density": 0.04624547360396417,
+        "groundedness": 0.1897890660404565,
+        "length": 230.83333333333334,
+        "latency_sec": 1.2457831144177665
+      }
+    },
+    "sassy": {
+      "shot_0": {
+        "json_conformance": 0.0,
+        "style_density": 0.015748757415424083,
+        "groundedness": 0.16404258509521666,
+        "length": 214.33333333333334,
+        "latency_sec": 1.215974270676573
+      },
+      "shot_1": {
+        "json_conformance": 0.16666666666666666,
+        "style_density": 0.005747126436781609,
+        "groundedness": 0.05833333333333333,
+        "length": 143.83333333333334,
+        "latency_sec": 0.7967568705789745
+      },
+      "shot_2": {
+        "json_conformance": 0.3333333333333333,
+        "style_density": 0.0,
+        "groundedness": 0.043859649122807015,
+        "length": 132.0,
+        "latency_sec": 0.769215377047658
+      },
+      "shot_3": {
+        "json_conformance": 0.3333333333333333,
+        "style_density": 0.010499338624338625,
+        "groundedness": 0.0726976976976977,
+        "length": 209.16666666666666,
+        "latency_sec": 1.1657995063190658
+      },
+      "shot_4": {
+        "json_conformance": 0.3333333333333333,
+        "style_density": 0.01759631117060836,
+        "groundedness": 0.17072633895818048,
+        "length": 383.5,
+        "latency_sec": 1.8294878887633483
+      },
+      "shot_5": {
+        "json_conformance": 0.3333333333333333,
+        "style_density": 0.00750122970978849,
+        "groundedness": 0.09543650793650793,
+        "length": 274.5,
+        "latency_sec": 1.2599851674555491
+      },
+      "shot_6": {
+        "json_conformance": 0.3333333333333333,
+        "style_density": 0.006903143585386576,
+        "groundedness": 0.07738931460195829,
+        "length": 233.66666666666666,
+        "latency_sec": 1.1170664731568347
+      },
+      "shot_7": {
+        "json_conformance": 0.5,
+        "style_density": 0.008145363408521303,
+        "groundedness": 0.09293981481481482,
+        "length": 209.33333333333334,
+        "latency_sec": 1.0936740167283763
+      },
+      "shot_8": {
+        "json_conformance": 0.6666666666666666,
+        "style_density": 0.022691390734868994,
+        "groundedness": 0.12505013209076188,
+        "length": 437.6666666666667,
+        "latency_sec": 2.1545179564661034
+      },
+      "shot_9": {
+        "json_conformance": 0.5,
+        "style_density": 0.009696969696969697,
+        "groundedness": 0.1127568338094654,
+        "length": 401.3333333333333,
+        "latency_sec": 1.8860845441619556
+      },
+      "shot_10": {
+        "json_conformance": 0.6666666666666666,
+        "style_density": 0.018887083493825067,
+        "groundedness": 0.1297751842091465,
+        "length": 415.6666666666667,
+        "latency_sec": 2.191488760135447
+      }
+    },
+    "pirate": {
+      "shot_0": {
+        "json_conformance": 0.16666666666666666,
+        "style_density": 0.008204973321252392,
+        "groundedness": 0.21935394040657197,
+        "length": 218.66666666666666,
+        "latency_sec": 1.1706607933156192
+      },
+      "shot_1": {
+        "json_conformance": 0.16666666666666666,
+        "style_density": 0.007147067491895078,
+        "groundedness": 0.047619047619047616,
+        "length": 163.83333333333334,
+        "latency_sec": 0.962087128078565
+      },
+      "shot_2": {
+        "json_conformance": 0.3333333333333333,
+        "style_density": 0.01716512430798145,
+        "groundedness": 0.0643270944741533,
+        "length": 204.83333333333334,
+        "latency_sec": 1.1973888500748824
+      },
+      "shot_3": {
+        "json_conformance": 0.3333333333333333,
+        "style_density": 0.017722930703620587,
+        "groundedness": 0.06991106719367589,
+        "length": 262.0,
+        "latency_sec": 1.4556901981122792
+      },
+      "shot_4": {
+        "json_conformance": 0.5,
+        "style_density": 0.015501418513539937,
+        "groundedness": 0.2426529118838099,
+        "length": 349.6666666666667,
+        "latency_sec": 1.8737729770752292
+      },
+      "shot_5": {
+        "json_conformance": 0.5,
+        "style_density": 0.033957769898522304,
+        "groundedness": 0.13771989453302022,
+        "length": 335.3333333333333,
+        "latency_sec": 1.7603532332771767
+      },
+      "shot_6": {
+        "json_conformance": 0.5,
+        "style_density": 0.04742631627426991,
+        "groundedness": 0.19943486590038315,
+        "length": 290.1666666666667,
+        "latency_sec": 1.5509948960194986
+      },
+      "shot_7": {
+        "json_conformance": 0.6666666666666666,
+        "style_density": 0.051864551952983985,
+        "groundedness": 0.16176427833754242,
+        "length": 324.0,
+        "latency_sec": 1.7002603985213984
+      },
+      "shot_8": {
+        "json_conformance": 0.6666666666666666,
+        "style_density": 0.04731447577863787,
+        "groundedness": 0.15460067838421215,
+        "length": 272.5,
+        "latency_sec": 1.5600436858367175
+      },
+      "shot_9": {
+        "json_conformance": 0.6666666666666666,
+        "style_density": 0.05317312777216546,
+        "groundedness": 0.15987213269821965,
+        "length": 271.3333333333333,
+        "latency_sec": 1.4737981496534
+      },
+      "shot_10": {
+        "json_conformance": 0.6666666666666666,
+        "style_density": 0.0316047349172227,
+        "groundedness": 0.16281642334273913,
+        "length": 337.3333333333333,
+        "latency_sec": 1.845993448824932
+      }
+    },
+    "cynical_redditor": {
+      "shot_0": {
+        "json_conformance": 0.16666666666666666,
+        "style_density": 0.0,
+        "groundedness": 0.25732452898691666,
+        "length": 272.8333333333333,
+        "latency_sec": 1.4370563969326515
+      },
+      "shot_1": {
+        "json_conformance": 0.5,
+        "style_density": 0.0,
+        "groundedness": 0.10671296296296297,
+        "length": 232.33333333333334,
+        "latency_sec": 1.2852443223043035
+      },
+      "shot_2": {
+        "json_conformance": 0.5,
+        "style_density": 0.0,
+        "groundedness": 0.07259570494864613,
+        "length": 206.83333333333334,
+        "latency_sec": 0.9966957107341538
+      },
+      "shot_3": {
+        "json_conformance": 0.6666666666666666,
+        "style_density": 0.0,
+        "groundedness": 0.19714701188351155,
+        "length": 352.0,
+        "latency_sec": 1.6145546281089385
+      },
+      "shot_4": {
+        "json_conformance": 0.3333333333333333,
+        "style_density": 0.0,
+        "groundedness": 0.07706374085684431,
+        "length": 272.6666666666667,
+        "latency_sec": 1.320140449795872
+      },
+      "shot_5": {
+        "json_conformance": 0.3333333333333333,
+        "style_density": 0.0026041666666666665,
+        "groundedness": 0.10591018650229177,
+        "length": 324.3333333333333,
+        "latency_sec": 1.5658687575099368
+      },
+      "shot_6": {
+        "json_conformance": 0.5,
+        "style_density": 0.0,
+        "groundedness": 0.1354789727338747,
+        "length": 254.83333333333334,
+        "latency_sec": 1.2794072981147717
+      },
+      "shot_7": {
+        "json_conformance": 0.6666666666666666,
+        "style_density": 0.0,
+        "groundedness": 0.09262125902992775,
+        "length": 189.33333333333334,
+        "latency_sec": 0.9479894829758754
+      },
+      "shot_8": {
+        "json_conformance": 0.6666666666666666,
+        "style_density": 0.0,
+        "groundedness": 0.130488034671189,
+        "length": 243.5,
+        "latency_sec": 1.20952443825081
+      },
+      "shot_9": {
+        "json_conformance": 0.6666666666666666,
+        "style_density": 0.002564102564102564,
+        "groundedness": 0.1631855413105413,
+        "length": 293.1666666666667,
+        "latency_sec": 1.4633359933892887
+      },
+      "shot_10": {
+        "json_conformance": 0.5,
+        "style_density": 0.0,
+        "groundedness": 0.1511347412986757,
+        "length": 236.33333333333334,
+        "latency_sec": 1.1942223925919582
+      }
+    }
+  },
+  "Phase 4: Data Construction and Accessibility": {
+    "Format: Raw Text": {
+      "rouge_l": 0.18932531840140532,
+      "semantic_similarity": 0.4151449079314868,
+      "groundedness": 0.3095458553791887,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 1.0
+    },
+    "Format: XML Tagged": {
+      "rouge_l": 0.20807531840140536,
+      "semantic_similarity": 0.3903965962429841,
+      "groundedness": 0.34139784946236557,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 1.0
+    },
+    "Format: JSON Array": {
+      "rouge_l": 0.21015865173473866,
+      "semantic_similarity": 0.4326384145145615,
+      "groundedness": 0.3578272208134909,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 1.0
+    },
+    "Ordering: First (Best)": {
+      "rouge_l": 0.20807531840140536,
+      "semantic_similarity": 0.3903965962429841,
+      "groundedness": 0.34139784946236557,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 1.0
+    },
+    "Ordering: Middle": {
+      "rouge_l": 0.207745937637242,
+      "semantic_similarity": 0.4048133430381616,
+      "groundedness": 0.3922203020993344,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 1.0
+    },
+    "Ordering: Last": {
+      "rouge_l": 0.22166227492314447,
+      "semantic_similarity": 0.4269872320195039,
+      "groundedness": 0.34761904761904755,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.5,
+      "judge_relevance": 1.0
+    },
+    "Metadata: Rich (Enriched)": {
+      "rouge_l": 0.20807531840140536,
+      "semantic_similarity": 0.3903965962429841,
+      "groundedness": 0.34139784946236557,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 1.0
+    },
+    "Metadata: None (Raw Text)": {
+      "rouge_l": 0.2049956082564778,
+      "semantic_similarity": 0.4240971952676773,
+      "groundedness": 0.30566370040786056,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.3,
+      "judge_relevance": 0.8333333333333334
+    },
+    "Rerank Cutoff: 2": {
+      "rouge_l": 0.1967528546332894,
+      "semantic_similarity": 0.3855853183194995,
+      "groundedness": 0.24793956043956045,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 1.0
+    },
+    "Rerank Cutoff: 4 (Default)": {
+      "rouge_l": 0.20807531840140536,
+      "semantic_similarity": 0.3903965962429841,
+      "groundedness": 0.34139784946236557,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 1.0
+    },
+    "Rerank Cutoff: 6": {
+      "rouge_l": 0.20547870004391744,
+      "semantic_similarity": 0.39278515862921876,
+      "groundedness": 0.3463832678948959,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.5833333333333334,
+      "judge_relevance": 1.0
+    },
+    "Rerank Cutoff: 8": {
+      "rouge_l": 0.21224198506807201,
+      "semantic_similarity": 0.4220989781121413,
+      "groundedness": 0.38035083905747324,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.5,
+      "judge_relevance": 1.0
+    },
+    "Rerank Cutoff: 12": {
+      "rouge_l": 0.21332894158981117,
+      "semantic_similarity": 0.4231814183294773,
+      "groundedness": 0.37487666688928956,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.5,
+      "judge_relevance": 1.0
+    },
+    "Ingestion: Parent Paragraph Chunks": {
+      "rouge_l": 0.2057531840140536,
+      "semantic_similarity": 0.4055059577027957,
+      "groundedness": 0.4157602813852814,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.5,
+      "judge_relevance": 1.0
+    },
+    "Ingestion: Sentence-level Snippets (Default)": {
+      "rouge_l": 0.20807531840140536,
+      "semantic_similarity": 0.3903965962429841,
+      "groundedness": 0.34139784946236557,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 1.0
+    }
+  },
+  "Phase 5: Prompt Engineering and Context Robustness": {
+    "System: Strict Refusal": {
+      "rouge_l": 0.1678743961352657,
+      "semantic_similarity": 0.30668846626455587,
+      "groundedness": 0.2527506860163635,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.6666666666666666,
+      "judge_relevance": 0.5,
+      "refusal_adherence": 0.16666666666666666,
+      "hallucination_ratio": 0.7226132557529534
+    },
+    "System: Sycophantic": {
+      "rouge_l": 0.2327733860342556,
+      "semantic_similarity": 0.41108348468939465,
+      "groundedness": 0.32008248184830657,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.6666666666666666,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.6437782995813276
+    },
+    "System: Default": {
+      "rouge_l": 0.22519762845849803,
+      "semantic_similarity": 0.4055398292839527,
+      "groundedness": 0.2771684482042538,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.5,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.680397075218047
+    },
+    "Volume: 1 Snippet": {
+      "rouge_l": 0.27407498902064126,
+      "semantic_similarity": 0.40186172164976597,
+      "groundedness": 0.16481772882244952,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.16666666666666666,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.7834789888841817
+    },
+    "Volume: 4 Snippets (Default)": {
+      "rouge_l": 0.22519762845849803,
+      "semantic_similarity": 0.4055398292839527,
+      "groundedness": 0.2771684482042538,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.5,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.680397075218047
+    },
+    "Volume: 12 Snippets": {
+      "rouge_l": 0.2335309617918314,
+      "semantic_similarity": 0.4359306717912356,
+      "groundedness": 0.2844949494949495,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.8333333333333334,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.6625420875420875
+    },
+    "Robustness: Normal": {
+      "rouge_l": 0.22519762845849803,
+      "semantic_similarity": 0.4055398292839527,
+      "groundedness": 0.2771684482042538,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.5,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.680397075218047
+    },
+    "Robustness: Distractor Injected": {
+      "rouge_l": 0.2264602547211243,
+      "semantic_similarity": 0.42046381036440533,
+      "groundedness": 0.4395267722473604,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.6666666666666666,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.513690925087984
+    },
+    "Robustness: 0 Distractors": {
+      "rouge_l": 0.22519762845849803,
+      "semantic_similarity": 0.4055398292839527,
+      "groundedness": 0.2771684482042538,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.5,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.680397075218047
+    },
+    "Robustness: 1 Distractor": {
+      "rouge_l": 0.2264602547211243,
+      "semantic_similarity": 0.42046381036440533,
+      "groundedness": 0.4395267722473604,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.6666666666666666,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.513690925087984
+    },
+    "Robustness: 2 Distractors": {
+      "rouge_l": 0.2337066315327185,
+      "semantic_similarity": 0.4268743246793747,
+      "groundedness": 0.444980574980575,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.4666666666666666,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.5080885780885781
+    },
+    "Robustness: 4 Distractors": {
+      "rouge_l": 0.24868247694334653,
+      "semantic_similarity": 0.42009708906213444,
+      "groundedness": 0.44942375886524827,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.8333333333333334,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.5037012411347518
+    },
+    "Robustness: 8 Distractors": {
+      "rouge_l": 0.24110671936758896,
+      "semantic_similarity": 0.41620539998014766,
+      "groundedness": 0.4453631446385069,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.6666666666666666,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.5171897345810389
+    },
+    "Robustness: Jailbreak Attack": {
+      "rouge_l": 0.12392676767676768,
+      "semantic_similarity": 0.25151540866742533,
+      "groundedness": 0.08680555555555554,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.3333333333333333,
+      "judge_relevance": 0.6666666666666666,
+      "refusal_adherence": 0.8333333333333334,
+      "hallucination_ratio": 0.871362433862434
+    },
+    "Attention Stress: 512 tokens": {
+      "rouge_l": 0.22169246815985946,
+      "semantic_similarity": 0.43024318541089696,
+      "groundedness": 0.5018661151523796,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.5,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.4703561070698426
+    },
+    "Attention Stress: 1024 tokens": {
+      "rouge_l": 0.2216979578392622,
+      "semantic_similarity": 0.3853709039588769,
+      "groundedness": 0.4096049608219993,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.16666666666666666,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.5488046850876466
+    },
+    "Attention Stress: 2048 tokens": {
+      "rouge_l": 0.2366738032498902,
+      "semantic_similarity": 0.4515351342658202,
+      "groundedness": 0.2559067996567997,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.5,
+      "judge_relevance": 1.0,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.6615535178035178
+    },
+    "Attention Stress: 4096 tokens": {
+      "rouge_l": 0.22248298199385153,
+      "semantic_similarity": 0.4630276734630267,
+      "groundedness": 0.37416739498914137,
+      "citation_fidelity": 1.0,
+      "judge_faithfulness": 0.5,
+      "judge_relevance": 0.8333333333333334,
+      "refusal_adherence": 0.6666666666666666,
+      "hallucination_ratio": 0.5357148374737363
+    }
+  }
+}

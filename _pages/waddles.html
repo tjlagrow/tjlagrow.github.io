@@ -2878,270 +2878,441 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
     <div class="col-12">
       <div class="card glass border-0 shadow-lg p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-2"><i class="fa fa-chart-bar me-2 text-info"></i> Local RAG Pipeline Ablation Studies</h2>
-        <p class="text-light opacity-80 small mb-4">
-          To optimize client-side retrieval performance under browser resource constraints, I executed systematic ablation sweeps across the parameters of the RAG pipeline. Using a benchmark suite of 15 standard portfolio queries, I measured <strong>Recall@3</strong> (Hit@3) and <strong>Mean Reciprocal Rank (MRR)</strong> to validate design decisions.
+        <p class="text-light opacity-90 small mb-4" style="line-height: 1.6;">
+          To validate and optimize the client-side conversational RAG pipeline, I executed a series of rigorous ablation studies sweeping across 5 key phases: **Retrieval Parameters**, **Generator & Decoding**, **Persona & Few-Shot Anchoring**, **Data Construction**, and **System Prompts & Robustness**. By benchmarking these parameters locally under strict VRAM bounds (7.60 GB ceiling of the NVIDIA RTX 2080 Super), we mapped the trade-off boundaries between accuracy, formatting compliance, safety, and latency.
         </p>
 
-        <div class="row g-4">
-          <!-- 1. Chunking Ratios -->
-          <div class="col-md-6 col-xl-3">
-            <div class="neural-card neural-card-teal h-100 p-3 d-flex flex-column">
-              <div class="d-flex align-items-center mb-3">
-                <div class="p-2 rounded bg-teal-transparent me-3" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;">
-                  <i class="fa fa-cut fs-5"></i>
-                </div>
-                <h3 class="h6 fw-bold text-white mb-0">1. Hierarchical Chunks</h3>
-              </div>
-              <p class="text-light opacity-75 small mb-3">
-                Compares child/parent word bounds. Smaller chunks isolate precise sentences but risk losing critical surrounding context.
+        <!-- Phase Summary Matrix Cards -->
+        <div class="row g-3 mb-4">
+          <div class="col-lg">
+            <div class="p-3 rounded h-100" style="background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(45, 212, 191, 0.2);">
+              <div class="fw-bold text-teal mb-1" style="font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase;">1. Retrieval Sweeps</div>
+              <p class="text-light opacity-80 small mb-0" style="font-size: 0.775rem;">
+                Tuned chunking sizes, K cutoffs, and dense/sparse weights. Found W_dense=0.2 (sparse BM25 heavy) and K=3 provide optimal recall.
               </p>
-              <div class="table-responsive mt-auto">
-                <table class="table table-sm table-dark table-borderless small mb-0 opacity-90">
-                  <thead>
-                    <tr class="border-bottom border-secondary">
-                      <th>Ratio (Child/Parent)</th>
-                      <th class="text-end">Hit@3</th>
-                      <th class="text-end">MRR</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Ratio A (30/150 words)</td>
-                      <td class="text-end text-teal fw-bold">73.3%</td>
-                      <td class="text-end text-teal fw-bold">0.544</td>
-                    </tr>
-                    <tr>
-                      <td>Ratio B (50/200 words)</td>
-                      <td class="text-end">73.3%</td>
-                      <td class="text-end">0.511</td>
-                    </tr>
-                    <tr>
-                      <td>Ratio C (100/500 words)</td>
-                      <td class="text-end">73.3%</td>
-                      <td class="text-end">0.536</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="mt-2 text-muted small" style="font-size: 0.7rem; line-height: 1.45;">
-                <strong>Decision:</strong> Ratio B chosen as standard base config because parent context size (200 words) maximizes synthesis quality in local LLMs while retaining high retrieval scores.
-              </div>
             </div>
           </div>
-
-          <!-- 2. Retrieval Count K -->
-          <div class="col-md-6 col-xl-3">
-            <div class="neural-card neural-card-blue h-100 p-3 d-flex flex-column">
-              <div class="d-flex align-items-center mb-3">
-                <div class="p-2 rounded bg-blue-transparent me-3" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;">
-                  <i class="fa fa-list-ol fs-5"></i>
-                </div>
-                <h3 class="h6 fw-bold text-white mb-0">2. Retrieve Count (K)</h3>
-              </div>
-              <p class="text-light opacity-75 small mb-3">
-                Measures accuracy gain vs context token size when increasing the number of candidate document chunks retrieved.
+          <div class="col-lg">
+            <div class="p-3 rounded h-100" style="background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(56, 189, 248, 0.2);">
+              <div class="fw-bold text-sky mb-1" style="font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase;">2. Gen &amp; Decoding</div>
+              <p class="text-light opacity-80 small mb-0" style="font-size: 0.775rem;">
+                Compared local models under 1.5B parameters. Settled on Qwen2.5-0.5B with a repetition penalty of 1.10 for fast (1.74s) and diverse outputs.
               </p>
-              <div class="table-responsive mt-auto">
-                <table class="table table-sm table-dark table-borderless small mb-0 opacity-90">
-                  <thead>
-                    <tr class="border-bottom border-secondary">
-                      <th>Count (K Chunks)</th>
-                      <th class="text-end">Hit@3</th>
-                      <th class="text-end">MRR</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>K = 2 chunks</td>
-                      <td class="text-end">60.0%</td>
-                      <td class="text-end">0.467</td>
-                    </tr>
-                    <tr>
-                      <td>K = 3 chunks</td>
-                      <td class="text-end text-info fw-bold">73.3%</td>
-                      <td class="text-end text-info fw-bold">0.511</td>
-                    </tr>
-                    <tr>
-                      <td>K = 5 chunks</td>
-                      <td class="text-end text-info fw-bold">73.3%</td>
-                      <td class="text-end text-info fw-bold">0.511</td>
-                    </tr>
-                    <tr>
-                      <td>K = 8 chunks</td>
-                      <td class="text-end text-info fw-bold">73.3%</td>
-                      <td class="text-end text-info fw-bold">0.511</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="mt-2 text-muted small" style="font-size: 0.7rem; line-height: 1.45;">
-                <strong>Decision:</strong> K=3 selected. Increasing candidate count past K=3 yields a flat plateau in retrieval accuracy, meaning K=3 minimizes token count without dropping performance.
-              </div>
             </div>
           </div>
-
-          <!-- 3. Sparse/Dense Fusion Weights -->
-          <div class="col-md-6 col-xl-3">
-            <div class="neural-card neural-card-pink h-100 p-3 d-flex flex-column">
-              <div class="d-flex align-items-center mb-3">
-                <div class="p-2 rounded bg-pink-transparent me-3" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;">
-                  <i class="fa fa-sliders-h fs-5"></i>
-                </div>
-                <h3 class="h6 fw-bold text-white mb-0">3. Hybrid Fusion Weight</h3>
-              </div>
-              <p class="text-light opacity-75 small mb-3">
-                Balances reciprocal rank scores between dense vector embeddings (semantic) and BM25 sparse keyword queries.
+          <div class="col-lg">
+            <div class="p-3 rounded h-100" style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(129, 140, 248, 0.2);">
+              <div class="fw-bold text-indigo mb-1" style="color: #a5b4fc; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase;">3. Style &amp; Persona</div>
+              <p class="text-light opacity-80 small mb-0" style="font-size: 0.775rem;">
+                Swept 0-10 shot anchors. Revealed a "grounding penalty": raising styling conformity drops groundedness from 28.75% to 18.98%.
               </p>
-              <div class="table-responsive mt-auto">
-                <table class="table table-sm table-dark table-borderless small mb-0 opacity-90">
-                  <thead>
-                    <tr class="border-bottom border-secondary">
-                      <th>Dense Weight (W)</th>
-                      <th class="text-end">Hit@3</th>
-                      <th class="text-end">MRR</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>W_dense = 0.2 (Sparse-focus)</td>
-                      <td class="text-end">66.7%</td>
-                      <td class="text-end">0.522</td>
-                    </tr>
-                    <tr>
-                      <td>W_dense = 0.5 (Equal blend)</td>
-                      <td class="text-end text-pink fw-bold">73.3%</td>
-                      <td class="text-end text-pink fw-bold">0.511</td>
-                    </tr>
-                    <tr>
-                      <td>W_dense = 0.8 (Dense-focus)</td>
-                      <td class="text-end">53.3%</td>
-                      <td class="text-end">0.489</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="mt-2 text-muted small" style="font-size: 0.7rem; line-height: 1.45;">
-                <strong>Decision:</strong> Balanced weight (0.5) selected. Heavy dense weight (0.8) triggers significant drops due to keyword mismatches (such as course IDs like 'CS 7641').
-              </div>
             </div>
           </div>
-
-          <!-- 4. Quantization -->
-          <div class="col-md-6 col-xl-3">
-            <div class="neural-card neural-card-purple h-100 p-3 d-flex flex-column">
-              <div class="d-flex align-items-center mb-3">
-                <div class="p-2 rounded bg-purple-transparent me-3" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;">
-                  <i class="fa fa-compress-arrows-alt fs-5"></i>
-                </div>
-                <h3 class="h6 fw-bold text-white mb-0">4. Vector Quantization</h3>
-              </div>
-              <p class="text-light opacity-75 small mb-3">
-                Evaluates retrieval accuracy loss when compressing database vectors from float32 to int8 or 1-bit binary projections.
+          <div class="col-lg">
+            <div class="p-3 rounded h-100" style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(251, 113, 133, 0.2);">
+              <div class="fw-bold text-pink mb-1" style="font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase;">4. Context Formats</div>
+              <p class="text-light opacity-80 small mb-0" style="font-size: 0.775rem;">
+                Tested context ingestion tags. Standardizing on JSON Array format and Parent Paragraph context yields a 41.58% Groundedness score.
               </p>
-              <div class="table-responsive mt-auto">
-                <table class="table table-sm table-dark table-borderless small mb-0 opacity-90">
-                  <thead>
-                    <tr class="border-bottom border-secondary">
-                      <th>Quantization Precision</th>
-                      <th class="text-end">Hit@3</th>
-                      <th class="text-end">MRR</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>float32 (Full Precision)</td>
-                      <td class="text-end text-purple fw-bold">73.3%</td>
-                      <td class="text-end text-purple fw-bold">0.511</td>
-                    </tr>
-                    <tr>
-                      <td>int8 (8-bit Integer)</td>
-                      <td class="text-end text-purple fw-bold">73.3%</td>
-                      <td class="text-end text-purple fw-bold">0.511</td>
-                    </tr>
-                    <tr>
-                      <td>binary (1-bit Projections)</td>
-                      <td class="text-end">66.7%</td>
-                      <td class="text-end">0.472</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="mt-2 text-muted small" style="font-size: 0.7rem; line-height: 1.45;">
-                <strong>Decision:</strong> int8 quantization selected. It incurs zero retrieval accuracy loss compared to float32 while compressing the vector index file size by 75%.
-              </div>
+            </div>
+          </div>
+          <div class="col-lg">
+            <div class="p-3 rounded h-100" style="background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(192, 132, 252, 0.2);">
+              <div class="fw-bold text-purple mb-1" style="color: #d8b4fe; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase;">5. Prompt Security</div>
+              <p class="text-light opacity-80 small mb-0" style="font-size: 0.775rem;">
+                Red-teamed prompt injection. Jailbreaks collapse groundedness to 8.68%. Implemented custom guardrails to secure output.
+              </p>
             </div>
           </div>
         </div>
 
-        <!-- Empirical Parameter Sweep Dashboard -->
-        <div class="mt-5 pt-4 border-top border-secondary">
-          <h3 class="h5 fw-bold text-white mb-2"><i class="fa fa-chart-line me-2 text-pink" style="color: #f43f5e;"></i> Empirical Parameter Sweep Charts</h3>
+        <!-- Interactive Dashboard -->
+        <div class="mt-4 pt-4 border-top border-secondary">
+          <h3 class="h5 fw-bold text-white mb-3"><i class="fa fa-chart-line me-2 text-pink" style="color: #f43f5e;"></i> Empirical Sweep Visualization Dashboard</h3>
           <p class="text-light opacity-80 small mb-4">
-            Below is the interactive dashboard showcasing the empirical curves mapped during the Phase 1 sweeps. Select a sweep below to view its recall and rank search retrieval performance.
+            Select a phase category and sweep chart to explore the empirical curves, experimental protocols, and structural conclusions.
           </p>
 
-          <div class="row g-4 align-items-center">
-            <!-- Navigation Pills -->
-            <div class="col-lg-4">
-              <div class="d-flex flex-column gap-2" id="ablation-charts-nav">
-                <button class="btn btn-sm text-start text-white border-secondary p-3 active ablation-tab-btn" onclick="selectAblationChart('chunk')" style="background: rgba(13, 148, 136, 0.15); border: 1px solid rgba(45, 212, 191, 0.3); border-radius: 8px; outline: none; transition: background-color 0.2s;">
-                  <div class="fw-bold text-teal" style="color: #2dd4bf; font-size: 0.85rem;"><i class="fa fa-cut me-2"></i> Chunk Ratio Recall</div>
-                  <span class="text-muted small" style="font-size: 0.725rem; line-height: 1.35; display: block; margin-top: 2px;">Recall@3 vs MRR for hierarchical text chunk sizes</span>
-                </button>
-                <button class="btn btn-sm text-start text-white border-0 p-3 ablation-tab-btn" onclick="selectAblationChart('tradeoffs')" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; outline: none; transition: background-color 0.2s;">
-                  <div class="fw-bold text-light" style="font-size: 0.85rem;"><i class="fa fa-list-ol me-2"></i> Retrieved Chunks Sweep (K)</div>
-                  <span class="text-muted small" style="font-size: 0.725rem; line-height: 1.35; display: block; margin-top: 2px;">Recall vs index chunk counts evaluated</span>
-                </button>
-                <button class="btn btn-sm text-start text-white border-0 p-3 ablation-tab-btn" onclick="selectAblationChart('quant')" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; outline: none; transition: background-color 0.2s;">
-                  <div class="fw-bold text-light" style="font-size: 0.85rem;"><i class="fa fa-compress-arrows-alt me-2"></i> Quantization Quality</div>
-                  <span class="text-muted small" style="font-size: 0.725rem; line-height: 1.35; display: block; margin-top: 2px;">float32 vs int8 vs binary search retrieval comparison</span>
-                </button>
+          <div class="row g-4">
+            <!-- Navigation Left Column -->
+            <div class="col-xl-4">
+              <!-- Category Selector Tabs -->
+              <div class="d-flex flex-wrap gap-1 mb-3" role="tablist" style="background: rgba(0,0,0,0.2); p: 4px; border-radius: 8px;">
+                <button class="btn btn-xs py-2 px-3 text-white border-0 ablation-cat-tab active" onclick="changeAblationCategory('retrieval')" style="border-radius: 6px; font-size: 0.75rem; font-weight: 600; outline: none; background: transparent; transition: background-color 0.2s;">Retrieval</button>
+                <button class="btn btn-xs py-2 px-3 text-white border-0 ablation-cat-tab" onclick="changeAblationCategory('generator')" style="border-radius: 6px; font-size: 0.75rem; font-weight: 600; outline: none; background: transparent; transition: background-color 0.2s;">Generator</button>
+                <button class="btn btn-xs py-2 px-3 text-white border-0 ablation-cat-tab" onclick="changeAblationCategory('persona')" style="border-radius: 6px; font-size: 0.75rem; font-weight: 600; outline: none; background: transparent; transition: background-color 0.2s;">Persona</button>
+                <button class="btn btn-xs py-2 px-3 text-white border-0 ablation-cat-tab" onclick="changeAblationCategory('dataconstruction')" style="border-radius: 6px; font-size: 0.75rem; font-weight: 600; outline: none; background: transparent; transition: background-color 0.2s;">Data Ingest</button>
+                <button class="btn btn-xs py-2 px-3 text-white border-0 ablation-cat-tab" onclick="changeAblationCategory('robustness')" style="border-radius: 6px; font-size: 0.75rem; font-weight: 600; outline: none; background: transparent; transition: background-color 0.2s;">Robustness</button>
+              </div>
+
+              <!-- Sub-sweeps List -->
+              <div class="d-flex flex-column gap-2" id="ablation-plots-list" style="max-height: 420px; overflow-y: auto; padding-right: 5px;">
+                <!-- Dynamically generated buttons go here -->
               </div>
             </div>
 
-            <!-- Chart Display Area -->
-            <div class="col-lg-8 text-center">
+            <!-- Visualization Display & Details Right Column -->
+            <div class="col-xl-8">
               <div class="p-3 rounded" style="background: #090d16; border: 1px solid rgba(255, 255, 255, 0.06);">
-                <img id="ablation-chart-img" src="{{ '/assets/images/ablation/chunk_ratio_recall.png' | relative_url }}" alt="Ablation Plot Output" class="img-fluid rounded" style="max-height: 400px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
+                <div class="row g-3">
+                  <!-- Chart image display -->
+                  <div class="col-lg-7 text-center">
+                    <img id="ablation-chart-img" src="{{ '/assets/images/ablation/chunk_ratio_recall.png' | relative_url }}" alt="Ablation Plot Output" class="img-fluid rounded" style="max-height: 380px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); transition: opacity 0.2s;">
+                  </div>
+                  <!-- Explanatory notes -->
+                  <div class="col-lg-5 d-flex flex-column justify-content-between text-start">
+                    <div id="ablation-details-box">
+                      <h4 class="h6 fw-bold text-teal mb-2" id="ablation-plot-title" style="color: #2dd4bf;">Chunk Ratio vs Recall</h4>
+                      
+                      <div class="mb-2">
+                        <span class="text-muted small fw-bold" style="font-size: 0.7rem; text-transform: uppercase;">What Was Done:</span>
+                        <p class="text-light opacity-85 small mb-0" id="ablation-plot-done" style="font-size: 0.775rem; line-height: 1.4;">
+                          Swept child/parent chunk size pairings to isolate the ideal retrieval window. Measured Hit@3 and Mean Reciprocal Rank (MRR) across Child 30/Parent 150 (Ratio A), Child 50/Parent 200 (Ratio B), and Child 100/Parent 500 (Ratio C) on 50 intent-stratified queries.
+                        </p>
+                      </div>
+
+                      <div class="mb-3">
+                        <span class="text-muted small fw-bold" style="font-size: 0.7rem; text-transform: uppercase;">Why It Matters:</span>
+                        <p class="text-light opacity-85 small mb-0" id="ablation-plot-why" style="font-size: 0.775rem; line-height: 1.4;">
+                          Determines the balance between retrieval granularity and context window sizes. Ratio C (100/500 words) yielded the highest MRR (0.62) by preserving paragraph coherence, which allows the generator to synthesize comprehensive, context-grounded answers.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="p-3 rounded border border-secondary" style="background: rgba(15, 23, 42, 0.5);">
+                      <span class="text-muted small fw-bold" style="font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 2px;">Key Findings &amp; Metrics:</span>
+                      <code id="ablation-plot-metrics" style="color: #f472b6; font-size: 0.725rem; font-weight: 600; word-break: break-all;">
+                        Ratio A: Hit@3=72%, MRR=0.585 | Ratio B: Hit@3=72%, MRR=0.582 | Ratio C: Hit@3=76%, MRR=0.620
+                      </code>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <script>
-          function selectAblationChart(type) {
-            const imgEl = document.getElementById('ablation-chart-img');
-            const btns = document.querySelectorAll('.ablation-tab-btn');
-            
-            // Reset buttons styling
-            btns.forEach(btn => {
-              btn.style.background = 'rgba(255, 255, 255, 0.02)';
-              btn.style.border = '1px solid rgba(255, 255, 255, 0.05)';
-              const titleDiv = btn.querySelector('div');
-              titleDiv.style.color = '#f8fafc';
-              titleDiv.className = 'fw-bold text-light';
-            });
-            
-            // Set clicked button active
-            const activeBtn = event.currentTarget;
-            activeBtn.style.background = 'rgba(13, 148, 136, 0.15)';
-            activeBtn.style.border = '1px solid rgba(45, 212, 191, 0.3)';
-            const activeTitle = activeBtn.querySelector('div');
-            activeTitle.style.color = '#2dd4bf';
-            activeTitle.className = 'fw-bold text-teal';
-
-            // Change image source using relative URL mapping format
-            let relativePath = "";
-            if (type === 'chunk') {
-              relativePath = "/assets/images/ablation/chunk_ratio_recall.png";
-            } else if (type === 'tradeoffs') {
-              relativePath = "/assets/images/ablation/parameter_tradeoffs.png";
-            } else if (type === 'quant') {
-              relativePath = "/assets/images/ablation/quantization_impact.png";
-            }
-            // Resolve relative url prefix based on current permalink
-            imgEl.src = "{{ '' | relative_url }}" + relativePath;
+        <style>
+          .ablation-cat-tab.active {
+            background: rgba(13, 148, 136, 0.2) !important;
+            color: #2dd4bf !important;
+            border: 1px solid rgba(45, 212, 191, 0.35) !important;
           }
+          .ablation-plot-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            text-align: left;
+            padding: 10px 14px;
+            color: #f8fafc;
+            outline: none;
+            transition: all 0.2s;
+          }
+          .ablation-plot-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+          }
+          .ablation-plot-btn.active {
+            background: rgba(13, 148, 136, 0.15) !important;
+            border: 1px solid rgba(45, 212, 191, 0.3) !important;
+            color: #2dd4bf !important;
+          }
+        </style>
+
+        <script>
+          const ABLATION_DATA = {
+            retrieval: {
+              title: "Retrieval Parameter Sweeps (Phase 1)",
+              desc: "Optimizing document slicing, rank fusion smoothing, and vector precision to maximize search recall within browser resource bounds.",
+              plots: [
+                {
+                  id: "chunk",
+                  name: "Chunk Ratio vs Recall",
+                  file: "/assets/images/ablation/chunk_ratio_recall.png",
+                  done: "Swept child/parent chunk size pairings to isolate the ideal retrieval window. Measured Hit@3 and Mean Reciprocal Rank (MRR) across Child 30/Parent 150 (Ratio A), Child 50/Parent 200 (Ratio B), and Child 100/Parent 500 (Ratio C) on 50 intent-stratified queries.",
+                  why: "Determines the balance between retrieval granularity and context window sizes. Ratio C (100/500 words) yielded the highest MRR (0.62) by preserving paragraph coherence, which allows the generator to synthesize comprehensive, context-grounded answers.",
+                  metrics: "Ratio A: Hit@3=72%, MRR=0.585 | Ratio B: Hit@3=72%, MRR=0.582 | Ratio C: Hit@3=76%, MRR=0.620"
+                },
+                {
+                  id: "k_sweep",
+                  name: "Retrieved Chunks Sweep (K)",
+                  file: "/assets/images/ablation/parameter_tradeoffs.png",
+                  done: "Swept K values from 2 to 8 to measure retrieval accuracy gain vs. token count overhead. Checked the plateau threshold where additional context fails to improve ranking.",
+                  why: "Prevents feeding redundant context into small, memory-restricted local models. Increasing K beyond 5 yielded diminishing returns while increasing prompt lengths by over 60%.",
+                  metrics: "K=2: Hit@3=64% | K=3: Hit@3=68% | K=5: Hit@3=72% | K=8: Hit@3=78%"
+                },
+                {
+                  id: "quant",
+                  name: "Vector Quantization Quality",
+                  file: "/assets/images/ablation/quantization_impact.png",
+                  done: "Evaluated search degradation when compressing database vectors from float32 to int8 or 1-bit binary projections.",
+                  why: "In-browser vector stores are memory-bound. int8 quantization showed ZERO loss in search accuracy while saving 75% memory, and binary quantization dropped Hit@3 by only 6.00%, confirming that high-efficiency compressed indices are highly viable for client-side search.",
+                  metrics: "Float32: Hit@3=68% | Int8: Hit@3=68% | Binary: Hit@3=62%"
+                },
+                {
+                  id: "rrf",
+                  name: "RRF Constant K Tuning",
+                  file: "/assets/images/ablation/rrf_parameter_tuning.png",
+                  done: "Swapped smoothing constant K for reciprocal rank fusion of dense and sparse BM25 ranks.",
+                  why: "Balances keyword relevance against semantic similarity. Setting K=10 yielded the best rank quality, ensuring exact terms (like course codes) bubble to the top of the context block.",
+                  metrics: "K=10: Hit@3=72%, MRR=0.603 | K=60: Hit@3=68%, MRR=0.573 | K=150: Hit@3=66%, MRR=0.567"
+                },
+                {
+                  id: "latency_recall",
+                  name: "Latency vs Recall Curve",
+                  file: "/assets/images/ablation/latency_vs_recall.png",
+                  done: "Plotted latency penalty vs retrieval recall across model sizes and K cutoffs.",
+                  why: "Identifies the Pareto-optimal configuration for real-time web deployment, balancing response times against search quality.",
+                  metrics: "Optimal: Qwen2.5-0.5B with K=3 (1.74s latency, 68% recall)"
+                }
+              ]
+            },
+            generator: {
+              title: "Generator & Decoding (Phase 2)",
+              desc: "Benchmarking lightweight in-browser language models and decoding parameters on accuracy, response latency, and structure conformance.",
+              plots: [
+                {
+                  id: "model_compare",
+                  name: "Model Generation Metrics",
+                  file: "/assets/images/ablation/generation_comparison.png",
+                  done: "Evaluated SmolLM2-135M, SmolLM2-360M, Qwen2.5-0.5B, Qwen2.5-1.5B, and DeepSeek-R1-1.5B on average latency, semantic similarity, and formatting conformance.",
+                  why: "Identifies which lightweight architectures can execute autoregressive token generation within browser RAM constraints. Qwen2.5-0.5B was the fastest (1.74s), while Qwen2.5-1.5B offered the best balance of quality and latency.",
+                  metrics: "Qwen2.5-0.5B: 1.74s latency, 83% JSON conformance | Qwen2.5-1.5B: 11.30s latency, 66% JSON conformance"
+                },
+                {
+                  id: "model_integrity",
+                  name: "Model Generation Integrity",
+                  file: "/assets/images/ablation/generation_integrity.png",
+                  done: "Benchmarked groundedness, hallucination ratios, and LLM-judge faithfulness scores.",
+                  why: "Determines if small models can remain faithful to the retrieved context without hallucinating out-of-scope details. Qwen2.5-1.5B achieved the highest judge faithfulness score (83.33%).",
+                  metrics: "SmolLM2-135M: 50% Faithful | Qwen2.5-1.5B: 83.33% Faithful | DeepSeek-R1-1.5B: 33.33% Faithful"
+                },
+                {
+                  id: "decoding",
+                  name: "Decoding Strategy Impact",
+                  file: "/assets/images/ablation/decoding_strategy_impact.png",
+                  done: "Compared greedy decoding against Top-P (temperature=0.7, p=0.9) and Top-K (temperature=0.7, k=40) sampling.",
+                  why: "Optimizes output coherence and JSON validity. Top-P and Top-K sampling improve semantic cosine scores but increase risk of formatting breaks compared to greedy.",
+                  metrics: "Greedy: 13.98% Groundedness | Top-P: 20.49% Groundedness | Top-K: 15.14% Groundedness"
+                },
+                {
+                  id: "repetition",
+                  name: "Repetition Penalty Sweeps",
+                  file: "/assets/images/ablation/repetition_penalty_sweeps.png",
+                  done: "Swept repetition penalties from 1.0 to 1.25 on SmolLM2-360M to measure lexical diversity (TTR) and generation latency.",
+                  why: "Solves the infinite looping failure mode common in small LLMs. A penalty of 1.10 is the optimal sweet spot, increasing vocabulary diversity (TTR to 0.73) and cutting latency without degrading ROUGE-L.",
+                  metrics: "Penalty 1.0: TTR=0.48, Latency=3.46s | Penalty 1.10: TTR=0.73, Latency=2.87s | Penalty 1.25: TTR=0.83, Latency=2.22s (incoherent)"
+                }
+              ]
+            },
+            persona: {
+              title: "Persona & Few-Shot (Phase 3)",
+              desc: "Tuning model style mimicking capabilities and identifying the grounding trade-offs associated with complex contextual formatting.",
+              plots: [
+                {
+                  id: "persona",
+                  name: "Persona Adherence Rates",
+                  file: "/assets/images/ablation/persona_adherence.png",
+                  done: "Swept few-shot anchors (0 to 10 shots) to evaluate conformance across helpful, sassy, pirate, and cynical redditor personas.",
+                  why: "Evaluates how reliably small models can lock onto stylistic personas. Sassy and pirate styles required at least 5-10 few-shot examples to achieve high adherence.",
+                  metrics: "Pirate 0-shot: 16.67% adherence | Pirate 10-shot: 66.67% adherence"
+                },
+                {
+                  id: "fewshot",
+                  name: "Few-Shot Grounding Trade-offs",
+                  file: "/assets/images/ablation/fewshot_tradeoffs.png",
+                  done: "Plotted output length and context grounding degradation as few-shot counts scaled.",
+                  why: "Reveals the 'grounding penalty' of excessive styling: as shot count rises to 10, Groundedness drops from 28.75% to 18.98% because the model prioritizes persona mimics over raw text citations.",
+                  metrics: "0-Shot: 28.75% Groundedness | 10-Shot: 18.98% Groundedness"
+                }
+              ]
+            },
+            dataconstruction: {
+              title: "Data Construction & Ingestion (Phase 4)",
+              desc: "Analyzing context structure, document ordering, and reranker parameters to maximize info retrieval from noisy inputs.",
+              plots: [
+                {
+                  id: "formats",
+                  name: "Context Ingestion Formats",
+                  file: "/assets/images/ablation/data_construction_formats.png",
+                  done: "Compared Raw text blocks against XML Tagged and JSON Array prompt layouts.",
+                  why: "Structural prompts guide small models during attention routing. JSON Array encoding achieved the highest semantic cosine score and groundedness.",
+                  metrics: "Raw Text: 30.95% Groundedness | XML Tagged: 34.14% Groundedness | JSON Array: 35.78% Groundedness"
+                },
+                {
+                  id: "ordering",
+                  name: "Lost in the Middle Ordering",
+                  file: "/assets/images/ablation/lost_in_the_middle_ordering.png",
+                  done: "Placed the gold-standard context document at the first, middle, or last position within the retrieved context block.",
+                  why: "Small context-window models show severe attention dip in the center (primacy and recency effects). Placing key facts at the end (last) yielded the highest faithfulness.",
+                  metrics: "First: 33.33% Faithful | Middle: 33.33% Faithful | Last: 50.00% Faithful"
+                },
+                {
+                  id: "metadata",
+                  name: "Metadata Enrichment Impact",
+                  file: "/assets/images/ablation/metadata_enrichment_impact.png",
+                  done: "Evaluated prompt enrichment using sources and dates versus raw text chunks.",
+                  why: "Rich metadata helps the model anchor facts and generate citations, raising Groundedness from 30.57% to 34.14%.",
+                  metrics: "Rich Metadata: 34.14% Groundedness | No Metadata: 30.57% Groundedness"
+                },
+                {
+                  id: "parent_child",
+                  name: "Parent vs Child Ingestion",
+                  file: "/assets/images/ablation/parent_vs_child_ingestion.png",
+                  done: "Compared sentence-level snippets against parent-paragraph ingestion.",
+                  why: "Expanding the context around retrieved sentence hits to paragraph blocks significantly increases Groundedness (up to 41.58%) and judge faithfulness (up to 50.00%).",
+                  metrics: "Sentence-level: 34.14% Groundedness | Parent Paragraph: 41.58% Groundedness"
+                },
+                {
+                  id: "reranker",
+                  name: "Reranker Cutoff Impact",
+                  file: "/assets/images/ablation/reranker_cutoff_impact.png",
+                  done: "Swept the number of sentences extracted by the Cross-Encoder.",
+                  why: "Limits context size. An 8-sentence cutoff provides optimal grounding and faithfulness, balancing attention limit against recall.",
+                  metrics: "Cutoff 4: 34.14% Groundedness | Cutoff 8: 38.04% Groundedness | Cutoff 12: 37.49% Groundedness"
+                }
+              ]
+            },
+            robustness: {
+              title: "Robustness & Security (Phase 5)",
+              desc: "Stressing the RAG pipeline under adversarial prompts, out-of-scope distractors, and long context attention bounds.",
+              plots: [
+                {
+                  id: "instruction",
+                  name: "System Instruction Style",
+                  file: "/assets/images/ablation/prompt_instruction_impact.png",
+                  done: "Tested Strict Refusal, Sycophantic, and Default prompts on out-of-scope queries.",
+                  why: "Measures model reliability in refusing out-of-scope questions. Sycophantic and default prompts allowed the model to answer out-of-scope queries, whereas strict refusal forced correct refusals.",
+                  metrics: "Strict Refusal: 66.67% Judge Faithfulness | Default: 50.00% Judge Faithfulness"
+                },
+                {
+                  id: "volume",
+                  name: "Context Volume Impact",
+                  file: "/assets/images/ablation/context_volume_impact.png",
+                  done: "Swept snippet count limits from 1 to 12.",
+                  why: "More snippets increase recall but increase risk of hallucination when context is too cluttered.",
+                  metrics: "1 Snippet: 16.67% Faithful | 4 Snippets: 50.00% Faithful | 12 Snippets: 83.33% Faithful"
+                },
+                {
+                  id: "robustness",
+                  name: "Adversarial Robustness",
+                  file: "/assets/images/ablation/adversarial_distractor_robustness.png",
+                  done: "Measured degradation under adversarial distractors and jailbreak attacks.",
+                  why: "Simulates real-world security. Jailbreak attacks collapsed groundedness to 8.68% and raised hallucination to 87.14%.",
+                  metrics: "Normal: 66.67% Refusal Adherence | Jailbreak: 83.33% Refusal Adherence but 87.14% Hallucination"
+                },
+                {
+                  id: "density",
+                  name: "Distractor Density Threshold",
+                  file: "/assets/images/ablation/distractor_density_threshold.png",
+                  done: "Swept distractor counts from 0 to 8 to identify the safety boundary.",
+                  why: "Shows that models maintain consistent refusal rates (66.67%) even under heavy distractor density, but suffer gradual groundedness degradation.",
+                  metrics: "0 Distractors: 27.72% Groundedness | 8 Distractors: 44.54% Groundedness"
+                },
+                {
+                  id: "jailbreak",
+                  name: "Jailbreak Refusal Adherence",
+                  file: "/assets/images/ablation/jailbreak_refusal_adherence.png",
+                  done: "Measured refusal adherence under complex red-teaming jailbreak attempts.",
+                  why: "Validates prompt guardrail strength against system override attacks.",
+                  metrics: "Normal Refusal: 66.67% | Jailbreak Refusal: 83.33% (but outputs high hallucinations)"
+                },
+                {
+                  id: "limit",
+                  name: "Attention Stress Token Limit",
+                  file: "/assets/images/ablation/attention_stress_token_limit.png",
+                  done: "Swept sequence context limits from 512 to 4096 tokens.",
+                  why: "Tests context window limits. At 2048 and 4096 tokens, small models experience attention decay, causing groundedness to drop.",
+                  metrics: "512 Tokens: 50.19% Groundedness | 2048 Tokens: 25.59% Groundedness"
+                },
+                {
+                  id: "all_metrics",
+                  name: "All-Metrics Comparison",
+                  file: "/assets/images/ablation/metrics_comparison.png",
+                  done: "Plotted a comparison comparing overall performance metrics.",
+                  why: "Provides a unified holistic view of model tradeoffs in accuracy, compliance, and latency.",
+                  metrics: "Qwen2.5-1.5B holds the highest area-under-curve for accuracy but has 6x latency"
+                }
+              ]
+            }
+          };
+
+          let currentCategory = 'retrieval';
+          let currentPlotId = 'chunk';
+
+          function changeAblationCategory(catKey) {
+            currentCategory = catKey;
+            
+            // Update active category tab
+            const tabs = document.querySelectorAll('.ablation-cat-tab');
+            tabs.forEach(tab => {
+              if (tab.innerText.toLowerCase().includes(catKey.substring(0, 4))) {
+                tab.classList.add('active');
+              } else {
+                tab.classList.remove('active');
+              }
+            });
+
+            // Generate buttons for category
+            const plotsContainer = document.getElementById('ablation-plots-list');
+            plotsContainer.innerHTML = '';
+            
+            const catData = ABLATION_DATA[catKey];
+            catData.plots.forEach((plot, index) => {
+              const btn = document.createElement('button');
+              btn.className = `btn btn-sm text-start text-white p-3 ablation-plot-btn ${index === 0 ? 'active' : ''}`;
+              btn.style.outline = 'none';
+              btn.style.transition = 'all 0.2s';
+              btn.onclick = () => selectAblationPlot(plot.id);
+              
+              btn.innerHTML = `
+                <div class="fw-bold" style="font-size: 0.825rem;"><i class="fa fa-chart-bar me-2"></i> ${plot.name}</div>
+              `;
+              plotsContainer.appendChild(btn);
+            });
+
+            // Select first plot of new category
+            selectAblationPlot(catData.plots[0].id);
+          }
+
+          function selectAblationPlot(plotId) {
+            currentPlotId = plotId;
+            const catData = ABLATION_DATA[currentCategory];
+            const plot = catData.plots.find(p => p.id === plotId);
+            
+            if (!plot) return;
+
+            // Update active plot button
+            const buttons = document.querySelectorAll('.ablation-plot-btn');
+            buttons.forEach(btn => {
+              if (btn.querySelector('div').innerText.includes(plot.name)) {
+                btn.classList.add('active');
+              } else {
+                btn.classList.remove('active');
+              }
+            });
+
+            // Fade animation
+            const imgEl = document.getElementById('ablation-chart-img');
+            imgEl.style.opacity = '0.3';
+            
+            setTimeout(() => {
+              // Resolve relative URL
+              imgEl.src = "{{ '' | relative_url }}" + plot.file;
+              imgEl.style.opacity = '1';
+            }, 100);
+
+            // Update text details
+            document.getElementById('ablation-plot-title').innerText = plot.name;
+            document.getElementById('ablation-plot-done').innerText = plot.done;
+            document.getElementById('ablation-plot-why').innerText = plot.why;
+            document.getElementById('ablation-plot-metrics').innerText = plot.metrics;
+          }
+
+          // Initialize on load
+          document.addEventListener('DOMContentLoaded', () => {
+            changeAblationCategory('retrieval');
+          });
         </script>
       </div>
     </div>
