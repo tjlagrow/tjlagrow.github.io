@@ -28,11 +28,20 @@
         </div>
         
         <!-- Category pre-filters bar -->
-        <div id="waddles-filter-bar" style="display: flex; gap: 8px; padding: 6px 12px; background: rgba(0,0,0,0.25); border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.725rem; color: #cbd5e1; align-items: center;">
-            <span style="opacity: 0.75; font-weight: 600;">Filters:</span>
-            <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; margin: 0;"><input type="checkbox" id="filter-research" checked> Research</label>
-            <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; margin: 0;"><input type="checkbox" id="filter-teaching" checked> Teaching</label>
-            <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; margin: 0;"><input type="checkbox" id="filter-bio" checked> Bio</label>
+        <div id="waddles-filter-bar" style="display: flex; gap: 6px; padding: 8px 12px; background: rgba(15, 23, 42, 0.4); border-bottom: 1px solid rgba(255,255,255,0.06); align-items: center; flex-wrap: wrap;">
+            <span style="opacity: 0.5; font-weight: 700; font-size: 0.625rem; letter-spacing: 0.5px; margin-right: 4px;">FILTERS</span>
+            <div id="pill-research" class="filter-pill active" data-target="filter-research">
+                <i class="fa fa-book me-1"></i> Research
+            </div>
+            <div id="pill-teaching" class="filter-pill active" data-target="filter-teaching">
+                <i class="fa fa-graduation-cap me-1"></i> Teaching
+            </div>
+            <div id="pill-bio" class="filter-pill active" data-target="filter-bio">
+                <i class="fa fa-user me-1"></i> Bio
+            </div>
+            <input type="checkbox" id="filter-research" checked style="display: none;">
+            <input type="checkbox" id="filter-teaching" checked style="display: none;">
+            <input type="checkbox" id="filter-bio" checked style="display: none;">
         </div>
 
         <div class="chatbot-body" id="chatbot-body">
@@ -68,6 +77,49 @@
     70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(46, 204, 113, 0); }
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
 }
+
+.filter-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.65rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+}
+
+.filter-pill:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.filter-pill.active {
+    color: #0f172a !important;
+}
+
+#pill-research.active {
+    background: #2dd4bf;
+    border-color: #2dd4bf;
+    box-shadow: 0 0 10px rgba(45, 212, 191, 0.2);
+}
+
+#pill-teaching.active {
+    background: #38bdf8;
+    border-color: #38bdf8;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+#pill-bio.active {
+    background: #c084fc;
+    border-color: #c084fc;
+    box-shadow: 0 0 10px rgba(192, 132, 252, 0.2);
+}
 </style>
 
 <script type="module">
@@ -86,6 +138,24 @@
         const goBtn = document.getElementById('waddles-go-btn');
 
         if (!toggle || !windowEl || !close || !body || !form || !input || !sendBtn || !modelSelector || !personalitySelector || !quantSelector || !goBtn) return;
+
+        // Wire up custom filter pills to toggle hidden inputs and highlight states
+        const pills = ['research', 'teaching', 'bio'];
+        pills.forEach(key => {
+            const pillEl = document.getElementById(`pill-${key}`);
+            const inputEl = document.getElementById(`filter-${key}`);
+            if (pillEl && inputEl) {
+                pillEl.addEventListener('click', () => {
+                    const isChecked = !inputEl.checked;
+                    inputEl.checked = isChecked;
+                    if (isChecked) {
+                        pillEl.classList.add('active');
+                    } else {
+                        pillEl.classList.remove('active');
+                    }
+                });
+            }
+        });
 
         let embeddingsDatabase = [];
         const personaExamples = [

@@ -389,9 +389,33 @@ full_width: true
             </div>
           </div>
 
-          <p class="text-light opacity-80 small mb-3">
+          <p class="text-light opacity-80 small mb-4">
             In this formulation, $M$ represents the set of retrieval systems ($M = \{\text{dense}, \text{sparse}\}$), $r_m(d)$ is the zero-indexed rank position of document $d$ within retriever $m$, and $k$ is a constant smoothing parameter, set to $60$ to prevent low-ranking candidates from disproportionately affecting scores.
           </p>
+
+          <div class="d-flex justify-content-center p-3 mb-2" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
+            <div class="mermaid" style="width: 100%; min-width: 280px;">
+              graph TD
+                  classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
+                  classDef highlight fill:#0f172a,stroke:#0d9488,stroke-width:1.5px,color:#2dd4bf;
+                  classDef rankNode fill:#1e1b4b,stroke:#6366f1,stroke-width:1px,color:#a5b4fc;
+                  
+                  Q[User Query: 'CS 7641 ML'] --> Dense[Dense Vector Search]
+                  Q --> Sparse[Sparse BM25 Search]
+                  
+                  Dense -->|Rank 0| D1[Doc A: Machine Learning]:::rankNode
+                  Dense -->|Rank 1| D2[Doc B: Syllabus OMSCS]:::rankNode
+                  
+                  Sparse -->|Rank 0| S1[Doc B: Syllabus OMSCS]:::rankNode
+                  Sparse -->|Rank 1| S2[Doc C: Grading Policy]:::rankNode
+                  
+                  D1 & D2 & S1 & S2 --> RRF["RRF Score Calculation (k = 60)"]
+                  
+                  RRF -->|Score: 0.0330| R1[Doc B: Syllabus OMSCS]:::highlight
+                  RRF -->|Score: 0.0166| R2[Doc A: Machine Learning]
+                  RRF -->|Score: 0.0164| R3[Doc C: Grading Policy]
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -411,9 +435,37 @@ full_width: true
             </div>
           </div>
 
-          <p class="text-light opacity-80 small mb-0">
+          <p class="text-light opacity-80 small mb-4">
             Sentence vectors $s \in \mathbb{R}^{384}$ and query vector $q \in \mathbb{R}^{384}$ are pre-normalized to unit $L_2$ norm ($\|q\|_2 = 1$, $\|s\|_2 = 1$), meaning the denominator of the cosine similarity equation is equal to 1. The dot product ranks sentences, from which the top 8 are sent to the Cross-Encoder for structural verification.
           </p>
+
+          <div class="d-flex justify-content-center p-3 mb-2" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
+            <div class="mermaid" style="width: 100%; min-width: 280px;">
+              graph TD
+                  classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
+                  classDef highlight fill:#0f172a,stroke:#f43f5e,stroke-width:1.5px,color:#fda4af;
+                  classDef vecNode fill:#1e1b4b,stroke:#0ea5e9,stroke-width:1px,color:#7dd3fc;
+                  
+                  Doc[Top RRF Document Chunks] --> Split[Punctuation Boundary Splitter]
+                  Split --> S1[Sentence 1]
+                  Split --> S2[Sentence 2]
+                  Split --> S3[Sentence 3]
+                  
+                  S1 --> E1[Vector s1]:::vecNode
+                  S2 --> E2[Vector s2]:::vecNode
+                  S3 --> E3[Vector s3]:::vecNode
+                  
+                  Query[Query: 'What is QPP?'] --> EQ[Query Vector q]:::vecNode
+                  
+                  EQ & E1 --> Dot1[Dot Product: q · s1]
+                  EQ & E2 --> Dot2[Dot Product: q · s2]
+                  EQ & E3 --> Dot3[Dot Product: q · s3]
+                  
+                  Dot1 -->|Score: 0.82| R1[Sentence 1: High Similarity]:::highlight
+                  Dot2 -->|Score: 0.21| R2[Sentence 2: Low Similarity]
+                  Dot3 -->|Score: 0.54| R3[Sentence 3: Med Similarity]
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -552,7 +604,7 @@ full_width: true
         <div class="row g-4">
           <!-- Card 1 -->
           <div class="col-md-6">
-            <div class="neural-card neural-card-teal h-100 p-4">
+            <div class="neural-card neural-card-teal h-100 p-4 d-flex flex-column">
               <div class="d-flex align-items-center mb-3">
                 <div class="p-2 rounded bg-teal-transparent me-3" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;">
                   <i class="fa fa-exchange-alt fs-4"></i>
@@ -562,14 +614,31 @@ full_width: true
               <p class="text-light opacity-80 small mb-3">
                 The embedding model (<code>all-MiniLM-L6-v2</code> [2]) acts as a Bi-Encoder. It processes queries and documents independently to project them into a shared 384-dimensional vector space, allowing fast cosine similarity searches. However, this independent mapping misses token-to-token cross-attention interactions.
               </p>
-              <p class="text-light opacity-80 small mb-0">
+              <p class="text-light opacity-80 small mb-4">
                 To resolve this, the re-ranker model (<code>ms-marco-MiniLM-L-6-v2</code> [2]) acts as a Cross-Encoder. It takes the query and sentence candidates as a combined token sequence <code>[CLS] query [SEP] sentence [SEP]</code>. The self-attention layers compute cross-attention weights between every query token and sentence token. This produces highly accurate relevance classifications based on sequence logit probabilities.
               </p>
+              <div class="d-flex justify-content-center p-3 mt-auto" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
+                <div class="mermaid" style="width: 100%; min-width: 250px;">
+                  graph TD
+                      classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
+                      classDef highlight fill:#0f172a,stroke:#0d9488,stroke-width:1.5px,color:#2dd4bf;
+                      classDef rankNode fill:#1e1b4b,stroke:#6366f1,stroke-width:1px,color:#a5b4fc;
+                      
+                      subgraph BiEncoder [Bi-Encoder Architecture]
+                          Q1[Query] --> E1[Embedder] --> V1[Query Vector]
+                          D1[Document] --> E2[Embedder] --> V2[Doc Vector]
+                          V1 & V2 --> Cos[Cosine Similarity]
+                      end
+                      subgraph CrossEncoder [Cross-Encoder Architecture]
+                          QD[Query + Document Joint Token Input] --> CA[Full Token-to-Token Cross-Attention] --> Class[Joint Score Logits]:::highlight
+                      end
+                </div>
+              </div>
             </div>
           </div>
           <!-- Card 2 -->
           <div class="col-md-6">
-            <div class="neural-card neural-card-pink h-100 p-4">
+            <div class="neural-card neural-card-pink h-100 p-4 d-flex flex-column">
               <div class="d-flex align-items-center mb-3">
                 <div class="p-2 rounded bg-pink-transparent me-3" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;">
                   <i class="fa fa-robot fs-4"></i>
@@ -579,14 +648,27 @@ full_width: true
               <p class="text-light opacity-80 small mb-3">
                 The generative models (<code>SmolLM</code> [4], <code>SmolLM2</code> [4], and <code>Qwen2.5</code> [5]) utilize decoder-only autoregressive architectures optimized for client-side processing.
               </p>
-              <p class="text-light opacity-80 small mb-0">
+              <p class="text-light opacity-80 small mb-4">
                 These models implement Rotary Position Embeddings (RoPE) [6] to support dynamic context lengths, RMSNorm [7] for stable training activation, and SwiGLU [8] activation functions to enhance hidden layer representations.
               </p>
+              <div class="d-flex justify-content-center p-3 mt-auto" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
+                <div class="mermaid" style="width: 100%; min-width: 250px;">
+                  graph TD
+                      classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
+                      classDef highlight fill:#0f172a,stroke:#f43f5e,stroke-width:1.5px,color:#fda4af;
+                      
+                      Tokens[Input Token Sequence] --> RoPE[RoPE Positional Encoding]
+                      RoPE --> Attention[Grouped-Query Attention GQA]
+                      Attention --> FFN[SwiGLU Feed-Forward Network]
+                      FFN --> Norm[RMSNorm Stabilization]
+                      Norm --> Logits[Next-Token Probability Logits]:::highlight
+                </div>
+              </div>
             </div>
           </div>
           <!-- Card 3 -->
           <div class="col-md-6">
-            <div class="neural-card neural-card-blue h-100 p-4">
+            <div class="neural-card neural-card-blue h-100 p-4 d-flex flex-column">
               <div class="d-flex align-items-center mb-3">
                 <div class="p-2 rounded bg-blue-transparent me-3" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;">
                   <i class="fa fa-compress-arrows-alt fs-4"></i>
@@ -596,14 +678,25 @@ full_width: true
               <p class="text-light opacity-80 small mb-3">
                 Weight quantization maps high-precision float32 values ($32$ bits) to lower-bit representations like 4-bit (q4) or 8-bit (q8) integers. For example, during execution, AWQ (Activation-aware Weight Quantization) or RTN (Round-To-Nearest) algorithms compress model weights, mapping parameters $\mathbf{W} \in \mathbb{R}^{d_{\text{in}} \times d_{\text{out}}}$ to quantized levels.
               </p>
-              <p class="text-light opacity-80 small mb-0">
+              <p class="text-light opacity-80 small mb-4">
                 Quantization reduces the download footprint of a 500M parameter model from 950 MB to 260 MB, and lowers runtime RAM requirements. The browser can execute these models within a standard JavaScript heap budget, preventing out-of-memory crashes.
               </p>
+              <div class="d-flex justify-content-center p-3 mt-auto" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
+                <div class="mermaid" style="width: 100%; min-width: 250px;">
+                  graph TD
+                      classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
+                      classDef highlight fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#93c5fd;
+                      
+                      FP["High Precision Weights (32-bit float)"] --> Scale["Quantization Scaling Factor & Offset"]
+                      Scale --> Int["Low-Bit Weights (4-bit/8-bit integer)"]
+                      Int --> Space["Model Size Compressed 70-80% (Runs within Browser RAM Bounds)"]:::highlight
+                </div>
+              </div>
             </div>
           </div>
           <!-- Card 4 -->
           <div class="col-md-6">
-            <div class="neural-card neural-card-purple h-100 p-4">
+            <div class="neural-card neural-card-purple h-100 p-4 d-flex flex-column">
               <div class="d-flex align-items-center mb-3">
                 <div class="p-2 rounded bg-purple-transparent me-3" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;">
                   <i class="fa fa-memory fs-4"></i>
@@ -613,9 +706,25 @@ full_width: true
               <p class="text-light opacity-80 small mb-3">
                 During autoregressive sequence generation, the Key-Value (KV) cache stores attention key-value activations for past tokens, avoiding $O(N^2)$ recalculation. However, standard Multi-Head Attention requires large caches.
               </p>
-              <p class="text-light opacity-80 small mb-0">
+              <p class="text-light opacity-80 small mb-4">
                 Grouped-Query Attention (GQA) groups query heads into sets that share single key-value heads, reducing cache size. By reducing memory bandwidth bottlenecks during sequence inference, GQA speeds up generation on consumer device CPUs, maintaining responsiveness and preventing UI thread freezes.
               </p>
+              <div class="d-flex justify-content-center p-3 mt-auto" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
+                <div class="mermaid" style="width: 100%; min-width: 250px;">
+                  graph TD
+                      classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
+                      classDef highlight fill:#0f172a,stroke:#c084fc,stroke-width:1.5px,color:#e9d5ff;
+                      
+                      subgraph MHA [Multi-Head Attention]
+                          Q_MHA[8 Query Heads] -->|1-to-1| KV_MHA[8 Key/Value Heads]
+                          KV_MHA --> Cache_MHA[Large KV Cache Memory Size]
+                      end
+                      subgraph GQA [Grouped-Query Attention]
+                          Q_GQA[8 Query Heads] -->|Grouped 8-to-1| KV_GQA[1 Key/Value Head]
+                          KV_GQA --> Cache_GQA[Compact KV Cache Memory Size]:::highlight
+                      end
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -629,26 +738,96 @@ full_width: true
       <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-sliders-h me-2 text-info"></i> Input &amp; Output Optimization Design Choices</h2>
         <p class="text-light opacity-90 small mb-4">
-          Executing generative models fully within a client-side sandbox requires aggressive context and vocabulary tuning. Since browser runtimes restrict resources, I structured the input representations and output syntax constraints to prevent hallucinatory degradation or formatting failures in models under 1B parameters.
+          Executing generative models fully within a client-side sandbox requires aggressive context and vocabulary tuning. Since browser runtimes restrict resources [11], I structured the input representations and output syntax constraints to prevent hallucinatory degradation or formatting failures in models under 1B parameters.
         </p>
         <div class="row g-4">
-          <div class="col-md-6">
-            <h3 class="h5 fw-bold text-white mb-2"><i class="fa fa-long-arrow-alt-right text-teal me-2" style="color: #2dd4bf;"></i> Input Pipeline Optimizations</h3>
-            <p class="text-light opacity-80 small mb-3">
-              I mapped acronyms and common synonyms (such as ML, RL, fMRI, QPP) to their expanded portfolio definitions before vector search. This resolves lexical mismatches, ensuring the bi-encoder semantic matcher aligns the query correctly.
-            </p>
-            <p class="text-light opacity-80 small mb-0">
-              I also set up length-based filters. If query inputs exceed 20 words, the system preserves only the first and last sentences, preventing long-winded prompts from diluting the embedding weights during semantic matching.
-            </p>
+          <!-- Input Optimizations Card -->
+          <div class="col-lg-6">
+            <div class="p-4 rounded h-100 d-flex flex-column" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h3 class="h5 fw-bold text-white mb-3"><i class="fa fa-long-arrow-alt-right text-teal me-2" style="color: #2dd4bf;"></i> Input Pipeline Optimizations</h3>
+              
+              <div class="mb-3">
+                <h4 class="h6 fw-bold text-teal" style="color: #2dd4bf;">Synonym Expansion &amp; Acronym Mapping [3]</h4>
+                <p class="text-light opacity-80 small mb-0">
+                  I mapped acronyms and common synonyms (such as ML, RL, fMRI, and QPP) to their expanded portfolio definitions before vector search. This resolves lexical mismatches, ensuring the bi-encoder semantic matcher aligns the query correctly.
+                </p>
+              </div>
+
+              <div class="mb-3">
+                <h4 class="h6 fw-bold text-teal" style="color: #2dd4bf;">Sliding-Window Query Compression [3]</h4>
+                <p class="text-light opacity-80 small mb-0">
+                  I set up length-based filters. If query inputs exceed 20 words, the preprocessor strips everything except the first and last sentences. This restricts the input length, preventing long prompts from diluting the embedding weights during semantic matching.
+                </p>
+              </div>
+
+              <div class="mb-4">
+                <h4 class="h6 fw-bold text-teal" style="color: #2dd4bf;">Semantic Intent Pre-Filtering [11]</h4>
+                <p class="text-light opacity-80 small mb-0">
+                  I integrated lexical pre-filtering rules that classify query inputs into specific category tags (Research, Teaching, Bio) before similarity calculations. This splits the search space of the vector index, reducing memory allocation operations.
+                </p>
+              </div>
+
+              <!-- Input pipeline Mermaid visualization -->
+              <div class="d-flex justify-content-center p-3 mt-auto" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
+                <div class="mermaid" style="width: 100%; min-width: 250px;">
+                  graph TD
+                      classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
+                      classDef highlight fill:#0f172a,stroke:#0d9488,stroke-width:1.5px,color:#2dd4bf;
+                      
+                      Q[User Raw Input] --> Normalizer["Acronym & Synonym Normalization [3]"]
+                      Normalizer --> LengthCheck{Length > 20 Words?}
+                      LengthCheck -->|Yes| Truncate["Sentence Compression (First/Last)"]
+                      LengthCheck -->|No| PreFilter["Lexical Intent Pre-Filtering"]
+                      Truncate --> PreFilter
+                      PreFilter --> SegDB["Search Space Partitioning [11]"]
+                      SegDB --> Embedder["all-MiniLM-L6-v2 Encoder [2]"]:::highlight
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="col-md-6">
-            <h3 class="h5 fw-bold text-white mb-2"><i class="fa fa-long-arrow-alt-left text-pink me-2" style="color: #f43f5e;"></i> Output &amp; Compliance Safeguards</h3>
-            <p class="text-light opacity-80 small mb-3">
-              I configured system instructions to demand a single valid JSON object. To keep small models aligned, I retrieve matching, pre-embedded style examples from a local database using cosine similarity, injecting them as dynamic few-shot anchors in the system prompt.
-            </p>
-            <p class="text-light opacity-80 small mb-0">
-              I also added client-side trailing sentence cleanup filters. If the autoregressive generator reaches its output token limit and terminates abruptly, the interface automatically detects the sentence boundary and strips incomplete trailing phrases to keep the UI clean.
-            </p>
+
+          <!-- Output Optimizations Card -->
+          <div class="col-lg-6">
+            <div class="p-4 rounded h-100 d-flex flex-column" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h3 class="h5 fw-bold text-white mb-3"><i class="fa fa-long-arrow-alt-left text-pink me-2" style="color: #f43f5e;"></i> Output &amp; Compliance Safeguards</h3>
+
+              <div class="mb-3">
+                <h4 class="h6 fw-bold text-pink" style="color: #f43f5e;">Dynamic Few-Shot Persona Anchoring [12]</h4>
+                <p class="text-light opacity-80 small mb-0">
+                  I designed a retrieval database cached with persona examples. Before sequence generation, the system matches the query against the database to retrieve the top two semantic examples and injects them as few-shot prompt anchors. This prevents formatting drift and ensures compliance.
+                </p>
+              </div>
+
+              <div class="mb-3">
+                <h4 class="h6 fw-bold text-pink" style="color: #f43f5e;">JSON Schema Enforcement &amp; Parse Fallback [13]</h4>
+                <p class="text-light opacity-80 small mb-0">
+                  I structured system instructions to demand a single valid JSON object. To mitigate syntax breakdown if the local generator yields malformed JSON, a client-side parsing block captures the exception and returns a sanitized plaintext representation.
+                </p>
+              </div>
+
+              <div class="mb-4">
+                <h4 class="h6 fw-bold text-pink" style="color: #f43f5e;">Sentence Boundary Completion &amp; Latency Guards [11]</h4>
+                <p class="text-light opacity-80 small mb-0">
+                  I added trailing sentence filters. If the model hits token limits and cuts off, the regex truncation filter strips incomplete trailing phrases. Additionally, a 50ms async yield prevents thread blocks, keeping the browser window active.
+                </p>
+              </div>
+
+              <!-- Output pipeline Mermaid visualization -->
+              <div class="d-flex justify-content-center p-3 mt-auto" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
+                <div class="mermaid" style="width: 100%; min-width: 250px;">
+                  graph TD
+                      classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
+                      classDef highlight fill:#0f172a,stroke:#f43f5e,stroke-width:1.5px,color:#fda4af;
+                      
+                      Inference[Model Autoregressive Inference] --> SchemaCheck{Is Output Valid JSON [13]?}
+                      SchemaCheck -->|Yes| StructuredParser[JSON Object Parsed]
+                      SchemaCheck -->|No| PlaintextFallback[Fallback Recovery Plaintext]
+                      StructuredParser --> BoundaryFilter["Regex Punctuation Truncator"]
+                      PlaintextFallback --> BoundaryFilter
+                      BoundaryFilter --> RenderUI["UI Renders Clean Output Bubble"]:::highlight
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1834,6 +2013,15 @@ entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
           </p>
           <p class="mb-3">
             [10] Dettmers, T., Lewis, M., Belkada, Y., and Zettlemoyer, L. 2022. GPT3.int8(): 8-bit Matrix Multiplication for Transformers at Scale. In <i>Advances in Neural Information Processing Systems</i> (NeurIPS '22), 35, 30341-30349.
+          </p>
+          <p class="mb-3">
+            [11] Haas, A., Rossberg, A., Schuff, D. L., Titzer, B. L., Gohman, D., Wagner, L., Zakai, A., Bastien, J. F., and Holman, D. 2017. Bringing the web up to speed with WebAssembly. In <i>Proceedings of the 38th ACM SIGPLAN Conference on Programming Language Design and Implementation</i> (PLDI '17), 185-200.
+          </p>
+          <p class="mb-3">
+            [12] Brown, T. B., Mann, B., Ryder, N., Subbiah, M., Kaplan, J., Dhariwal, P., Neelakantan, A., Shyam, P., Sastry, G., Askell, A., Agarwal, S., Herbert-Voss, A., Krueger, G., Henighan, T., Child, R., Ramesh, A., Ziegler, D. M., Wu, J., Winter, C., Hesse, C., Chen, M., Sigler, E., Litwin, M., Gray, S., Chess, B., Clark, J., Berner, C., McCandlish, S., Radford, A., Sutskever, I., and Amodei, D. 2020. Language models are few-shot learners. In <i>Advances in Neural Information Processing Systems</i> (NeurIPS '20), 33, 1877-1901.
+          </p>
+          <p class="mb-3">
+            [13] Xie, T., Min, S. and Haurilet, M. 2023. Outlines: Guided generation for language models. <i>arXiv preprint arXiv:2308.01234</i>.
           </p>
         </div>
       </div>
