@@ -647,6 +647,38 @@
             return 'VSM Keyword Search';
         }
 
+        function getClientSpecs() {
+            let gpu = "Unknown";
+            try {
+                const canvas = document.createElement("canvas");
+                const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+                if (gl) {
+                    const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+                    gpu = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_VENDOR_ID) || gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "No Debug Extension";
+                }
+            } catch(e) {
+                gpu = "Error querying WebGL";
+            }
+
+            let network = "Unknown";
+            if (navigator.connection) {
+                network = `${navigator.connection.effectiveType} (rtt: ${navigator.connection.rtt}ms, downlink: ${navigator.connection.downlink}Mbps)`;
+            }
+
+            return {
+                cpuCores: navigator.hardwareConcurrency || "Unknown",
+                ramMemoryGb: navigator.deviceMemory || "Unknown",
+                gpu: gpu,
+                webGpuSupported: !!navigator.gpu,
+                screen: `${window.screen.width}x${window.screen.height} (ratio: ${window.devicePixelRatio}, viewport: ${window.innerWidth}x${window.innerHeight})`,
+                network: network,
+                userAgent: navigator.userAgent,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                language: navigator.language,
+                url: window.location.href
+            };
+        }
+
         function logQuery(queryId, queryText, responseText, extraData) {
             const searchMode = activeModelType;
             const modelName = getModelName();
@@ -691,6 +723,7 @@
                 const historyToLog = chatHistory.slice(0, -2);
                 const historyText = historyToLog.map(m => `${m.role === 'user' ? 'User' : 'Waddles'}: ${m.content}`).join('\n');
                 formData.append('entry.1452883440', historyText);
+                formData.append('entry.1639900798', JSON.stringify(getClientSpecs()));
 
                 fetch(QUERY_LOG_ENDPOINT, {
                     method: 'POST',
@@ -747,6 +780,7 @@
                 const historyToLog = chatHistory.slice(0, -2);
                 const historyText = historyToLog.map(m => `${m.role === 'user' ? 'User' : 'Waddles'}: ${m.content}`).join('\n');
                 formData.append('entry.937115658', historyText);
+                formData.append('entry.1778307832', JSON.stringify(getClientSpecs()));
 
                 fetch(RATING_LOG_ENDPOINT, {
                     method: 'POST',
