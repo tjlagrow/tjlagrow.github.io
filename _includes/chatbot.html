@@ -795,7 +795,7 @@
             }
         }
 
-        function logRating(queryId, queryText, responseText, ratingVal, extraData) {
+        function logRating(queryId, queryText, responseText, ratingVal, extraData, feedbackText = "") {
             const searchMode = activeModelType;
             const modelName = getModelName();
             const personality = document.getElementById('waddles-personality-selector')?.value || 'helpful';
@@ -811,7 +811,8 @@
                 confidence: extraData ? extraData.confidence : 1.0,
                 category: extraData ? extraData.category : 'Unknown',
                 followups: extraData ? JSON.stringify(extraData.followups) : '[]',
-                latency: extraData ? extraData.latency : 0
+                latency: extraData ? extraData.latency : 0,
+                feedback: feedbackText
             };
 
             console.log("[Waddles] Logging satisfaction rating feedback", ratingItem);
@@ -842,6 +843,7 @@
                 const historyText = historyToLog.map(m => `${m.role === 'user' ? 'User' : 'Waddles'}: ${m.content}`).join('\n');
                 formData.append('entry.937115658', historyText);
                 formData.append('entry.1778307832', JSON.stringify(getClientSpecs()));
+                formData.append('entry.1364879751', feedbackText);
 
                 fetch(RATING_LOG_ENDPOINT, {
                     method: 'POST',
@@ -953,6 +955,9 @@
         function renderFeedbackButtons(msg, queryText, queryId, displayHtml, extraData) {
             const fbContainer = document.createElement('div');
             fbContainer.className = 'chatbot-feedback-buttons';
+            fbContainer.style.display = 'flex';
+            fbContainer.style.alignItems = 'center';
+            fbContainer.style.flexWrap = 'wrap';
             fbContainer.innerHTML = `
                 <button class="chatbot-feedback-btn" data-rating="up" title="Thumb up">👍</button>
                 <button class="chatbot-feedback-btn" data-rating="down" title="Thumb down">👎</button>
@@ -973,6 +978,64 @@
                     btnDown.classList.remove('disabled');
                 }
                 logRating(queryId, queryText, displayHtml, ratingVal, extraData);
+
+                // Check and show "Want to explain?" button
+                if (!fbContainer.querySelector('.chatbot-feedback-explain-btn')) {
+                    const explainBtn = document.createElement('button');
+                    explainBtn.className = 'chatbot-feedback-explain-btn';
+                    explainBtn.innerText = 'Want to explain?';
+                    explainBtn.style.background = 'none';
+                    explainBtn.style.border = 'none';
+                    explainBtn.style.color = '#2dd4bf';
+                    explainBtn.style.fontSize = '0.725rem';
+                    explainBtn.style.textDecoration = 'underline';
+                    explainBtn.style.marginLeft = '10px';
+                    explainBtn.style.cursor = 'pointer';
+                    explainBtn.style.padding = '0';
+                    explainBtn.style.fontFamily = 'inherit';
+
+                    explainBtn.addEventListener('click', () => {
+                        explainBtn.remove();
+
+                        const explainArea = document.createElement('div');
+                        explainArea.className = 'chatbot-feedback-explain-area';
+                        explainArea.style.marginTop = '8px';
+                        explainArea.style.display = 'flex';
+                        explainArea.style.gap = '6px';
+                        explainArea.style.width = '100%';
+                        explainArea.innerHTML = `
+                            <input type="text" placeholder="What could be improved or what worked well?" class="chatbot-feedback-explain-input" style="flex: 1; font-size: 0.725rem; padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.12); background: rgba(15, 23, 42, 0.4); color: white; outline: none; font-family: inherit;">
+                            <button class="chatbot-feedback-explain-submit" style="border: none; background: #2dd4bf; color: #0f172a; font-weight: 700; border-radius: 6px; padding: 6px 12px; font-size: 0.725rem; cursor: pointer; transition: opacity 0.2s; font-family: inherit;">Submit</button>
+                        `;
+                        fbContainer.appendChild(explainArea);
+
+                        const inputField = explainArea.querySelector('.chatbot-feedback-explain-input');
+                        const submitBtn = explainArea.querySelector('.chatbot-feedback-explain-submit');
+
+                        inputField.focus();
+
+                        const submitFeedback = () => {
+                            const val = inputField.value.trim();
+                            if (!val) return;
+
+                            logRating(queryId, queryText, displayHtml, ratingVal, extraData, val);
+
+                            explainArea.innerHTML = `<span style="font-size: 0.725rem; color: #10b981; font-weight: 600;">Thank you for your feedback!</span>`;
+                            setTimeout(() => {
+                                explainArea.remove();
+                            }, 3000);
+                        };
+
+                        submitBtn.addEventListener('click', submitFeedback);
+                        inputField.addEventListener('keypress', (event) => {
+                            if (event.key === 'Enter') {
+                                submitFeedback();
+                            }
+                        });
+                    });
+
+                    fbContainer.appendChild(explainBtn);
+                }
             };
 
             btnUp.addEventListener('click', () => handleFeedback('up'));
