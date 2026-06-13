@@ -689,10 +689,12 @@
             const specs = getClientSpecs();
             const recEl = document.getElementById('waddles-model-recommendation');
             const modelSelector = document.getElementById('waddles-model-selector');
+            const quantSelector = document.getElementById('waddles-quant-selector');
             
             if (!recEl || !modelSelector) return;
             
             let recommendedModel = 'keyword';
+            let recommendedQuant = 'q4';
             let reason = '';
             
             const hasWebGPU = specs.webGpuSupported;
@@ -702,41 +704,55 @@
             if (hasWebGPU) {
                 if (ram === "Unknown" || ram >= 8) {
                     recommendedModel = 'smollm2';
-                    reason = `Detected WebGPU support & >=8GB RAM. <strong>SmolLM2 360M</strong> is recommended for high accuracy and fast local inference.`;
+                    recommendedQuant = 'q8';
+                    reason = `Detected WebGPU support & >=8GB RAM. <strong>SmolLM2 360M</strong> at <strong>8-bit quantization</strong> is recommended for high accuracy and fast local inference.`;
                 } else if (ram >= 4) {
                     recommendedModel = 'qwen';
-                    reason = `Detected WebGPU & ~${ram}GB RAM. <strong>Qwen 0.5B</strong> is recommended for balanced memory footprint and speed.`;
+                    recommendedQuant = 'q4';
+                    reason = `Detected WebGPU & ~${ram}GB RAM. <strong>Qwen 0.5B</strong> at <strong>4-bit quantization</strong> is recommended for balanced speed and memory.`;
                 } else {
                     recommendedModel = 'smollm';
-                    reason = `Detected WebGPU with limited RAM (<4GB). <strong>SmolLM 135M</strong> is recommended to prevent browser page crashes.`;
+                    recommendedQuant = 'q4';
+                    reason = `Detected WebGPU with limited RAM (<4GB). <strong>SmolLM 135M</strong> at <strong>4-bit quantization</strong> is recommended to prevent browser page crashes.`;
                 }
             } else {
                 if (ram !== "Unknown" && ram >= 8 && cores >= 8) {
                     recommendedModel = 'qwen';
-                    reason = `No WebGPU detected, but CPU has ${cores} cores & >=8GB RAM. <strong>Qwen 0.5B (WASM CPU)</strong> is recommended (generation will be slower).`;
+                    recommendedQuant = 'q4';
+                    reason = `No WebGPU detected, but CPU has ${cores} cores & >=8GB RAM. <strong>Qwen 0.5B (4-bit WASM CPU)</strong> is recommended (generation will be slower).`;
                 } else if (ram !== "Unknown" && ram >= 4) {
                     recommendedModel = 'smollm';
-                    reason = `No WebGPU detected. <strong>SmolLM 135M (WASM CPU)</strong> is recommended as a lightweight option for your ${cores}-core device.`;
+                    recommendedQuant = 'q4';
+                    reason = `No WebGPU detected. <strong>SmolLM 135M (4-bit WASM CPU)</strong> is recommended as a lightweight option for your ${cores}-core device.`;
                 } else {
                     recommendedModel = 'keyword';
+                    recommendedQuant = 'q4';
                     reason = `Low specifications or no WebGPU detected. Defaulting to <strong>Keyword Match</strong> to ensure lag-free page navigation.`;
                 }
             }
             
             recEl.innerHTML = `💡 <strong>Device Recommendation:</strong> ${reason}`;
             
+            // Set and label model selector
             Array.from(modelSelector.options).forEach(opt => {
+                // Clear any existing (Recommended) tag first
+                opt.text = opt.text.replace(" (Recommended)", "");
                 if (opt.value === recommendedModel) {
-                    if (!opt.text.includes('(Recommended)')) {
-                        opt.text = opt.text + " (Recommended)";
-                    }
+                    opt.text = opt.text + " (Recommended)";
                     opt.selected = true;
                 }
             });
             
-            const quantSelector = document.getElementById('waddles-quant-selector');
+            // Set and label quantization selector
             if (quantSelector) {
                 quantSelector.disabled = (recommendedModel === 'keyword');
+                Array.from(quantSelector.options).forEach(opt => {
+                    opt.text = opt.text.replace(" (Recommended)", "");
+                    if (opt.value === recommendedQuant) {
+                        opt.text = opt.text + " (Recommended)";
+                        opt.selected = true;
+                    }
+                });
             }
         }
 

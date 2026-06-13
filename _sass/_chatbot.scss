@@ -15,8 +15,8 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: $brand-color;
-    background: linear-gradient(135deg, $brand-color, darken($brand-color, 10%));
+    background: #ec4899;
+    background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
     color: white;
     border: none;
     font-size: 1.5rem;
@@ -29,7 +29,7 @@
 
     &:hover {
         transform: scale(1.08);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 22px rgba(236, 72, 153, 0.55), 0 6px 20px rgba(0, 0, 0, 0.3);
     }
 
     &:active {
@@ -158,6 +158,10 @@
             #chatbot-close {
                 font-size: 1.4rem;
                 line-height: 1;
+                
+                &:hover {
+                    color: #ec4899;
+                }
             }
         }
     }
@@ -340,23 +344,23 @@
     }
 
     .chatbot-chip {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba($brand-color, 0.35);
-        color: $brand-color;
-        padding: 0.35rem 0.75rem;
+        background: rgba($brand-color, 0.1);
+        border: 1px solid rgba($brand-color, 0.5);
+        color: #e2e8f0; /* High-contrast slate-200 text so it doesn't blend in */
+        padding: 0.35rem 0.85rem;
         border-radius: 20px;
         font-size: 0.8rem;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 
         &:hover {
-            background: rgba($brand-color, 0.15);
-            border-color: $brand-color;
+            background: rgba($brand-color, 0.22);
+            border-color: lighten($brand-color, 12%);
             color: #ffffff;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 212, 191, 0.35); /* Vibrant glowing border shadow */
         }
 
         &:active {

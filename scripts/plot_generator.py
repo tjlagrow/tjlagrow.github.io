@@ -7,22 +7,23 @@ def generate_expanded_plots(results):
     print("\nCompiling premium Matplotlib benchmark charts...")
     
     # Modern design token settings
-    plt.rcParams['figure.facecolor'] = '#f8fafc'  # Slate-50 background
-    plt.rcParams['axes.facecolor'] = '#ffffff'
-    plt.rcParams['axes.edgecolor'] = '#cbd5e1'   # Slate-300 borders
-    plt.rcParams['axes.linewidth'] = 0.8
+    # Premium Dark/Glassmorphic design token settings
+    plt.rcParams['figure.facecolor'] = '#0f172a'  # Slate-900 background (matches site)
+    plt.rcParams['axes.facecolor'] = '#1e293b'    # Slate-800 card background
+    plt.rcParams['axes.edgecolor'] = '#334155'    # Slate-700 borders
+    plt.rcParams['axes.linewidth'] = 1.0
     plt.rcParams['axes.grid'] = True
-    plt.rcParams['grid.color'] = '#f1f5f9'        # Slate-100 grid lines
-    plt.rcParams['grid.linestyle'] = '-'
-    plt.rcParams['grid.linewidth'] = 0.8
+    plt.rcParams['grid.color'] = '#334155'        # Slate-700 grid lines
+    plt.rcParams['grid.linestyle'] = '--'
+    plt.rcParams['grid.linewidth'] = 0.6
     
     # Typography configuration
     plt.rcParams['font.family'] = 'sans-serif'
     plt.rcParams['font.sans-serif'] = ['Inter', 'DejaVu Sans', 'Arial', 'Helvetica']
-    plt.rcParams['text.color'] = '#0f172a'        # Slate-900 text
-    plt.rcParams['axes.labelcolor'] = '#334155'   # Slate-700 labels
-    plt.rcParams['xtick.color'] = '#64748b'       # Slate-500 ticks
-    plt.rcParams['ytick.color'] = '#64748b'
+    plt.rcParams['text.color'] = '#f8fafc'        # Slate-50 text
+    plt.rcParams['axes.labelcolor'] = '#cbd5e1'   # Slate-300 labels
+    plt.rcParams['xtick.color'] = '#94a3b8'       # Slate-400 ticks
+    plt.rcParams['ytick.color'] = '#94a3b8'
     plt.rcParams['xtick.labelsize'] = 9
     plt.rcParams['ytick.labelsize'] = 9
     plt.rcParams['axes.labelsize'] = 10
@@ -32,34 +33,36 @@ def generate_expanded_plots(results):
     
     # Legend styling
     plt.rcParams['legend.frameon'] = True
-    plt.rcParams['legend.framealpha'] = 0.95
-    plt.rcParams['legend.facecolor'] = '#ffffff'
-    plt.rcParams['legend.edgecolor'] = '#e2e8f0'
-    plt.rcParams['legend.fontsize'] = 9
+    plt.rcParams['legend.framealpha'] = 0.85
+    plt.rcParams['legend.facecolor'] = '#0f172a'
+    plt.rcParams['legend.edgecolor'] = '#334155'
+    plt.rcParams['legend.fontsize'] = 8.5
 
-    # Colors definition
-    PRIMARY = "#4f46e5"    # Indigo
-    SECONDARY = "#06b6d4"  # Cyan
-    ACCENT_ROSE = "#f43f5e" # Rose
-    ACCENT_AMBER = "#f59e0b" # Amber
-    ACCENT_EMERALD = "#10b981" # Emerald
-    ACCENT_PURPLE = "#8b5cf6"  # Violet
-    ACCENT_PINK = "#ec4899"    # Pink
+    # Colors definition (Cyberpunk/Neon theme)
+    PRIMARY = "#2dd4bf"     # Neon Teal
+    SECONDARY = "#38bdf8"   # Neon Sky
+    ACCENT_ROSE = "#fb7185"  # Rose (Light)
+    ACCENT_AMBER = "#fbbf24" # Amber (Light)
+    ACCENT_EMERALD = "#34d399"# Emerald (Light)
+    ACCENT_PURPLE = "#c084fc" # Violet (Light)
+    ACCENT_PINK = "#f472b6"   # Pink (Light)
 
     def style_axes(ax, title, xlabel=None, ylabel=None, show_legend=True):
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
-        ax.spines['left'].set_color('#cbd5e1')
-        ax.spines['bottom'].set_color('#cbd5e1')
-        ax.set_title(title, fontweight='bold', pad=12)
+        ax.spines['left'].set_color('#334155')
+        ax.spines['bottom'].set_color('#334155')
+        ax.set_title(title, fontweight='bold', pad=12, color='#ffffff')
         if xlabel:
-            ax.set_xlabel(xlabel, labelpad=6)
+            ax.set_xlabel(xlabel, labelpad=6, color='#cbd5e1')
         if ylabel:
-            ax.set_ylabel(ylabel, labelpad=6)
+            ax.set_ylabel(ylabel, labelpad=6, color='#cbd5e1')
         ax.set_axisbelow(True)
         if show_legend and ax.get_legend_handles_labels()[0]:
-            legend = ax.legend(frameon=True, facecolor='#ffffff', edgecolor='#e2e8f0', fontsize=8)
+            legend = ax.legend(frameon=True, facecolor='#0f172a', edgecolor='#334155', fontsize=8)
             legend.get_frame().set_linewidth(0.8)
+            for text in legend.get_texts():
+                text.set_color('#cbd5e1')
 
     # 1. Chunking Ratio Recall (Phase 1)
     p1 = results.get("Phase 1: Retrieval Parameters", {})
@@ -96,6 +99,8 @@ def generate_expanded_plots(results):
                 markerfacecolor=SECONDARY, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
         ax.plot(labels, mrr_vals, marker='s', linewidth=2.5, color=ACCENT_AMBER, label="MRR",
                 markerfacecolor=ACCENT_AMBER, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
+        ax.fill_between(range(len(labels)), hit3_vals, color=SECONDARY, alpha=0.12)
+        ax.fill_between(range(len(labels)), mrr_vals, color=ACCENT_AMBER, alpha=0.08)
         
         style_axes(ax, "Retrieval Cutoff (K) Parameter Trade-offs", ylabel="Score")
         ax.set_ylim(min(mrr_vals) * 0.95, 1.05)
@@ -170,9 +175,9 @@ def generate_expanded_plots(results):
             colors_list = [PRIMARY, SECONDARY, ACCENT_ROSE, ACCENT_AMBER, ACCENT_PURPLE][:len(models)]
             sizes = [150, 220, 290, 360, 430][:len(models)]
             
-            ax.scatter(latencies, groundedness_vals, s=sizes, c=colors_list, alpha=0.85, edgecolors='#334155', linewidth=1.2)
+            ax.scatter(latencies, groundedness_vals, s=sizes, c=colors_list, alpha=0.85, edgecolors='#cbd5e1', linewidth=1.2)
             for i, txt in enumerate(models):
-                ax.annotate(txt, (latencies[i], groundedness_vals[i]), xytext=(8, -3), textcoords='offset points', fontweight='bold', fontsize=8, color='#0f172a')
+                ax.annotate(txt, (latencies[i], groundedness_vals[i]), xytext=(8, -3), textcoords='offset points', fontweight='bold', fontsize=8, color='#f8fafc')
                 
             style_axes(ax, "Pareto Frontier: Generation Latency vs. Groundedness", "Average Latency (seconds, log scale)", "Groundedness Score", show_legend=False)
             ax.set_ylim(-0.05, 1.05)
@@ -196,7 +201,7 @@ def generate_expanded_plots(results):
             matrix_data = np.array(matrix_data)
             
             fig, ax = plt.subplots(figsize=(8, 5))
-            im = ax.imshow(matrix_data, cmap="YlGnBu", aspect="auto", vmin=0, vmax=1)
+            im = ax.imshow(matrix_data, cmap="viridis", aspect="auto", vmin=0, vmax=1)
             
             ax.set_xticks(np.arange(len(metrics_labels)))
             ax.set_yticks(np.arange(len(models)))
@@ -207,7 +212,7 @@ def generate_expanded_plots(results):
             for i in range(len(models)):
                 for j in range(len(metrics_labels)):
                     val = matrix_data[i, j]
-                    txt_color = "white" if val > 0.6 else "#0f172a"
+                    txt_color = "#0f172a" if val > 0.65 else "#ffffff"
                     ax.text(j, i, f"{val:.2f}", ha="center", va="center", color=txt_color, fontweight='bold', fontsize=9)
             
             cbar = ax.figure.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
@@ -314,6 +319,8 @@ def generate_expanded_plots(results):
                 markerfacecolor=ACCENT_ROSE, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
         ax.plot(labels, rel_vals, marker='s', linewidth=2.5, color=ACCENT_AMBER, label="Judge Relevance",
                 markerfacecolor=ACCENT_AMBER, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
+        ax.fill_between(range(len(labels)), faith_vals, color=ACCENT_ROSE, alpha=0.12)
+        ax.fill_between(range(len(labels)), rel_vals, color=ACCENT_AMBER, alpha=0.08)
         
         style_axes(ax, "Lost-in-the-Middle: Document Position Impact", ylabel="Evaluation Score")
         ax.set_ylim(min(faith_vals + rel_vals) * 0.9, 1.05)
@@ -380,6 +387,8 @@ def generate_expanded_plots(results):
                 markerfacecolor=ACCENT_PURPLE, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
         ax.plot(labels, halluc_vals, marker='s', linewidth=2.5, color=ACCENT_AMBER, label="Hallucination Ratio",
                 markerfacecolor=ACCENT_AMBER, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
+        ax.fill_between(range(len(labels)), faith_vals, color=ACCENT_PURPLE, alpha=0.12)
+        ax.fill_between(range(len(labels)), halluc_vals, color=ACCENT_AMBER, alpha=0.08)
         
         style_axes(ax, "Context Volume Scaling: Recall vs. Hallucination", ylabel="Score")
         ax.set_ylim(-0.05, 1.05)
@@ -422,6 +431,8 @@ def generate_expanded_plots(results):
                 markerfacecolor=ACCENT_AMBER, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
         ax.plot(labels, mrr_vals, marker='s', linewidth=2.5, color=ACCENT_EMERALD, label="MRR",
                 markerfacecolor=ACCENT_EMERALD, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
+        ax.fill_between(range(len(labels)), hit3_vals, color=ACCENT_AMBER, alpha=0.12)
+        ax.fill_between(range(len(labels)), mrr_vals, color=ACCENT_EMERALD, alpha=0.08)
         
         style_axes(ax, "Reciprocal Rank Fusion (RRF) Constant Optimization", ylabel="Score")
         ax.set_ylim(min(mrr_vals) * 0.95, 1.05)
@@ -460,6 +471,8 @@ def generate_expanded_plots(results):
                 markerfacecolor=ACCENT_PINK, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
         ax.plot(rep_labels, rep_structs, marker='s', linewidth=2.5, color=PRIMARY, label="JSON Conformance",
                 markerfacecolor=PRIMARY, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
+        ax.fill_between(range(len(rep_labels)), rep_ttrs, color=ACCENT_PINK, alpha=0.12)
+        ax.fill_between(range(len(rep_labels)), rep_structs, color=PRIMARY, alpha=0.08)
         
         ax.axvline(x=2, color=ACCENT_AMBER, linestyle=':', linewidth=1.5, alpha=0.8)
         ax.text(2.1, 0.8, "Sweet Spot (1.10)", color=ACCENT_AMBER, fontweight='bold', fontsize=8)
@@ -482,6 +495,8 @@ def generate_expanded_plots(results):
                 markerfacecolor="#14b8a6", markeredgecolor='white', markeredgewidth=1.5, markersize=8)
         ax.plot(labels, ground_vals, marker='s', linewidth=2.5, color=ACCENT_PURPLE, label="Groundedness",
                 markerfacecolor=ACCENT_PURPLE, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
+        ax.fill_between(range(len(labels)), faith_vals, color="#14b8a6", alpha=0.12)
+        ax.fill_between(range(len(labels)), ground_vals, color=ACCENT_PURPLE, alpha=0.08)
         
         style_axes(ax, "Reranker Sentence Selection Limit Impact", ylabel="Score")
         ax.set_ylim(-0.05, 1.05)
@@ -525,6 +540,9 @@ def generate_expanded_plots(results):
                 markerfacecolor=PRIMARY, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
         ax.plot(labels, halluc_vals, marker='^', linewidth=2.5, color=ACCENT_ROSE, label="Hallucination Ratio",
                 markerfacecolor=ACCENT_ROSE, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
+        ax.fill_between(range(len(labels)), faith_vals, color=ACCENT_EMERALD, alpha=0.1)
+        ax.fill_between(range(len(labels)), ground_vals, color=PRIMARY, alpha=0.08)
+        ax.fill_between(range(len(labels)), halluc_vals, color=ACCENT_ROSE, alpha=0.05)
         
         ax.axvline(x=3, color=ACCENT_ROSE, linestyle=':', linewidth=1.5, alpha=0.6)
         ax.text(3.1, 0.9, "Attention Distraction Threshold", color=ACCENT_ROSE, fontsize=8, fontweight='bold')
@@ -568,6 +586,8 @@ def generate_expanded_plots(results):
                 markerfacecolor=ACCENT_EMERALD, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
         ax.plot(labels, ground_vals, marker='s', linewidth=2.5, color=ACCENT_AMBER, label="Groundedness",
                 markerfacecolor=ACCENT_AMBER, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
+        ax.fill_between(range(len(labels)), faith_vals, color=ACCENT_EMERALD, alpha=0.12)
+        ax.fill_between(range(len(labels)), ground_vals, color=ACCENT_AMBER, alpha=0.08)
         
         style_axes(ax, "Attention Stress Test: Context Expansion Window Impact", ylabel="Score")
         ax.set_ylim(-0.05, 1.05)

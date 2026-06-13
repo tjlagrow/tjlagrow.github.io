@@ -132,7 +132,6 @@ full_width: true
   cursor: pointer;
   transform-style: preserve-3d;
   will-change: transform;
-  animation: float-avatar 5s ease-in-out infinite;
   transition: transform 0.1s ease, box-shadow 0.3s ease;
 }
 
@@ -171,11 +170,6 @@ full_width: true
   to { transform: rotate(0deg); }
 }
 
-@keyframes float-avatar {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-  100% { transform: translateY(0px); }
-}
 
 @keyframes glow-pulse {
   0% { transform: scale(0.95); opacity: 0.7; }
@@ -2930,6 +2924,24 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
         <!-- Interactive Dashboard -->
         <div class="mt-4 pt-4 border-top border-secondary">
           <h3 class="h5 fw-bold text-white mb-3"><i class="fa fa-chart-line me-2 text-pink" style="color: #f43f5e;"></i> Empirical Sweep Visualization Dashboard</h3>
+          
+          <!-- Live Hardware Profiler & Recommendation Card -->
+          <div class="p-3 mb-4 rounded d-flex flex-wrap align-items-center justify-content-between gap-3" style="background: rgba(45, 212, 191, 0.04); border: 1px solid rgba(45, 212, 191, 0.12); border-radius: 10px;">
+              <div class="d-flex align-items-center gap-3">
+                  <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 42px; height: 42px; background: rgba(45, 212, 191, 0.12); color: #2dd4bf; font-size: 1.1rem;">
+                      <i class="fa fa-microchip"></i>
+                  </div>
+                  <div>
+                      <h4 class="h6 fw-bold text-white mb-0" style="font-size: 0.85rem;">Your Client Hardware Profile</h4>
+                      <p class="text-light opacity-80 small mb-0" id="ablation-profiler-specs" style="font-size: 0.725rem;">Detecting system capabilities...</p>
+                  </div>
+              </div>
+              <div class="text-md-end">
+                  <span class="text-muted small d-block" style="font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.05em;">Recommended Local Model</span>
+                  <span class="badge fw-bold" id="ablation-profiler-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25); padding: 5px 10px; font-size: 0.725rem; border-radius: 4px;">Computing...</span>
+              </div>
+          </div>
+
           <p class="text-light opacity-80 small mb-4">
             Select a phase category and sweep chart to explore the empirical curves, experimental protocols, and structural conclusions.
           </p>
@@ -2958,7 +2970,12 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
                 <div class="row g-3">
                   <!-- Chart image display -->
                   <div class="col-lg-7 text-center">
-                    <img id="ablation-chart-img" src="{{ '/assets/images/ablation/chunk_ratio_recall.png' | relative_url }}" alt="Ablation Plot Output" class="img-fluid rounded" style="max-height: 380px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); transition: opacity 0.2s;">
+                    <div style="position: relative; overflow: hidden; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);" class="chart-zoom-container">
+                      <img id="ablation-chart-img" src="{{ '/assets/images/ablation/chunk_ratio_recall.png' | relative_url }}" alt="Ablation Plot Output" class="img-fluid rounded" style="max-height: 380px; transition: all 0.25s; cursor: pointer; display: block; width: 100%;" onclick="openAblationLightbox()">
+                      <div style="position: absolute; bottom: 12px; right: 12px; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.15); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #2dd4bf; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.35);" onclick="openAblationLightbox()">
+                        <i class="fa fa-expand" style="font-size: 0.8rem;"></i>
+                      </div>
+                    </div>
                   </div>
                   <!-- Explanatory notes -->
                   <div class="col-lg-5 d-flex flex-column justify-content-between text-start">
@@ -3310,11 +3327,99 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
             document.getElementById('ablation-plot-metrics').innerText = plot.metrics;
           }
 
+          // Lightbox Modal Functions
+          window.openAblationLightbox = function() {
+            const modal = document.getElementById('ablation-lightbox-modal');
+            const img = document.getElementById('ablation-lightbox-img');
+            const srcImg = document.getElementById('ablation-chart-img');
+            
+            if (!modal || !img || !srcImg) return;
+            
+            img.src = srcImg.src;
+            modal.style.display = 'flex';
+            
+            // Trigger animation frame
+            setTimeout(() => {
+              modal.style.opacity = '1';
+              img.style.transform = 'scale(1)';
+            }, 10);
+          };
+
+          window.closeAblationLightbox = function() {
+            const modal = document.getElementById('ablation-lightbox-modal');
+            const img = document.getElementById('ablation-lightbox-img');
+            
+            if (!modal || !img) return;
+            
+            modal.style.opacity = '0';
+            img.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+              modal.style.display = 'none';
+            }, 300);
+          };
+
+          // Live System Hardware Specs Profiler
+          function initHardwareProfiler() {
+            let cores = navigator.hardwareConcurrency || "Unknown";
+            let ram = navigator.deviceMemory || "Unknown";
+            let hasWebGPU = !!navigator.gpu;
+            
+            let specStr = `CPU: <strong>${cores} Cores</strong> | RAM: <strong>${ram} GB</strong> | WebGPU: <strong style="color: ${hasWebGPU ? '#34d399' : '#fb7185'};">${hasWebGPU ? 'Supported' : 'Not Supported'}</strong>`;
+            document.getElementById('ablation-profiler-specs').innerHTML = specStr;
+            
+            let badge = document.getElementById('ablation-profiler-badge');
+            if (hasWebGPU) {
+              if (ram === "Unknown" || ram >= 8) {
+                badge.innerHTML = "SmolLM2 360M (8-bit) + WebGPU";
+                badge.style.background = "rgba(45, 212, 191, 0.2)";
+                badge.style.color = "#2dd4bf";
+                badge.style.borderColor = "rgba(45, 212, 191, 0.3)";
+              } else if (ram >= 4) {
+                badge.innerHTML = "Qwen 0.5B (4-bit) + WebGPU";
+                badge.style.background = "rgba(56, 189, 248, 0.2)";
+                badge.style.color = "#38bdf8";
+                badge.style.borderColor = "rgba(56, 189, 248, 0.3)";
+              } else {
+                badge.innerHTML = "SmolLM 135M (4-bit) + WebGPU";
+                badge.style.background = "rgba(192, 132, 252, 0.2)";
+                badge.style.color = "#c084fc";
+                badge.style.borderColor = "rgba(192, 132, 252, 0.3)";
+              }
+            } else {
+              if (ram !== "Unknown" && ram >= 8 && cores >= 8) {
+                badge.innerHTML = "Qwen 0.5B (4-bit WASM CPU)";
+                badge.style.background = "rgba(251, 191, 36, 0.2)";
+                badge.style.color = "#fbbf24";
+                badge.style.borderColor = "rgba(251, 191, 36, 0.3)";
+              } else if (ram !== "Unknown" && ram >= 4) {
+                badge.innerHTML = "SmolLM 135M (4-bit WASM CPU)";
+                badge.style.background = "rgba(251, 113, 133, 0.2)";
+                badge.style.color = "#fb7185";
+                badge.style.borderColor = "rgba(251, 113, 133, 0.3)";
+              } else {
+                badge.innerHTML = "Keyword Match (N/A)";
+                badge.style.background = "rgba(148, 163, 184, 0.2)";
+                badge.style.color = "#94a3b8";
+                badge.style.borderColor = "rgba(148, 163, 184, 0.3)";
+              }
+            }
+          }
+
           // Initialize on load
           document.addEventListener('DOMContentLoaded', () => {
             changeAblationCategory('retrieval');
+            initHardwareProfiler();
           });
         </script>
+
+        <!-- Image Lightbox Modal HTML -->
+        <div id="ablation-lightbox-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.93); backdrop-filter: blur(10px); z-index: 9999; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;" onclick="closeAblationLightbox()">
+            <div style="position: absolute; top: 20px; right: 20px; color: #fff; cursor: pointer; font-size: 1.25rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onclick="closeAblationLightbox()">
+                <i class="fa fa-times"></i>
+            </div>
+            <img id="ablation-lightbox-img" src="" style="max-width: 90%; max-height: 85%; object-fit: contain; border-radius: 8px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85); transform: scale(0.95); transition: transform 0.3s ease;" onclick="event.stopPropagation()">
+        </div>
       </div>
     </div>
   </div>
