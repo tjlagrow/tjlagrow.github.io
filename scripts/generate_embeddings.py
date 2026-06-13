@@ -273,6 +273,30 @@ def extract_chunks():
                 "type": "milestone"
             })
 
+    # 4.4 YouTube Transcripts
+    youtube_path = os.path.join(DATA_DIR, "youtube_transcripts.json")
+    if os.path.isfile(youtube_path):
+        with open(youtube_path, "r", encoding="utf-8") as f:
+            transcripts = json.load(f) or []
+        for vt in transcripts:
+            title = vt.get("title", "")
+            url = vt.get("url", "")
+            transcript_text = vt.get("transcript", "")
+            original_type = vt.get("original_type", "")
+            
+            # Segment the transcript into chunks of ~120 words
+            sub_chunks = chunk_text(transcript_text, max_words=120)
+            for i, text_chunk in enumerate(sub_chunks):
+                # The text is prefixed with context to help keyword matching and LLM understanding.
+                chunk_text_representation = f"YouTube Video Transcript for '{title}': {text_chunk}"
+                chunks.append({
+                    "title": f"Transcript: {title} (Part {i+1})",
+                    "url": url,
+                    "text": chunk_text_representation,
+                    "type": "youtube_transcript",
+                    "original_type": original_type
+                })
+
     print(f"Extracted {len(chunks)} total text chunks for embedding.")
     return chunks
 
@@ -298,13 +322,16 @@ def main():
     
     output_data = []
     for chunk, emb in zip(chunks, embeddings_list):
-        output_data.append({
+        item = {
             "title": chunk["title"],
             "url": chunk["url"],
             "text": chunk["text"],
             "type": chunk["type"],
             "embedding": emb
-        })
+        }
+        if "original_type" in chunk:
+            item["original_type"] = chunk["original_type"]
+        output_data.append(item)
         
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:

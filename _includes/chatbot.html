@@ -49,7 +49,10 @@
             </div>
         </div>
         <form id="chatbot-form" class="chatbot-input-area">
-            <input type="text" id="chatbot-input" class="form-control form-control-sm" placeholder="Ask me a question..." aria-label="Chat input">
+            <div style="position: relative; flex-grow: 1; display: flex;">
+                <input type="text" id="chatbot-input" class="form-control form-control-sm" placeholder="Ask me a question..." aria-label="Chat input" spellcheck="true" autocomplete="off" style="width: 100%;">
+                <div id="chatbot-autocomplete-hint" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; padding: 0.4rem 1rem; font-size: 0.9rem; line-height: 1.5; pointer-events: none; z-index: 3; font-family: inherit; display: flex; align-items: center; white-space: pre; overflow: hidden; box-sizing: border-box; color: rgba(255, 255, 255, 0.25);"></div>
+            </div>
             <button type="submit" id="chatbot-send" class="btn btn-primary btn-sm" aria-label="Send message"><i class="fa fa-paper-plane"></i></button>
         </form>
     </div>
@@ -271,8 +274,110 @@
             const text = input.value.trim();
             if (!text) return;
             input.value = '';
+            const hintEl = document.getElementById('chatbot-autocomplete-hint');
+            if (hintEl) hintEl.innerHTML = '';
+            currentSuggestion = '';
             handleUserQuery(text);
         });
+
+        // Autocomplete Queries list
+        const autocompleteQueries = [
+            "what courses does tj teach?",
+            "tell me about cs 7641",
+            "tell me about cs 7642",
+            "what certificates are in flexstack?",
+            "tell me about tj's brain research",
+            "what is a quasi-periodic pattern?",
+            "how do i contact tj?",
+            "how does this local rag chatbot work?",
+            "who is waddles?",
+            "tell me about quasi-periodic patterns",
+            "tell me about resting-state fmri",
+            "what is the mind lab?"
+        ];
+
+        const hintEl = document.getElementById('chatbot-autocomplete-hint');
+        let currentSuggestion = "";
+
+        if (input && hintEl) {
+            input.addEventListener('input', () => {
+                const val = input.value;
+                if (!val || val.trim().length === 0) {
+                    hintEl.innerHTML = "";
+                    currentSuggestion = "";
+                    return;
+                }
+
+                const valLower = val.toLowerCase();
+                const match = autocompleteQueries.find(q => q.startsWith(valLower));
+
+                if (match) {
+                    currentSuggestion = match;
+                    const typedPart = val;
+                    const suffix = match.substring(val.length);
+                    hintEl.innerHTML = `<span style="visibility: hidden;">${typedPart}</span><span>${suffix}</span>`;
+                } else {
+                    hintEl.innerHTML = "";
+                    currentSuggestion = "";
+                }
+            });
+
+            input.addEventListener('blur', () => {
+                setTimeout(() => {
+                    hintEl.innerHTML = "";
+                }, 150);
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if ((e.key === 'Tab' || e.key === 'ArrowRight') && currentSuggestion) {
+                    const cursorPosition = input.selectionStart;
+                    if (cursorPosition === input.value.length) {
+                        e.preventDefault();
+                        input.value = currentSuggestion;
+                        hintEl.innerHTML = "";
+                        currentSuggestion = "";
+                    }
+                }
+            });
+        }
+
+        // Input Pre-processing and expansion helper
+        function preprocessQuery(query) {
+            let clean = query.trim();
+            if (!clean) return "";
+
+            // 1. Casing normalization and duplicate punctuation cleaning
+            clean = clean.replace(/[?]+/g, '?');
+            clean = clean.replace(/[!]+/g, '!');
+            clean = clean.replace(/\s+/g, ' ');
+
+            // 2. Query shortening for long inputs (>20 words)
+            const words = clean.split(/\s+/);
+            if (words.length > 20) {
+                const sentences = clean.split(/(?<=[.!?])\s+/);
+                if (sentences.length >= 2) {
+                    clean = sentences[0] + " " + sentences[sentences.length - 1];
+                }
+            }
+
+            // 3. Synonym Expansion and Acronym Mapping
+            const mappings = {
+                "\\bml\\b": "CS 7641 Machine Learning",
+                "\\brl\\b": "CS 7642 Reinforcement Learning",
+                "\\bqpps?\\b": "Quasi-Periodic Patterns",
+                "\\bfmri\\b": "resting-state fMRI",
+                "\\bmind lab\\b": "Keilholz MIND Lab",
+                "\\bclasses\\b": "courses",
+                "\\bemail\\b": "contact details"
+            };
+
+            for (const [key, replacement] of Object.entries(mappings)) {
+                const regex = new RegExp(key, 'gi');
+                clean = clean.replace(regex, replacement);
+            }
+
+            return clean;
+        }
 
         // Category pre-filtering validation helper
         function passFilters(doc) {
@@ -280,10 +385,11 @@
             const teachingChecked = document.getElementById('filter-teaching').checked;
             const bioChecked = document.getElementById('filter-bio').checked;
 
-            if (doc.type === 'publication' || doc.type === 'talk') {
+            const effectiveType = doc.original_type || doc.type;
+            if (effectiveType === 'publication' || effectiveType === 'talk') {
                 return researchChecked;
             }
-            if (doc.url.includes('/teaching') || doc.type === 'milestone') {
+            if (doc.url.includes('/teaching') || effectiveType === 'milestone') {
                 return teachingChecked;
             }
             return bioChecked;
@@ -291,6 +397,9 @@
 
         async function handleUserQuery(query) {
             if (input.disabled || modelLoading) return;
+
+            const processedQuery = preprocessQuery(query);
+            if (!processedQuery) return;
 
             // Disable inputs and activate button loading animation
             input.disabled = true;
@@ -315,7 +424,7 @@
                 const modelName = getModelName();
                 
                 // Retrieve response and structured data
-                const result = await getBotResponse(query);
+                const result = await getBotResponse(processedQuery);
                 indicator.remove();
                 
                 const endTime = performance.now();
@@ -339,7 +448,7 @@
                 scrollToBottom();
                 
                 // Keep history for conversation context memory
-                chatHistory.push({ role: 'user', content: query });
+                chatHistory.push({ role: 'user', content: processedQuery });
                 chatHistory.push({ role: 'assistant', content: responseText });
                 if (chatHistory.length > 10) {
                     chatHistory.splice(0, 2);
@@ -846,7 +955,8 @@
             'newsletter': '✉️ Newsletter',
             'publication': '🎓 Publication',
             'talk': '🗣️ Presentation',
-            'milestone': '🏆 Defense Milestone'
+            'milestone': '🏆 Defense Milestone',
+            'youtube_transcript': '🎥 Video Transcript'
         };
 
         function highlightText(text, queryTerms) {
@@ -910,10 +1020,11 @@
         }
 
         function getDocCategory(doc) {
-            if (doc.type === 'publication' || doc.type === 'talk') {
+            const effectiveType = doc.original_type || doc.type;
+            if (effectiveType === 'publication' || effectiveType === 'talk') {
                 return 'Research';
             }
-            if (doc.url.includes('/teaching') || doc.type === 'milestone') {
+            if (doc.url.includes('/teaching') || effectiveType === 'milestone') {
                 return 'Teaching';
             }
             return 'Bio/Contact';
@@ -1263,10 +1374,11 @@ ${query}<|im_end|>
                         </div>
                     `;
 
+                    const effectiveType = bestMatch.original_type || bestMatch.type;
                     return {
                         answer: responseHtml,
                         confidence: 1.0,
-                        category: bestMatch.url.includes('/teaching') ? 'Teaching' : (bestMatch.type === 'publication' || bestMatch.type === 'talk' ? 'Research' : 'Bio/Contact'),
+                        category: bestMatch.url.includes('/teaching') ? 'Teaching' : (effectiveType === 'publication' || effectiveType === 'talk' ? 'Research' : 'Bio/Contact'),
                         followups: [],
                         sourceTitle: bestMatch.title,
                         sourceUrl: bestMatch.url

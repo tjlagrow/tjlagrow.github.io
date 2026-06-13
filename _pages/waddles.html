@@ -227,6 +227,83 @@ full_width: true
       
       avatar.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.06)`;
     });
+
+    // Synthesize and play realistic truffle pig snort sound on click
+    avatar.style.cursor = 'pointer';
+    avatar.addEventListener('click', () => {
+      playTrufflePigSound();
+    });
+
+    function playTrufflePigSound() {
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        const ctx = new AudioContextClass();
+        
+        const now = ctx.currentTime;
+        const duration = 0.35; // short grunt duration
+        
+        // 1. Oscillator for the low-frequency grunt tone
+        const osc = ctx.createOscillator();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(110, now);
+        osc.frequency.exponentialRampToValueAtTime(75, now + duration);
+        
+        // 2. Bandpass filter to isolate the "grunt/snort" vowel formants
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(160, now);
+        filter.Q.setValueAtTime(3.0, now);
+        
+        // 3. Noise node to add the snort raspiness
+        const bufferSize = ctx.sampleRate * duration;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        
+        // Noise bandpass filter
+        const noiseFilter = ctx.createBiquadFilter();
+        noiseFilter.type = 'bandpass';
+        noiseFilter.frequency.setValueAtTime(200, now);
+        noiseFilter.Q.setValueAtTime(2.0, now);
+        
+        // Gain nodes to mix and shape the envelope
+        const oscGain = ctx.createGain();
+        oscGain.gain.setValueAtTime(0.2, now);
+        oscGain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+        
+        const noiseGain = ctx.createGain();
+        noiseGain.gain.setValueAtTime(0.12, now);
+        noiseGain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+        
+        const mainGain = ctx.createGain();
+        mainGain.gain.setValueAtTime(0.8, now);
+        mainGain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+        
+        // Connect nodes
+        osc.connect(filter);
+        filter.connect(oscGain);
+        
+        noise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        
+        oscGain.connect(mainGain);
+        noiseGain.connect(mainGain);
+        mainGain.connect(ctx.destination);
+        
+        // Start sources
+        osc.start(now);
+        osc.stop(now + duration);
+        noise.start(now);
+        noise.stop(now + duration);
+      } catch (err) {
+        console.warn("Audio Context playback failed:", err);
+      }
+    }
   });
 </script>
     </div>
@@ -678,6 +755,693 @@ full_width: true
     </div>
   </div>
 
+  <!-- VECTOR DATABASE VISUALIZER -->
+  <style>
+    /* Translucent layout stylings */
+    .bg-teal-transparent { background: rgba(45, 212, 191, 0.08); color: #2dd4bf; }
+    .bg-pink-transparent { background: rgba(244, 63, 94, 0.08); color: #f43f5e; }
+    .bg-blue-transparent { background: rgba(14, 165, 233, 0.08); color: #38bdf8; }
+    .bg-purple-transparent { background: rgba(168, 85, 247, 0.08); color: #c084fc; }
+    .bg-yellow-transparent { background: rgba(234, 179, 8, 0.08); color: #eab308; }
+    .bg-slate-transparent { background: rgba(148, 163, 184, 0.08); color: #94a3b8; }
+    .bg-red-transparent { background: rgba(239, 68, 68, 0.08); color: #f87171; }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 3px 8px;
+      border-radius: 6px;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .legend-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .legend-item.disabled {
+      opacity: 0.35;
+    }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .neighbor-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 8px;
+      transition: all 0.2s;
+      cursor: pointer;
+      user-select: none;
+    }
+    .neighbor-card:hover {
+      background: rgba(45, 212, 191, 0.06);
+      border-color: rgba(45, 212, 191, 0.25);
+      transform: translateX(4px);
+    }
+    .inspector-header-container {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+    
+    @keyframes borderGlow {
+      0% { border-color: rgba(45, 212, 191, 0.2); }
+      50% { border-color: rgba(45, 212, 191, 0.6); }
+      100% { border-color: rgba(45, 212, 191, 0.2); }
+    }
+    .canvas-searching {
+      animation: borderGlow 2s infinite ease-in-out;
+    }
+  </style>
+
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-lg p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-2"><i class="fa fa-network-wired me-2 text-teal" style="color: #2dd4bf;"></i> Interactive Vector Space Sandbox</h2>
+        <p class="text-light opacity-80 small mb-4">
+          Visualize the 587 document chunks inside the client-side portfolio database. The 384-dimensional embeddings (generated by the <code>all-MiniLM-L6-v2</code> encoder) are projected into a 2D coordinates grid using an on-the-fly Principal Component Analysis (PCA) solver. Drag to pan, scroll to zoom, click nodes to calculate top 5 nearest neighbors using real-time cosine similarity (dot products), or filter by type to trace how context is structured.
+        </p>
+
+        <!-- Loading State -->
+        <div id="vector-loading-container" class="text-center py-5" style="background: rgba(9, 13, 22, 0.5); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05);">
+          <div class="spinner-border text-info mb-3" style="color: #2dd4bf !important;" role="status"></div>
+          <div class="text-white small" id="vector-loading-text" style="font-family: monospace;">Fetching vector database index (7.3 MB)...</div>
+          <div class="progress mx-auto mt-3" style="max-width: 300px; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden;">
+            <div id="vector-progress-bar" style="width: 0%; height: 100%; background: #2dd4bf; transition: width 0.1s;"></div>
+          </div>
+        </div>
+
+        <!-- Visualizer Content (Hidden during loading) -->
+        <div id="vector-visualizer-content" style="display: none;">
+          <div class="row g-4">
+            <!-- Canvas Panel -->
+            <div class="col-lg-8">
+              <div id="canvas-wrapper-panel" class="position-relative" style="background: #090d16; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.06); overflow: hidden;">
+                <!-- Control Bar -->
+                <div class="d-flex align-items-center justify-content-between p-2" style="background: #111827; border-bottom: 1px solid rgba(255, 255, 255, 0.05); flex-wrap: wrap; gap: 8px;">
+                  <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-secondary text-white border-0 canvas-btn" id="btn-zoom-in" title="Zoom In"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-sm btn-outline-secondary text-white border-0 canvas-btn" id="btn-zoom-out" title="Zoom Out"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-sm btn-outline-secondary text-white border-0 canvas-btn" id="btn-reset-view" title="Reset View"><i class="fa fa-sync-alt"></i></button>
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <input type="text" id="vector-search-input" placeholder="Search text &amp; keywords..." class="form-control form-control-sm bg-dark text-white border-secondary" style="width: 200px; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.1); outline: none;">
+                    <button class="btn btn-sm btn-outline-info" id="btn-recalculate-pca" style="font-size: 0.725rem; color: #2dd4bf; border-color: rgba(45,212,191,0.3); background: transparent;"><i class="fa fa-calculator"></i> Solver PCA</button>
+                  </div>
+                </div>
+                
+                <!-- Canvas viewport -->
+                <canvas id="vector-canvas" width="800" height="500" style="width: 100%; height: 500px; display: block; cursor: grab; background: radial-gradient(circle at center, #0b111e 0%, #06080e 100%);"></canvas>
+                
+                <!-- Floating Tooltip Overlay -->
+                <div id="vector-tooltip" style="position: absolute; display: none; background: rgba(15, 23, 42, 0.92); border: 1px solid rgba(45, 212, 191, 0.3); border-radius: 8px; padding: 12px; color: #f8fafc; font-size: 0.75rem; pointer-events: none; backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.6); z-index: 1000; max-width: 260px;"></div>
+
+                <!-- Interactive Legend Overlay -->
+                <div class="position-absolute bottom-0 start-0 p-3 m-2 rounded" style="background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.65rem; pointer-events: auto; max-width: 95%;">
+                  <div style="font-weight: 700; color: #cbd5e1; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Click to Toggle Filters</div>
+                  <div class="d-flex flex-wrap gap-2" id="legend-container"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Inspector Panel -->
+            <div class="col-lg-4">
+              <div class="card border-0 h-100 p-3" style="background: #0b101d; border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; min-height: 480px; display: flex; flex-direction: column;">
+                <div class="d-flex align-items-center justify-content-between inspector-header-container mb-3">
+                  <h3 class="h6 fw-bold text-white mb-0" id="inspector-title-label"><i class="fa fa-info-circle me-1 text-info"></i> Node Inspector</h3>
+                  <span id="inspector-badge" class="badge bg-secondary" style="font-size: 0.65rem;">Default</span>
+                </div>
+                
+                <!-- Initial Welcome Message -->
+                <div id="inspector-default-msg" class="text-muted small my-auto text-center py-4">
+                  <i class="fa fa-mouse-pointer fs-2 mb-3 text-teal" style="color: #2dd4bf; opacity: 0.7;"></i>
+                  <p class="mb-0">Click any semantic node (dot) on the map to inspect its text contents, calculate similarities, and highlight neighbors.</p>
+                </div>
+                
+                <!-- Inspector Details Data Panel -->
+                <div id="inspector-data-panel" style="display: none; flex-grow: 1; flex-direction: column;">
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="small fw-bold text-uppercase" id="node-type-header" style="font-size: 0.65rem; letter-spacing: 0.05em;">Type</span>
+                      <a href="#" target="_blank" class="btn btn-xs btn-outline-info" id="node-url-btn" style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; display: none;"><i class="fa fa-external-link-alt me-1"></i> Open Document</a>
+                    </div>
+                    <div class="h6 text-white fw-bold mb-2 text-truncate" id="node-title">Title</div>
+                    <p class="text-light opacity-90 small overflow-auto mb-0" style="max-height: 180px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.04); font-size: 0.8rem; line-height: 1.45;" id="node-text">
+                      Snippet
+                    </p>
+                  </div>
+                  
+                  <div class="mt-auto pt-3 border-top border-secondary">
+                    <h4 class="small text-uppercase fw-bold mb-2" style="color: #f43f5e; font-size: 0.65rem; letter-spacing: 0.05em;"><i class="fa fa-network-wired me-1"></i> Top 5 Nearest Neighbors</h4>
+                    <div class="d-flex flex-column gap-2" id="neighbors-list"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      let database = [];
+      let projectedCoords = [];
+      let activeFilters = {};
+      let selectedNode = null;
+      let hoveredNode = null;
+      let neighbors = [];
+      let searchQuery = "";
+      
+      let scale = 1.0;
+      let offsetX = 0;
+      let offsetY = 0;
+      
+      // Coordinate extremes
+      let minX = 0, maxX = 0, minY = 0, maxY = 0;
+      
+      const typeColors = {
+        'page': '#94a3b8',
+        'post': '#ef4444',
+        'newsletter': '#ec4899',
+        'publication': '#38bdf8',
+        'talk': '#a855f7',
+        'milestone': '#eab308',
+        'youtube_transcript': '#2dd4bf'
+      };
+      
+      const typeNames = {
+        'page': '📄 Site Page',
+        'post': '📝 Blog Post',
+        'newsletter': '✉️ Newsletter',
+        'publication': '🎓 Publication',
+        'talk': '🗣️ Presentation',
+        'milestone': '🏆 Defense Milestone',
+        'youtube_transcript': '🎥 Video Transcript'
+      };
+
+      const canvas = document.getElementById('vector-canvas');
+      const ctx = canvas.getContext('2d');
+      const tooltip = document.getElementById('vector-tooltip');
+      const searchInput = document.getElementById('vector-search-input');
+      const wrapperPanel = document.getElementById('canvas-wrapper-panel');
+      
+      // Initialize filters
+      Object.keys(typeColors).forEach(type => activeFilters[type] = true);
+      
+      // Dynamic scaling screen helpers
+      function toScreen(px, py) {
+        return {
+          x: px * scale + offsetX,
+          y: py * scale + offsetY
+        };
+      }
+      
+      function toModel(sx, sy) {
+        return {
+          x: (sx - offsetX) / scale,
+          y: (sy - offsetY) / scale
+        };
+      }
+      
+      function convertHexToRgba(hex, alpha) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      }
+
+      // XML Request with live progress updates
+      document.addEventListener('DOMContentLoaded', () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '{{ "/assets/json/embeddings.json" | relative_url }}', true);
+        xhr.responseType = 'json';
+        xhr.onprogress = (e) => {
+          if (e.lengthComputable) {
+            const percent = Math.round((e.loaded / e.total) * 100);
+            document.getElementById('vector-progress-bar').style.width = percent + '%';
+            document.getElementById('vector-loading-text').innerText = `Downloading vector database index (${percent}%)...`;
+          }
+        };
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            database = xhr.response || [];
+            document.getElementById('vector-loading-container').style.display = 'none';
+            document.getElementById('vector-visualizer-content').style.display = 'block';
+            runPCAOrchestrator();
+          } else {
+            document.getElementById('vector-loading-text').innerText = 'Failed to load vector database.';
+          }
+        };
+        xhr.onerror = () => {
+          document.getElementById('vector-loading-text').innerText = 'Error loading vector database.';
+        };
+        xhr.send();
+      });
+
+      // PCA Solver Execution
+      function runPCAOrchestrator() {
+        if (!database || database.length === 0) return;
+        
+        const N = database.length;
+        const D = 384; // all-MiniLM-L6-v2 output dimension
+        
+        // 1. Centering Vectors
+        const mean = new Array(D).fill(0);
+        for (let i = 0; i < N; i++) {
+          const vec = database[i].embedding;
+          for (let j = 0; j < D; j++) {
+            mean[j] += vec[j];
+          }
+        }
+        for (let j = 0; j < D; j++) {
+          mean[j] /= N;
+        }
+        
+        const X = [];
+        for (let i = 0; i < N; i++) {
+          const vec = database[i].embedding;
+          const row = [];
+          for (let j = 0; j < D; j++) {
+            row.push(vec[j] - mean[j]);
+          }
+          X.push(row);
+        }
+        
+        // Covariance multiply proxy helper
+        function multiplyCovariance(Y, v) {
+          const temp = new Array(N).fill(0);
+          for (let i = 0; i < N; i++) {
+            for (let j = 0; j < D; j++) {
+              temp[i] += Y[i][j] * v[j];
+            }
+          }
+          const out = new Array(D).fill(0);
+          for (let j = 0; j < D; j++) {
+            for (let i = 0; i < N; i++) {
+              out[j] += Y[i][j] * temp[i];
+            }
+          }
+          return out;
+        }
+        
+        // Power Iteration step solver
+        function runPowerIteration(Y, iterations = 15) {
+          let v = new Array(D).fill(0).map(() => Math.random() * 2 - 1);
+          let norm = Math.sqrt(v.reduce((sum, val) => sum + val * val, 0));
+          v = v.map(val => val / (norm || 1));
+          
+          for (let iter = 0; iter < iterations; iter++) {
+            const w = multiplyCovariance(Y, v);
+            norm = Math.sqrt(w.reduce((sum, val) => sum + val * val, 0));
+            v = w.map(val => val / (norm || 1));
+          }
+          return v;
+        }
+        
+        // Find Eigenvectors
+        const v1 = runPowerIteration(X, 15);
+        
+        // Deflate
+        const projections = new Array(N).fill(0);
+        for (let i = 0; i < N; i++) {
+          for (let j = 0; j < D; j++) {
+            projections[i] += X[i][j] * v1[j];
+          }
+        }
+        const X2 = [];
+        for (let i = 0; i < N; i++) {
+          const row = [];
+          for (let j = 0; j < D; j++) {
+            row.push(X[i][j] - projections[i] * v1[j]);
+          }
+          X2.push(row);
+        }
+        
+        const v2 = runPowerIteration(X2, 15);
+        
+        // Project
+        minX = Infinity; maxX = -Infinity; minY = Infinity; maxY = -Infinity;
+        database.forEach((node, idx) => {
+          let x = 0;
+          let y = 0;
+          for (let j = 0; j < D; j++) {
+            x += X[idx][j] * v1[j];
+            y += X[idx][j] * v2[j];
+          }
+          node.x = x;
+          node.y = y;
+          
+          if (x < minX) minX = x;
+          if (x > maxX) maxX = x;
+          if (y < minY) minY = y;
+          if (y > maxY) maxY = y;
+        });
+        
+        initializeLegendControls();
+        resetView();
+      }
+
+      function initializeLegendControls() {
+        const legendContainer = document.getElementById('legend-container');
+        if (!legendContainer) return;
+        
+        legendContainer.innerHTML = Object.keys(typeColors).map(type => `
+          <div class="legend-item" data-type="${type}">
+            <span class="legend-dot" style="background: ${typeColors[type]};"></span>
+            <span style="color: #cbd5e1;">${typeNames[type].split(' ').slice(1).join(' ')}</span>
+          </div>
+        `).join('');
+        
+        legendContainer.querySelectorAll('.legend-item').forEach(item => {
+          item.addEventListener('click', () => {
+            const type = item.getAttribute('data-type');
+            activeFilters[type] = !activeFilters[type];
+            item.classList.toggle('disabled', !activeFilters[type]);
+            
+            // Clean hover/selection if hidden
+            if (!activeFilters[type]) {
+              if (selectedNode && selectedNode.type === type) {
+                clearInspectorSelection();
+              }
+              if (hoveredNode && hoveredNode.type === type) {
+                hoveredNode = null;
+                tooltip.style.display = 'none';
+              }
+            }
+            draw();
+          });
+        });
+      }
+
+      function resetView() {
+        const margin = 50;
+        const rangeX = maxX - minX;
+        const rangeY = maxY - minY;
+        
+        scale = Math.min((canvas.width - margin * 2) / (rangeX || 1), (canvas.height - margin * 2) / (rangeY || 1));
+        offsetX = canvas.width / 2 - ((minX + maxX) / 2) * scale;
+        offsetY = canvas.height / 2 - ((minY + maxY) / 2) * scale;
+        draw();
+      }
+
+      // Drawing routine
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // 1. Draw Neighbor Connectors
+        if (selectedNode && activeFilters[selectedNode.type]) {
+          const start = toScreen(selectedNode.x, selectedNode.y);
+          neighbors.forEach(item => {
+            if (activeFilters[item.node.type]) {
+              const end = toScreen(item.node.x, item.node.y);
+              
+              // Glow path
+              ctx.beginPath();
+              ctx.moveTo(start.x, start.y);
+              ctx.lineTo(end.x, end.y);
+              ctx.strokeStyle = 'rgba(244, 63, 94, 0.15)';
+              ctx.lineWidth = 4;
+              ctx.stroke();
+              
+              // Center stroke
+              ctx.beginPath();
+              ctx.moveTo(start.x, start.y);
+              ctx.lineTo(end.x, end.y);
+              ctx.strokeStyle = 'rgba(244, 63, 94, 0.6)';
+              ctx.lineWidth = 1.5;
+              ctx.stroke();
+              
+              // Distance label
+              const midX = (start.x + end.x) / 2;
+              const midY = (start.y + end.y) / 2;
+              ctx.fillStyle = '#f43f5e';
+              ctx.font = '9px monospace';
+              ctx.fillText((item.score).toFixed(2), midX + 5, midY - 5);
+            }
+          });
+        }
+        
+        // 2. Draw Nodes
+        database.forEach(node => {
+          if (!activeFilters[node.type]) return;
+          
+          const screen = toScreen(node.x, node.y);
+          if (screen.x < -10 || screen.x > canvas.width + 10 || screen.y < -10 || screen.y > canvas.height + 10) return;
+          
+          let radius = 4.5;
+          let opacity = 0.8;
+          let isMatch = false;
+          
+          if (searchQuery) {
+            if (node.title.toLowerCase().includes(searchQuery) || node.text.toLowerCase().includes(searchQuery)) {
+              radius = 7.5;
+              opacity = 1.0;
+              isMatch = true;
+            } else {
+              opacity = 0.15;
+              radius = 2.5;
+            }
+          }
+          
+          const isSelected = (node === selectedNode);
+          const isHovered = (node === hoveredNode);
+          
+          if (isSelected) {
+            radius = 8.5;
+            opacity = 1.0;
+          } else if (isHovered) {
+            radius = 6.5;
+            opacity = 1.0;
+          }
+          
+          // Halos
+          if (isSelected || isMatch) {
+            ctx.beginPath();
+            ctx.arc(screen.x, screen.y, radius + 3.5, 0, Math.PI * 2);
+            ctx.fillStyle = isSelected ? 'rgba(244, 63, 94, 0.22)' : 'rgba(45, 212, 191, 0.22)';
+            ctx.fill();
+          }
+          
+          // Dot core
+          ctx.beginPath();
+          ctx.arc(screen.x, screen.y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = convertHexToRgba(typeColors[node.type], opacity);
+          ctx.fill();
+          
+          ctx.strokeStyle = isSelected ? '#f43f5e' : (isHovered ? '#ffffff' : 'rgba(255,255,255,0.18)');
+          ctx.lineWidth = isSelected ? 2 : (isHovered ? 1.5 : 0.8);
+          ctx.stroke();
+        });
+      }
+
+      // Drag to pan
+      let isDragging = false;
+      let dragStartX = 0, dragStartY = 0;
+      
+      canvas.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        canvas.style.cursor = 'grabbing';
+        dragStartX = e.clientX - offsetX;
+        dragStartY = e.clientY - offsetY;
+      });
+      
+      canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        
+        if (isDragging) {
+          offsetX = e.clientX - dragStartX;
+          offsetY = e.clientY - dragStartY;
+          draw();
+        } else {
+          // Hover collision detector
+          let closest = null;
+          let minDist = 8.5;
+          
+          database.forEach(node => {
+            if (!activeFilters[node.type]) return;
+            const screen = toScreen(node.x, node.y);
+            const dist = Math.sqrt((screen.x - mx) * (screen.x - mx) + (screen.y - my) * (screen.y - my));
+            if (dist < minDist) {
+              minDist = dist;
+              closest = node;
+            }
+          });
+          
+          if (closest !== hoveredNode) {
+            hoveredNode = closest;
+            draw();
+          }
+          
+          if (hoveredNode) {
+            canvas.style.cursor = 'pointer';
+            tooltip.style.left = (rect.left + window.scrollX + (hoveredNode.x * scale + offsetX) + 15) + 'px';
+            tooltip.style.top = (rect.top + window.scrollY + (hoveredNode.y * scale + offsetY) - 15) + 'px';
+            
+            const rawText = hoveredNode.text.replace(/YouTube Video Transcript for '[^']+':\s*/g, '');
+            tooltip.innerHTML = `
+              <div style="font-weight: 700; margin-bottom: 2px;">${hoveredNode.title}</div>
+              <div style="font-size: 0.65rem; color: #2dd4bf; margin-bottom: 6px; font-weight:600;">${typeNames[hoveredNode.type]}</div>
+              <div style="color: #cbd5e1; font-size: 0.675rem; line-height: 1.35; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">${rawText}</div>
+            `;
+            tooltip.style.display = 'block';
+          } else {
+            canvas.style.cursor = 'grab';
+            tooltip.style.display = 'none';
+          }
+        }
+      });
+      
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+        canvas.style.cursor = 'grab';
+      });
+
+      // Mouse Wheel Zoom
+      canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        
+        const zoom = e.deltaY < 0 ? 1.12 : 0.88;
+        
+        const modelPt = toModel(mx, my);
+        scale *= zoom;
+        offsetX = mx - modelPt.x * scale;
+        offsetY = my - modelPt.y * scale;
+        draw();
+      });
+
+      // Selection clicks
+      canvas.addEventListener('click', () => {
+        if (hoveredNode) {
+          selectNode(hoveredNode);
+        } else {
+          clearInspectorSelection();
+        }
+      });
+
+      function selectNode(node) {
+        selectedNode = node;
+        
+        // Center view smoothly on selected node
+        offsetX = canvas.width / 2 - node.x * scale;
+        offsetY = canvas.height / 2 - node.y * scale;
+        
+        // Calculate nearest neighbors via dot product
+        const target = node.embedding;
+        const scored = database.map(n => {
+          let dot = 0;
+          const emb = n.embedding;
+          for (let j = 0; j < 384; j++) {
+            dot += target[j] * emb[j];
+          }
+          return { node: n, score: dot };
+        });
+        
+        neighbors = scored
+          .filter(item => item.node !== node)
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 5);
+          
+        updateInspectorPanel(node);
+        draw();
+      }
+
+      function clearInspectorSelection() {
+        selectedNode = null;
+        neighbors = [];
+        document.getElementById('inspector-default-msg').style.display = 'block';
+        document.getElementById('inspector-data-panel').style.display = 'none';
+        document.getElementById('inspector-badge').innerText = 'Default';
+        draw();
+      }
+
+      function updateInspectorPanel(node) {
+        document.getElementById('inspector-default-msg').style.display = 'none';
+        document.getElementById('inspector-data-panel').style.display = 'flex';
+        
+        const badge = document.getElementById('inspector-badge');
+        badge.innerText = 'Active';
+        badge.className = `badge bg-teal-transparent`;
+        
+        document.getElementById('node-type-header').innerText = typeNames[node.type];
+        document.getElementById('node-title').innerText = node.title;
+        
+        const rawText = node.text.replace(/YouTube Video Transcript for '[^']+':\s*/g, '');
+        document.getElementById('node-text').innerText = rawText;
+        
+        const urlBtn = document.getElementById('node-url-btn');
+        if (node.url) {
+          urlBtn.href = node.url;
+          urlBtn.style.display = 'inline-block';
+        } else {
+          urlBtn.style.display = 'none';
+        }
+        
+        const listContainer = document.getElementById('neighbors-list');
+        listContainer.innerHTML = neighbors.map(item => `
+          <div class="neighbor-card d-flex align-items-center justify-content-between" onclick="window.selectNodeByTitle('${item.node.title.replace(/'/g, "\\'")}')">
+            <div style="max-width: 75%;">
+              <div class="small fw-bold text-white text-truncate" style="font-size: 0.75rem;">${item.node.title}</div>
+              <div class="text-muted" style="font-size: 0.65rem;">${typeNames[item.node.type].split(' ').slice(1).join(' ')}</div>
+            </div>
+            <span class="badge bg-pink-transparent" style="font-size: 0.65rem; font-weight:700;">${(item.score * 100).toFixed(1)}%</span>
+          </div>
+        `).join('');
+      }
+
+      // Globally scoped selector helper
+      window.selectNodeByTitle = function(title) {
+        const node = database.find(n => n.title === title);
+        if (node) {
+          selectNode(node);
+        }
+      };
+
+      // Zoom Panel Buttons
+      document.getElementById('btn-zoom-in').addEventListener('click', () => {
+        const mx = canvas.width / 2;
+        const my = canvas.height / 2;
+        const modelPt = toModel(mx, my);
+        scale *= 1.2;
+        offsetX = mx - modelPt.x * scale;
+        offsetY = my - modelPt.y * scale;
+        draw();
+      });
+      
+      document.getElementById('btn-zoom-out').addEventListener('click', () => {
+        const mx = canvas.width / 2;
+        const my = canvas.height / 2;
+        const modelPt = toModel(mx, my);
+        scale *= 0.82;
+        offsetX = mx - modelPt.x * scale;
+        offsetY = my - modelPt.y * scale;
+        draw();
+      });
+      
+      document.getElementById('btn-reset-view').addEventListener('click', resetView);
+      document.getElementById('btn-recalculate-pca').addEventListener('click', runPCAOrchestrator);
+
+      // Real-time Text Filtering
+      searchInput.addEventListener('input', () => {
+        searchQuery = searchInput.value.toLowerCase().trim();
+        if (searchQuery) {
+          wrapperPanel.classList.add('canvas-searching');
+        } else {
+          wrapperPanel.classList.remove('canvas-searching');
+        }
+        draw();
+      });
+    })();
+  </script>
+
   <!-- RAG INSPECTOR TERMINAL -->
   <div class="row mb-5">
     <div class="col-12">
@@ -1087,6 +1851,17 @@ entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
               </p>
               <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
                 <strong>Specific failures prevented:</strong> Prevents JSON parsing crashes, missing object keys, and style drift. Pre-embedded style examples matching the query topic are retrieved via cosine similarity and injected into system instructions to anchor the formatting.
+            </div>
+          </div>
+          <!-- Input Pre-processing & Autocomplete suggestions -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-keyboard me-2"></i> 8. Input Pre-processing &amp; Autocomplete Suggestions</h4>
+              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Why it is needed:</strong> Raw user inputs are prone to typos, non-standard acronyms, rambling text that dilutes embedding weights, and queries that miss the relevant indexed documents.
+              </p>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Specific failures prevented:</strong> Mitigates vector search misses and semantic misalignment by translating abbreviations (such as ML, RL, fMRI, QPP) to expanded definitions, truncating inputs exceeding 20 words to core queries, and displaying tab-completable pixel-aligned autocomplete ghost recommendations to guide user search.
               </p>
             </div>
           </div>
