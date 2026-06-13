@@ -234,17 +234,30 @@ full_width: true
 </section>
 
 <div class="container mb-5">
-  <!-- CALL TO ACTION -->
-  <div class="row mb-5 justify-content-center">
-    <div class="col-md-8 text-center">
-      <div class="card glass border-0 shadow-lg p-4 p-md-5" style="background: rgba(17, 94, 89, 0.35); border: 1px solid rgba(45, 212, 191, 0.25); border-radius: 1.5rem; backdrop-filter: blur(12px);">
+  <!-- CALL TO ACTION & PRIVACY GUARANTEE -->
+  <div class="row mb-5 justify-content-center g-4">
+    <div class="col-md-6 text-center text-md-start">
+      <div class="card glass border-0 shadow-lg h-100 p-4" style="background: rgba(17, 94, 89, 0.35); border: 1px solid rgba(45, 212, 191, 0.25); border-radius: 1.5rem; backdrop-filter: blur(12px);">
         <h2 class="h3 fw-bold text-white mb-3">Launch Local Assistant</h2>
         <p class="text-light opacity-95 mb-4" style="font-size: 0.95rem; line-height: 1.6;">
           Waddles runs neural networks directly on your device CPU or WebGPU. Click the button below to launch the conversational window, select a model, and query portfolio data with zero-server latency.
         </p>
-        <button class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-lg" id="navbar-chatbot-trigger" style="background: linear-gradient(135deg, #0d9488, #0ea5e9); border: none; font-weight: 700; transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 0.025em;">
-          <i class="fa fa-comments me-2"></i> Open Chat Console
-        </button>
+        <div class="mt-auto">
+          <button class="btn btn-primary btn-lg rounded-pill px-4 py-3 shadow-lg" id="navbar-chatbot-trigger" style="background: linear-gradient(135deg, #0d9488, #0ea5e9); border: none; font-weight: 700; transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 0.025em;">
+            <i class="fa fa-comments me-2"></i> Open Chat Console
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 text-center text-md-start">
+      <div class="card glass border-0 shadow-lg h-100 p-4" style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.5rem; backdrop-filter: blur(12px);">
+        <h2 class="h3 fw-bold text-white mb-3"><i class="fa fa-shield-alt text-teal me-2"></i> Client-Side Sandbox Guarantee</h2>
+        <p class="text-light opacity-95 mb-3" style="font-size: 0.95rem; line-height: 1.6;">
+          Your search queries and conversation text are compiled and executed entirely inside the browser's JavaScript sandbox. The model weights are cached locally on your device, and no chat text is sent to third-party AI servers.
+        </p>
+        <p class="text-light opacity-80 small mb-0" style="line-height: 1.5;">
+          The system's only network requests are for weight downloads from Hugging Face CDN and structured, anonymous logging payloads pushed to the Google Forms webhooks.
+        </p>
       </div>
     </div>
   </div>
@@ -301,6 +314,99 @@ full_width: true
         <p class="text-light opacity-80 small mb-0" style="line-height: 1.5;">
           Feeds sentence pairs into a Cross-Encoder Transformer (<code>ms-marco-MiniLM-L-6-v2</code>). Scores semantic alignment via joint self-attention sequence logits to output a compressed context.
         </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE DIAGRAM -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-sitemap me-2 text-info"></i> Multi-Stage WebAssembly RAG Pipeline Architecture</h2>
+        <div class="d-flex justify-content-center p-3" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
+          <div class="mermaid" style="width: 100%; min-width: 600px;">
+            graph TD
+                subgraph Compilation [Offline Data Pre-Processing]
+                    A[Site Pages & Publications] -->|generate_embeddings.py| B(Xenova/all-MiniLM-L6-v2 Embedder)
+                    B --> C[assets/json/embeddings.json]
+                end
+                subgraph Classification [Client-Side Input Routing]
+                    D[User Query] -->|regex & keywords| E{Intent Classifier}
+                    E -->|Teaching / Research / Bio| F[Database Category Filter]
+                    C --> F
+                end
+                subgraph Retrieval [Parallel Search & Rank Fusion]
+                    F -->|Sparse BM25 Indexing| H(Sparse Keyword Ranks)
+                    F -->|Dense Dot-Product Scanning| I(Dense Vector Ranks)
+                    H & I -->|RRF Fusion Ranks| J[Reciprocal Rank Fusion]
+                    J -->|Select top 3 document chunks| K[Sentence Splitter]
+                end
+                subgraph Compression [Sentence-Level Compression & Re-ranking]
+                    K -->|10-15 sentence candidates| L(Batch Sentence Embedder)
+                    D -->|Extract Query Vector| G[all-MiniLM-L6-v2 Embedder]
+                    G -->|Sentence Cosine Similarities| M(Dot-Product Score & Sort)
+                    L --> M
+                    M -->|Top 8 sentences| N(Cross-Encoder Rerank pipeline)
+                    D -->|Cross-Attention Scoring| N
+                    N -->|Select top 4 sentence context| O[Compressed Context block]
+                end
+                subgraph Synthesis [Generation & Webhook Log Feedback]
+                    O -->|Construct prompt template| P[Prompt Compiler]
+                    Q[Conversation History] -->|Append rolling 4 turns| P
+                    P -->|ONNX Inference| R{Generator Selector}
+                    R -->|SmolLM2 / Qwen| S[JSON Schema output parsing]
+                    S -->|Submit logs| T[Queries FormWebhook]
+                    S -->|Submit feedback rating| U[Ratings FormWebhook]
+                end
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORE CONCEPTS & MATHEMATICS -->
+  <div class="row g-4 mb-5">
+    <!-- Reciprocal Rank Fusion Details -->
+    <div class="col-md-6">
+      <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <div class="card-body p-4">
+          <h3 class="h4 fw-bold text-white mb-3"><i class="fa fa-calculator text-info me-2"></i> Reciprocal Rank Fusion (RRF) [1]</h3>
+          <p class="text-light opacity-80 small mb-3">
+            To address the vocabulary mismatch problem (where semantic vector searches fail to resolve specific lexical keys like course numbers or acronyms), Waddles implements a hybrid sparse-dense retrieval architecture. The system executes BM25-style keyword search (which targets exact string matching on tokens like 'CS 7641' or 'fMRI') and dense embedding search (which captures the conceptual meaning of the query) in parallel. The results of these search systems are combined using Reciprocal Rank Fusion (RRF). RRF maps ranks to scores via the following formulation:
+          </p>
+          
+          <div class="bg-dark p-3 rounded text-center border border-secondary mb-3" style="overflow-x: auto; max-width: 100%;">
+            <div class="text-white" style="font-size: clamp(0.75rem, 1.8vw, 1.1rem);">
+              $$\text{RRF\_Score}(d \in D) = \sum_{m \in M} \frac{1}{k + r_m(d)}$$
+            </div>
+          </div>
+
+          <p class="text-light opacity-80 small mb-3">
+            In this formulation, $M$ represents the set of retrieval systems ($M = \{\text{dense}, \text{sparse}\}$), $r_m(d)$ is the zero-indexed rank position of document $d$ within retriever $m$, and $k$ is a constant smoothing parameter, set to $60$ to prevent low-ranking candidates from disproportionately affecting scores.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cosine Similarity & Compression -->
+    <div class="col-md-6">
+      <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <div class="card-body p-4">
+          <h3 class="h4 fw-bold text-white mb-3"><i class="fa fa-compress text-info me-2"></i> Sentence Cosine Dot Products [2, 3]</h3>
+          <p class="text-light opacity-80 small mb-3">
+            Waddles splits the top 3 RRF-matched document chunks into individual sentences using punctuation boundaries. To isolate the most relevant context and discard noisy or irrelevant sentences, the system feeds all candidates into a parallel batch execution of the vector embedder in a single forward pass. It then calculates the cosine similarity between the query vector and each candidate sentence vector:
+          </p>
+          
+          <div class="bg-dark p-3 rounded text-center border border-secondary mb-3" style="overflow-x: auto; max-width: 100%;">
+            <div class="text-white" style="font-size: clamp(0.75rem, 1.8vw, 1.1rem);">
+              $$\text{Similarity}(q, s) = \sum_{i=1}^{384} (q_i \times s_i)$$
+            </div>
+          </div>
+
+          <p class="text-light opacity-80 small mb-0">
+            Sentence vectors $s \in \mathbb{R}^{384}$ and query vector $q \in \mathbb{R}^{384}$ are pre-normalized to unit $L_2$ norm ($\|q\|_2 = 1$, $\|s\|_2 = 1$), meaning the denominator of the cosine similarity equation is equal to 1. The dot product ranks sentences, from which the top 8 are sent to the Cross-Encoder for structural verification.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -417,99 +523,6 @@ full_width: true
     </div>
   </div>
 
-  <!-- ARCHITECTURE DIAGRAM -->
-  <div class="row mb-5">
-    <div class="col-12">
-      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
-        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-sitemap me-2 text-info"></i> Multi-Stage WebAssembly RAG Pipeline Architecture</h2>
-        <div class="d-flex justify-content-center p-3" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
-          <div class="mermaid" style="width: 100%; min-width: 600px;">
-            graph TD
-                subgraph Compilation [Offline Data Pre-Processing]
-                    A[Site Pages & Publications] -->|generate_embeddings.py| B(Xenova/all-MiniLM-L6-v2 Embedder)
-                    B --> C[assets/json/embeddings.json]
-                end
-                subgraph Classification [Client-Side Input Routing]
-                    D[User Query] -->|regex & keywords| E{Intent Classifier}
-                    E -->|Teaching / Research / Bio| F[Database Category Filter]
-                    C --> F
-                end
-                subgraph Retrieval [Parallel Search & Rank Fusion]
-                    F -->|Sparse BM25 Indexing| H(Sparse Keyword Ranks)
-                    F -->|Dense Dot-Product Scanning| I(Dense Vector Ranks)
-                    H & I -->|RRF Fusion Ranks| J[Reciprocal Rank Fusion]
-                    J -->|Select top 3 document chunks| K[Sentence Splitter]
-                end
-                subgraph Compression [Sentence-Level Compression & Re-ranking]
-                    K -->|10-15 sentence candidates| L(Batch Sentence Embedder)
-                    D -->|Extract Query Vector| G[all-MiniLM-L6-v2 Embedder]
-                    G -->|Sentence Cosine Similarities| M(Dot-Product Score & Sort)
-                    L --> M
-                    M -->|Top 8 sentences| N(Cross-Encoder Rerank pipeline)
-                    D -->|Cross-Attention Scoring| N
-                    N -->|Select top 4 sentence context| O[Compressed Context block]
-                end
-                subgraph Synthesis [Generation & Webhook Log Feedback]
-                    O -->|Construct prompt template| P[Prompt Compiler]
-                    Q[Conversation History] -->|Append rolling 4 turns| P
-                    P -->|ONNX Inference| R{Generator Selector}
-                    R -->|SmolLM2 / Qwen| S[JSON Schema output parsing]
-                    S -->|Submit logs| T[Queries FormWebhook]
-                    S -->|Submit feedback rating| U[Ratings FormWebhook]
-                end
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CORE CONCEPTS & MATHEMATICS -->
-  <div class="row g-4 mb-5">
-    <!-- Reciprocal Rank Fusion Details -->
-    <div class="col-md-6">
-      <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
-        <div class="card-body p-4">
-          <h3 class="h4 fw-bold text-white mb-3"><i class="fa fa-calculator text-info me-2"></i> Reciprocal Rank Fusion (RRF) [1]</h3>
-          <p class="text-light opacity-80 small mb-3">
-            To address the vocabulary mismatch problem (where semantic vector searches fail to resolve specific lexical keys like course numbers or acronyms), Waddles implements a hybrid sparse-dense retrieval architecture. The system executes BM25-style keyword search (which targets exact string matching on tokens like 'CS 7641' or 'fMRI') and dense embedding search (which captures the conceptual meaning of the query) in parallel. The results of these search systems are combined using Reciprocal Rank Fusion (RRF). RRF maps ranks to scores via the following formulation:
-          </p>
-          
-          <div class="bg-dark p-3 rounded text-center border border-secondary mb-3" style="overflow-x: auto; max-width: 100%;">
-            <div class="text-white" style="font-size: clamp(0.75rem, 1.8vw, 1.1rem);">
-              $$\text{RRF\_Score}(d \in D) = \sum_{m \in M} \frac{1}{k + r_m(d)}$$
-            </div>
-          </div>
-
-          <p class="text-light opacity-80 small mb-3">
-            In this formulation, $M$ represents the set of retrieval systems ($M = \{\text{dense}, \text{sparse}\}$), $r_m(d)$ is the zero-indexed rank position of document $d$ within retriever $m$, and $k$ is a constant smoothing parameter, set to $60$ to prevent low-ranking candidates from disproportionately affecting scores.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Cosine Similarity & Compression -->
-    <div class="col-md-6">
-      <div class="card glass border-0 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
-        <div class="card-body p-4">
-          <h3 class="h4 fw-bold text-white mb-3"><i class="fa fa-compress text-info me-2"></i> Sentence Cosine Dot Products [2, 3]</h3>
-          <p class="text-light opacity-80 small mb-3">
-            Waddles splits the top 3 RRF-matched document chunks into individual sentences using punctuation boundaries. To isolate the most relevant context and discard noisy or irrelevant sentences, the system feeds all candidates into a parallel batch execution of the vector embedder in a single forward pass. It then calculates the cosine similarity between the query vector and each candidate sentence vector:
-          </p>
-          
-          <div class="bg-dark p-3 rounded text-center border border-secondary mb-3" style="overflow-x: auto; max-width: 100%;">
-            <div class="text-white" style="font-size: clamp(0.75rem, 1.8vw, 1.1rem);">
-              $$\text{Similarity}(q, s) = \sum_{i=1}^{384} (q_i \times s_i)$$
-            </div>
-          </div>
-
-          <p class="text-light opacity-80 small mb-0">
-            Sentence vectors $s \in \mathbb{R}^{384}$ and query vector $q \in \mathbb{R}^{384}$ are pre-normalized to unit $L_2$ norm ($\|q\|_2 = 1$, $\|s\|_2 = 1$), meaning the denominator of the cosine similarity equation is equal to 1. The dot product ranks sentences, from which the top 8 are sent to the Cross-Encoder for structural verification.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- NEURAL ARCHITECTURES -->
   <div class="row mb-5">
     <div class="col-12">
@@ -554,6 +567,114 @@ full_width: true
           </div>
         </div>
       </div>
+    </div>
+  <!-- DEVELOPER CODE SYMBOL MAPPING -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <details class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;" open>
+        <summary class="h4 fw-bold text-white mb-0 d-flex align-items-center justify-content-between" style="cursor: pointer; list-style: none; outline: none;">
+          <span><i class="fa fa-code me-2 text-info"></i> Developer Code Symbol Mapping</span>
+          <span class="text-muted small"><i class="fa fa-chevron-down ms-2"></i></span>
+        </summary>
+        <div class="mt-4">
+          <p class="text-light opacity-80 small mb-4">
+            This table maps the core stages of the client-side WebAssembly RAG pipeline to the respective JavaScript functions and code blocks.
+          </p>
+          <div class="table-responsive">
+            <table class="table table-dark table-hover table-striped mb-0 align-middle" style="background: rgba(11, 15, 25, 0.5); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; overflow: hidden;">
+              <thead>
+                <tr style="border-bottom: 2px solid rgba(255, 255, 255, 0.1);">
+                  <th scope="col" style="color: #2dd4bf; width: 25%;">Pipeline Stage</th>
+                  <th scope="col" style="color: #2dd4bf; width: 45%;">JavaScript Symbol</th>
+                  <th scope="col" style="color: #2dd4bf; width: 30%;">File Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="fw-bold text-white">Initialization &amp; Orchestration</td>
+                  <td>
+                    <code>getBotResponse(query)</code>
+                    <div class="text-muted small mt-1">Coordinates the overall RAG retrieval flow including semantic checking, formatting, and history compilation.</div>
+                  </td>
+                  <td>
+                    <span class="text-info">_includes/chatbot.html</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-bold text-white">Parallel Model Loader</td>
+                  <td>
+                    <code>ensureModelLoaded(modelKey, quantKey)</code>
+                    <div class="text-muted small mt-1">Downloads the ONNX Runtime execution graph for generator, embedder, and re-ranker models.</div>
+                  </td>
+                  <td>
+                    <span class="text-info">_includes/chatbot.html</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-bold text-white">Intent Classification</td>
+                  <td>
+                    <code>classifyQueryIntent(query)</code>
+                    <div class="text-muted small mt-1">Identifies search boundaries (Teaching, Research, Bio) based on keywords.</div>
+                  </td>
+                  <td>
+                    <span class="text-info">_includes/chatbot.html</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-bold text-white">Dense/Sparse Rank Fusion</td>
+                  <td>
+                    <code>findKeywordMatches(query)</code> &amp; RRF Loop
+                    <div class="text-muted small mt-1">Combines sparse index hits with bi-encoder cosine scores.</div>
+                  </td>
+                  <td>
+                    <span class="text-info">_includes/chatbot.html</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-bold text-white">Sentence Context Compression</td>
+                  <td>
+                    Inline Embedding &amp; <code>activeReranker</code>
+                    <div class="text-muted small mt-1">Chunks candidates, embeds sentences, and ranks them with Cross-Encoder attention.</div>
+                  </td>
+                  <td>
+                    <span class="text-info">_includes/chatbot.html</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-bold text-white">Structured Output Compliance</td>
+                  <td>
+                    <code>parseStructuredResponse(rawOutput, bestMatch)</code>
+                    <div class="text-muted small mt-1">Extracts JSON keys and provides custom fallback mechanisms if formatting is corrupted.</div>
+                  </td>
+                  <td>
+                    <span class="text-info">_includes/chatbot.html</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-bold text-white">Response Sanitization</td>
+                  <td>
+                    <code>trimToCompleteSentence(text)</code>
+                    <div class="text-muted small mt-1">Truncates trailing fragments to ensure natural language termination.</div>
+                  </td>
+                  <td>
+                    <span class="text-info">_includes/chatbot.html</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-bold text-white">Structured Logs Logging</td>
+                  <td>
+                    <code>logQuery(...)</code> / <code>logRating(...)</code>
+                    <div class="text-muted small mt-1">Submits parameters (confidence, latency, history) asynchronously to Google Forms webhooks.</div>
+                  </td>
+                  <td>
+                    <span class="text-info">_includes/chatbot.html</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 
@@ -650,16 +771,16 @@ full_width: true
                 followups: ["What certificates are in FlexStack?", "How can I contact TJ?"]
             },
             sassy: {
-                answer: "If you had looked at the site, you would see TJ directs a small army of 30+ TAs to teach CS 7641 (Machine Learning) to 1400+ master's students. He also worked with CS 7642, because one massive class apparently wasn't enough.",
+                answer: "Oh, marvelous, another query about classes. As if it wasn't enough that TJ corrals 1400+ OMSCS students in CS 7641, he also has a small army of 30+ TAs to do the actual grading. Go ahead, ask what else he teaches, I'll wait.",
                 confidence: 1.0,
                 category: "Teaching",
-                followups: ["Do the TAs do all the grading?", "What certificates are in FlexStack?"]
+                followups: ["Does TJ actually teach or just supervise?", "Is reinforcement learning CS 7642 also this chaotic?"]
             },
             pirate: {
-                answer: "Ahoy matey! Cap'n TJ steer the ship for CS 7641 Machine Learning, commandin' a crew of 30 TAs for 1400 master's master-at-arms! He also sails the waves of CS 7642 Reinforcement Learning, harrr!",
+                answer: "Ahoy, landlubber! If it be Cap'n TJ's legendary teaching ye seek, know that he commands the CS 7641 machine learning galleon! He rules over 1400 master-at-arms with a crew of 30 loyal TAs, and even plundered the Outstanding TA of the Year trophy! Harrr!",
                 confidence: 1.0,
                 category: "Teaching",
-                followups: ["What certificates are in FlexStack?", "How can I contact TJ?"]
+                followups: ["What other gold and loot does the Cap'n teach?", "How do I send a message in a bottle to Cap'n TJ?"]
             }
         },
         research: {
@@ -693,16 +814,16 @@ full_width: true
                 followups: ["What is resting-state fMRI?", "View Google Scholar profile"]
             },
             sassy: {
-                answer: "TJ peers into brains using resting-state fMRI in the Keilholz MIND Lab. He maps spatiotemporal patterns called QPPs, trying to track down biomarkers for Parkinson's and Alzheimer's before they track us down.",
+                answer: "Look, TJ sits in the Keilholz MIND Lab looking at brains via resting-state fMRI. He tracks these things called QPPs (Quasi-Periodic Patterns) to find biomarkers for Alzheimer's and Parkinson's. Fascinating stuff if you are into brain waves, I guess. Do you want to ask what a QPP is, or are we done here?",
                 confidence: 0.95,
                 category: "Research",
-                followups: ["What on earth is a QPP?", "View Google Scholar profile"]
+                followups: ["What on earth is a QPP?", "Can you explain resting-state fMRI?"]
             },
             pirate: {
-                answer: "Ahoy! The lad TJ sails the seas of Emory/GT MIND Lab! He maps the hidden dynamic tides of the brain using resting-state fMRI, trackin' down QPP patterns like buried treasure to defeat Alzheimer's, harrr!",
+                answer: "Ahoy! The brave Cap'n TJ sails the mysterious seas of the Keilholz MIND Lab! He maps the hidden dynamic tides of the mind using resting-state fMRI, tracking down Quasi-Periodic Patterns like buried treasure to defeat the Alzheimer's plague! Harrr!",
                 confidence: 1.0,
                 category: "Research",
-                followups: ["What is resting-state fMRI?", "View Google Scholar profile"]
+                followups: ["What be a Quasi-Periodic Pattern?", "Show me the Cap'n's Google Scholar scroll!"]
             }
         },
         contact: {
@@ -933,12 +1054,15 @@ entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
               </p>
             </div>
           </div>
-          <!-- Latency Guard -->
+          <!-- Latency & Rendering Guard -->
           <div class="col-md-6">
             <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
-              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-spinner me-2"></i> 5. Input-Locking Latency Guard</h4>
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-spinner me-2"></i> 5. Asynchronous DOM Yield &amp; Latency Guard</h4>
+              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Why it is needed:</strong> WebAssembly model execution runs on the browser's single main thread. Heavy CPU calculations starve the layout engine and prevent the browser from repainting the DOM.
+              </p>
               <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                To handle local model processing latency, Waddles implements an active UI locking mechanism. Upon submission, the text field and send button are disabled, and the button icon shifts to a spinning loader. This prevents duplicate form submissions and ensures a smooth interactive workflow during model execution.
+                <strong>Specific failures prevented:</strong> Prevents browser tab freezes, duplicate query submission race conditions, and unresponsive button states by yielding the execution thread for 50 milliseconds to paint UI spinners and typing indicators before model loading begins.
               </p>
             </div>
           </div>
@@ -946,17 +1070,23 @@ entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
           <div class="col-md-6">
             <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
               <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-align-left me-2"></i> 6. Trailing Sentence Auto-Truncation</h4>
+              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Why it is needed:</strong> Autoregressive language models generate text token-by-token and can reach generation limits mid-phrase, resulting in trailing fragments.
+              </p>
               <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                To prevent incomplete sentences due to generation token cuts, Waddles scans model outputs. The client finds the final sentence-ending punctuation mark (period, exclamation point, or question mark) and strips away any trailing words that do not form a complete sentence, ensuring all responses end naturally.
+                <strong>Specific failures prevented:</strong> Prevents broken syntax and abrupt, incomplete text terminations in the user interface by scanning for sentence boundaries and stripping unfinished trailing words.
               </p>
             </div>
           </div>
-          <!-- One-Shot Structured Persona Anchoring -->
+          <!-- Dynamic Few-Shot Structured Persona Anchoring -->
           <div class="col-md-6">
             <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
-              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-anchor me-2"></i> 7. One-Shot Persona Anchoring</h4>
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-anchor me-2"></i> 7. Dynamic Few-Shot Persona Anchoring</h4>
+              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Why it is needed:</strong> Lightweight models (under 1B parameters) struggle with complex instruction adherence and formatting consistency when prompted to adopt custom styles.
+              </p>
               <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                To enforce complex stylistic personas (Helpful, Sassy, Pirate) while maintaining strict JSON schema compliance inside lightweight models, Waddles utilizes one-shot prompt anchoring. The system prompt injects a complete mock JSON response conforming to the schema. This anchor teaches the model how to structure answers and follow-ups in the active tone without failing JSON parsing.
+                <strong>Specific failures prevented:</strong> Prevents JSON parsing crashes, missing object keys, and style drift. Pre-embedded style examples matching the query topic are retrieved via cosine similarity and injected into system instructions to anchor the formatting.
               </p>
             </div>
           </div>
