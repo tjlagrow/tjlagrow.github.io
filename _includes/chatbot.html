@@ -23,6 +23,9 @@
                     <option value="q8">8-bit</option>
                     <option value="fp16">16-bit</option>
                 </select>
+                <label id="waddles-webgpu-label" style="font-size: 0.65rem; color: #2dd4bf; display: flex; align-items: center; gap: 2px; cursor: pointer; margin: 0 2px;" title="Enable WebGPU hardware acceleration">
+                    <input type="checkbox" id="waddles-webgpu-cb" checked> GPU
+                </label>
                 <button id="waddles-go-btn" class="rounded px-2" style="font-size: 0.65rem; border: none; cursor: pointer; height: 22px; background: #2dd4bf; color: #0f172a; font-weight: 700; transition: opacity 0.2s;">Load</button>
                 <button id="chatbot-close" aria-label="Close chat">×</button>
             </div>
@@ -43,6 +46,9 @@
             <input type="checkbox" id="filter-research" checked style="display: none;">
             <input type="checkbox" id="filter-teaching" checked style="display: none;">
             <input type="checkbox" id="filter-bio" checked style="display: none;">
+            <label style="font-size: 0.625rem; font-weight: 700; color: #f43f5e; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-left: auto;" title="Generate hypothetical answer to improve retrieval">
+                <input type="checkbox" id="waddles-hyde-toggle"> HyDE
+            </label>
         </div>
 
         <div class="chatbot-body" id="chatbot-body">
@@ -159,6 +165,7 @@
         });
 
         let embeddingsDatabase = [];
+        let knowledgeGraphAdjacency = {};
         const personaExamples = [
             {
                 tone: 'sassy',
@@ -289,11 +296,25 @@
             }
         });
 
+        // Check WebGPU availability at startup
+        const webgpuCb = document.getElementById('waddles-webgpu-cb');
+        if (webgpuCb && !navigator.gpu) {
+            webgpuCb.checked = false;
+            webgpuCb.disabled = true;
+            const webgpuLabel = document.getElementById('waddles-webgpu-label');
+            if (webgpuLabel) {
+                webgpuLabel.style.color = '#64748b';
+                webgpuLabel.title = 'WebGPU is not supported by your browser';
+            }
+        }
+
         // Asynchronously load vector embeddings database
         fetch('{{ "/assets/json/embeddings.json" | relative_url }}')
             .then(response => response.json())
             .then(data => {
-                embeddingsDatabase = data;
+                embeddingsDatabase = data.embeddings || data || [];
+                knowledgeGraphAdjacency = data.knowledge_graph || {};
+                console.log(`[Waddles] Loaded vector database with ${embeddingsDatabase.length} entries.`);
             })
             .catch(err => console.error("Error loading Waddles embeddings database:", err));
 
@@ -513,7 +534,10 @@
                     followups: result.followups,
                     latency: latencyMs,
                     sourceTitle: result.sourceTitle,
-                    sourceUrl: result.sourceUrl
+                    sourceUrl: result.sourceUrl,
+                    visualAssetUrl: result.visualAssetUrl,
+                    visualAssetTitle: result.visualAssetTitle,
+                    conceptChips: getKnowledgeGraphSuggestions(query)
                 };
 
                 appendMessage(responseText, 'system', query, queryId, extraData);
@@ -697,6 +721,63 @@
                 msg.innerHTML += citationHtml;
             }
 
+            // Render visual asset lightbox thumbnail if present
+            if (extraData && extraData.visualAssetUrl) {
+                const imgContainer = document.createElement('div');
+                imgContainer.style.marginTop = '8px';
+                imgContainer.style.position = 'relative';
+                
+                const imgThumb = document.createElement('img');
+                imgThumb.src = extraData.visualAssetUrl;
+                imgThumb.alt = extraData.visualAssetTitle || "Visual Asset";
+                imgThumb.style.maxWidth = '100%';
+                imgThumb.style.maxHeight = '150px';
+                imgThumb.style.borderRadius = '6px';
+                imgThumb.style.cursor = 'pointer';
+                imgThumb.style.border = '1px solid rgba(255,255,255,0.15)';
+                imgThumb.style.transition = 'transform 0.2s';
+                imgThumb.title = "Click to zoom";
+                
+                imgThumb.addEventListener('mouseover', () => {
+                    imgThumb.style.transform = 'scale(1.02)';
+                });
+                imgThumb.addEventListener('mouseout', () => {
+                    imgThumb.style.transform = 'scale(1)';
+                });
+                
+                imgThumb.addEventListener('click', () => {
+                    const lightbox = document.createElement('div');
+                    lightbox.style.position = 'fixed';
+                    lightbox.style.top = '0';
+                    lightbox.style.left = '0';
+                    lightbox.style.width = '100vw';
+                    lightbox.style.height = '100vh';
+                    lightbox.style.background = 'rgba(0,0,0,0.85)';
+                    lightbox.style.display = 'flex';
+                    lightbox.style.justifyContent = 'center';
+                    lightbox.style.alignItems = 'center';
+                    lightbox.style.zIndex = '99999';
+                    lightbox.style.cursor = 'zoom-out';
+                    
+                    const lightboxImg = document.createElement('img');
+                    lightboxImg.src = extraData.visualAssetUrl;
+                    lightboxImg.style.maxWidth = '90vw';
+                    lightboxImg.style.maxHeight = '90vh';
+                    lightboxImg.style.borderRadius = '8px';
+                    lightboxImg.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
+                    
+                    lightbox.appendChild(lightboxImg);
+                    document.body.appendChild(lightbox);
+                    
+                    lightbox.addEventListener('click', () => {
+                        lightbox.remove();
+                    });
+                });
+                
+                imgContainer.appendChild(imgThumb);
+                msg.appendChild(imgContainer);
+            }
+
             // Render dynamic action chips if present in JSON output
             if (extraData && extraData.followups && extraData.followups.length > 0) {
                 const chipsContainer = document.createElement('div');
@@ -711,6 +792,34 @@
                     chipsContainer.appendChild(chipBtn);
                 });
                 msg.appendChild(chipsContainer);
+            }
+
+            // Render concept chips if present
+            if (extraData && extraData.conceptChips && extraData.conceptChips.length > 0) {
+                const conceptContainer = document.createElement('div');
+                conceptContainer.className = 'chatbot-chips concept-chips';
+                conceptContainer.style.marginTop = '8px';
+                conceptContainer.style.borderTop = '1px dashed rgba(255,255,255,0.08)';
+                conceptContainer.style.paddingTop = '6px';
+                
+                const titleSpan = document.createElement('span');
+                titleSpan.style.fontSize = '0.65rem';
+                titleSpan.style.opacity = '0.5';
+                titleSpan.style.display = 'block';
+                titleSpan.style.marginBottom = '4px';
+                titleSpan.innerText = '🔗 Related Concepts (Knowledge Graph):';
+                conceptContainer.appendChild(titleSpan);
+                
+                extraData.conceptChips.forEach(q => {
+                    const chipBtn = document.createElement('button');
+                    chipBtn.className = 'chatbot-chip concept-chip';
+                    chipBtn.style.borderColor = 'rgba(45, 212, 191, 0.4)';
+                    chipBtn.style.color = '#2dd4bf';
+                    chipBtn.setAttribute('data-question', `Tell me about ${q}`);
+                    chipBtn.innerText = q;
+                    conceptContainer.appendChild(chipBtn);
+                });
+                msg.appendChild(conceptContainer);
             }
 
             if (sender === 'system' && queryText && queryId && !content.includes("Waddles is ready") && !content.includes("Switched to") && !content.includes("Initializing local")) {
@@ -810,7 +919,22 @@
                     env.backends.onnx.wasm.proxy = false;
                     env.backends.onnx.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/dist/';
 
-                    console.log("[Waddles] Module loaded. Configuring parameters.");
+                    const webgpuCb = document.getElementById('waddles-webgpu-cb');
+                    const preferredDevice = (webgpuCb && webgpuCb.checked) ? 'webgpu' : 'wasm';
+                    console.log("[Waddles] Module loaded. Configuring parameters. Preferred device:", preferredDevice);
+
+                    const safeLoadPipeline = async (task, model, options) => {
+                        if (preferredDevice === 'webgpu') {
+                            try {
+                                console.log(`[Waddles] Attempting WebGPU load for ${model}...`);
+                                return await pipeline(task, model, { ...options, device: 'webgpu' });
+                            } catch (gpuErr) {
+                                console.warn(`[Waddles] WebGPU load failed for ${model}, falling back to WASM:`, gpuErr);
+                                return await pipeline(task, model, { ...options, device: 'wasm' });
+                            }
+                        }
+                        return await pipeline(task, model, { ...options, device: 'wasm' });
+                    };
 
                     try {
                         let embedderProgress = 0;
@@ -829,8 +953,7 @@
 
                         // 1. Fetch Embedder
                         if (!loadedEmbedders['all-MiniLM-L6-v2']) {
-                            activeEmbedder = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
-                                device: 'wasm',
+                            activeEmbedder = await safeLoadPipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
                                 progress_callback: (data) => {
                                     if (data.status === 'progress') {
                                         embedderProgress = data.progress;
@@ -849,8 +972,7 @@
                         }
 
                         // 2. Fetch Generator
-                        activeGenerator = await pipeline('text-generation', modelRepo, {
-                            device: 'wasm',
+                        activeGenerator = await safeLoadPipeline('text-generation', modelRepo, {
                             dtype: quantKey,
                             progress_callback: (data) => {
                                 if (data.status === 'progress') {
@@ -866,8 +988,7 @@
 
                         // 3. Fetch Reranker
                         if (!loadedReranker) {
-                            activeReranker = await pipeline('text-classification', 'Xenova/ms-marco-MiniLM-L-6-v2', {
-                                device: 'wasm',
+                            activeReranker = await safeLoadPipeline('text-classification', 'Xenova/ms-marco-MiniLM-L-6-v2', {
                                 progress_callback: (data) => {
                                     if (data.status === 'progress') {
                                         rerankerProgress = data.progress;
@@ -1060,7 +1181,7 @@
         }
 
         // Parsing mechanism with text fallback
-        function parseStructuredResponse(rawOutput, bestMatch) {
+        function parseStructuredResponse(rawOutput, bestMatch, visualAssetUrl = "", visualAssetTitle = "") {
             let cleaned = rawOutput.trim();
             if (cleaned.startsWith('```')) {
                 cleaned = cleaned.replace(/^```(?:json)?\n?|```$/g, '').trim();
@@ -1075,7 +1196,9 @@
                         category: parsedObj.category ?? 'Bio/Contact',
                         followups: Array.isArray(parsedObj.followups) ? parsedObj.followups.slice(0, 2) : [],
                         sourceTitle: bestMatch ? bestMatch.title : null,
-                        sourceUrl: bestMatch ? bestMatch.url : null
+                        sourceUrl: bestMatch ? bestMatch.url : null,
+                        visualAssetUrl: visualAssetUrl,
+                        visualAssetTitle: visualAssetTitle
                     };
                 }
             } catch (err) {
@@ -1089,7 +1212,9 @@
                 category: 'Unknown',
                 followups: [],
                 sourceTitle: bestMatch ? bestMatch.title : null,
-                sourceUrl: bestMatch ? bestMatch.url : null
+                sourceUrl: bestMatch ? bestMatch.url : null,
+                visualAssetUrl: visualAssetUrl,
+                visualAssetTitle: visualAssetTitle
             };
         }
 
@@ -1118,6 +1243,24 @@
             if (hasResearch && !hasTeaching) return 'Research';
             if (hasBio) return 'Bio/Contact';
             return null;
+        }
+
+        function getKnowledgeGraphSuggestions(query) {
+            const lowerQuery = query.toLowerCase();
+            const suggestions = new Set();
+            const kg = (knowledgeGraphAdjacency && Object.keys(knowledgeGraphAdjacency).length > 0) ? knowledgeGraphAdjacency : {
+                "CS 7641": ["Machine Learning", "Georgia Tech", "OMSCS", "Supervised Learning", "Unsupervised Learning", "Randomized Optimization", "Markov Decision Processes"],
+                "fMRI": ["Brain Connectivity", "Helmholtz-Hodge Decomposition", "Solenoidal Flow", "Curl Flow", "Neuroscience", "rs-fMRI"],
+                "Mind Lab": ["TJ LaGrow", "Georgia Tech", "Neuroengineering", "Keilholz MIND Lab"],
+                "TJ LaGrow": ["Mind Lab", "Georgia Tech", "PhD Candidate", "Research", "fMRI", "OMSCS CS 7641", "Machine Learning"]
+            };
+            
+            for (const key in kg) {
+                if (lowerQuery.includes(key.toLowerCase())) {
+                    kg[key].forEach(concept => suggestions.add(concept));
+                }
+            }
+            return Array.from(suggestions);
         }
 
         async function getBotResponse(query) {
@@ -1173,6 +1316,34 @@
                 };
             }
 
+            // HyDE Retrieval Step (Generates hypothetical answer)
+            const hydeToggle = document.getElementById('waddles-hyde-toggle');
+            let queryForEmbedding = query;
+            if (hydeToggle && hydeToggle.checked && activeModelType === 'rag' && activeGenerator) {
+                try {
+                    console.log("[Waddles] HyDE enabled. Generating hypothetical answer...");
+                    const hydePrompt = `<|im_start|>system
+You are a helpful assistant. Generate a short, hypothetical direct answer (1-2 sentences) to the user's question. This answer will be used for semantic search, so describe key concepts directly. Do not include introductory text or disclaimers.
+<|im_end|>
+<|im_start|>user
+${query}<|im_end|>
+<|im_start|>assistant
+`;
+                    const hydeOutput = await activeGenerator(hydePrompt, {
+                        max_new_tokens: 64,
+                        temperature: 0.7,
+                        do_sample: true,
+                        return_full_text: false
+                    });
+                    let hypotheticalAnswer = hydeOutput[0].generated_text.trim();
+                    hypotheticalAnswer = hypotheticalAnswer.replace(/<\|im_end\|>/g, '').replace(/<\|im_start\|>/g, '').trim();
+                    console.log("[Waddles] Generated hypothetical answer for HyDE:", hypotheticalAnswer);
+                    queryForEmbedding = hypotheticalAnswer;
+                } catch (hydeErr) {
+                    console.error("[Waddles] HyDE generation failed, falling back to original query:", hydeErr);
+                }
+            }
+
             // 2. Intent Pre-filtering
             const queryIntent = classifyQueryIntent(query);
             let databaseSubset = embeddingsDatabase.filter(passFilters);
@@ -1190,7 +1361,7 @@
 
             if (activeModelType === 'rag' && activeEmbedder && activeGenerator && activeReranker && embeddingsDatabase && embeddingsDatabase.length > 0) {
                 try {
-                    const output = await activeEmbedder(query, { pooling: 'mean', normalize: true });
+                    const output = await activeEmbedder(queryForEmbedding, { pooling: 'mean', normalize: true });
                     queryVector = Array.from(output.data);
 
                     denseMatches = databaseSubset.map(doc => {
@@ -1245,14 +1416,27 @@
                 const docTypeLabel = bestMatch.type.charAt(0).toUpperCase() + bestMatch.type.slice(1);
 
                 if (activeModelType === 'rag' && activeGenerator && activeEmbedder && activeReranker) {
-                    let contextText = bestMatch.text;
+                    let contextText = bestMatch.parent_text || bestMatch.text;
                     let finalBestMatch = bestMatch;
 
                     // 5. Sentence-level Context Compression
                     const topChunks = finalRRFMatches.slice(0, 3).map(r => r.doc);
+                    
+                    // Extract visual asset details if present in the top chunks
+                    let visualAssetUrl = "";
+                    let visualAssetTitle = "";
+                    const visualDoc = topChunks.find(d => d.type === 'visual_asset');
+                    if (visualDoc) {
+                        visualAssetUrl = visualDoc.url;
+                        visualAssetTitle = visualDoc.title;
+                    } else if (bestMatch.type === 'visual_asset') {
+                        visualAssetUrl = bestMatch.url;
+                        visualAssetTitle = bestMatch.title;
+                    }
+
                     let allSentences = [];
                     topChunks.forEach(doc => {
-                        const sentences = doc.text.split(/(?<=[.!?])\s+/);
+                        const sentences = (doc.parent_text || doc.text).split(/(?<=[.!?])\s+/);
                         sentences.forEach(s => {
                             const cleanS = s.trim();
                             if (cleanS.length > 15) {
@@ -1351,12 +1535,14 @@
                         historyPrompt += `<|im_start|>${msg.role}\n${msg.content}<|im_end|>\n`;
                     });
 
-                    // Define personality-specific instructions
+                    // Define personality-specific instructions and tool guidelines
+                    let toolCallInstructions = "\n\nIf the user asks for TJ's live/real-time GitHub statistics, follower counts, or repository counts, you MUST call the github_stats tool by outputting exactly: <tool_call>github_stats</tool_call> and nothing else. Do not output JSON yet.";
+                    
                     let systemInstruction = "";
                     if (personality === 'sassy') {
                         systemInstruction = `You are Waddles, Theodore J. LaGrow (TJ)'s sassy, sarcastic personal chatbot assistant.
 Answer the user's question about TJ's research, teaching, or background using ONLY this context.
-Be extremely witty, highly sarcastic, and mock the user's curiosity slightly, while remaining factually accurate to the context. Do not make up facts outside the context.${dynamicExamplesText || `
+Be extremely witty, highly sarcastic, and mock the user's curiosity slightly, while remaining factually accurate to the context. Do not make up facts outside the context.${toolCallInstructions}${dynamicExamplesText || `
 
 Here is an example of the structured response format you MUST use:
 {
@@ -1375,7 +1561,7 @@ ${contextText}
 Answer the user's question about TJ's research, teaching, or background using ONLY this context.
 You MUST speak in heavy pirate slang (use Ahoy, Ye, Harrr, Cap'n, landlubber, plunder, galleon, treasure, chest, compass).
 Refer to TJ as "Cap'n TJ", refer to courses/certificates as "loot/treasure maps", and research labs as "vessels/fleets".
-Do not make up facts outside the context.${dynamicExamplesText || `
+Do not make up facts outside the context.${toolCallInstructions}${dynamicExamplesText || `
 
 Here is an example of the structured response format you MUST use:
 {
@@ -1391,7 +1577,7 @@ ${contextText}
 ---`;
                     } else {
                         systemInstruction = `You are Waddles, Theodore J. LaGrow (TJ)'s personal chatbot assistant.
-Answer the user's question about TJ's research, teaching, or background using ONLY this context:
+Answer the user's question about TJ's research, teaching, or background using ONLY this context:${toolCallInstructions}
 ---
 ${contextText}
 ---`;
@@ -1420,8 +1606,49 @@ ${query}<|im_end|>
 
                     let generatedText = output[0].generated_text.trim();
                     generatedText = generatedText.replace(/<\|im_end\|>/g, '').replace(/<\|im_start\|>/g, '').trim();
+
+                    // Check for agentic tool calls
+                    if (generatedText.includes("<tool_call>github_stats</tool_call>")) {
+                        console.log("[Waddles] Tool call detected! Intercepting and fetching GitHub stats...");
+                        let toolContext = "";
+                        try {
+                            const res = await fetch('https://api.github.com/users/tjlagrow');
+                            const stats = await res.json();
+                            toolContext = `Real-time GitHub stats for TJ LaGrow: Name is ${stats.name || 'TJ LaGrow'}, public repositories count is ${stats.public_repos || 16}, followers count is ${stats.followers || 2}, following count is ${stats.following || 10}. Profile URL is ${stats.html_url || 'https://github.com/tjlagrow'}.`;
+                        } catch (toolErr) {
+                            console.error("[Waddles] Tool call fetch failed:", toolErr);
+                            toolContext = "Real-time GitHub stats for TJ LaGrow: Fetch failed, but his GitHub profile URL is https://github.com/tjlagrow.";
+                        }
+                        
+                        console.log("[Waddles] Retooling context. Re-generating final answer...");
+                        const rePrompt = `<|im_start|>system
+${systemInstruction}
+[Tool Call Output]:
+${toolContext}
+Answer the user's query incorporating the real-time GitHub tool output data above.
+You MUST respond with a single valid JSON object. Do not output any markdown formatting, backticks, or introduction text. Follow this schema:
+{
+  "answer": "Concise answer of 1-3 sentences incorporating the stats.",
+  "confidence": 1.0,
+  "category": "Bio/Contact",
+  "followups": ["Short follow-up question 1", "Short follow-up question 2"]
+}
+<|im_end|>
+${historyPrompt}<|im_start|>user
+${query}<|im_end|>
+<|im_start|>assistant
+`;
+                        const reOutput = await activeGenerator(rePrompt, {
+                            max_new_tokens: 256,
+                            temperature: 0.1,
+                            do_sample: false,
+                            return_full_text: false
+                        });
+                        generatedText = reOutput[0].generated_text.trim();
+                        generatedText = generatedText.replace(/<\|im_end\|>/g, '').replace(/<\|im_start\|>/g, '').trim();
+                    }
                     
-                    return parseStructuredResponse(generatedText, finalBestMatch);
+                    return parseStructuredResponse(generatedText, finalBestMatch, visualAssetUrl, visualAssetTitle);
                 } else {
                     const queryTokens = query.toLowerCase().replace(/[^\w\s-]/g, '').split(/\s+/).filter(t => t.length > 2);
                     const stopWords = ['the', 'and', 'for', 'this', 'that', 'with', 'from', 'about', 'your', 'will', 'have', 'been', 'are', 'was', 'were', 'what', 'tell', 'how', 'who', 'does', 'shes', 'they'];

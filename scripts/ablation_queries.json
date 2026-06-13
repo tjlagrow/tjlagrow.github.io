@@ -1,0 +1,129 @@
+[
+  {
+    "query": "what courses does TJ teach?",
+    "intent": "Teaching",
+    "ground_truth_document_titles": [
+      "Teaching",
+      "Hello, World! OMSCS Machine Learning Blog Series",
+      "Scaling ML Education: Ops, Pedagogy, and Teaching 1,200 Students"
+    ],
+    "ground_truth_answer": "TJ is the Lead Instructor for CS 7641 (Machine Learning) in Georgia Tech's OMSCS program and has supported CS 7642 (Reinforcement Learning)."
+  },
+  {
+    "query": "what is Markov Decision Processes?",
+    "intent": "Teaching",
+    "ground_truth_document_titles": [
+      "Mastering Markov Decision Processes: A Practical RL Journey with OpenAI Gym"
+    ],
+    "ground_truth_answer": "A Markov Decision Process (MDP) is a mathematical framework for modeling decision-making in environments where outcomes are partly random and partly under the control of a decision maker."
+  },
+  {
+    "query": "how to evaluate features after dimensionality reduction?",
+    "intent": "Teaching",
+    "ground_truth_document_titles": [
+      "How to Evaluate Features after Dimensionality Reduction?"
+    ],
+    "ground_truth_answer": "Feature evaluation after dimensionality reduction involves analyzing variance ratios, reconstruction errors, clustering efficiency, and model performance on downstream tasks."
+  },
+  {
+    "query": "tell me about exploratory data analysis guide",
+    "intent": "Teaching",
+    "ground_truth_document_titles": [
+      "Beginner’s Guide to Exploratory Data Analysis"
+    ],
+    "ground_truth_answer": "Exploratory Data Analysis (EDA) is an approach to analyzing datasets to summarize their main characteristics, often using visual methods."
+  },
+  {
+    "query": "tell me about Quasi-Periodic Patterns in Alzheimer's",
+    "intent": "Research",
+    "ground_truth_document_titles": [
+      "Beyond Static Connectivity: The Role of Quasi-Periodic Patterns in Alzheimer's",
+      "Tracing Alzheimer's Through Spatiotemporal Brain Patterns"
+    ],
+    "ground_truth_answer": "Quasi-Periodic Patterns (QPPs) are recurring spatiotemporal patterns of low-frequency brain activity in resting-state fMRI, showing changes in neurodegenerative diseases like Alzheimer's."
+  },
+  {
+    "query": "what is the role of resting-state fMRI in brain dynamics?",
+    "intent": "Research",
+    "ground_truth_document_titles": [
+      "Fidelity of Spatiotemporal Patterns of Brain Activity Across Sampling Rate, Scan Duration, and Frequency Content",
+      "Exploration of Spatiotemporal Dynamics in Neurodegenerative Functional Brain Networks",
+      "PhD Proposal: Spatiotemporal Dynamics in Brain Networks"
+    ],
+    "ground_truth_answer": "Resting-state fMRI measures spontaneous, low-frequency fluctuations in blood-oxygen-level-dependent (BOLD) signals to map functional connectivity and spatiotemporal brain dynamics."
+  },
+  {
+    "query": "tell me about cross-species functional connectivity",
+    "intent": "Research",
+    "ground_truth_document_titles": [
+      "Cross-Species Functional Connectivity: The Translational Bridge",
+      "Functional connectivity of the brain across rodents and humans"
+    ],
+    "ground_truth_answer": "Cross-species functional connectivity aligns brain network dynamics between rodents and humans to act as a translational bridge for neuroimaging research."
+  },
+  {
+    "query": "what is PhD Proposal of TJ LaGrow?",
+    "intent": "Research",
+    "ground_truth_document_titles": [
+      "PhD Proposal: Spatiotemporal Dynamics in Brain Networks",
+      "Exploration of Spatiotemporal Dynamics in Neurodegenerative Functional Brain Networks"
+    ],
+    "ground_truth_answer": "TJ LaGrow's PhD proposal is titled 'Exploration of Spatiotemporal Dynamics in Neurodegenerative Functional Brain Networks' focusing on resting-state fMRI dynamics."
+  },
+  {
+    "query": "how can I contact TJ LaGrow?",
+    "intent": "Bio/Contact",
+    "ground_truth_document_titles": [
+      "Contact"
+    ],
+    "ground_truth_answer": "You can contact TJ LaGrow via email at tlagrow3@gatech.edu or submit a message using the form on his Contact Page."
+  },
+  {
+    "query": "tell me about TJ's awards and honors",
+    "intent": "Bio/Contact",
+    "ground_truth_document_titles": [
+      "Honors & Awards"
+    ],
+    "ground_truth_answer": "TJ's awards include the Georgia Tech Outstanding Teaching Assistant of the Year and various academic neuroimaging honors."
+  },
+  {
+    "query": "who is TJ LaGrow?",
+    "intent": "Bio/Contact",
+    "ground_truth_document_titles": [
+      "About"
+    ],
+    "ground_truth_answer": "TJ LaGrow is a PhD candidate in Neuroengineering at the Keilholz MIND Lab, running machine learning education and resting-state fMRI research."
+  },
+  {
+    "query": "what did AI newsletter say about LLMs?",
+    "intent": "General",
+    "ground_truth_document_titles": [
+      "Newsletter #1 — What Actually Mattered in AI This Week"
+    ],
+    "ground_truth_answer": "The AI newsletter discussed key advancements in LLM reasoning, code execution capabilities, and open-source models."
+  },
+  {
+    "query": "tell me about Ramon y Cajal retinal sketch",
+    "intent": "General",
+    "ground_truth_document_titles": [
+      "Ramon y Cajal Histology Retinal Drawing"
+    ],
+    "ground_truth_answer": "Santiago Ramon y Cajal was a Nobel laureate who sketched detailed neuroanatomy of retinal cell structures and synapses."
+  },
+  {
+    "query": "what is the GATO generalist agent?",
+    "intent": "General",
+    "ground_truth_document_titles": [
+      "GATO: The All-in-One Generalist Agent"
+    ],
+    "ground_truth_answer": "Gato is a multi-modal, multi-task, multi-embodiment generalist policy trained by DeepMind that can play games, caption images, and control robotic arms."
+  },
+  {
+    "query": "what is Graph of Thoughts structured reasoning?",
+    "intent": "General",
+    "ground_truth_document_titles": [
+      "Graph of Thoughts: Structured Reasoning with LLMs"
+    ],
+    "ground_truth_answer": "Graph of Thoughts (GoT) is a framework that models LLM reasoning as a directed graph, enabling non-linear combination, aggregation, and refinement of thoughts."
+  }
+]

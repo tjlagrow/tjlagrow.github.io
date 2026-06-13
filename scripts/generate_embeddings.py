@@ -14,6 +14,51 @@ NEWSLETTERS_DIR = os.path.join(PROJECT_ROOT, "_newsletters")
 DATA_DIR = os.path.join(PROJECT_ROOT, "_data")
 OUTPUT_FILE = os.path.join(PROJECT_ROOT, "assets", "json", "embeddings.json")
 
+VISUAL_ASSETS = [
+    {
+        "title": "Alzheimer's Disease Brain Connectivity Header",
+        "url": "/assets/images/alzheimers_header.png",
+        "text": "Alzheimer's Disease analysis and brain network connectivity map. Shows functional connectivity graph decomposition and Solenoidal and Curl decomposition regimes of resting-state fMRI activity. Details Helmholtz-Hodge decomposition pipelines.",
+        "type": "visual_asset"
+    },
+    {
+        "title": "Cross-Species Brain Graph Topology Header",
+        "url": "/assets/images/cross_species_header.png",
+        "text": "Cross-species comparative brain graph topology and alignment mappings. Visualizes resting-state functional MRI alignment protocols between different mammalian cohorts and evolutionary conservation metrics.",
+        "type": "visual_asset"
+    },
+    {
+        "title": "Backward Design Education Paradigm Header",
+        "url": "/assets/images/education_header.png",
+        "text": "Backward Design educational paradigm diagram. Illustrates backward design mapping: starting from learning outcomes and assessments, then aligning learning activities and curriculum rubrics, grounding teaching in evidence-based learning science.",
+        "type": "visual_asset"
+    },
+    {
+        "title": "Ramon y Cajal Brain Tissue Sketch",
+        "url": "/assets/images/ramon_y_cajal.png",
+        "text": "Santiago Ramon y Cajal historical illustration of brain tissue neural structures, historical brain slice neurons, pyramidal cells, and cortical layers. Classic neurobiology sketch.",
+        "type": "visual_asset"
+    },
+    {
+        "title": "Ramon y Cajal Histology Retinal Drawing",
+        "url": "/assets/images/ramon_y_cajal_3.png",
+        "text": "Santiago Ramon y Cajal neuroanatomy histology drawing of retinal cell connections, rods, cones, bipolar cells, and optic nerve synapses. Historical neuroscience cell architecture.",
+        "type": "visual_asset"
+    },
+    {
+        "title": "Static and Dynamic Web Assembly Optimizations Header",
+        "url": "/assets/images/static_dynamic_header.png",
+        "text": "Static hosting and browser-side WebAssembly execution optimization overview. Visualizes single-threaded WASM fallback, dynamic CDN weight retrieval, and HTTP persistent caching storage pipelines.",
+        "type": "visual_asset"
+    },
+    {
+        "title": "Waddles AI Avatar Truffle Pig Mascot",
+        "url": "/assets/images/waddles_ai_avatar.png",
+        "text": "Waddles RAG search assistant avatar, truffle pig minimalist flat-vector mascot illustration. Pulses and tilts with dynamic mouse-move orbital interactive tech rings.",
+        "type": "visual_asset"
+    }
+]
+
 def clean_content(content):
     """Strips YAML front matter, Liquid tags, HTML, and Markdown syntax."""
     # Decode HTML entities
@@ -123,8 +168,23 @@ def get_post_url(filename, front_matter_categories):
     else:
         return f"/{year}/{month}/{day}/{slug}/"
 
+def extract_parent_child_chunks(clean_txt, max_words_parent=200, max_words_child=50, metadata_prefix=""):
+    """Splits clean text into child chunks (~50 words) mapping to parent blocks (~200 words)."""
+    parents = chunk_text(clean_txt, max_words=max_words_parent)
+    sub_chunks = []
+    for parent in parents:
+        children = chunk_text(parent, max_words=max_words_child)
+        for child in children:
+            child_text = f"{metadata_prefix} {child}".strip() if metadata_prefix else child.strip()
+            parent_text = f"{metadata_prefix} {parent}".strip() if metadata_prefix else parent.strip()
+            sub_chunks.append({
+                "text": child_text,
+                "parent_text": parent_text
+            })
+    return sub_chunks
+
 def extract_chunks():
-    """Compiles all text chunks across pages, posts, newsletters, and YAML databases."""
+    """Compiles all text chunks across pages, posts, newsletters, databases, and visual assets."""
     chunks = []
     
     # 1. Parse Pages
@@ -148,11 +208,12 @@ def extract_chunks():
                         url_name = os.path.splitext(file)[0]
                         url = f"/{url_name}/"
                         
-                    for text_chunk in chunk_text(clean_txt):
+                    for child_item in extract_parent_child_chunks(clean_txt):
                         chunks.append({
                             "title": title,
                             "url": url,
-                            "text": text_chunk,
+                            "text": child_item["text"],
+                            "parent_text": child_item["parent_text"],
                             "type": "page"
                         })
                         
@@ -179,11 +240,12 @@ def extract_chunks():
                             pass
                             
                 url = get_post_url(file, categories)
-                for text_chunk in chunk_text(clean_txt):
+                for child_item in extract_parent_child_chunks(clean_txt):
                     chunks.append({
                         "title": title,
                         "url": url,
-                        "text": text_chunk,
+                        "text": child_item["text"],
+                        "parent_text": child_item["parent_text"],
                         "type": "post"
                     })
                     
@@ -201,11 +263,12 @@ def extract_chunks():
                     name_slug = os.path.splitext(file)[0]
                     url = f"/newsletter/{name_slug}/"
                     
-                for text_chunk in chunk_text(clean_txt):
+                for child_item in extract_parent_child_chunks(clean_txt):
                     chunks.append({
                         "title": title,
                         "url": url,
-                        "text": text_chunk,
+                        "text": child_item["text"],
+                        "parent_text": child_item["parent_text"],
                         "type": "newsletter"
                     })
 
@@ -234,6 +297,7 @@ def extract_chunks():
                 "title": title,
                 "url": "/research/",
                 "text": text,
+                "parent_text": text,
                 "type": "publication"
             })
             
@@ -256,6 +320,7 @@ def extract_chunks():
                 "title": title,
                 "url": "/research/",
                 "text": text,
+                "parent_text": text,
                 "type": "talk"
             })
             
@@ -278,9 +343,10 @@ def extract_chunks():
                 "title": title,
                 "url": "/research/",
                 "text": text,
+                "parent_text": text,
                 "type": "milestone"
             })
-
+ 
     # 4.4 YouTube Transcripts
     youtube_path = os.path.join(DATA_DIR, "youtube_transcripts.json")
     if os.path.isfile(youtube_path):
@@ -292,19 +358,18 @@ def extract_chunks():
             transcript_text = vt.get("transcript", "")
             original_type = vt.get("original_type", "")
             
-            # Segment the transcript into chunks of ~120 words
-            sub_chunks = chunk_text(transcript_text, max_words=120)
-            for i, text_chunk in enumerate(sub_chunks):
-                # The text is prefixed with context to help keyword matching and LLM understanding.
-                chunk_text_representation = f"YouTube Video Transcript for '{title}': {text_chunk}"
+            # Segment the transcript into hierarchical parent/child chunks
+            child_items = extract_parent_child_chunks(transcript_text, metadata_prefix=f"YouTube Video Transcript for '{title}':")
+            for i, child_item in enumerate(child_items):
                 chunks.append({
                     "title": f"Transcript: {title} (Part {i+1})",
                     "url": url,
-                    "text": chunk_text_representation,
+                    "text": child_item["text"],
+                    "parent_text": child_item["parent_text"],
                     "type": "youtube_transcript",
                     "original_type": original_type
                 })
-
+ 
     # 4.5 Georgia Tech OMSCS Machine Learning (CS 7641) Course Content
     course_path = os.path.join(DATA_DIR, "omscs7641_content.json")
     if os.path.isfile(course_path):
@@ -325,16 +390,26 @@ def extract_chunks():
             formatted_date = date.split("T")[0] if "T" in date else date
             metadata_prefix = f"Georgia Tech OMSCS CS 7641 Machine Learning course site article: '{title}' written by {author} on {formatted_date}."
             
-            sub_chunks = chunk_text(clean_txt, max_words=120)
-            for text_chunk in sub_chunks:
-                chunk_text_representation = f"{metadata_prefix} {text_chunk}"
+            child_items = extract_parent_child_chunks(clean_txt, metadata_prefix=metadata_prefix)
+            for child_item in child_items:
                 chunks.append({
                     "title": title,
                     "url": url,
-                    "text": chunk_text_representation,
+                    "text": child_item["text"],
+                    "parent_text": child_item["parent_text"],
                     "type": item_type
                 })
 
+    # 4.6 Visual Assets
+    for asset in VISUAL_ASSETS:
+        chunks.append({
+            "title": asset["title"],
+            "url": asset["url"],
+            "text": asset["text"],
+            "parent_text": asset["text"],
+            "type": asset["type"]
+        })
+ 
     print(f"Extracted {len(chunks)} total text chunks for embedding.")
     return chunks
 
@@ -364,6 +439,7 @@ def main():
             "title": chunk["title"],
             "url": chunk["url"],
             "text": chunk["text"],
+            "parent_text": chunk.get("parent_text", chunk["text"]),
             "type": chunk["type"],
             "embedding": emb
         }
@@ -371,9 +447,21 @@ def main():
             item["original_type"] = chunk["original_type"]
         output_data.append(item)
         
+    knowledge_graph = {
+        "CS 7641": ["Machine Learning", "Georgia Tech", "OMSCS", "Supervised Learning", "Unsupervised Learning", "Randomized Optimization", "Markov Decision Processes"],
+        "fMRI": ["Brain Connectivity", "Helmholtz-Hodge Decomposition", "Solenoidal Flow", "Curl Flow", "Neuroscience", "rs-fMRI"],
+        "Mind Lab": ["TJ LaGrow", "Georgia Tech", "Neuroengineering", "Cognitive Neuroscience"],
+        "TJ LaGrow": ["Mind Lab", "Georgia Tech", "PhD Candidate", "Research", "fMRI", "OMSCS CS 7641", "Machine Learning"]
+    }
+    
+    final_output = {
+        "embeddings": output_data,
+        "knowledge_graph": knowledge_graph
+    }
+        
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-        json.dump(output_data, f, ensure_ascii=False, indent=2)
+        json.dump(final_output, f, ensure_ascii=False, indent=2)
         
     print(f"Success! Generated vector database file at: {OUTPUT_FILE}")
     print(f"Total file size: {os.path.getsize(OUTPUT_FILE) / 1024:.2f} KB")

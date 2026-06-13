@@ -1,0 +1,122 @@
+{
+  "Run 0: Dense Vector Only": {
+    "hit_at_3": 0.5333333333333333,
+    "hit_at_5": 0.5333333333333333,
+    "mrr": 0.4444444444444444,
+    "ndcg_at_5": 0.6569148672837779,
+    "context_reduction": -0.0005926567245844617,
+    "latency_preprocess": 0.020226665462056797,
+    "latency_search": 24.29984666717549,
+    "latency_compression": 0.0,
+    "latency_rerank": 0.0,
+    "latency_total": 24.341813331314672
+  },
+  "Run 1: Sparse BM25 Only": {
+    "hit_at_3": 0.6,
+    "hit_at_5": 0.6,
+    "mrr": 0.5333333333333333,
+    "ndcg_at_5": 0.7253233698362086,
+    "context_reduction": -0.0007647060403971858,
+    "latency_preprocess": 0.01743999697888891,
+    "latency_search": 156.57191333787827,
+    "latency_compression": 0.0,
+    "latency_rerank": 0.0,
+    "latency_total": 156.60411333277202
+  },
+  "Run 2a: Hybrid RRF (k=20)": {
+    "hit_at_3": 0.6666666666666666,
+    "hit_at_5": 0.6666666666666666,
+    "mrr": 0.48888888888888893,
+    "ndcg_at_5": 0.683191112792023,
+    "context_reduction": -0.0006445825850555161,
+    "latency_preprocess": 0.01848666579462588,
+    "latency_search": 554.9782866689687,
+    "latency_compression": 0.0,
+    "latency_rerank": 0.0,
+    "latency_total": 555.0139733299147
+  },
+  "Run 2b: Hybrid RRF (k=60)": {
+    "hit_at_3": 0.7333333333333333,
+    "hit_at_5": 0.7333333333333333,
+    "mrr": 0.5111111111111112,
+    "ndcg_at_5": 0.7165244461253564,
+    "context_reduction": -0.0007573548303186536,
+    "latency_preprocess": 0.01933333502771954,
+    "latency_search": 545.5356133345049,
+    "latency_compression": 0.0,
+    "latency_rerank": 0.0,
+    "latency_total": 545.572000000781
+  },
+  "Run 2c: Hybrid RRF (k=100)": {
+    "hit_at_3": 0.6666666666666666,
+    "hit_at_5": 0.6666666666666666,
+    "mrr": 0.48888888888888893,
+    "ndcg_at_5": 0.683191112792023,
+    "context_reduction": -0.0006383277420410524,
+    "latency_preprocess": 0.01925999919573466,
+    "latency_search": 544.2186133353971,
+    "latency_compression": 0.0,
+    "latency_rerank": 0.0,
+    "latency_total": 544.2572466660446
+  },
+  "Run 3: RRF (k=60) + Intent Pre-Filtering": {
+    "hit_at_3": 0.5333333333333333,
+    "hit_at_5": 0.5333333333333333,
+    "mrr": 0.5333333333333333,
+    "ndcg_at_5": 0.7670624302319887,
+    "context_reduction": -0.0007289551463627604,
+    "latency_preprocess": 0.021100005445381004,
+    "latency_search": 241.52673999778926,
+    "latency_compression": 0.0,
+    "latency_rerank": 0.0,
+    "latency_total": 241.56543333277418
+  },
+  "Run 4: RRF (k=60) + Synonym Expansion": {
+    "hit_at_3": 0.7333333333333333,
+    "hit_at_5": 0.7333333333333333,
+    "mrr": 0.5111111111111112,
+    "ndcg_at_5": 0.7165244461253564,
+    "context_reduction": -0.0007573548303186536,
+    "latency_preprocess": 0.08150666253641248,
+    "latency_search": 544.2762066668365,
+    "latency_compression": 0.0,
+    "latency_rerank": 0.0,
+    "latency_total": 544.3730333315519
+  },
+  "Run 5: RRF (k=60) + Query Length Filter": {
+    "hit_at_3": 0.7333333333333333,
+    "hit_at_5": 0.7333333333333333,
+    "mrr": 0.5111111111111112,
+    "ndcg_at_5": 0.7165244461253564,
+    "context_reduction": -0.0007573548303186536,
+    "latency_preprocess": 0.020366670408596594,
+    "latency_search": 551.2783533311449,
+    "latency_compression": 0.0,
+    "latency_rerank": 0.0,
+    "latency_total": 551.3129733367047
+  },
+  "Run 6: RRF (k=60) + Sentence Compression": {
+    "hit_at_3": 0.7333333333333333,
+    "hit_at_5": 0.7333333333333333,
+    "mrr": 0.5111111111111112,
+    "ndcg_at_5": 0.7165244461253564,
+    "context_reduction": 0.7859126740750312,
+    "latency_preprocess": 0.023099995451048017,
+    "latency_search": 608.34834666263,
+    "latency_compression": 376.18873333364417,
+    "latency_rerank": 0.007206661393865943,
+    "latency_total": 984.5809866654841
+  },
+  "Run 7: RRF (k=60) + Sentence Compression + Reranker (Full)": {
+    "hit_at_3": 0.5333333333333333,
+    "hit_at_5": 0.5333333333333333,
+    "mrr": 0.5333333333333333,
+    "ndcg_at_5": 0.7670624302319887,
+    "context_reduction": 0.8139577187456748,
+    "latency_preprocess": 0.09416666968415181,
+    "latency_search": 277.8972600043441,
+    "latency_compression": 434.49128000065684,
+    "latency_rerank": 146.8479333387222,
+    "latency_total": 859.3477800022811
+  }
+}

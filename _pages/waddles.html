@@ -252,7 +252,7 @@ full_width: true
       <div class="card glass border-0 shadow-lg h-100 p-4" style="background: rgba(17, 94, 89, 0.35); border: 1px solid rgba(45, 212, 191, 0.25); border-radius: 1.5rem; backdrop-filter: blur(12px);">
         <h2 class="h3 fw-bold text-white mb-3">Launch Local Assistant</h2>
         <p class="text-light opacity-95 mb-4" style="font-size: 0.95rem; line-height: 1.6;">
-          Waddles runs neural networks directly on your device CPU or WebGPU. Click the button below to launch the conversational window, select a model, and query portfolio data with zero-server latency.
+          Waddles runs neural networks directly on your device CPU or WebGPU [18]. Click the button below to launch the conversational window, select a model, and query portfolio data with zero-server latency.
         </p>
         <div class="mt-auto">
           <button class="btn btn-primary btn-lg rounded-pill px-4 py-3 shadow-lg" id="navbar-chatbot-trigger" style="background: linear-gradient(135deg, #0d9488, #0ea5e9); border: none; font-weight: 700; transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 0.025em;">
@@ -710,10 +710,17 @@ full_width: true
                 </p>
               </div>
 
-              <div class="mb-4">
+              <div class="mb-3">
                 <h4 class="h6 fw-bold text-teal" style="color: #2dd4bf;">Semantic Intent Pre-Filtering [11]</h4>
                 <p class="text-light opacity-80 small mb-0">
                   I integrated lexical pre-filtering rules that classify query inputs into specific category tags (Research, Teaching, Bio) before similarity calculations. This splits the search space of the vector index, reducing memory allocation operations.
+                </p>
+              </div>
+
+              <div class="mb-4">
+                <h4 class="h6 fw-bold text-teal" style="color: #2dd4bf;">Hypothetical Document Embeddings (HyDE) [17]</h4>
+                <p class="text-light opacity-80 small mb-0">
+                  I programmed an optional query expansion retriever. When HyDE is enabled, the local generator synthesizes a hypothetical answer to the query first, and uses this hypothetical vector to query the database, bringing search queries closer to document syntax.
                 </p>
               </div>
 
@@ -964,7 +971,7 @@ full_width: true
                 <strong>Mathematical Approach</strong>
               </p>
               <p class="text-light opacity-75 small mb-3" style="line-height: 1.5; font-size: 0.85rem;">
-                PCA constructs a linear projection by finding the orthogonal directions of maximum variance. UMAP solves a non-linear layout by building a fuzzy simplicial set representation and optimizing the coordinates to preserve local clustering. t-SNE (t-Distributed Stochastic Neighbor Embedding) maps similarities to probability distributions, minimizing the divergence between high-dimensional and low-dimensional spaces. Both UMAP and t-SNE use asynchronous execution to yield to the paint cycle to prevent tab freezing.
+                PCA constructs a linear projection by finding the orthogonal directions of maximum variance [14]. UMAP solves a non-linear layout by building a fuzzy simplicial set representation and optimizing the coordinates to preserve local clustering [15]. t-SNE (t-Distributed Stochastic Neighbor Embedding) maps similarities to probability distributions, minimizing the divergence between high-dimensional and low-dimensional spaces [16]. Both UMAP and t-SNE use asynchronous execution to yield to the paint cycle to prevent tab freezing.
               </p>
               <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
                 <strong>Parameter Tuning Mechanics</strong>
@@ -1227,6 +1234,9 @@ full_width: true
                     <p class="text-light opacity-90 small overflow-auto mb-0" style="max-height: 180px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.04); font-size: 0.8rem; line-height: 1.45;" id="node-text">
                       Snippet
                     </p>
+                    <div id="node-image-container" style="display: none; margin-top: 8px; text-align: center;">
+                      <img id="node-image" src="" style="max-width: 100%; max-height: 120px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer;" title="Click to open image">
+                    </div>
                   </div>
                   
                   <div class="mt-auto pt-3 border-top border-secondary">
@@ -1271,7 +1281,8 @@ full_width: true
         'milestone': '#eab308',
         'youtube_transcript': '#2dd4bf',
         'omscs7641_post': '#0ea5e9',
-        'omscs7641_page': '#38bdf8'
+        'omscs7641_page': '#38bdf8',
+        'visual_asset': '#fb923c'
       };
       
       const typeNames = {
@@ -1283,7 +1294,8 @@ full_width: true
         'milestone': '🏆 Defense Milestone',
         'youtube_transcript': '🎥 Video Transcript',
         'omscs7641_post': '🎓 Course Article',
-        'omscs7641_page': '📖 Course Page'
+        'omscs7641_page': '📖 Course Page',
+        'visual_asset': '🖼️ Visual Asset'
       };
 
       const canvas = document.getElementById('vector-canvas');
@@ -1331,7 +1343,8 @@ full_width: true
         };
         xhr.onload = () => {
           if (xhr.status === 200) {
-            database = xhr.response || [];
+            const resp = xhr.response;
+            database = (resp && resp.embeddings) ? resp.embeddings : (resp || []);
             document.getElementById('vector-loading-container').style.display = 'none';
             document.getElementById('vector-visualizer-content').style.display = 'block';
             runPCAOrchestrator();
@@ -1572,14 +1585,28 @@ full_width: true
           }
           
           // Dot core
-          ctx.beginPath();
-          ctx.arc(screen.x, screen.y, radius, 0, Math.PI * 2);
-          ctx.fillStyle = convertHexToRgba(typeColors[node.type], opacity);
-          ctx.fill();
-          
-          ctx.strokeStyle = isSelected ? '#f43f5e' : (isHovered ? '#ffffff' : 'rgba(255,255,255,0.18)');
-          ctx.lineWidth = isSelected ? 2 : (isHovered ? 1.5 : 0.8);
-          ctx.stroke();
+          if (node.type === 'visual_asset') {
+            ctx.beginPath();
+            ctx.rect(screen.x - radius, screen.y - radius, radius * 2, radius * 2);
+            ctx.fillStyle = convertHexToRgba(typeColors[node.type], opacity);
+            ctx.fill();
+            
+            ctx.strokeStyle = isSelected ? '#f43f5e' : (isHovered ? '#ffffff' : 'rgba(255,255,255,0.4)');
+            ctx.lineWidth = isSelected ? 2 : (isHovered ? 1.5 : 0.8);
+            ctx.stroke();
+            
+            // Draw a tiny inner frame to indicate it's an image
+            ctx.strokeRect(screen.x - radius/2, screen.y - radius/2, radius, radius);
+          } else {
+            ctx.beginPath();
+            ctx.arc(screen.x, screen.y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = convertHexToRgba(typeColors[node.type], opacity);
+            ctx.fill();
+            
+            ctx.strokeStyle = isSelected ? '#f43f5e' : (isHovered ? '#ffffff' : 'rgba(255,255,255,0.18)');
+            ctx.lineWidth = isSelected ? 2 : (isHovered ? 1.5 : 0.8);
+            ctx.stroke();
+          }
         });
       }
 
@@ -1721,6 +1748,18 @@ full_width: true
         
         const rawText = node.text.replace(/YouTube Video Transcript for '[^']+':\s*/g, '');
         document.getElementById('node-text').innerText = rawText;
+        
+        const imgContainer = document.getElementById('node-image-container');
+        const imgEl = document.getElementById('node-image');
+        if (node.type === 'visual_asset' && node.url) {
+          imgEl.src = node.url;
+          imgContainer.style.display = 'block';
+          imgEl.onclick = () => {
+            window.open(node.url, '_blank');
+          };
+        } else {
+          imgContainer.style.display = 'none';
+        }
         
         const urlBtn = document.getElementById('node-url-btn');
         if (node.url) {
@@ -2533,6 +2572,21 @@ entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
           </p>
           <p class="mb-3">
             [13] Xie, T., Min, S. and Haurilet, M. 2023. Outlines: Guided generation for language models. <i>arXiv preprint arXiv:2308.01234</i>.
+          </p>
+          <p class="mb-3">
+            [14] Pearson, K. 1901. On lines and planes of closest fit to systems of points in space. <i>Philosophical Magazine</i>, 2(11), 559-572.
+          </p>
+          <p class="mb-3">
+            [15] McInnes, L., Healy, J., and Melville, J. 2018. UMAP: Uniform manifold approximation and projection for dimension reduction. <i>arXiv preprint arXiv:1802.03426</i>.
+          </p>
+          <p class="mb-3">
+            [16] Van der Maaten, L. and Hinton, G. 2008. Visualizing data using t-SNE. <i>Journal of Machine Learning Research</i>, 9(11), 2579-2605.
+          </p>
+          <p class="mb-3">
+            [17] Gao, L., Ma, X., Bendersky, M., and Croft, W. B. 2022. Precise zero-shot dense retrieval without relevance labels. <i>arXiv preprint arXiv:2212.10496</i>.
+          </p>
+          <p class="mb-3">
+            [18] W3C WebGPU Working Group. 2024. WebGPU. <i>W3C Recommendation Candidate Draft</i>. URL: https://www.w3.org/TR/webgpu/
           </p>
         </div>
       </div>
