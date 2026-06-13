@@ -6,11 +6,12 @@
                 <span style="font-weight: 700;">Waddles</span>
             </div>
             <div class="d-flex align-items-center" style="gap: 4px; max-width: 85%;">
-                <select id="waddles-model-selector" class="rounded py-0 px-1" style="font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #2dd4bf; font-weight: 600; max-width: 90px;" title="Model selection">
+                <select id="waddles-model-selector" class="rounded py-0 px-1" style="font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #2dd4bf; font-weight: 600; max-width: 100px;" title="Model selection">
                     <option value="keyword" selected>🔍 Keyword</option>
                     <option value="smollm">🤖 SmolLM</option>
                     <option value="qwen">🤖 Qwen 0.5B</option>
                     <option value="smollm2">🤖 SmolLM2 360M</option>
+                    <option value="qwen_math">📐 Qwen Math 1.5B</option>
                 </select>
                 <select id="waddles-personality-selector" class="rounded py-0 px-1" style="font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #f43f5e; font-weight: 600; max-width: 75px;" title="Personality mode">
                     <option value="helpful" selected>😇 Helpful</option>
@@ -262,7 +263,8 @@
         const modelRepoMap = {
             'smollm': 'onnx-community/SmolLM-135M-Instruct-ONNX',
             'qwen': 'onnx-community/Qwen2.5-0.5B-Instruct',
-            'smollm2': 'onnx-community/SmolLM2-360M-Instruct-ONNX'
+            'smollm2': 'onnx-community/SmolLM2-360M-Instruct-ONNX',
+            'qwen_math': 'onnx-community/Qwen2.5-Math-1.5B-Instruct'
         };
 
         // Disable quantization selector when keyword search is selected
