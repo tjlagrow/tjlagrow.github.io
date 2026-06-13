@@ -9,6 +9,8 @@ full_width: true
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <!-- Load UMAP-js for client-side UMAP embeddings -->
 <script src="https://cdn.jsdelivr.net/npm/umap-js/lib/umap-js.min.js"></script>
+<!-- Load tsnejs for client-side t-SNE embeddings -->
+<script src="https://cdn.jsdelivr.net/gh/karpathy/tsnejs/tsne.js"></script>
 <script>
   mermaid.initialize({
     startOnLoad: true,
@@ -954,21 +956,21 @@ full_width: true
         </p>
 
         <div class="row g-4">
-          <!-- PCA vs UMAP Projections -->
+          <!-- PCA vs UMAP vs t-SNE Projections -->
           <div class="col-md-6">
             <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
-              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-compress-alt me-2"></i> PCA &amp; UMAP Dimensionality Projections</h4>
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-compress-alt me-2"></i> PCA, UMAP, &amp; t-SNE Projections</h4>
               <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
                 <strong>Mathematical Approach</strong>
               </p>
               <p class="text-light opacity-75 small mb-3" style="line-height: 1.5; font-size: 0.85rem;">
-                PCA constructs a linear projection by finding the orthogonal directions of maximum variance. UMAP solves a non-linear layout by building a fuzzy simplicial set representation and optimizing the coordinates to preserve local clustering. The UMAP solver uses <code>fitAsync</code> to run asynchronously, yielding to the paint cycle to prevent tab freezing.
+                PCA constructs a linear projection by finding the orthogonal directions of maximum variance. UMAP solves a non-linear layout by building a fuzzy simplicial set representation and optimizing the coordinates to preserve local clustering. t-SNE (t-Distributed Stochastic Neighbor Embedding) maps similarities to probability distributions, minimizing the divergence between high-dimensional and low-dimensional spaces. Both UMAP and t-SNE use asynchronous execution to yield to the paint cycle to prevent tab freezing.
               </p>
               <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
                 <strong>Parameter Tuning Mechanics</strong>
               </p>
               <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                The slider controls adjust neighbors (n_neighbors) to balance local and global structures. You can also modify minimum distance (min_dist) to alter clustering density, and epochs (n_epochs) to control optimization steps. Coordinate projection results are cached to ensure instantaneous tab switching between layout algorithms.
+                The UMAP slider controls adjust neighbors (n_neighbors) to balance local and global structures. The t-SNE slider controls adjust perplexity to guide neighborhood size, and epsilon to tune optimization step learning rates. Coordinate projection results are cached to ensure instantaneous tab switching between layout algorithms.
               </p>
             </div>
           </div>
@@ -1106,12 +1108,14 @@ full_width: true
                     <div class="btn-group btn-group-sm ms-2" role="group" style="border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; background: rgba(0,0,0,0.25);">
                       <button type="button" class="btn btn-xs py-1 px-3 text-white border-0" id="btn-projection-pca" style="font-size: 0.675rem; font-weight: 700; background: #2dd4bf; color: #0f172a !important;">PCA</button>
                       <button type="button" class="btn btn-xs py-1 px-3 text-white border-0" id="btn-projection-umap" style="font-size: 0.675rem; font-weight: 700; background: transparent; color: #94a3b8 !important;">UMAP</button>
+                      <button type="button" class="btn btn-xs py-1 px-3 text-white border-0" id="btn-projection-tsne" style="font-size: 0.675rem; font-weight: 700; background: transparent; color: #94a3b8 !important;">t-SNE</button>
                     </div>
                   </div>
                   <div class="d-flex align-items-center gap-2">
                     <input type="text" id="vector-search-input" placeholder="Search text &amp; keywords..." class="form-control form-control-sm bg-dark text-white border-secondary" style="width: 170px; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.1); outline: none;">
                     <button class="btn btn-sm btn-outline-info" id="btn-recalculate-pca" style="font-size: 0.725rem; color: #2dd4bf; border-color: rgba(45,212,191,0.3); background: transparent;"><i class="fa fa-calculator"></i> Solver PCA</button>
                     <button class="btn btn-sm btn-outline-warning" id="btn-toggle-umap-drawer" style="font-size: 0.725rem; color: #fb923c; border-color: rgba(251,146,60,0.3); background: transparent; display: none;"><i class="fa fa-sliders-h"></i> Params</button>
+                    <button class="btn btn-sm btn-outline-warning" id="btn-toggle-tsne-drawer" style="font-size: 0.725rem; color: #fb923c; border-color: rgba(251,146,60,0.3); background: transparent; display: none;"><i class="fa fa-sliders-h"></i> Params</button>
                   </div>
                 </div>
 
@@ -1141,6 +1145,36 @@ full_width: true
                     </div>
                     <div class="col-md-3 text-end">
                       <button class="btn btn-sm w-100" id="btn-recalculate-umap" style="background: linear-gradient(135deg, #0d9488, #0ea5e9); border: none; font-weight: 700; color: #fff; height: 28px; font-size: 0.7rem; border-radius: 4px;"><i class="fa fa-sync-alt me-1"></i> Solver UMAP</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- t-SNE Hyperparameters Drawer (Collapsible) -->
+                <div id="tsne-controls-drawer" style="display: none; background: #111827; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 12px; font-size: 0.725rem;" class="text-white">
+                  <div class="row g-3 align-items-center">
+                    <div class="col-md-3">
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="opacity-75">Perplexity</span>
+                        <span id="val-tsne-perplexity" class="text-teal font-monospace fw-bold" style="color: #2dd4bf;">30</span>
+                      </div>
+                      <input type="range" class="form-range" id="tsne-perplexity" min="5" max="50" step="1" value="30" style="accent-color: #2dd4bf; height: 6px;">
+                    </div>
+                    <div class="col-md-3">
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="opacity-75">Learning Rate (Epsilon)</span>
+                        <span id="val-tsne-epsilon" class="text-teal font-monospace fw-bold" style="color: #2dd4bf;">10</span>
+                      </div>
+                      <input type="range" class="form-range" id="tsne-epsilon" min="1" max="50" step="1" value="10" style="accent-color: #2dd4bf; height: 6px;">
+                    </div>
+                    <div class="col-md-3">
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="opacity-75">Iterations</span>
+                        <span id="val-tsne-epochs" class="text-teal font-monospace fw-bold" style="color: #2dd4bf;">150</span>
+                      </div>
+                      <input type="range" class="form-range" id="tsne-epochs" min="50" max="300" step="10" value="150" style="accent-color: #2dd4bf; height: 6px;">
+                    </div>
+                    <div class="col-md-3 text-end">
+                      <button class="btn btn-sm w-100" id="btn-recalculate-tsne" style="background: linear-gradient(135deg, #0d9488, #0ea5e9); border: none; font-weight: 700; color: #fff; height: 28px; font-size: 0.7rem; border-radius: 4px;"><i class="fa fa-sync-alt me-1"></i> Solver t-SNE</button>
                     </div>
                   </div>
                 </div>
@@ -1219,6 +1253,7 @@ full_width: true
       let searchQuery = "";
       let currentProjectionMethod = 'pca';
       let cachedUmapCoords = null;
+      let cachedTsneCoords = null;
       
       let scale = 1.0;
       let offsetX = 0;
@@ -1756,15 +1791,38 @@ full_width: true
         });
       }
 
+      // t-SNE sliders
+      const perplexitySlider = document.getElementById('tsne-perplexity');
+      const epsilonSlider = document.getElementById('tsne-epsilon');
+      const tsneEpochsSlider = document.getElementById('tsne-epochs');
+
+      if (perplexitySlider && epsilonSlider && tsneEpochsSlider) {
+        perplexitySlider.addEventListener('input', (e) => {
+          document.getElementById('val-tsne-perplexity').innerText = e.target.value;
+        });
+        epsilonSlider.addEventListener('input', (e) => {
+          document.getElementById('val-tsne-epsilon').innerText = e.target.value;
+        });
+        tsneEpochsSlider.addEventListener('input', (e) => {
+          document.getElementById('val-tsne-epochs').innerText = e.target.value;
+        });
+      }
+
       // Recalculate UMAP
       document.getElementById('btn-recalculate-umap').addEventListener('click', runUMAPOrchestrator);
+      document.getElementById('btn-recalculate-tsne').addEventListener('click', runTSNEOrchestrator);
 
       // Method switcher
       const btnPca = document.getElementById('btn-projection-pca');
       const btnUmap = document.getElementById('btn-projection-umap');
+      const btnTsne = document.getElementById('btn-projection-tsne');
+      
       const umapDrawer = document.getElementById('umap-controls-drawer');
+      const tsneDrawer = document.getElementById('tsne-controls-drawer');
+      
       const pcaRecalcBtn = document.getElementById('btn-recalculate-pca');
       const umapParamsBtn = document.getElementById('btn-toggle-umap-drawer');
+      const tsneParamsBtn = document.getElementById('btn-toggle-tsne-drawer');
 
       btnPca.addEventListener('click', () => {
         if (currentProjectionMethod === 'pca') return;
@@ -1774,10 +1832,14 @@ full_width: true
         btnPca.style.color = '#0f172a';
         btnUmap.style.background = 'transparent';
         btnUmap.style.color = '#94a3b8';
+        btnTsne.style.background = 'transparent';
+        btnTsne.style.color = '#94a3b8';
         
         umapDrawer.style.display = 'none';
+        tsneDrawer.style.display = 'none';
         pcaRecalcBtn.style.display = 'inline-block';
         umapParamsBtn.style.display = 'none';
+        tsneParamsBtn.style.display = 'none';
 
         switchProjectionToPCA();
       });
@@ -1790,8 +1852,13 @@ full_width: true
         btnUmap.style.color = '#0f172a';
         btnPca.style.background = 'transparent';
         btnPca.style.color = '#94a3b8';
+        btnTsne.style.background = 'transparent';
+        btnTsne.style.color = '#94a3b8';
         
         pcaRecalcBtn.style.display = 'none';
+        tsneParamsBtn.style.display = 'none';
+        tsneDrawer.style.display = 'none';
+        
         umapParamsBtn.style.display = 'inline-block';
         umapDrawer.style.display = 'block';
 
@@ -1802,9 +1869,39 @@ full_width: true
         }
       });
 
+      btnTsne.addEventListener('click', () => {
+        if (currentProjectionMethod === 'tsne') return;
+        currentProjectionMethod = 'tsne';
+
+        btnTsne.style.background = '#2dd4bf';
+        btnTsne.style.color = '#0f172a';
+        btnPca.style.background = 'transparent';
+        btnPca.style.color = '#94a3b8';
+        btnUmap.style.background = 'transparent';
+        btnUmap.style.color = '#94a3b8';
+
+        pcaRecalcBtn.style.display = 'none';
+        umapParamsBtn.style.display = 'none';
+        umapDrawer.style.display = 'none';
+
+        tsneParamsBtn.style.display = 'inline-block';
+        tsneDrawer.style.display = 'block';
+
+        if (cachedTsneCoords) {
+          switchProjectionToTSNE();
+        } else {
+          runTSNEOrchestrator();
+        }
+      });
+
       umapParamsBtn.addEventListener('click', () => {
         const isHidden = umapDrawer.style.display === 'none';
         umapDrawer.style.display = isHidden ? 'block' : 'none';
+      });
+
+      tsneParamsBtn.addEventListener('click', () => {
+        const isHidden = tsneDrawer.style.display === 'none';
+        tsneDrawer.style.display = isHidden ? 'block' : 'none';
       });
 
       function switchProjectionToPCA() {
@@ -1826,6 +1923,20 @@ full_width: true
         database.forEach(node => {
           node.x = node.umapX;
           node.y = node.umapY;
+          if (node.x < minX) minX = node.x;
+          if (node.x > maxX) maxX = node.x;
+          if (node.y < minY) minY = node.y;
+          if (node.y > maxY) maxY = node.y;
+        });
+        clearInspectorSelection();
+        resetView();
+      }
+
+      function switchProjectionToTSNE() {
+        minX = Infinity; maxX = -Infinity; minY = Infinity; maxY = -Infinity;
+        database.forEach(node => {
+          node.x = node.tsneX;
+          node.y = node.tsneY;
           if (node.x < minX) minX = node.x;
           if (node.x > maxX) maxX = node.x;
           if (node.y < minY) minY = node.y;
@@ -1912,6 +2023,87 @@ full_width: true
           console.error("UMAP calculation error:", err);
           if (overlay) overlay.style.display = 'none';
           alert("UMAP computation failed: " + (err.message || err));
+        }
+      }
+
+      async function runTSNEOrchestrator() {
+        if (!database || database.length === 0) return;
+
+        const overlay = document.getElementById('umap-loading-overlay');
+        const progress = document.getElementById('umap-progress-bar');
+        const loadingText = document.getElementById('umap-loading-text');
+
+        if (overlay) {
+          overlay.style.display = 'flex';
+          progress.style.width = '0%';
+          loadingText.innerText = 'Initializing t-SNE solver...';
+        }
+
+        // Yield execution to allow progress bar to paint initially
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        const embeddings = database.map(node => node.embedding);
+        const perplexity = parseInt(document.getElementById('tsne-perplexity').value) || 30;
+        const epsilon = parseInt(document.getElementById('tsne-epsilon').value) || 10;
+        const nEpochs = parseInt(document.getElementById('tsne-epochs').value) || 150;
+
+        const TSNEClass = window.tsnejs ? window.tsnejs.tSNE : null;
+        if (!TSNEClass) {
+          console.error("t-SNE class not found.");
+          if (overlay) overlay.style.display = 'none';
+          alert("t-SNE library is not loaded from CDN. Please check your network and try again.");
+          return;
+        }
+
+        try {
+          const tsneSolver = new TSNEClass({
+            epsilon: epsilon,
+            perplexity: perplexity,
+            dim: 2
+          });
+
+          // Feed high-dim vectors to t-SNE
+          tsneSolver.initDataRaw(embeddings);
+
+          // We step the solver in batches/epochs asynchronously
+          for (let step = 0; step < nEpochs; step++) {
+            tsneSolver.step();
+
+            if (step % 5 === 0 || step === nEpochs - 1) {
+              const percent = Math.round((step / nEpochs) * 100);
+              if (progress) progress.style.width = `${percent}%`;
+              if (loadingText) loadingText.innerText = `Solving t-SNE projection: Iteration ${step}/${nEpochs} (${percent}%)`;
+              
+              // Yield execution to prevent freezing
+              await new Promise(resolve => setTimeout(resolve, 0));
+            }
+          }
+
+          const solution = tsneSolver.getSolution();
+
+          minX = Infinity; maxX = -Infinity; minY = Infinity; maxY = -Infinity;
+          database.forEach((node, idx) => {
+            const x = solution[idx][0];
+            const y = solution[idx][1];
+            node.tsneX = x;
+            node.tsneY = y;
+            node.x = x;
+            node.y = y;
+
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          });
+
+          cachedTsneCoords = database.map(node => ({ x: node.tsneX, y: node.tsneY }));
+          if (overlay) overlay.style.display = 'none';
+          clearInspectorSelection();
+          resetView();
+        } catch (err) {
+          console.error("t-SNE calculation error:", err);
+          if (overlay) overlay.style.display = 'none';
+          alert("t-SNE computation failed: " + (err.message || err));
         }
       }
 
