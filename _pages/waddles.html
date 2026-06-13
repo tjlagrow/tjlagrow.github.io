@@ -22,17 +22,6 @@ full_width: true
   });
 </script>
 
-<!-- Load KaTeX Auto-Render Extension -->
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.9.0/dist/contrib/auto-render.min.js"
-        integrity="sha384-IiI65aU9ZYub2MY9zLtW1MBkC8SPdCGRYvy7UIMwJVJH/GoF6EMowewIM1xYiRJu" crossorigin="anonymous"
-        onload="renderMathInElement(document.body, {
-          delimiters: [
-            {left: '$$', right: '$$', display: true},
-            {left: '$', right: '$', display: false},
-            {left: '\\(', right: '\\)', display: false},
-            {left: '\\[', right: '\\]', display: true}
-          ]
-        });"></script>
 
 <!-- HEADER BANNER -->
 <section class="glass-banner py-5 mb-5" style="background: radial-gradient(circle at top right, rgba(13, 148, 136, 0.15) 0%, rgba(4, 47, 46, 0.5) 100%); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
@@ -199,6 +188,18 @@ full_width: true
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Render math equations using KaTeX auto-render
+    if (typeof renderMathInElement === 'function') {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false},
+          {left: '\\(', right: '\\)', display: false},
+          {left: '\\[', right: '\\]', display: true}
+        ]
+      });
+    }
+
     const container = document.querySelector('.waddles-interactive-container');
     const avatar = document.getElementById('waddles-tilt-avatar');
     if (!container || !avatar) return;
@@ -487,7 +488,7 @@ full_width: true
         <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-road me-2 text-info"></i> RAG Retrieval Evolution</h2>
         <div class="row g-3">
           <!-- Stage 1 -->
-          <div class="col-md-4">
+          <div class="col-md-6 col-lg-3">
             <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
               <div class="d-flex justify-content-between align-items-center mb-2">
                 <span class="badge bg-secondary text-light fw-bold">Stage 1 (Legacy Fallback)</span>
@@ -500,28 +501,41 @@ full_width: true
             </div>
           </div>
           <!-- Stage 2 -->
-          <div class="col-md-4">
-            <div class="p-3 rounded h-100" style="background: rgba(13, 148, 136, 0.15); border: 1px solid rgba(45, 212, 191, 0.4);">
+          <div class="col-md-6 col-lg-3">
+            <div class="p-3 rounded h-100" style="background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(45, 212, 191, 0.25);">
               <div class="d-flex justify-content-between align-items-center mb-2">
                 <span class="badge bg-teal text-white fw-bold" style="background-color: #0d9488 !important;">Stage 2 (Completed)</span>
                 <i class="fa fa-check-circle text-success fs-5"></i>
               </div>
-              <h4 class="h5 fw-bold text-white mb-2">Advanced WASM RAG</h4>
+              <h4 class="h5 fw-bold text-white mb-2">Multimodal WASM RAG</h4>
               <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                Multi-model orchestration running locally. Leverages query intent pre-filtering, Reciprocal Rank Fusion, sentence-level semantic vector extraction, and neural Cross-Encoder re-ranking.
+                Multi-model orchestration running locally. Leverages query intent pre-filtering, Reciprocal Rank Fusion, sentence-level compression, and Cross-Encoder re-ranking. Integrates crawled YouTube transcripts and cached dynamic few-shot style examples.
               </p>
             </div>
           </div>
           <!-- Stage 3 -->
-          <div class="col-md-4">
+          <div class="col-md-6 col-lg-3">
+            <div class="p-3 rounded h-100" style="background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(45, 212, 191, 0.25);">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-teal text-white fw-bold" style="background-color: #0d9488 !important;">Stage 3 (Completed)</span>
+                <i class="fa fa-check-circle text-success fs-5"></i>
+              </div>
+              <h4 class="h5 fw-bold text-white mb-2">Vector Space Visualizer</h4>
+              <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                An interactive 2D Principal Component Analysis (PCA) vector space sandbox running on-the-fly mathematical solver routines. Projects 587 data nodes and computes real-time nearest neighbors on mouse clicks.
+              </p>
+            </div>
+          </div>
+          <!-- Stage 4 -->
+          <div class="col-md-6 col-lg-3">
             <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
               <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-secondary text-light fw-bold">Stage 3 (Future)</span>
+                <span class="badge bg-secondary text-light fw-bold">Stage 4 (Future)</span>
                 <i class="fa fa-cog text-muted x-small"></i>
               </div>
               <h4 class="h5 fw-bold text-white mb-2">Autonomous Agentic Tools</h4>
               <p class="text-light opacity-80 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
-                Activating function calling capabilities. Waddles will autonomously call external API endpoints to fetch live citation statistics, calendar events, or dispatch contact requests.
+                Activating tool use and function calling capabilities. Waddles will autonomously call external API endpoints to fetch live publication citation statistics, calendar schedules, or dispatch email contact messages.
               </p>
             </div>
           </div>
