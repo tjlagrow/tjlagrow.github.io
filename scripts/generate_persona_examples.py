@@ -793,10 +793,10 @@ BASE_DATA = [
     {
         "id": 98,
         "category": "General",
-        "query": "What is HyDE in RAG pipelines?",
-        "facts": "HyDE (Hypothetical Document Embeddings) generates a zero-shot answer template first to improve vector search alignment.",
-        "subjects": ["hypothetical answer template", "vector search alignment"],
-        "followups": ["Does Waddles use HyDE?", "Is it slower?"]
+        "query": "What is Reciprocal Rank Fusion (RRF)?",
+        "facts": "Reciprocal Rank Fusion (RRF) combines sparse keyword search and dense vector search ranks to produce a unified relevance ranking.",
+        "subjects": ["hybrid rank combination", "unified relevance ranking"],
+        "followups": ["What is the RRF constant?", "Does Waddles use BM25?"]
     },
     {
         "id": 99,

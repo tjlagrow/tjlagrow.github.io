@@ -1,33 +1,56 @@
 <div id="chatbot-container">
     <div id="chatbot-window" style="display: none;">
-        <div class="chatbot-header" style="flex-wrap: wrap; gap: 4px;">
-            <div class="d-flex align-items-center">
-                <div style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite;"></div>
-                <span style="font-weight: 700;">Waddles</span>
+        <div class="chatbot-header">
+            <div class="waddles-header-left">
+                <div class="waddles-avatar-wrapper">
+                    <img src="/assets/images/waddles_avatar.png" class="waddles-avatar-img" alt="Waddles Avatar">
+                    <div id="waddles-status-indicator" class="waddles-status-ring"></div>
+                </div>
+                <div class="waddles-title-info">
+                    <span class="waddles-title">Waddles</span>
+                    <span class="waddles-subtitle">Local RAG Assistant</span>
+                </div>
             </div>
-            <div class="d-flex align-items-center" style="gap: 4px; max-width: 85%;">
-                <select id="waddles-model-selector" class="rounded py-0 px-1" style="font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #2dd4bf; font-weight: 600; max-width: 100px;" title="Model selection">
-                    <option value="keyword" selected>🔍 Keyword</option>
-                    <option value="smollm">🤖 SmolLM</option>
+            <div class="waddles-header-actions">
+                <button id="waddles-settings-toggle" title="Toggle AI settings" aria-label="Toggle AI settings" type="button">
+                    <i class="fa fa-cog"></i>
+                </button>
+                <button id="chatbot-close" aria-label="Close chat" title="Close chat" type="button">×</button>
+            </div>
+        </div>
+
+        <!-- Sliding settings drawer -->
+        <div id="waddles-settings-drawer" class="waddles-settings-drawer">
+            <div class="settings-row">
+                <span>Model Selector</span>
+                <select id="waddles-model-selector" title="Model selection">
+                    <option value="keyword" selected>🔍 Keyword Match</option>
+                    <option value="smollm">🤖 SmolLM 135M</option>
                     <option value="qwen">🤖 Qwen 0.5B</option>
                     <option value="smollm2">🤖 SmolLM2 360M</option>
-                    <option value="qwen_math">📐 Qwen Math 1.5B</option>
                 </select>
-                <select id="waddles-personality-selector" class="rounded py-0 px-1" style="font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #f43f5e; font-weight: 600; max-width: 75px;" title="Personality mode">
+            </div>
+            <div class="settings-row">
+                <span>Quantization</span>
+                <select id="waddles-quant-selector" title="Quantization level" disabled>
+                    <option value="q4" selected>4-bit (Fastest)</option>
+                    <option value="q8">8-bit</option>
+                    <option value="fp16">16-bit (Precise)</option>
+                </select>
+            </div>
+            <div class="settings-row">
+                <span>Personality</span>
+                <select id="waddles-personality-selector" title="Personality mode">
                     <option value="helpful" selected>😇 Helpful</option>
                     <option value="sassy">🌶️ Sassy</option>
                     <option value="pirate">🏴‍☠️ Pirate</option>
                 </select>
-                <select id="waddles-quant-selector" class="rounded py-0 px-1" style="font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); outline: none; cursor: pointer; height: 22px; background: #1e293b; color: #38bdf8; font-weight: 600; max-width: 60px;" title="Quantization level" disabled>
-                    <option value="q4" selected>4-bit</option>
-                    <option value="q8">8-bit</option>
-                    <option value="fp16">16-bit</option>
-                </select>
-                <label id="waddles-webgpu-label" style="font-size: 0.65rem; color: #2dd4bf; display: flex; align-items: center; gap: 2px; cursor: pointer; margin: 0 2px;" title="Enable WebGPU hardware acceleration">
-                    <input type="checkbox" id="waddles-webgpu-cb" checked> GPU
+            </div>
+            <div class="settings-row" style="margin-top: 4px; justify-content: flex-start; gap: 8px;">
+                <label id="waddles-webgpu-label" style="color: #2dd4bf; display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; margin: 0;" title="Enable WebGPU hardware acceleration">
+                    <input type="checkbox" id="waddles-webgpu-cb" checked style="cursor: pointer; margin: 0;"> WebGPU Acceleration
                 </label>
-                <button id="waddles-go-btn" class="rounded px-2" style="font-size: 0.65rem; border: none; cursor: pointer; height: 22px; background: #2dd4bf; color: #0f172a; font-weight: 700; transition: opacity 0.2s;">Load</button>
-                <button id="chatbot-close" aria-label="Close chat">×</button>
+                <button id="waddles-go-btn" style="margin-left: auto; border: none; cursor: pointer; padding: 4px 12px; background: #2dd4bf; color: #0f172a; font-weight: 700; border-radius: 4px; font-size: 0.75rem; transition: opacity 0.2s;" type="button">Load</button>
             </div>
         </div>
         
@@ -46,16 +69,18 @@
             <input type="checkbox" id="filter-research" checked style="display: none;">
             <input type="checkbox" id="filter-teaching" checked style="display: none;">
             <input type="checkbox" id="filter-bio" checked style="display: none;">
-            <label style="font-size: 0.625rem; font-weight: 700; color: #f43f5e; cursor: pointer; display: flex; align-items: center; gap: 4px; margin-left: auto;" title="Generate hypothetical answer to improve retrieval">
-                <input type="checkbox" id="waddles-hyde-toggle"> HyDE
-            </label>
         </div>
 
         <div class="chatbot-body" id="chatbot-body">
+            <!-- Floating scroll-to-bottom snap button -->
+            <div id="waddles-scroll-bottom" title="Scroll to bottom">
+                <i class="fa fa-chevron-down"></i>
+            </div>
+
             <div class="chatbot-message system">
                 <strong>Hello!</strong> I'm Waddles, TJ's virtual assistant. Ask me anything about TJ's teaching, research, or contact details, or select a topic below.
                 <br><br>
-                <em>I am currently running in Keyword Match mode by default. Select a neural model in the header and click Load to initialize WebAssembly RAG!</em>
+                <em>I am currently running in Keyword Match mode by default. Click the settings icon (⚙️) above to load a neural WebAssembly model!</em>
                 <div class="chatbot-chips">
                     <button class="chatbot-chip" data-question="What courses does TJ teach?">🎓 OMSCS & Teaching</button>
                     <button class="chatbot-chip" data-question="Tell me about TJ's research.">🧠 Brain Research</button>
@@ -65,11 +90,15 @@
             </div>
         </div>
         <form id="chatbot-form" class="chatbot-input-area">
-            <div style="position: relative; flex-grow: 1; display: flex;">
-                <input type="text" id="chatbot-input" class="form-control form-control-sm" placeholder="Ask me a question..." aria-label="Chat input" spellcheck="true" autocomplete="off" style="width: 100%;">
-                <div id="chatbot-autocomplete-hint" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; padding: 0.4rem 1rem; font-size: 0.9rem; line-height: 1.5; pointer-events: none; z-index: 3; font-family: inherit; display: flex; align-items: center; white-space: pre; overflow: hidden; box-sizing: border-box; color: rgba(255, 255, 255, 0.25);"></div>
+            <div class="chatbot-input-wrapper">
+                <input type="text" id="chatbot-input" placeholder="Ask me a question..." aria-label="Chat input" spellcheck="true" autocomplete="off">
+                <div id="chatbot-autocomplete-hint" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; padding: 0.5rem 1.1rem; font-size: 0.9rem; line-height: 1.5; pointer-events: none; z-index: 3; font-family: inherit; display: flex; align-items: center; white-space: pre; overflow: hidden; box-sizing: border-box; color: rgba(255, 255, 255, 0.25);"></div>
             </div>
-            <button type="submit" id="chatbot-send" class="btn btn-primary btn-sm" aria-label="Send message"><i class="fa fa-paper-plane"></i></button>
+            <button type="submit" id="chatbot-send" aria-label="Send message">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="transform: rotate(45deg); margin-left: -2px; margin-top: -1px;">
+                    <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"/>
+                </svg>
+            </button>
         </form>
     </div>
 
@@ -143,8 +172,42 @@
         const personalitySelector = document.getElementById('waddles-personality-selector');
         const quantSelector = document.getElementById('waddles-quant-selector');
         const goBtn = document.getElementById('waddles-go-btn');
+        const settingsToggle = document.getElementById('waddles-settings-toggle');
+        const settingsDrawer = document.getElementById('waddles-settings-drawer');
+        const scrollBottomBtn = document.getElementById('waddles-scroll-bottom');
 
-        if (!toggle || !windowEl || !close || !body || !form || !input || !sendBtn || !modelSelector || !personalitySelector || !quantSelector || !goBtn) return;
+        if (!toggle || !windowEl || !close || !body || !form || !input || !sendBtn || !modelSelector || !personalitySelector || !quantSelector || !goBtn || !settingsToggle || !settingsDrawer || !scrollBottomBtn) return;
+
+        // Toggle Settings Drawer
+        settingsToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            settingsDrawer.classList.toggle('open');
+            settingsToggle.classList.toggle('active');
+        });
+
+        // Close drawer if clicking outside of it inside chatbot
+        windowEl.addEventListener('click', (e) => {
+            if (!settingsDrawer.contains(e.target) && !settingsToggle.contains(e.target)) {
+                settingsDrawer.classList.remove('open');
+                settingsToggle.classList.remove('active');
+            }
+        });
+
+        // Scroll snap down button logic
+        body.addEventListener('scroll', () => {
+            const scrollDiff = body.scrollHeight - body.scrollTop - body.clientHeight;
+            if (scrollDiff > 100) {
+                scrollBottomBtn.classList.add('visible');
+            } else {
+                scrollBottomBtn.classList.remove('visible');
+            }
+        });
+        scrollBottomBtn.addEventListener('click', () => {
+            body.scrollTo({
+                top: body.scrollHeight,
+                behavior: 'smooth'
+            });
+        });
 
         // Wire up custom filter pills to toggle hidden inputs and highlight states
         const pills = ['research', 'teaching', 'bio'];
@@ -270,8 +333,7 @@
         const modelRepoMap = {
             'smollm': 'onnx-community/SmolLM-135M-Instruct-ONNX',
             'qwen': 'onnx-community/Qwen2.5-0.5B-Instruct',
-            'smollm2': 'onnx-community/SmolLM2-360M-Instruct-ONNX',
-            'qwen_math': 'onnx-community/Qwen2.5-Math-1.5B-Instruct'
+            'smollm2': 'onnx-community/SmolLM2-360M-Instruct-ONNX'
         };
 
         // Disable quantization selector when keyword search is selected
@@ -500,6 +562,9 @@
             sendBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
             sendBtn.classList.add('loading');
 
+            const statusIndicator = document.getElementById('waddles-status-indicator');
+            if (statusIndicator) statusIndicator.classList.add('pulsing');
+
             appendMessage(query, 'user');
             scrollToBottom();
 
@@ -540,7 +605,7 @@
                     conceptChips: getKnowledgeGraphSuggestions(query)
                 };
 
-                appendMessage(responseText, 'system', query, queryId, extraData);
+                await appendMessage(responseText, 'system', query, queryId, extraData);
                 scrollToBottom();
                 
                 // Keep history for conversation context memory
@@ -560,8 +625,14 @@
                 // Restore inputs and button state
                 input.disabled = false;
                 sendBtn.disabled = false;
-                sendBtn.innerHTML = '<i class="fa fa-paper-plane"></i>';
+                sendBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="transform: rotate(45deg); margin-left: -2px; margin-top: -1px;">
+                        <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"/>
+                    </svg>
+                `;
                 sendBtn.classList.remove('loading');
+                const statusIndicator = document.getElementById('waddles-status-indicator');
+                if (statusIndicator) statusIndicator.classList.remove('pulsing');
                 input.focus();
             }
         }
@@ -686,172 +757,265 @@
             }
         }
 
+        function renderVisualAsset(msg, extraData) {
+            const imgContainer = document.createElement('div');
+            imgContainer.style.marginTop = '8px';
+            imgContainer.style.position = 'relative';
+            
+            const imgThumb = document.createElement('img');
+            imgThumb.src = extraData.visualAssetUrl;
+            imgThumb.alt = extraData.visualAssetTitle || "Visual Asset";
+            imgThumb.style.maxWidth = '100%';
+            imgThumb.style.maxHeight = '150px';
+            imgThumb.style.borderRadius = '6px';
+            imgThumb.style.cursor = 'pointer';
+            imgThumb.style.border = '1px solid rgba(255,255,255,0.15)';
+            imgThumb.style.transition = 'transform 0.2s';
+            imgThumb.title = "Click to zoom";
+            
+            imgThumb.addEventListener('mouseover', () => {
+                imgThumb.style.transform = 'scale(1.02)';
+            });
+            imgThumb.addEventListener('mouseout', () => {
+                imgThumb.style.transform = 'scale(1)';
+            });
+            
+            imgThumb.addEventListener('click', () => {
+                const lightbox = document.createElement('div');
+                lightbox.style.position = 'fixed';
+                lightbox.style.top = '0';
+                lightbox.style.left = '0';
+                lightbox.style.width = '100vw';
+                lightbox.style.height = '100vh';
+                lightbox.style.background = 'rgba(0,0,0,0.85)';
+                lightbox.style.display = 'flex';
+                lightbox.style.justifyContent = 'center';
+                lightbox.style.alignItems = 'center';
+                lightbox.style.zIndex = '99999';
+                lightbox.style.cursor = 'zoom-out';
+                
+                const lightboxImg = document.createElement('img');
+                lightboxImg.src = extraData.visualAssetUrl;
+                lightboxImg.style.maxWidth = '90vw';
+                lightboxImg.style.maxHeight = '90vh';
+                lightboxImg.style.borderRadius = '8px';
+                lightboxImg.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
+                
+                lightbox.appendChild(lightboxImg);
+                document.body.appendChild(lightbox);
+                
+                lightbox.addEventListener('click', () => {
+                    lightbox.remove();
+                });
+            });
+            
+            imgContainer.appendChild(imgThumb);
+            msg.appendChild(imgContainer);
+        }
+
+        function renderActionChips(msg, followups) {
+            const chipsContainer = document.createElement('div');
+            chipsContainer.className = 'chatbot-chips';
+            chipsContainer.style.marginTop = '8px';
+            
+            followups.forEach(q => {
+                const chipBtn = document.createElement('button');
+                chipBtn.className = 'chatbot-chip';
+                chipBtn.setAttribute('data-question', q);
+                chipBtn.innerText = q;
+                chipsContainer.appendChild(chipBtn);
+            });
+            msg.appendChild(chipsContainer);
+        }
+
+        function renderConceptChips(msg, conceptChips) {
+            const conceptContainer = document.createElement('div');
+            conceptContainer.className = 'chatbot-chips concept-chips';
+            conceptContainer.style.marginTop = '8px';
+            conceptContainer.style.borderTop = '1px dashed rgba(255,255,255,0.08)';
+            conceptContainer.style.paddingTop = '6px';
+            
+            const titleSpan = document.createElement('span');
+            titleSpan.style.fontSize = '0.65rem';
+            titleSpan.style.opacity = '0.5';
+            titleSpan.style.display = 'block';
+            titleSpan.style.marginBottom = '4px';
+            titleSpan.innerText = '🔗 Related Concepts (Knowledge Graph):';
+            conceptContainer.appendChild(titleSpan);
+            
+            conceptChips.forEach(q => {
+                const chipBtn = document.createElement('button');
+                chipBtn.className = 'chatbot-chip concept-chip';
+                chipBtn.style.borderColor = 'rgba(45, 212, 191, 0.4)';
+                chipBtn.style.color = '#2dd4bf';
+                chipBtn.setAttribute('data-question', `Tell me about ${q}`);
+                chipBtn.innerText = q;
+                conceptContainer.appendChild(chipBtn);
+            });
+            msg.appendChild(conceptContainer);
+        }
+
+        function renderFeedbackButtons(msg, queryText, queryId, displayHtml, extraData) {
+            const fbContainer = document.createElement('div');
+            fbContainer.className = 'chatbot-feedback-buttons';
+            fbContainer.innerHTML = `
+                <button class="chatbot-feedback-btn" data-rating="up" title="Thumb up">👍</button>
+                <button class="chatbot-feedback-btn" data-rating="down" title="Thumb down">👎</button>
+            `;
+            msg.appendChild(fbContainer);
+
+            const btnUp = fbContainer.querySelector('[data-rating="up"]');
+            const btnDown = fbContainer.querySelector('[data-rating="down"]');
+
+            const handleFeedback = (ratingVal) => {
+                btnUp.classList.add('disabled');
+                btnDown.classList.add('disabled');
+                if (ratingVal === 'up') {
+                    btnUp.classList.add('selected');
+                    btnUp.classList.remove('disabled');
+                } else {
+                    btnDown.classList.add('selected');
+                    btnDown.classList.remove('disabled');
+                }
+                logRating(queryId, queryText, displayHtml, ratingVal, extraData);
+            };
+
+            btnUp.addEventListener('click', () => handleFeedback('up'));
+            btnDown.addEventListener('click', () => handleFeedback('down'));
+        }
+
         function appendMessage(content, sender, queryText = null, queryId = null, extraData = null) {
-            const msg = document.createElement('div');
-            msg.className = `chatbot-message ${sender}`;
+            return new Promise((resolve) => {
+                const msg = document.createElement('div');
+                msg.className = `chatbot-message ${sender}`;
 
-            let displayHtml = content;
-            let citationHtml = '';
+                let displayHtml = content;
+                let citationHtml = '';
 
-            // Handle metadata decoration
-            if (extraData && sender === 'system' && extraData.category) {
-                displayHtml = extraData.answer;
-                
-                const confidencePercent = Math.round(extraData.confidence * 100);
-                let confidenceStyle = 'opacity: 0.65;';
-                let confidenceWarning = `[Confidence: ${confidencePercent}%]`;
-                if (extraData.confidence < 0.5) {
-                    confidenceStyle = 'color: #f59e0b; font-weight: 700;';
-                    confidenceWarning = `⚠️ Low confidence (${confidencePercent}%)`;
-                }
-
-                let sourceLinkHtml = '';
-                if (extraData.sourceTitle && extraData.sourceUrl) {
-                    sourceLinkHtml = ` - Source: <a href="${extraData.sourceUrl}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">${extraData.sourceTitle}</a>`;
-                }
-
-                citationHtml = `<div style="font-size: 0.725rem; margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 4px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; width: 100%;">
-                    <span>🏷️ ${extraData.category} <span style="${confidenceStyle}">${confidenceWarning}</span></span>
-                    <span>${sourceLinkHtml}</span>
-                </div>`;
-            }
-
-            msg.innerHTML = displayHtml;
-            if (citationHtml) {
-                msg.innerHTML += citationHtml;
-            }
-
-            // Render visual asset lightbox thumbnail if present
-            if (extraData && extraData.visualAssetUrl) {
-                const imgContainer = document.createElement('div');
-                imgContainer.style.marginTop = '8px';
-                imgContainer.style.position = 'relative';
-                
-                const imgThumb = document.createElement('img');
-                imgThumb.src = extraData.visualAssetUrl;
-                imgThumb.alt = extraData.visualAssetTitle || "Visual Asset";
-                imgThumb.style.maxWidth = '100%';
-                imgThumb.style.maxHeight = '150px';
-                imgThumb.style.borderRadius = '6px';
-                imgThumb.style.cursor = 'pointer';
-                imgThumb.style.border = '1px solid rgba(255,255,255,0.15)';
-                imgThumb.style.transition = 'transform 0.2s';
-                imgThumb.title = "Click to zoom";
-                
-                imgThumb.addEventListener('mouseover', () => {
-                    imgThumb.style.transform = 'scale(1.02)';
-                });
-                imgThumb.addEventListener('mouseout', () => {
-                    imgThumb.style.transform = 'scale(1)';
-                });
-                
-                imgThumb.addEventListener('click', () => {
-                    const lightbox = document.createElement('div');
-                    lightbox.style.position = 'fixed';
-                    lightbox.style.top = '0';
-                    lightbox.style.left = '0';
-                    lightbox.style.width = '100vw';
-                    lightbox.style.height = '100vh';
-                    lightbox.style.background = 'rgba(0,0,0,0.85)';
-                    lightbox.style.display = 'flex';
-                    lightbox.style.justifyContent = 'center';
-                    lightbox.style.alignItems = 'center';
-                    lightbox.style.zIndex = '99999';
-                    lightbox.style.cursor = 'zoom-out';
+                // Handle metadata decoration
+                if (extraData && sender === 'system' && extraData.category) {
+                    displayHtml = extraData.answer;
                     
-                    const lightboxImg = document.createElement('img');
-                    lightboxImg.src = extraData.visualAssetUrl;
-                    lightboxImg.style.maxWidth = '90vw';
-                    lightboxImg.style.maxHeight = '90vh';
-                    lightboxImg.style.borderRadius = '8px';
-                    lightboxImg.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
-                    
-                    lightbox.appendChild(lightboxImg);
-                    document.body.appendChild(lightbox);
-                    
-                    lightbox.addEventListener('click', () => {
-                        lightbox.remove();
-                    });
-                });
-                
-                imgContainer.appendChild(imgThumb);
-                msg.appendChild(imgContainer);
-            }
-
-            // Render dynamic action chips if present in JSON output
-            if (extraData && extraData.followups && extraData.followups.length > 0) {
-                const chipsContainer = document.createElement('div');
-                chipsContainer.className = 'chatbot-chips';
-                chipsContainer.style.marginTop = '8px';
-                
-                extraData.followups.forEach(q => {
-                    const chipBtn = document.createElement('button');
-                    chipBtn.className = 'chatbot-chip';
-                    chipBtn.setAttribute('data-question', q);
-                    chipBtn.innerText = q;
-                    chipsContainer.appendChild(chipBtn);
-                });
-                msg.appendChild(chipsContainer);
-            }
-
-            // Render concept chips if present
-            if (extraData && extraData.conceptChips && extraData.conceptChips.length > 0) {
-                const conceptContainer = document.createElement('div');
-                conceptContainer.className = 'chatbot-chips concept-chips';
-                conceptContainer.style.marginTop = '8px';
-                conceptContainer.style.borderTop = '1px dashed rgba(255,255,255,0.08)';
-                conceptContainer.style.paddingTop = '6px';
-                
-                const titleSpan = document.createElement('span');
-                titleSpan.style.fontSize = '0.65rem';
-                titleSpan.style.opacity = '0.5';
-                titleSpan.style.display = 'block';
-                titleSpan.style.marginBottom = '4px';
-                titleSpan.innerText = '🔗 Related Concepts (Knowledge Graph):';
-                conceptContainer.appendChild(titleSpan);
-                
-                extraData.conceptChips.forEach(q => {
-                    const chipBtn = document.createElement('button');
-                    chipBtn.className = 'chatbot-chip concept-chip';
-                    chipBtn.style.borderColor = 'rgba(45, 212, 191, 0.4)';
-                    chipBtn.style.color = '#2dd4bf';
-                    chipBtn.setAttribute('data-question', `Tell me about ${q}`);
-                    chipBtn.innerText = q;
-                    conceptContainer.appendChild(chipBtn);
-                });
-                msg.appendChild(conceptContainer);
-            }
-
-            if (sender === 'system' && queryText && queryId && !content.includes("Waddles is ready") && !content.includes("Switched to") && !content.includes("Initializing local")) {
-                const fbContainer = document.createElement('div');
-                fbContainer.className = 'chatbot-feedback-buttons';
-                fbContainer.innerHTML = `
-                    <button class="chatbot-feedback-btn" data-rating="up" title="Thumb up">👍</button>
-                    <button class="chatbot-feedback-btn" data-rating="down" title="Thumb down">👎</button>
-                `;
-                msg.appendChild(fbContainer);
-
-                const btnUp = fbContainer.querySelector('[data-rating="up"]');
-                const btnDown = fbContainer.querySelector('[data-rating="down"]');
-
-                const handleFeedback = (ratingVal) => {
-                    btnUp.classList.add('disabled');
-                    btnDown.classList.add('disabled');
-                    if (ratingVal === 'up') {
-                        btnUp.classList.add('selected');
-                        btnUp.classList.remove('disabled');
-                    } else {
-                        btnDown.classList.add('selected');
-                        btnDown.classList.remove('disabled');
+                    const confidencePercent = Math.round(extraData.confidence * 100);
+                    let confidenceStyle = 'opacity: 0.65;';
+                    let confidenceWarning = `[Confidence: ${confidencePercent}%]`;
+                    if (extraData.confidence < 0.5) {
+                        confidenceStyle = 'color: #f59e0b; font-weight: 700;';
+                        confidenceWarning = `⚠️ Low confidence (${confidencePercent}%)`;
                     }
-                    logRating(queryId, queryText, displayHtml, ratingVal, extraData);
-                };
 
-                btnUp.addEventListener('click', () => handleFeedback('up'));
-                btnDown.addEventListener('click', () => handleFeedback('down'));
-            }
+                    let sourceLinkHtml = '';
+                    if (extraData.sourceTitle && extraData.sourceUrl) {
+                        sourceLinkHtml = ` - Source: <a href="${extraData.sourceUrl}" style="color:#2dd4bf; text-decoration:underline; font-weight:600;">${extraData.sourceTitle}</a>`;
+                    }
 
-            body.appendChild(msg);
+                    citationHtml = `<div style="font-size: 0.725rem; margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 4px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; width: 100%;">
+                        <span>🏷️ ${extraData.category} <span style="${confidenceStyle}">${confidenceWarning}</span></span>
+                        <span>${sourceLinkHtml}</span>
+                    </div>`;
+                }
+
+                const isAssistantAnswer = sender === 'system' && (extraData || queryText) && !content.includes("Waddles is ready") && !content.includes("Switched to") && !content.includes("Initializing local");
+
+                if (isAssistantAnswer) {
+                    let i = 0;
+                    msg.innerHTML = "";
+                    body.appendChild(msg);
+
+                    const speed = 10;
+                    function step() {
+                        if (i < displayHtml.length) {
+                            if (displayHtml[i] === '<') {
+                                const endTagIdx = displayHtml.indexOf('>', i);
+                                if (endTagIdx !== -1) {
+                                    msg.innerHTML += displayHtml.substring(i, endTagIdx + 1);
+                                    i = endTagIdx + 1;
+                                } else {
+                                    msg.innerHTML += displayHtml[i];
+                                    i++;
+                                }
+                            } else {
+                                msg.innerHTML += displayHtml[i];
+                                i++;
+                            }
+                            scrollToBottom();
+                            setTimeout(step, speed);
+                        } else {
+                            if (citationHtml) {
+                                msg.innerHTML += citationHtml;
+                            }
+                            if (extraData && extraData.visualAssetUrl) {
+                                renderVisualAsset(msg, extraData);
+                            }
+                            if (extraData && extraData.followups && extraData.followups.length > 0) {
+                                renderActionChips(msg, extraData.followups);
+                            }
+                            if (extraData && extraData.conceptChips && extraData.conceptChips.length > 0) {
+                                renderConceptChips(msg, extraData.conceptChips);
+                            }
+                            if (queryText && queryId) {
+                                renderFeedbackButtons(msg, queryText, queryId, displayHtml, extraData);
+                            }
+
+                            const badge = document.createElement('span');
+                            badge.className = 'chatbot-model-badge';
+                            if (activeModelType === 'keyword') {
+                                badge.innerText = 'via Keyword Match';
+                            } else {
+                                const modelNameMap = {
+                                    'smollm': 'SmolLM 135M',
+                                    'qwen': 'Qwen 0.5B',
+                                    'smollm2': 'SmolLM2 360M'
+                                };
+                                const mName = modelNameMap[activeModelKey] || activeModelKey;
+                                const qName = activeQuantKey === 'q4' ? '4-bit' : activeQuantKey === 'q8' ? '8-bit' : '16-bit';
+                                badge.innerText = `via ${mName} (${qName})`;
+                            }
+                            msg.appendChild(badge);
+
+                            scrollToBottom();
+                            resolve();
+                        }
+                    }
+                    step();
+                } else {
+                    msg.innerHTML = displayHtml;
+                    if (citationHtml) {
+                        msg.innerHTML += citationHtml;
+                    }
+                    if (extraData && extraData.visualAssetUrl) {
+                        renderVisualAsset(msg, extraData);
+                    }
+                    if (extraData && extraData.followups && extraData.followups.length > 0) {
+                        renderActionChips(msg, extraData.followups);
+                    }
+                    if (extraData && extraData.conceptChips && extraData.conceptChips.length > 0) {
+                        renderConceptChips(msg, extraData.conceptChips);
+                    }
+
+                    if (sender === 'system' && (extraData || queryText)) {
+                        const badge = document.createElement('span');
+                        badge.className = 'chatbot-model-badge';
+                        if (activeModelType === 'keyword') {
+                            badge.innerText = 'via Keyword Match';
+                        } else {
+                            const modelNameMap = {
+                                'smollm': 'SmolLM 135M',
+                                'qwen': 'Qwen 0.5B',
+                                'smollm2': 'SmolLM2 360M'
+                            };
+                            const mName = modelNameMap[activeModelKey] || activeModelKey;
+                            const qName = activeQuantKey === 'q4' ? '4-bit' : activeQuantKey === 'q8' ? '8-bit' : '16-bit';
+                            badge.innerText = `via ${mName} (${qName})`;
+                        }
+                        msg.appendChild(badge);
+                    }
+
+                    body.appendChild(msg);
+                    scrollToBottom();
+                    resolve();
+                }
+            });
         }
 
         function showTypingIndicator() {
@@ -896,6 +1060,9 @@
             input.disabled = true;
             const submitBtn = form.querySelector('button[type="submit"]');
             if (submitBtn) submitBtn.disabled = true;
+
+            const statusIndicator = document.getElementById('waddles-status-indicator');
+            if (statusIndicator) statusIndicator.classList.add('pulsing');
 
             const loadingCard = document.createElement('div');
             loadingCard.className = 'chatbot-message system';
@@ -1028,6 +1195,9 @@
                         activeQuantKey = quantKey;
                         modelLoading = false;
 
+                        const statusIndicator = document.getElementById('waddles-status-indicator');
+                        if (statusIndicator) statusIndicator.classList.remove('pulsing');
+
                         const lc = document.getElementById('waddles-loading-card');
                         if (lc) lc.remove();
 
@@ -1052,6 +1222,8 @@
             activeModelType = 'keyword';
             activeModelKey = 'keyword';
             modelLoading = false;
+            const statusIndicator = document.getElementById('waddles-status-indicator');
+            if (statusIndicator) statusIndicator.classList.remove('pulsing');
             const lc = document.getElementById('waddles-loading-card');
             if (lc) lc.remove();
             appendMessage(`<span class="text-warning">${msg}</span>`, 'system');
@@ -1316,34 +1488,6 @@
                 };
             }
 
-            // HyDE Retrieval Step (Generates hypothetical answer)
-            const hydeToggle = document.getElementById('waddles-hyde-toggle');
-            let queryForEmbedding = query;
-            if (hydeToggle && hydeToggle.checked && activeModelType === 'rag' && activeGenerator) {
-                try {
-                    console.log("[Waddles] HyDE enabled. Generating hypothetical answer...");
-                    const hydePrompt = `<|im_start|>system
-You are a helpful assistant. Generate a short, hypothetical direct answer (1-2 sentences) to the user's question. This answer will be used for semantic search, so describe key concepts directly. Do not include introductory text or disclaimers.
-<|im_end|>
-<|im_start|>user
-${query}<|im_end|>
-<|im_start|>assistant
-`;
-                    const hydeOutput = await activeGenerator(hydePrompt, {
-                        max_new_tokens: 64,
-                        temperature: 0.7,
-                        do_sample: true,
-                        return_full_text: false
-                    });
-                    let hypotheticalAnswer = hydeOutput[0].generated_text.trim();
-                    hypotheticalAnswer = hypotheticalAnswer.replace(/<\|im_end\|>/g, '').replace(/<\|im_start\|>/g, '').trim();
-                    console.log("[Waddles] Generated hypothetical answer for HyDE:", hypotheticalAnswer);
-                    queryForEmbedding = hypotheticalAnswer;
-                } catch (hydeErr) {
-                    console.error("[Waddles] HyDE generation failed, falling back to original query:", hydeErr);
-                }
-            }
-
             // 2. Intent Pre-filtering
             const queryIntent = classifyQueryIntent(query);
             let databaseSubset = embeddingsDatabase.filter(passFilters);
@@ -1361,7 +1505,7 @@ ${query}<|im_end|>
 
             if (activeModelType === 'rag' && activeEmbedder && activeGenerator && activeReranker && embeddingsDatabase && embeddingsDatabase.length > 0) {
                 try {
-                    const output = await activeEmbedder(queryForEmbedding, { pooling: 'mean', normalize: true });
+                    const output = await activeEmbedder(query, { pooling: 'mean', normalize: true });
                     queryVector = Array.from(output.data);
 
                     denseMatches = databaseSubset.map(doc => {

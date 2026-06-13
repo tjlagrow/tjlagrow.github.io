@@ -59,32 +59,166 @@
     animation: slideInUp 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
     .chatbot-header {
-        padding: 1rem 1.25rem;
-        background: rgba(255, 255, 255, 0.04);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 0.85rem 1.25rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-weight: 700;
         color: #ffffff;
 
-        #chatbot-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            line-height: 1;
-            cursor: pointer;
-            color: rgba(255, 255, 255, 0.6);
-            padding: 0;
-            width: 24px;
-            height: 24px;
+        .waddles-header-left {
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: color 0.15s ease;
+            gap: 10px;
 
-            &:hover {
-                color: #ffffff;
+            .waddles-avatar-wrapper {
+                position: relative;
+                width: 32px;
+                height: 32px;
+
+                .waddles-avatar-img {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    background: #1e293b;
+                    border: 1.5px solid rgba(255, 255, 255, 0.15);
+                }
+
+                .waddles-status-ring {
+                    position: absolute;
+                    bottom: -1px;
+                    right: -1px;
+                    width: 9px;
+                    height: 9px;
+                    background: #2ecc71;
+                    border-radius: 50%;
+                    border: 1.5px solid #0f172a;
+                    
+                    &.pulsing {
+                        animation: pulse 2s infinite;
+                    }
+                }
+            }
+
+            .waddles-title-info {
+                display: flex;
+                flex-direction: column;
+
+                .waddles-title {
+                    font-weight: 700;
+                    font-size: 0.95rem;
+                    line-height: 1.2;
+                }
+
+                .waddles-subtitle {
+                    font-size: 0.65rem;
+                    color: rgba(255, 255, 255, 0.45);
+                    font-weight: 500;
+                }
+            }
+        }
+
+        .waddles-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: rgba(255, 255, 255, 0.55);
+                padding: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: color 0.15s ease, transform 0.1s ease;
+
+                &:hover {
+                    color: #ffffff;
+                    transform: scale(1.08);
+                }
+
+                &:active {
+                    transform: scale(0.95);
+                }
+            }
+
+            #waddles-settings-toggle {
+                font-size: 1.05rem;
+                
+                &.active {
+                    color: $brand-color;
+                    transform: rotate(30deg);
+                }
+            }
+
+            #chatbot-close {
+                font-size: 1.4rem;
+                line-height: 1;
+            }
+        }
+    }
+
+    /* Settings drawer */
+    .waddles-settings-drawer {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), padding 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(13, 18, 35, 0.96);
+        border-bottom: 0px solid rgba(255, 255, 255, 0.08);
+        padding: 0 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        z-index: 10;
+
+        &.open {
+            max-height: 220px;
+            opacity: 1;
+            padding: 0.95rem 1.25rem;
+            border-bottom-width: 1px;
+        }
+
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.775rem;
+            color: #cbd5e1;
+
+            span {
+                font-weight: 600;
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+            select {
+                font-size: 0.7rem;
+                border: 1px solid rgba(255,255,255,0.1);
+                outline: none;
+                cursor: pointer;
+                height: 24px;
+                background: #1e293b;
+                color: #2dd4bf;
+                font-weight: 600;
+                border-radius: 4px;
+                padding: 0 4px;
+                max-width: 150px;
+                
+                &:focus {
+                    border-color: $brand-color;
+                }
+            }
+            
+            #waddles-personality-selector {
+                color: #f43f5e;
+            }
+            
+            #waddles-quant-selector {
+                color: #38bdf8;
             }
         }
     }
@@ -93,36 +227,93 @@
         flex: 1;
         padding: 1.25rem;
         overflow-y: auto;
-        background: rgba(0, 0, 0, 0.2);
+        background: rgba(0, 0, 0, 0.25);
         display: flex;
         flex-direction: column;
         gap: 1rem;
+        position: relative;
+    }
+
+    /* Snap scroll-to-bottom button */
+    #waddles-scroll-bottom {
+        position: absolute;
+        bottom: 1.25rem;
+        right: 1.25rem;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease, background 0.15s ease;
+        z-index: 100;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+        &.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        &:hover {
+            background: rgba(45, 212, 191, 0.2);
+            border-color: $brand-color;
+            color: $brand-color;
+            transform: translateY(-2px);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
     }
 
     .chatbot-message {
         padding: 0.85rem 1.1rem;
-        border-radius: 14px;
-        font-size: 0.925rem;
+        border-radius: 16px;
+        font-size: 0.9rem;
         line-height: 1.5;
         max-width: 85%;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         word-wrap: break-word;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        transition: all 0.2s ease;
 
         &.system {
-            background: rgba(255, 255, 255, 0.07);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
             color: #f8fafc;
             border-bottom-left-radius: 2px;
             align-self: flex-start;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-left: 3px solid $brand-color;
         }
 
         &.user {
-            background: rgba($brand-color, 0.18);
+            background: linear-gradient(135deg, rgba(45, 212, 191, 0.18) 0%, rgba(13, 148, 136, 0.12) 100%);
             color: #ffffff;
             border-bottom-right-radius: 2px;
             align-self: flex-end;
+            border: 1px solid rgba(45, 212, 191, 0.22);
             border-right: 3px solid $brand-color;
             font-weight: 500;
+        }
+
+        .chatbot-model-badge {
+            align-self: flex-end;
+            font-size: 0.6rem;
+            opacity: 0.45;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-top: 4px;
+            color: #cbd5e1;
         }
 
         ul, ol {
@@ -195,36 +386,52 @@
     }
 
     .chatbot-input-area {
-        padding: 0.85rem 1rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 0.95rem 1.15rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
         display: flex;
-        gap: 0.5rem;
-        background: rgba(15, 18, 35, 0.95);
+        gap: 0.6rem;
+        background: rgba(13, 15, 30, 0.96);
+        align-items: center;
+
+        .chatbot-input-wrapper {
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            
+            &:focus-within {
+                border-color: rgba(45, 212, 191, 0.6);
+                background: rgba(255, 255, 255, 0.08);
+                box-shadow: 0 0 12px rgba(45, 212, 191, 0.15);
+            }
+        }
 
         input {
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 0.4rem 1rem;
+            border: none !important;
+            background: transparent !important;
+            padding: 0.5rem 1.1rem;
             font-size: 0.9rem;
-            background: rgba(255, 255, 255, 0.06);
             color: #ffffff;
+            width: 100%;
+            height: 38px;
+            box-shadow: none !important;
 
             &:focus {
-                border-color: $brand-color;
-                background: rgba(255, 255, 255, 0.09);
-                box-shadow: 0 0 0 0.2rem rgba($brand-color, 0.25);
                 outline: none;
             }
             
             &::placeholder {
-                color: rgba(255, 255, 255, 0.45);
+                color: rgba(255, 255, 255, 0.4);
             }
         }
 
         button {
             border-radius: 50%;
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -234,22 +441,25 @@
             color: #0f172a;
             border: none;
             cursor: pointer;
-            transition: background 0.15s ease, transform 0.1s ease;
+            transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+            box-shadow: 0 2px 8px rgba(45, 212, 191, 0.2);
             
-            &:hover {
+            &:hover:not(:disabled) {
                 background: lighten($brand-color, 8%);
                 transform: scale(1.05);
+                box-shadow: 0 4px 12px rgba(45, 212, 191, 0.35);
             }
             
-            &:active {
+            &:active:not(:disabled) {
                 transform: scale(0.95);
             }
             
             &:disabled:not(.loading) {
-                background: rgba(255, 255, 255, 0.1);
-                color: rgba(255, 255, 255, 0.3);
+                background: rgba(255, 255, 255, 0.08);
+                color: rgba(255, 255, 255, 0.2);
                 cursor: not-allowed;
                 transform: none;
+                box-shadow: none;
             }
 
             &.loading {

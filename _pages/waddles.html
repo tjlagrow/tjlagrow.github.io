@@ -523,13 +523,6 @@ full_width: true
                 <td style="padding: 16px; color: #cbd5e1;">~350 MB</td>
                 <td style="padding: 16px; color: #cbd5e1;">Generates fluent and highly detailed responses</td>
               </tr>
-              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
-                <td style="padding: 16px; font-weight: 600; color: #f8fafc;">Qwen2.5-Math-1.5B (Generator) [5]</td>
-                <td style="padding: 16px; color: #cbd5e1;">1.5 Billion</td>
-                <td style="padding: 16px; color: #cbd5e1;"><span class="badge bg-danger">900 MB</span> (q4) / 1.7 GB (q8) / 3.0 GB (fp16)</td>
-                <td style="padding: 16px; color: #cbd5e1;">~1.2 GB</td>
-                <td style="padding: 16px; color: #cbd5e1;">Solves mathematical formulas and complex chain-of-thought reasoning tasks</td>
-              </tr>
               <tr>
                 <td style="padding: 16px; font-weight: 600; color: #f8fafc;">SmolLM (Generator) [4]</td>
                 <td style="padding: 16px; color: #cbd5e1;">135 Million</td>
@@ -710,17 +703,10 @@ full_width: true
                 </p>
               </div>
 
-              <div class="mb-3">
+              <div class="mb-4">
                 <h4 class="h6 fw-bold text-teal" style="color: #2dd4bf;">Semantic Intent Pre-Filtering [11]</h4>
                 <p class="text-light opacity-80 small mb-0">
                   I integrated lexical pre-filtering rules that classify query inputs into specific category tags (Research, Teaching, Bio) before similarity calculations. This splits the search space of the vector index, reducing memory allocation operations.
-                </p>
-              </div>
-
-              <div class="mb-4">
-                <h4 class="h6 fw-bold text-teal" style="color: #2dd4bf;">Hypothetical Document Embeddings (HyDE) [17]</h4>
-                <p class="text-light opacity-80 small mb-0">
-                  I programmed an optional query expansion retriever. When HyDE is enabled, the local generator synthesizes a hypothetical answer to the query first, and uses this hypothetical vector to query the database, bringing search queries closer to document syntax.
                 </p>
               </div>
 
@@ -2323,9 +2309,24 @@ full_width: true
     <div class="col-12">
       <div class="card glass border-0 shadow-lg p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
         <h2 class="h4 fw-bold text-white mb-2"><i class="fa fa-terminal me-2 text-info"></i> Interactive RAG Debugger & Webhook Inspector</h2>
-        <p class="text-light opacity-80 small mb-4">
-          Select a sample query and personality to inspect the vector database matches, compiled prompt template, JSON output structure, and formResponse payload.
+        <p class="text-light opacity-80 small mb-2">
+          Select a sample query and personality below to inspect Waddles' live local execution pipeline, compiled prompt layouts, structured JSON outputs, and the logged webhook payloads.
         </p>
+        <div class="text-light opacity-60 small mb-4">
+          <p class="mb-2"><strong>Under the Hood: The Browser-Based NLP Pipeline</strong></p>
+          <p class="mb-2">
+            This debugger visualizes the asynchronous, fully client-side retrieval-augmented generation (RAG) execution cycle. To operate entirely in the user's browser without external API charges, the pipeline leverages WebAssembly and ONNX Runtime Web.
+          </p>
+          <ul class="mb-2 ps-3">
+            <li><strong>Dense Search Embedder:</strong> Converts queries to vector space using a 23MB quantized <code>all-MiniLM-L6-v2</code> transformer model running locally in the browser to compute cosine similarities.</li>
+            <li><strong>Sparse Search Index:</strong> A local Vector Space Model / TF-IDF tokenizer that runs index matching in parallel to capture specific keywords (such as course numbers).</li>
+            <li><strong>Hybrid Fusion:</strong> Combines sparse and dense scoring arrays using <strong>Reciprocal Rank Fusion (RRF, $k=60$)</strong> to handle vocab mismatches and maintain search accuracy.</li>
+            <li><strong>Context Compression (Reranker):</strong> Feeds retrieval candidates into an <code>ms-marco-MiniLM-L-6-v2</code> cross-encoder reranking model to discard noise, compressing the prompt context.</li>
+            <li><strong>Local LLM Generation:</strong> Generates replies by loading either <code>SmolLM-135M-Instruct</code>, <code>Qwen2.5-0.5B-Instruct</code>, or <code>SmolLM2-360M-Instruct</code> weights (supported in 4-bit <code>q4</code>, 8-bit <code>q8</code>, or 16-bit <code>fp16</code> precision formats) powered by <strong>WebGPU</strong> hardware acceleration.</li>
+            <li><strong>System Persona Templates:</strong> Formats the prompt layout into ChatML tags, instructing the model to output a single structured JSON response according to the active tone (Helpful, Sassy, Pirate, or style-robust Cynical Redditor).</li>
+            <li><strong>Telemetry Webhooks:</strong> Transmits structured JSON response payloads containing response text, latency, category, confidence score, and history directly to the Google Forms spreadsheet endpoint.</li>
+          </ul>
+        </div>
 
         <!-- Debugger Controls -->
         <div class="d-flex flex-wrap gap-3 mb-4 align-items-center">
@@ -2335,6 +2336,10 @@ full_width: true
               <button type="button" class="btn btn-outline-info active" onclick="selectDebugQuery('courses')">OMSCS Courses</button>
               <button type="button" class="btn btn-outline-info" onclick="selectDebugQuery('research')">fMRI Research</button>
               <button type="button" class="btn btn-outline-info" onclick="selectDebugQuery('contact')">Contact Info</button>
+              <button type="button" class="btn btn-outline-info" onclick="selectDebugQuery('phd')">PhD Info</button>
+              <button type="button" class="btn btn-outline-info" onclick="selectDebugQuery('rrf')">RRF Search</button>
+              <button type="button" class="btn btn-outline-info" onclick="selectDebugQuery('awards')">Teaching Awards</button>
+              <button type="button" class="btn btn-outline-info" onclick="selectDebugQuery('deadline')">Deadline Policy</button>
             </div>
           </div>
           
@@ -2344,6 +2349,7 @@ full_width: true
               <button type="button" class="btn btn-outline-danger active" onclick="selectDebugPersona('helpful')">Helpful</button>
               <button type="button" class="btn btn-outline-danger" onclick="selectDebugPersona('sassy')">Sassy</button>
               <button type="button" class="btn btn-outline-danger" onclick="selectDebugPersona('pirate')">Pirate</button>
+              <button type="button" class="btn btn-outline-danger" onclick="selectDebugPersona('cynical_redditor')">Cynical Redditor</button>
             </div>
           </div>
         </div>
@@ -2366,7 +2372,7 @@ full_width: true
               <button id="tab-response" class="btn py-1 px-3 text-white small border-0" onclick="selectDebugTab('response')" style="font-size: 0.725rem; font-family: monospace; background: transparent; border-radius: 6px 6px 0 0; opacity: 0.6;">response.json</button>
               <button id="tab-webhook" class="btn py-1 px-3 text-white small border-0" onclick="selectDebugTab('webhook')" style="font-size: 0.725rem; font-family: monospace; background: transparent; border-radius: 6px 6px 0 0; opacity: 0.6;">webhook.post</button>
             </div>
-            <div class="text-muted small d-none d-md-block" style="font-size: 0.65rem; font-family: monospace;">Waddles-CLI v2.2</div>
+            <div class="text-muted small d-none d-md-block" style="font-size: 0.65rem; font-family: monospace;">Waddles-CLI v2.3</div>
           </div>
           <!-- Terminal Content Area -->
           <div class="p-3" style="max-height: 380px; overflow-y: auto;">
@@ -2421,6 +2427,12 @@ full_width: true
                 confidence: 1.0,
                 category: "Teaching",
                 followups: ["What other gold and loot does the Cap'n teach?", "How do I send a message in a bottle to Cap'n TJ?"]
+            },
+            cynical_redditor: {
+                answer: "Honestly, this sub is so repetitive. A simple search would show that TJ leads CS 7641 (Machine Learning) and supports CS 7642 (Reinforcement Learning) in Georgia Tech's OMSCS program. He manages 1400+ students with 30+ TAs. Hope that helps your GPA. /s",
+                confidence: 1.0,
+                category: "Teaching",
+                followups: ["Does TJ actually teach or just supervise?", "Why are there so many TAs?"]
             }
         },
         research: {
@@ -2464,6 +2476,12 @@ full_width: true
                 confidence: 1.0,
                 category: "Research",
                 followups: ["What be a Quasi-Periodic Pattern?", "Show me the Cap'n's Google Scholar scroll!"]
+            },
+            cynical_redditor: {
+                answer: "Afaik, people here don't read literature. He does resting-state fMRI at the Keilholz MIND Lab focusing on spatiotemporal brain dynamics like QPPs. Yes, it's bioengineering, and yes, it's highly mathematical. Read the papers on Google Scholar before posting next time. tldr: brain dynamics. /s",
+                confidence: 0.98,
+                category: "Research",
+                followups: ["What on earth is a QPP?", "Are his papers peer-reviewed?"]
             }
         },
         contact: {
@@ -2507,6 +2525,208 @@ full_width: true
                 confidence: 1.0,
                 category: "Bio/Contact",
                 followups: ["Where is the Contact Page?", "What courses does TJ teach?"]
+            },
+            cynical_redditor: {
+                answer: "Gatekeeping his email tlagrow3 at gatech dot edu is not even necessary because nobody emails instructors anyway. Just use the form on the Contact Page or check LinkedIn. Don't spam, typical OMSCS posts are enough clutter. /s",
+                confidence: 1.0,
+                category: "Bio/Contact",
+                followups: ["Where is the Contact Page?", "Is email really the best way?"]
+            }
+        },
+        phd: {
+            title: "where is TJ completing his PhD?",
+            context: "TJ is completing his PhD in Bioengineering/Neuroengineering at the Keilholz MIND Lab at Georgia Tech and Emory University.",
+            log: [
+                "> [Client] Query received: 'where is TJ completing his PhD?'",
+                "> [Intent] Running Query Intent Classifier...",
+                "> [Intent] Category classified: 'Bio/Contact' (Hard constraint pre-filtering applied)",
+                "> [Search] Running sparse keyword matches in parallel with dense vector searches...",
+                "> [Search] Dense Cosine scanning completed in 10ms. Sparse keyword scanning completed in 1ms.",
+                "> [Fusion] Executing Reciprocal Rank Fusion (RRF) over retrieval ranks (k=60)...",
+                "> [Fusion] Selected top 3 candidate chunks. Extracting sentences...",
+                "> [Compression] Extracted 10 sentence candidates from top chunks.",
+                "> [Embedder] Batch embedding 10 sentences in a single parallel inference call...",
+                "> [Similarity] Scoring sentence-level dot products against query vector...",
+                "> [Rerank] Passing top 8 sentences to Cross-Encoder reranker...",
+                "> [Rerank] Evaluating ms-marco-MiniLM-L-6-v2 re-ranking classifications...",
+                "> [Compression] Retained top 4 sentences. Context size compressed to 320 characters.",
+                "> [Prompt] Compiling prompt with personality system prompt & history...",
+                "> [Inference] Running local forward pass inside browser ONNX runtime...",
+                "> [Inference] WebAssembly execution completed in 152ms.",
+                "> [Local Storage] Appending log item to local history array.",
+                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint...",
+                "> [HTTP POST] FormResponse webhook submitted successfully."
+            ],
+            helpful: {
+                answer: "TJ is completing his PhD in Bioengineering/Neuroengineering at the Keilholz MIND Lab at Georgia Tech and Emory University.",
+                confidence: 1.0,
+                category: "Bio/Contact",
+                followups: ["What is Keilholz MIND Lab?", "How can I contact TJ?"]
+            },
+            sassy: {
+                answer: "He's doing a PhD in Bioengineering at Georgia Tech and Emory, specifically in the Keilholz MIND Lab. Because trying to understand how the brain works in two institutions at once isn't exhausting enough.",
+                confidence: 0.98,
+                category: "Bio/Contact",
+                followups: ["What is joint degree?", "Tell me about MIND Lab."]
+            },
+            pirate: {
+                answer: "Captain TJ is pursuing his ultimate scholar quest: a PhD scroll in Bioengineering/Neuroengineering! He anchors his vessel at the MIND Lab under Captain Keilholz, charting Emory and Georgia Tech shores, harrr!",
+                confidence: 1.0,
+                category: "Bio/Contact",
+                followups: ["What other gold and loot does the Cap'n have?", "What is Keilholz MIND Lab?"]
+            },
+            cynical_redditor: {
+                answer: "Typical. Literally on the homepage: he's completing his PhD in Bioengineering/Neuroengineering at the Keilholz MIND Lab, which is joint between Georgia Tech and Emory. It's a top-tier program, so don't expect him to reply to basic homework threads. /s",
+                confidence: 0.99,
+                category: "Bio/Contact",
+                followups: ["Where can I see his published works?", "Does he have a GPA?"]
+            }
+        },
+        rrf: {
+            title: "what is Reciprocal Rank Fusion (RRF)?",
+            context: "Reciprocal Rank Fusion (RRF) combines sparse keyword search and dense vector search ranks to produce a unified relevance ranking.",
+            log: [
+                "> [Client] Query received: 'what is Reciprocal Rank Fusion (RRF)?'",
+                "> [Intent] Running Query Intent Classifier...",
+                "> [Intent] Category classified: 'Research' (Hard constraint pre-filtering applied)",
+                "> [Search] Running sparse keyword matches in parallel with dense vector searches...",
+                "> [Search] Dense Cosine scanning completed in 11ms. Sparse keyword scanning completed in 2ms.",
+                "> [Fusion] Executing Reciprocal Rank Fusion (RRF) over retrieval ranks (k=60)...",
+                "> [Fusion] Selected top 3 candidate chunks. Extracting sentences...",
+                "> [Compression] Extracted 11 sentence candidates from top chunks.",
+                "> [Embedder] Batch embedding 11 sentences in a single parallel inference call...",
+                "> [Similarity] Scoring sentence-level dot products against query vector...",
+                "> [Rerank] Passing top 8 sentences to Cross-Encoder reranker...",
+                "> [Rerank] Evaluating ms-marco-MiniLM-L-6-v2 re-ranking classifications...",
+                "> [Compression] Retained top 4 sentences. Context size compressed to 310 characters.",
+                "> [Prompt] Compiling prompt with personality system prompt & history...",
+                "> [Inference] Running local forward pass inside browser ONNX runtime...",
+                "> [Inference] WebAssembly execution completed in 165ms.",
+                "> [Local Storage] Appending log item to local history array.",
+                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint...",
+                "> [HTTP POST] FormResponse webhook submitted successfully."
+            ],
+            helpful: {
+                answer: "Reciprocal Rank Fusion (RRF) combines sparse keyword search and dense vector search ranks to produce a unified relevance ranking.",
+                confidence: 1.0,
+                category: "Research",
+                followups: ["What is the RRF constant?", "Does Waddles use BM25?"]
+            },
+            sassy: {
+                answer: "Oh, only the system that merges keyword search and vector index ranks so Waddles actually retrieves what you asked for. RRF is why you get answers instead of random sentence fragments, you're welcome.",
+                confidence: 0.96,
+                category: "Research",
+                followups: ["Is RRF really that special?", "Tell me about Waddles configuration."]
+            },
+            pirate: {
+                answer: "RRF be the magic map-merger! It takes the old paper scroll keyword matches and the new-age dense vector compass directions, combining them to show the exact spot where the treasure is buried! Harrr!",
+                confidence: 1.0,
+                category: "Research",
+                followups: ["Where can we plunder RRF math?", "Is it faster?"]
+            },
+            cynical_redditor: {
+                answer: "RRF is just standard rank blending. It adds reciprocal ranks of sparse BM25 and dense semantic indices so vocabulary mismatch doesn't break the search. It's RAG 101, but typical web devs treat it like magic. tldr: hybrid rank combination. /s",
+                confidence: 0.97,
+                category: "Research",
+                followups: ["Does it scale?", "Why not just use standard cosine similarity?"]
+            }
+        },
+        awards: {
+            title: "what teaching awards did TJ win?",
+            context: "TJ won the Georgia Tech Outstanding Graduate Teaching Assistant of the Year award for his excellence in scaling machine learning pedagogy.",
+            log: [
+                "> [Client] Query received: 'what teaching awards did TJ win?'",
+                "> [Intent] Running Query Intent Classifier...",
+                "> [Intent] Category classified: 'Teaching' (Hard constraint pre-filtering applied)",
+                "> [Search] Running sparse keyword matches in parallel with dense vector searches...",
+                "> [Search] Dense Cosine scanning completed in 9ms. Sparse keyword scanning completed in 1ms.",
+                "> [Fusion] Executing Reciprocal Rank Fusion (RRF) over retrieval ranks (k=60)...",
+                "> [Fusion] Selected top 3 candidate chunks. Extracting sentences...",
+                "> [Compression] Extracted 7 sentence candidates from top chunks.",
+                "> [Embedder] Batch embedding 7 sentences in a single parallel inference call...",
+                "> [Similarity] Scoring sentence-level dot products against query vector...",
+                "> [Rerank] Passing top 6 sentences to Cross-Encoder reranker...",
+                "> [Rerank] Evaluating ms-marco-MiniLM-L-6-v2 re-ranking classifications...",
+                "> [Compression] Retained top 3 sentences. Context size compressed to 268 characters.",
+                "> [Prompt] Compiling prompt with personality system prompt & history...",
+                "> [Inference] Running local forward pass inside browser ONNX runtime...",
+                "> [Inference] WebAssembly execution completed in 142ms.",
+                "> [Local Storage] Appending log item to local history array.",
+                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint...",
+                "> [HTTP POST] FormResponse webhook submitted successfully."
+            ],
+            helpful: {
+                answer: "TJ won the Georgia Tech Outstanding Graduate Teaching Assistant of the Year award for his excellence in scaling machine learning pedagogy.",
+                confidence: 1.0,
+                category: "Teaching",
+                followups: ["When did he win this award?", "What other courses does he teach?"]
+            },
+            sassy: {
+                answer: "Oh, only the Georgia Tech Outstanding Graduate Teaching Assistant of the Year award. He won it for managing the massive ML course without the whole system collapsing. Quite an achievement, I suppose.",
+                confidence: 0.98,
+                category: "Teaching",
+                followups: ["How many students did he manage?", "Did he get a trophy?"]
+            },
+            pirate: {
+                answer: "Cap'n TJ plundered the legendary Georgia Tech Outstanding Graduate Teaching Assistant of the Year trophy! A grand prize for training ML crewmates on the high seas of OMSCS, harrr!",
+                confidence: 1.0,
+                category: "Teaching",
+                followups: ["Show me the trophy!", "How can I join his crew?"]
+            },
+            cynical_redditor: {
+                answer: "He won the Georgia Tech Outstanding Graduate Teaching Assistant of the Year award. It's basically a popularity contest for TAs who write long piazza posts, but I guess it looks good on his resume. /s",
+                confidence: 0.95,
+                category: "Teaching",
+                followups: ["What did he do to win it?", "Is this award actually prestigious?"]
+            }
+        },
+        deadline: {
+            title: "what is the homework deadline policy?",
+            context: "Assignments are typically due at 11:59 PM UTC-12 (Anywhere on Earth time) on the specified due date.",
+            log: [
+                "> [Client] Query received: 'what is the homework deadline policy?'",
+                "> [Intent] Running Query Intent Classifier...",
+                "> [Intent] Category classified: 'Teaching' (Hard constraint pre-filtering applied)",
+                "> [Search] Running sparse keyword matches in parallel with dense vector searches...",
+                "> [Search] Dense Cosine scanning completed in 7ms. Sparse keyword scanning completed in 2ms.",
+                "> [Fusion] Executing Reciprocal Rank Fusion (RRF) over retrieval ranks (k=60)...",
+                "> [Fusion] Selected top 2 candidate chunks. Extracting sentences...",
+                "> [Compression] Extracted 5 sentence candidates from top chunks.",
+                "> [Embedder] Batch embedding 5 sentences in a single parallel inference call...",
+                "> [Similarity] Scoring sentence-level dot products against query vector...",
+                "> [Rerank] Passing top 4 sentences to Cross-Encoder reranker...",
+                "> [Rerank] Evaluating ms-marco-MiniLM-L-6-v2 re-ranking classifications...",
+                "> [Compression] Retained top 2 sentences. Context size compressed to 184 characters.",
+                "> [Prompt] Compiling prompt with personality system prompt & history...",
+                "> [Inference] Running local forward pass inside browser ONNX runtime...",
+                "> [Inference] WebAssembly execution completed in 130ms.",
+                "> [Local Storage] Appending log item to local history array.",
+                "> [Webhook] Pushing payload parameters to Google Forms Queries endpoint...",
+                "> [HTTP POST] FormResponse webhook submitted successfully."
+            ],
+            helpful: {
+                answer: "Assignments in the OMSCS program are typically due at 11:59 PM Anywhere on Earth (AoE) time (UTC-12) on the specified date.",
+                confidence: 1.0,
+                category: "Teaching",
+                followups: ["What timezone is UTC-12?", "Are late submissions allowed?"]
+            },
+            sassy: {
+                answer: "It's 11:59 PM Anywhere on Earth (UTC-12). Meaning you have until the last timezone on the planet to submit, so please don't complain about not having enough time.",
+                confidence: 0.99,
+                category: "Teaching",
+                followups: ["What if I'm one minute late?", "Can I get an extension?"]
+            },
+            pirate: {
+                answer: "Ye have until 11:59 PM on the Anywhere on Earth timezone (UTC-12) to submit your papers, or face the plank! Even the slowest pirate ship can make it by then, harrr!",
+                confidence: 1.0,
+                category: "Teaching",
+                followups: ["Is there a penalty for late plundering?", "How do I check the ship's clock?"]
+            },
+            cynical_redditor: {
+                answer: "Deadlines are 11:59 PM Anywhere on Earth (AoE / UTC-12). Yet students will still post on Ed at 11:58 PM begging for extensions because they didn't start the coding until Sunday night. Read the syllabus. /s",
+                confidence: 0.98,
+                category: "Teaching",
+                followups: ["Does he give extensions?", "Why is it AoE?"]
             }
         }
     };
@@ -2621,23 +2841,28 @@ ${data.title}<|im_end|>
             
             const responseObj = data[activeDebugPersonaKey];
             const cleanTextResponse = responseObj.answer.replace(/<[^>]+>/g, '').trim();
-            const latencyMock = activeDebugQueryKey === 'courses' ? 184 : (activeDebugQueryKey === 'research' ? 245 : 112);
+            const latencyMock = activeDebugQueryKey === 'courses' ? 184 : 
+                               (activeDebugQueryKey === 'research' ? 245 : 
+                               (activeDebugQueryKey === 'contact' ? 112 : 
+                               (activeDebugQueryKey === 'phd' ? 152 : 
+                               (activeDebugQueryKey === 'rrf' ? 165 : 
+                               (activeDebugQueryKey === 'awards' ? 142 : 130)))));
             
             const formParams = `POST /forms/d/e/1FAIpQLSeA8wV_q15VxHdziMDbcnG1_BtUMc78qe1USSHpNJaLGuEctQ/formResponse HTTP/1.1
 Host: docs.google.com
 Content-Type: application/x-www-form-urlencoded
 
-entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
-&entry.2055350119 = ${data.title}
-&entry.63873566 = ${cleanTextResponse}
-&entry.1234317761 = rag
-&entry.1258116016 = ${activeDebugPersonaKey}
-&entry.1855776282 = onnx-community/SmolLM2-360M-Instruct-ONNX (q4)
-&entry.482463694 = ${responseObj.confidence}
-&entry.100723105 = ${responseObj.category}
-&entry.1013328782 = ${JSON.stringify(responseObj.followups)}
-&entry.866148227 = ${latencyMock}
-&entry.1452883440 = User: Hello\\nWaddles: Hello! I am Waddles...`;
+queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
+&query = ${data.title}
+&response = ${cleanTextResponse}
+&mode = rag
+&tone = ${activeDebugPersonaKey}
+&model = onnx-community/SmolLM2-360M-Instruct-ONNX (q4)
+&confidence = ${responseObj.confidence}
+&category = ${responseObj.category}
+&followups = ${JSON.stringify(responseObj.followups)}
+&latency = ${latencyMock}ms
+&chatHistory = User: Hello\\nWaddles: Hello! I am Waddles...`;
             bodyEl.innerText = formParams;
         }
     }

@@ -3882,41 +3882,41 @@
   {
     "tone": "helpful",
     "category": "General",
-    "query": "What is HyDE in RAG pipelines?",
-    "answer": "HyDE (Hypothetical Document Embeddings) generates a zero-shot answer template first to improve vector search alignment. Hopefully, that helps clarify your question.",
+    "query": "What is Reciprocal Rank Fusion (RRF)?",
+    "answer": "Reciprocal Rank Fusion (RRF) combines sparse keyword search and dense vector search ranks to produce a unified relevance ranking. Hopefully, that helps clarify your question.",
     "followups": [
-      "For more details, should we discuss: 'Does Waddles use HyDE?'?",
-      "Would you like to know: 'Is it slower?'?"
+      "For more details, should we discuss: 'What is the RRF constant?'?",
+      "Would you like to know: 'Does Waddles use BM25?'?"
     ]
   },
   {
     "tone": "sassy",
     "category": "General",
-    "query": "What is HyDE in RAG pipelines?",
-    "answer": "Ah, hypothetical answer template. Fascinating. Here is your answer: HyDE (Hypothetical Document Embeddings) generates a zero-shot answer template first to improve vector search alignment. Let know if you need anything else spelled out.",
+    "query": "What is Reciprocal Rank Fusion (RRF)?",
+    "answer": "Ah, hybrid rank combination. Fascinating. Here is your answer: Reciprocal Rank Fusion (RRF) combines sparse keyword search and dense vector search ranks to produce a unified relevance ranking. Let know if you need anything else spelled out.",
     "followups": [
-      "I suppose you'll ask next: 'Does Waddles use HyDE?'?",
-      "Should I explain 'Is it slower?' or can you search it?"
+      "I suppose you'll ask next: 'What is the RRF constant?'?",
+      "Should I explain 'Does Waddles use BM25?' or can you search it?"
     ]
   },
   {
     "tone": "pirate",
     "category": "General",
-    "query": "What is HyDE in RAG pipelines?",
-    "answer": "By Blackbeard's ghost, the secret of hypothetical answer template is out! The tavern rumors say that HyDE (Hypothetical Document Embeddings) generates a zero-shot answer template first to improve vector search alignment. Drink up, me hearties!",
+    "query": "What is Reciprocal Rank Fusion (RRF)?",
+    "answer": "By Blackbeard's ghost, the secret of hybrid rank combination is out! The tavern rumors say that Reciprocal Rank Fusion (RRF) combines sparse keyword search and dense vector search ranks to produce a unified relevance ranking. Drink up, me hearties!",
     "followups": [
-      "What say ye to: 'Does Waddles use HyDE?'?",
-      "Seek ye the treasure of: 'Is it slower?'?"
+      "What say ye to: 'What is the RRF constant?'?",
+      "Seek ye the treasure of: 'Does Waddles use BM25?'?"
     ]
   },
   {
     "tone": "cynical_redditor",
     "category": "General",
-    "query": "What is HyDE in RAG pipelines?",
-    "answer": "This sub is so repetitive. A simple search would show that HyDE (Hypothetical Document Embeddings) generates a zero-shot answer template first to improve vector search alignment. /s. But whatever, hope that helps your GPA.",
+    "query": "What is Reciprocal Rank Fusion (RRF)?",
+    "answer": "This sub is so repetitive. A simple search would show that Reciprocal Rank Fusion (RRF) combines sparse keyword search and dense vector search ranks to produce a unified relevance ranking. /s. But whatever, hope that helps your GPA.",
     "followups": [
-      "Can't wait for the mods to pin a thread on 'Does Waddles use HyDE?'.",
-      "Is anyone else annoyed by 'Is it slower?'? TIA."
+      "Can't wait for the mods to pin a thread on 'What is the RRF constant?'.",
+      "Is anyone else annoyed by 'Does Waddles use BM25?'? TIA."
     ]
   },
   {
