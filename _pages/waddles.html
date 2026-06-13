@@ -937,6 +937,57 @@ full_width: true
     </div>
   </div>
 
+  <!-- DIMENSIONALITY REDUCTION & INGESTION EXPANSION -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-4"><i class="fa fa-project-diagram me-2 text-info"></i> Dimensionality Reduction &amp; Ingestion Expansion</h2>
+        <p class="text-light opacity-90 small mb-4">
+          To display high-dimensional vectors on a 2D canvas, we map our embeddings using statistical projection. We also expand the index space dynamically using clean parsing pipelines.
+        </p>
+
+        <div class="row g-4">
+          <!-- PCA vs UMAP Projections -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-compress-alt me-2"></i> PCA &amp; UMAP Dimensionality Projections</h4>
+              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Mathematical Approach</strong>
+              </p>
+              <p class="text-light opacity-75 small mb-3" style="line-height: 1.5; font-size: 0.85rem;">
+                PCA constructs a linear projection by finding the orthogonal directions of maximum variance. UMAP solves a non-linear layout by building a fuzzy simplicial set representation and optimizing the coordinates to preserve local clustering. The UMAP solver uses <code>fitAsync</code> to run asynchronously, yielding to the paint cycle to prevent tab freezing.
+              </p>
+              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Parameter Tuning Mechanics</strong>
+              </p>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                The slider controls adjust neighbors (n_neighbors) to balance local and global structures. You can also modify minimum distance (min_dist) to alter clustering density, and epochs (n_epochs) to control optimization steps. Coordinate projection results are cached to ensure instantaneous tab switching between layout algorithms.
+              </p>
+            </div>
+          </div>
+          <!-- Georgia Tech OMSCS Ingestion -->
+          <div class="col-md-6">
+            <div class="p-3 rounded h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h4 class="h6 fw-bold text-info mb-2"><i class="fa fa-graduation-cap me-2"></i> Georgia Tech OMSCS Machine Learning (CS 7641) Ingestion</h4>
+              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Data Parsing &amp; Sanitization</strong>
+              </p>
+              <p class="text-light opacity-75 small mb-3" style="line-height: 1.5; font-size: 0.85rem;">
+                The ingestion pipeline reads content from the raw site scraper storage <a href="file:///c:/Users/tjlag/Documents/tjlagrow.github.io/_data/omscs7641_content.json">omscs7641_content.json</a>. During the compile stage in the generator script <a href="file:///c:/Users/tjlag/Documents/tjlagrow.github.io/scripts/generate_embeddings.py">generate_embeddings.py</a>, script tags and style block contents are stripped to enforce safety. HTML entities are decoded to prevent raw tokenization noise, creating clean inputs for the embedder.
+              </p>
+              <p class="text-light opacity-75 small mb-2" style="line-height: 1.5; font-size: 0.85rem;">
+                <strong>Vector Space &amp; Chatbot Routing</strong>
+              </p>
+              <p class="text-light opacity-75 small mb-0" style="line-height: 1.5; font-size: 0.85rem;">
+                This ingestion expands our database from 587 chunks to 933 chunks, adding 346 high-dimensional vectors to <a href="file:///c:/Users/tjlag/Documents/tjlagrow.github.io/assets/json/embeddings.json">embeddings.json</a>. Mappings in <a href="file:///c:/Users/tjlag/Documents/tjlagrow.github.io/_includes/chatbot.html">chatbot.html</a> route course posts to the Teaching category. They also display custom academic icons, enabling proper pre-filtering and search results mapping.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- VECTOR DATABASE VISUALIZER -->
   <style>
     /* Neural Architecture Cards */
@@ -1798,7 +1849,15 @@ full_width: true
         const minDist = parseFloat(document.getElementById('umap-mindist').value) || 0.1;
         const nEpochs = parseInt(document.getElementById('umap-epochs').value) || 200;
 
-        const UMAPClass = window.UMAP || (typeof umap !== 'undefined' ? umap.UMAP : null);
+        let UMAPClass = null;
+        if (typeof window.UMAP === 'function') {
+          UMAPClass = window.UMAP;
+        } else if (window.UMAP && typeof window.UMAP.UMAP === 'function') {
+          UMAPClass = window.UMAP.UMAP;
+        } else if (typeof umap !== 'undefined' && typeof umap.UMAP === 'function') {
+          UMAPClass = umap.UMAP;
+        }
+
         if (!UMAPClass) {
           console.error("UMAP class not found.");
           if (overlay) overlay.style.display = 'none';
@@ -2192,6 +2251,32 @@ entry.1296087798 = q_${Date.now()}_${Math.floor(Math.random()*1000)}
     });
   </script>
 
+
+  <!-- RAG SAFETY AND XSS PROTECTION NOTICE -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card glass border-0 shadow-sm p-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem;">
+        <h2 class="h4 fw-bold text-white mb-3"><i class="fa fa-shield-alt me-2 text-success" style="color: #2ecc71;"></i> Ingestion Safety &amp; XSS Safeguards</h2>
+        <p class="text-light opacity-90 small mb-3" style="line-height: 1.6;">
+          Ensuring security and cleanliness within client-side retrieval systems requires strict verification and sanitization across both the offline ingestion and online rendering pipelines.
+        </p>
+        <div class="row g-3 text-light opacity-80 small">
+          <div class="col-md-6">
+            <h3 class="h6 text-teal fw-bold mb-2" style="color: #2dd4bf;">Offline Ingestion Protections</h3>
+            <p style="line-height: 1.5;">
+              During the pre-processing stage, scripts and CSS layout blocks are completely stripped from source files (using targeted script and style tags regex filters in the compiler script) before vector embeddings are calculated. HTML entity codes are decoded to clean English text, ensuring models receive optimized data representation without layout injection vectors.
+            </p>
+          </div>
+          <div class="col-md-6">
+            <h3 class="h6 text-teal fw-bold mb-2" style="color: #2dd4bf;">Online Render Sanitization</h3>
+            <p style="line-height: 1.5;">
+              Interactive elements rendered on the coordinate canvas map content using standard DOM properties that escape HTML tags automatically, neutralizing client-side Cross-Site Scripting (XSS) channels. Dynamic template structures are validated against internal formatting guidelines before being pushed to UI modules.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- RESEARCH DATA COLLECTION DISCLAIMER -->
   <div class="row mb-5">

@@ -32,6 +32,10 @@ def clean_content(content):
     # Remove HTML comments
     content = re.sub(r'<!--.*?-->', '', content, flags=re.DOTALL)
     
+    # Remove script and style tags and their inner contents for XSS safety
+    content = re.sub(r'<script.*?>.*?</script>', ' ', content, flags=re.DOTALL)
+    content = re.sub(r'<style.*?>.*?</style>', ' ', content, flags=re.DOTALL)
+    
     # Remove HTML tags (keep text)
     content = re.sub(r'<[^>]+>', ' ', content)
     
