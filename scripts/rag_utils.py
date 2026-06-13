@@ -657,13 +657,13 @@ def load_hf_generator(model_id, fallback_id=None):
     from transformers import pipeline
     
     force_quant = None
-    if model_id.endswith("-4bit"):
+    if model_id.endswith("-4bit") and not model_id.startswith("unsloth/"):
         force_quant = "4bit"
         model_id = model_id[:-5]
-    elif model_id.endswith("-8bit"):
+    elif model_id.endswith("-8bit") and not model_id.startswith("unsloth/"):
         force_quant = "8bit"
         model_id = model_id[:-5]
-    elif model_id.endswith("-fp16"):
+    elif model_id.endswith("-fp16") and not model_id.startswith("unsloth/"):
         force_quant = "fp16"
         model_id = model_id[:-5]
 

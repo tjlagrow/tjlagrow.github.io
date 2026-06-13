@@ -454,7 +454,8 @@ full_width: true
                 subgraph Retrieval [Parallel Search & Rank Fusion]
                     F -->|Sparse BM25 Indexing| H(Sparse Keyword Ranks)
                     F -->|Dense Dot-Product Scanning| I(Dense Vector Ranks)
-                    H & I -->|RRF Fusion Ranks| J[Reciprocal Rank Fusion]
+                    H -->|RRF Fusion Ranks| J[Reciprocal Rank Fusion]
+                    I -->|RRF Fusion Ranks| J
                     J -->|Select top 3 document chunks| K[Sentence Splitter]
                 end
                 subgraph Compression [Sentence-Level Compression & Re-ranking]
@@ -517,7 +518,10 @@ full_width: true
                   Sparse -->|Rank 0| S1[Doc B: Syllabus OMSCS]:::rankNode
                   Sparse -->|Rank 1| S2[Doc C: Grading Policy]:::rankNode
                   
-                  D1 & D2 & S1 & S2 --> RRF["RRF Score Calculation (k = 60)"]
+                  D1 --> RRF["RRF Score Calculation (k = 60)"]
+                  D2 --> RRF
+                  S1 --> RRF
+                  S2 --> RRF
                   
                   RRF -->|Score: 0.0330| R1[Doc B: Syllabus OMSCS]:::highlight
                   RRF -->|Score: 0.0166| R2[Doc A: Machine Learning]
@@ -565,9 +569,12 @@ full_width: true
                   
                   Query[Query: 'What is QPP?'] --> EQ[Query Vector q]:::vecNode
                   
-                  EQ & E1 --> Dot1[Dot Product: q · s1]
-                  EQ & E2 --> Dot2[Dot Product: q · s2]
-                  EQ & E3 --> Dot3[Dot Product: q · s3]
+                  EQ --> Dot1[Dot Product: q · s1]
+                  E1 --> Dot1
+                  EQ --> Dot2[Dot Product: q · s2]
+                  E2 --> Dot2
+                  EQ --> Dot3[Dot Product: q · s3]
+                  E3 --> Dot3
                   
                   Dot1 -->|Score: 0.82| R1[Sentence 1: High Similarity]:::highlight
                   Dot2 -->|Score: 0.21| R2[Sentence 2: Low Similarity]
@@ -674,7 +681,8 @@ full_width: true
                       subgraph BiEncoder [Bi-Encoder Architecture]
                           Q1[Query] --> E1[Embedder] --> V1[Query Vector]
                           D1[Document] --> E2[Embedder] --> V2[Doc Vector]
-                          V1 & V2 --> Cos[Cosine Similarity]
+                           V1 --> Cos[Cosine Similarity]
+                           V2 --> Cos
                       end
                       subgraph CrossEncoder [Cross-Encoder Architecture]
                           QD[Query + Document Joint Token Input] --> CA[Full Token-to-Token Cross-Attention] --> Class[Joint Score Logits]:::highlight
@@ -3031,6 +3039,159 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
           </div>
         </div>
 
+        <!-- Local Generator Model Leaderboard -->
+        <div class="row mt-4 pt-4 border-top border-secondary">
+          <div class="col-12">
+            <div class="p-4 rounded shadow-sm" style="background: rgba(15, 23, 42, 0.45); border: 1px solid rgba(255, 255, 255, 0.06);">
+              <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                <div>
+                  <h3 class="h5 fw-bold text-white mb-1"><i class="fa fa-trophy text-warning me-2"></i> RAG Generator Model Leaderboard</h3>
+                  <p class="text-light opacity-80 small mb-0">Empirical benchmark results of local models evaluated under strict memory and hardware bounds.</p>
+                </div>
+                <span class="badge" style="background: rgba(13, 148, 136, 0.15); color: #2dd4bf; border: 1px solid rgba(45, 212, 191, 0.25); font-size: 0.75rem; padding: 6px 10px; border-radius: 6px;">
+                  <i class="fa fa-hdd me-1"></i> NVIDIA RTX 2080 Super (7.6GB VRAM)
+                </span>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-dark table-hover table-borderless align-middle mb-0" style="background: transparent;">
+                  <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem; color: #94a3b8;">
+                      <th class="ps-0 py-3" style="width: 25%">Model Tested</th>
+                      <th class="py-3 text-center" style="width: 12%">Latency (Sec)</th>
+                      <th class="py-3 text-center" style="width: 12%">ROUGE-L</th>
+                      <th class="py-3 text-center" style="width: 12%">Semantic Cosine</th>
+                      <th class="py-3 text-center" style="width: 13%">Judge Faithfulness</th>
+                      <th class="py-3 text-center" style="width: 13%">JSON Compliance</th>
+                      <th class="py-3 text-center" style="width: 13%">Verdict</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.825rem;">
+                      <td class="ps-0 py-3 fw-bold text-white">
+                        <i class="fa fa-check-circle text-teal me-2" style="color: #2dd4bf;"></i>Qwen2.5-0.5B
+                        <span class="d-block text-muted fw-normal small mt-0.5" style="font-size: 0.7rem;">Qwen/Qwen2.5-0.5B-Instruct</span>
+                      </td>
+                      <td class="text-center text-teal fw-bold" style="color: #2dd4bf;">1.74s</td>
+                      <td class="text-center text-light">0.218</td>
+                      <td class="text-center text-light">0.397</td>
+                      <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                          <span class="text-light">41.7%</span>
+                          <div class="progress" style="width: 35px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                            <div class="progress-bar" style="width: 41.7%; background: #2dd4bf; border-radius: 2px;"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                          <span class="text-teal fw-bold" style="color: #2dd4bf;">83.3%</span>
+                          <div class="progress" style="width: 35px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                            <div class="progress-bar" style="width: 83.3%; background: #2dd4bf; border-radius: 2px;"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge" style="background: rgba(13, 148, 136, 0.15); color: #2dd4bf; border: 1px solid rgba(45, 212, 191, 0.2); font-size: 0.65rem;">Selected Default (Fastest)</span>
+                      </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.825rem;">
+                      <td class="ps-0 py-3 fw-bold text-white">
+                        <i class="fa fa-star text-info me-2"></i>Qwen2.5-1.5B
+                        <span class="d-block text-muted fw-normal small mt-0.5" style="font-size: 0.7rem;">Qwen/Qwen2.5-1.5B-Instruct</span>
+                      </td>
+                      <td class="text-center text-light">11.30s</td>
+                      <td class="text-center text-light">0.203</td>
+                      <td class="text-center text-teal fw-bold" style="color: #2dd4bf;">0.480</td>
+                      <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                          <span class="text-teal fw-bold" style="color: #2dd4bf;">83.3%</span>
+                          <div class="progress" style="width: 35px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                            <div class="progress-bar" style="width: 83.3%; background: #2dd4bf; border-radius: 2px;"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                          <span class="text-light">66.7%</span>
+                          <div class="progress" style="width: 35px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                            <div class="progress-bar" style="width: 66.7%; background: #38bdf8; border-radius: 2px;"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge" style="background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); font-size: 0.65rem;">High Quality Option</span>
+                      </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.825rem;">
+                      <td class="ps-0 py-3 fw-bold text-white">
+                        <i class="fa fa-dot-circle text-muted me-2" style="opacity: 0.5;"></i>SmolLM2-360M
+                        <span class="d-block text-muted fw-normal small mt-0.5" style="font-size: 0.7rem;">HuggingFaceTB/SmolLM2-360M-Instruct</span>
+                      </td>
+                      <td class="text-center text-light">3.39s</td>
+                      <td class="text-center text-light">0.179</td>
+                      <td class="text-center text-light">0.361</td>
+                      <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                          <span class="text-light">33.3%</span>
+                          <div class="progress" style="width: 35px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                            <div class="progress-bar" style="width: 33.3%; background: #f43f5e; border-radius: 2px;"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center text-muted">0.0%</td>
+                      <td>
+                        <span class="badge" style="font-size: 0.65rem; background: rgba(255,255,255,0.04); color: #94a3b8; border: 1px solid rgba(255,255,255,0.08);">Low Conformance</span>
+                      </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.825rem;">
+                      <td class="ps-0 py-3 fw-bold text-white">
+                        <i class="fa fa-dot-circle text-muted me-2" style="opacity: 0.5;"></i>SmolLM2-135M
+                        <span class="d-block text-muted fw-normal small mt-0.5" style="font-size: 0.7rem;">HuggingFaceTB/SmolLM2-135M-Instruct</span>
+                      </td>
+                      <td class="text-center text-light">3.08s</td>
+                      <td class="text-center text-light">0.213</td>
+                      <td class="text-center text-light">0.384</td>
+                      <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                          <span class="text-light">50.0%</span>
+                          <div class="progress" style="width: 35px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                            <div class="progress-bar" style="width: 50%; background: #38bdf8; border-radius: 2px;"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center text-muted">0.0%</td>
+                      <td>
+                        <span class="badge" style="font-size: 0.65rem; background: rgba(255,255,255,0.04); color: #94a3b8; border: 1px solid rgba(255,255,255,0.08);">Insufficient Capacity</span>
+                      </td>
+                    </tr>
+                    <tr style="font-size: 0.825rem;">
+                      <td class="ps-0 py-3 fw-bold text-white">
+                        <i class="fa fa-exclamation-triangle text-muted me-2" style="opacity: 0.7;"></i>DeepSeek-R1-1.5B
+                        <span class="d-block text-muted fw-normal small mt-0.5" style="font-size: 0.7rem;">deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B</span>
+                      </td>
+                      <td class="text-center text-danger fw-bold" style="color: #fb7185;">43.83s</td>
+                      <td class="text-center text-teal fw-bold" style="color: #2dd4bf;">0.359</td>
+                      <td class="text-center text-light">0.402</td>
+                      <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                          <span class="text-light">33.3%</span>
+                          <div class="progress" style="width: 35px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                            <div class="progress-bar" style="width: 33.3%; background: #f43f5e; border-radius: 2px;"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center text-muted">0.0%</td>
+                      <td>
+                        <span class="badge" style="background: rgba(244, 63, 94, 0.12); color: #fb7185; border: 1px solid rgba(251, 113, 133, 0.18); font-size: 0.65rem;">Latency Bound</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Interactive Dashboard -->
         <div class="mt-4 pt-4 border-top border-secondary">
           <h3 class="h5 fw-bold text-white mb-3"><i class="fa fa-chart-line me-2 text-pink" style="color: #f43f5e;"></i> Empirical Sweep Visualization Dashboard</h3>
@@ -3374,7 +3535,7 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
             // Update active category tab
             const tabs = document.querySelectorAll('.ablation-cat-tab');
             tabs.forEach(tab => {
-              if (tab.innerText.toLowerCase().includes(catKey.substring(0, 4))) {
+              if (tab.getAttribute('onclick') && tab.getAttribute('onclick').includes(`'${catKey}'`)) {
                 tab.classList.add('active');
               } else {
                 tab.classList.remove('active');
@@ -3393,8 +3554,14 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
               btn.style.transition = 'all 0.2s';
               btn.onclick = () => selectAblationPlot(plot.id);
               
+              let shortDesc = plot.done || "";
+              if (shortDesc.length > 55) {
+                shortDesc = shortDesc.substring(0, 52) + "...";
+              }
+              
               btn.innerHTML = `
-                <div class="fw-bold" style="font-size: 0.825rem;"><i class="fa fa-chart-bar me-2"></i> ${plot.name}</div>
+                <div class="fw-bold text-truncate" style="font-size: 0.825rem;"><i class="fa fa-chart-line me-2 text-info" style="color: #38bdf8 !important;"></i>${plot.name}</div>
+                <div class="text-light opacity-50 text-truncate mt-1" style="font-size: 0.7rem;">${shortDesc}</div>
               `;
               plotsContainer.appendChild(btn);
             });
@@ -3413,7 +3580,8 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
             // Update active plot button
             const buttons = document.querySelectorAll('.ablation-plot-btn');
             buttons.forEach(btn => {
-              if (btn.querySelector('div').innerText.includes(plot.name)) {
+              const titleEl = btn.querySelector('div');
+              if (titleEl && titleEl.innerText.trim().endsWith(plot.name.trim())) {
                 btn.classList.add('active');
               } else {
                 btn.classList.remove('active');

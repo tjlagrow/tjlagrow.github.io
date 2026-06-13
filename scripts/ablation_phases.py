@@ -241,7 +241,7 @@ def run_phase2(embed_model, reranker_model, db_items, doc_embeddings, core_queri
             "Qwen2.5-0.5B": ("Qwen/Qwen2.5-0.5B-Instruct", None),
             "DeepSeek-R1-1.5B": ("deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B", "Qwen/Qwen2.5-1.5B-Instruct"),
             "Qwen2.5-1.5B": ("Qwen/Qwen2.5-1.5B-Instruct", None),
-            "Llama-3.2-3B-4bit": ("unsloth/Llama-3.2-3B-Instruct-4bit", "Qwen/Qwen2.5-3B-Instruct")
+            "Llama-3.2-3B-4bit": ("unsloth/Llama-3.2-3B-Instruct-bnb-4bit", "Qwen/Qwen2.5-3B-Instruct")
         }
         
         for name, (model_id, fallback_id) in models_to_test.items():

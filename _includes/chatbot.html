@@ -608,7 +608,8 @@
                     sourceUrl: result.sourceUrl,
                     visualAssetUrl: result.visualAssetUrl,
                     visualAssetTitle: result.visualAssetTitle,
-                    conceptChips: getKnowledgeGraphSuggestions(query)
+                    conceptChips: getKnowledgeGraphSuggestions(query),
+                    trace: result.trace
                 };
 
                 await appendMessage(responseText, 'system', query, queryId, extraData);
@@ -870,6 +871,107 @@
             }
         }
 
+        function renderTracePanel(msg, trace, latency) {
+            if (!trace) return;
+            const container = document.createElement('div');
+            container.className = 'waddles-trace-container';
+            container.style.marginTop = '8px';
+            container.style.fontFamily = 'monospace';
+            container.style.fontSize = '0.675rem';
+            container.style.border = '1px solid rgba(255, 255, 255, 0.08)';
+            container.style.borderRadius = '6px';
+            container.style.background = 'rgba(15, 23, 42, 0.4)';
+            container.style.overflow = 'hidden';
+
+            const btn = document.createElement('button');
+            btn.className = 'waddles-trace-toggle-btn';
+            btn.style.width = '100%';
+            btn.style.display = 'flex';
+            btn.style.justifyContent = 'space-between';
+            btn.style.alignItems = 'center';
+            btn.style.background = 'rgba(255,255,255,0.03)';
+            btn.style.border = 'none';
+            btn.style.padding = '6px 10px';
+            btn.style.color = '#2dd4bf';
+            btn.style.cursor = 'pointer';
+            btn.style.textAlign = 'left';
+            btn.style.fontWeight = '700';
+            btn.style.fontFamily = 'inherit';
+            btn.innerHTML = `<span>🔍 View RAG Pipeline Trace (${latency}ms)</span><i class="fa fa-chevron-down" style="transition: transform 0.2s; color: #2dd4bf;"></i>`;
+
+            const details = document.createElement('div');
+            details.className = 'waddles-trace-details';
+            details.style.display = 'none';
+            details.style.padding = '10px';
+            details.style.borderTop = '1px solid rgba(255,255,255,0.06)';
+            details.style.maxHeight = '180px';
+            details.style.overflowY = 'auto';
+            details.style.color = '#94a3b8';
+            details.style.lineHeight = '1.45';
+
+            let html = '';
+            
+            // Stage 1: Query Normalization
+            html += `<div style="margin-bottom: 8px;"><strong style="color: #38bdf8;">[Stage 1: Query Normalization]</strong><br>`;
+            html += `• Raw: "${trace.rawQuery}"<br>`;
+            html += `• Preprocessed: "${trace.processedQuery}"</div>`;
+
+            // Stage 2: Dual Retrieval
+            html += `<div style="margin-bottom: 8px;"><strong style="color: #38bdf8;">[Stage 2: Dual Retrieval]</strong><br>`;
+            if (trace.denseMatches && trace.denseMatches.length > 0) {
+                html += `• Dense (Cosine Similarity):<br>`;
+                trace.denseMatches.forEach(m => {
+                    html += `&nbsp;&nbsp;- ${m.title.substring(0, 32)}... (score: ${m.score.toFixed(3)})<br>`;
+                });
+            } else if (activeModelType === 'rag') {
+                html += `• Dense: No high-scoring vectors found.<br>`;
+            }
+            if (trace.sparseMatches && trace.sparseMatches.length > 0) {
+                html += `• Sparse (Keyword Match):<br>`;
+                trace.sparseMatches.forEach(m => {
+                    html += `&nbsp;&nbsp;- ${m.title.substring(0, 32)}... (score: ${m.score.toFixed(1)})<br>`;
+                });
+            } else {
+                html += `• Sparse: No keyword matches found.<br>`;
+            }
+            html += `</div>`;
+
+            // Stage 3: Hybrid Fusion (RRF)
+            html += `<div style="margin-bottom: 8px;"><strong style="color: #38bdf8;">[Stage 3: Hybrid Fusion (RRF)]</strong><br>`;
+            if (trace.rrfMatches && trace.rrfMatches.length > 0) {
+                trace.rrfMatches.forEach((m, idx) => {
+                    html += `• Rank ${idx + 1}: ${m.title.substring(0, 32)}... (RRF: ${m.score.toFixed(4)})<br>`;
+                });
+            } else {
+                html += `• No merged results.<br>`;
+            }
+            html += `</div>`;
+
+            // Stage 4: Cross-Encoder Rerank
+            if (trace.rerankedSentences && trace.rerankedSentences.length > 0) {
+                html += `<div style="margin-bottom: 4px;"><strong style="color: #38bdf8;">[Stage 4: Cross-Encoder Rerank]</strong><br>`;
+                trace.rerankedSentences.forEach((s, idx) => {
+                    html += `• Sent ${idx + 1}: "${s.text.substring(0, 28)}..." (Logits: ${s.score.toFixed(3)})<br>`;
+                });
+                html += `</div>`;
+            }
+
+            details.innerHTML = html;
+            container.appendChild(btn);
+            container.appendChild(details);
+            msg.appendChild(container);
+
+            btn.addEventListener('click', () => {
+                const isCollapsed = details.style.display === 'none';
+                details.style.display = isCollapsed ? 'block' : 'none';
+                const icon = btn.querySelector('i');
+                if (icon) {
+                    icon.style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
+                }
+                scrollToBottom();
+            });
+        }
+
         function renderVisualAsset(msg, extraData) {
             const imgContainer = document.createElement('div');
             imgContainer.style.marginTop = '8px';
@@ -1127,6 +1229,9 @@
                             if (extraData && extraData.conceptChips && extraData.conceptChips.length > 0) {
                                 renderConceptChips(msg, extraData.conceptChips);
                             }
+                            if (extraData && extraData.trace) {
+                                renderTracePanel(msg, extraData.trace, extraData.latency);
+                            }
                             if (queryText && queryId) {
                                 renderFeedbackButtons(msg, queryText, queryId, displayHtml, extraData);
                             }
@@ -1165,6 +1270,9 @@
                     }
                     if (extraData && extraData.conceptChips && extraData.conceptChips.length > 0) {
                         renderConceptChips(msg, extraData.conceptChips);
+                    }
+                    if (extraData && extraData.trace) {
+                        renderTracePanel(msg, extraData.trace, extraData.latency);
                     }
 
                     if (sender === 'system' && (extraData || queryText)) {
@@ -1612,6 +1720,7 @@
         async function getBotResponse(query) {
             const text = query.toLowerCase().trim();
             const personality = document.getElementById('waddles-personality-selector')?.value || 'helpful';
+            let finalRerankedData = null;
 
             // 1. Curated responses for exact match chips / simple greetings (only when helpful personality is active)
             const greetings = ["hello", "hi", "hey", "greetings", "who are you", "who is tj"];
@@ -1806,6 +1915,7 @@
                                 });
 
                                 const sortedFinal = finalReranked.sort((a, b) => b.score - a.score);
+                                finalRerankedData = sortedFinal;
                                 const compressedSentences = sortedFinal.slice(0, 4);
                                 
                                 contextText = compressedSentences.map(s => s.text).join(" ");
@@ -1966,7 +2076,21 @@ ${query}<|im_end|>
                         generatedText = generatedText.replace(/<\|im_end\|>/g, '').replace(/<\|im_start\|>/g, '').trim();
                     }
                     
-                    return parseStructuredResponse(generatedText, finalBestMatch, visualAssetUrl, visualAssetTitle);
+                    const responseObj = parseStructuredResponse(generatedText, finalBestMatch, visualAssetUrl, visualAssetTitle);
+                    const processedTokens = query.toLowerCase()
+                        .replace(/[^\w\s-]/g, '')
+                        .split(/\s+/)
+                        .filter(t => t.length > 2)
+                        .filter(t => !['the', 'and', 'for', 'this', 'that', 'with', 'from', 'about', 'your', 'will', 'have', 'been', 'are', 'was', 'were', 'what', 'tell', 'how', 'who', 'does', 'shes', 'they'].includes(t));
+                    responseObj.trace = {
+                        rawQuery: query,
+                        processedQuery: processedTokens.join(' '),
+                        denseMatches: denseMatches.slice(0, 3).map(m => ({ title: m.doc.title, score: m.score })),
+                        sparseMatches: sparseMatches.slice(0, 3).map(m => ({ title: m.doc.title, score: m.score })),
+                        rrfMatches: finalRRFMatches.slice(0, 3).map(m => ({ title: m.doc.title, score: m.score })),
+                        rerankedSentences: finalRerankedData ? finalRerankedData.slice(0, 3).map(s => ({ text: s.text, score: s.score })) : null
+                    };
+                    return responseObj;
                 } else {
                     const queryTokens = query.toLowerCase().replace(/[^\w\s-]/g, '').split(/\s+/).filter(t => t.length > 2);
                     const stopWords = ['the', 'and', 'for', 'this', 'that', 'with', 'from', 'about', 'your', 'will', 'have', 'been', 'are', 'was', 'were', 'what', 'tell', 'how', 'who', 'does', 'shes', 'they'];
@@ -1999,7 +2123,15 @@ ${query}<|im_end|>
                         category: getDocCategory(bestMatch),
                         followups: [],
                         sourceTitle: bestMatch.title,
-                        sourceUrl: bestMatch.url
+                        sourceUrl: bestMatch.url,
+                        trace: {
+                            rawQuery: query,
+                            processedQuery: searchTerms.join(' '),
+                            denseMatches: [],
+                            sparseMatches: sparseMatches.slice(0, 3).map(m => ({ title: m.doc.title, score: m.score })),
+                            rrfMatches: finalRRFMatches.slice(0, 3).map(m => ({ title: m.doc.title, score: m.score })),
+                            rerankedSentences: null
+                        }
                     };
                 }
             }
