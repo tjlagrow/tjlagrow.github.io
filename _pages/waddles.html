@@ -442,38 +442,38 @@ full_width: true
         <div class="d-flex justify-content-center p-3" style="background: rgba(0,0,0,0.2); border-radius: 0.5rem; overflow-x: auto;">
           <div class="mermaid" style="width: 100%; min-width: 600px;">
             graph TD
-                subgraph Compilation [Offline Data Pre-Processing]
-                    A[Site Pages & Publications] -->|generate_embeddings.py| B(Xenova/all-MiniLM-L6-v2 Embedder)
-                    B --> C[assets/json/embeddings.json]
+                subgraph Compilation ["Offline Data Pre-Processing"]
+                    A["Site Pages & Publications"] -->|generate_embeddings.py| B["Xenova/all-MiniLM-L6-v2 Embedder"]
+                    B --> C["assets/json/embeddings.json"]
                 end
-                subgraph Classification [Client-Side Input Routing]
-                    D[User Query] -->|regex & keywords| E{Intent Classifier}
-                    E -->|Teaching / Research / Bio| F[Database Category Filter]
+                subgraph Classification ["Client-Side Input Routing"]
+                    D["User Query"] -->|regex & keywords| E{"Intent Classifier"}
+                    E -->|Teaching / Research / Bio| F["Database Category Filter"]
                     C --> F
                 end
-                subgraph Retrieval [Parallel Search & Rank Fusion]
-                    F -->|Sparse BM25 Indexing| H(Sparse Keyword Ranks)
-                    F -->|Dense Dot-Product Scanning| I(Dense Vector Ranks)
-                    H -->|RRF Fusion Ranks| J[Reciprocal Rank Fusion]
+                subgraph Retrieval ["Parallel Search & Rank Fusion"]
+                    F -->|Sparse BM25 Indexing| H["Sparse Keyword Ranks"]
+                    F -->|Dense Dot-Product Scanning| I["Dense Vector Ranks"]
+                    H -->|RRF Fusion Ranks| J["Reciprocal Rank Fusion"]
                     I -->|RRF Fusion Ranks| J
-                    J -->|Select top 3 document chunks| K[Sentence Splitter]
+                    J -->|Select top 3 document chunks| K["Sentence Splitter"]
                 end
-                subgraph Compression [Sentence-Level Compression & Re-ranking]
-                    K -->|10-15 sentence candidates| L(Batch Sentence Embedder)
-                    D -->|Extract Query Vector| G[all-MiniLM-L6-v2 Embedder]
-                    G -->|Sentence Cosine Similarities| M(Dot-Product Score & Sort)
+                subgraph Compression ["Sentence-Level Compression & Re-ranking"]
+                    K -->|10-15 sentence candidates| L["Batch Sentence Embedder"]
+                    D -->|Extract Query Vector| G["all-MiniLM-L6-v2 Embedder"]
+                    G -->|Sentence Cosine Similarities| M["Dot-Product Score & Sort"]
                     L --> M
-                    M -->|Top 8 sentences| N(Cross-Encoder Rerank pipeline)
+                    M -->|Top 8 sentences| N["Cross-Encoder Rerank pipeline"]
                     D -->|Cross-Attention Scoring| N
-                    N -->|Select top 4 sentence context| O[Compressed Context block]
+                    N -->|Select top 4 sentence context| O["Compressed Context block"]
                 end
-                subgraph Synthesis [Generation & Webhook Log Feedback]
-                    O -->|Construct prompt template| P[Prompt Compiler]
-                    Q[Conversation History] -->|Append rolling 4 turns| P
-                    P -->|ONNX Inference| R{Generator Selector}
-                    R -->|SmolLM2 / Qwen| S[JSON Schema output parsing]
-                    S -->|Submit logs| T[Queries FormWebhook]
-                    S -->|Submit feedback rating| U[Ratings FormWebhook]
+                subgraph Synthesis ["Generation & Webhook Log Feedback"]
+                    O -->|Construct prompt template| P["Prompt Compiler"]
+                    Q["Conversation History"] -->|Append rolling 4 turns| P
+                    P -->|ONNX Inference| R{"Generator Selector"}
+                    R -->|SmolLM2 / Qwen| S["JSON Schema output parsing"]
+                    S -->|Submit logs| T["Queries FormWebhook"]
+                    S -->|Submit feedback rating| U["Ratings FormWebhook"]
                 end
           </div>
         </div>
@@ -509,23 +509,23 @@ full_width: true
                   classDef highlight fill:#0f172a,stroke:#0d9488,stroke-width:1.5px,color:#2dd4bf;
                   classDef rankNode fill:#1e1b4b,stroke:#6366f1,stroke-width:1px,color:#a5b4fc;
                   
-                  Q[User Query: 'CS 7641 ML'] --> Dense[Dense Vector Search]
-                  Q --> Sparse[Sparse BM25 Search]
+                  Q["User Query: 'CS 7641 ML'"] --> Dense["Dense Vector Search"]
+                  Q --> Sparse["Sparse BM25 Search"]
                   
-                  Dense -->|Rank 0| D1[Doc A: Machine Learning]:::rankNode
-                  Dense -->|Rank 1| D2[Doc B: Syllabus OMSCS]:::rankNode
+                  Dense -->|Rank 0| D1["Doc A: Machine Learning"]:::rankNode
+                  Dense -->|Rank 1| D2["Doc B: Syllabus OMSCS"]:::rankNode
                   
-                  Sparse -->|Rank 0| S1[Doc B: Syllabus OMSCS]:::rankNode
-                  Sparse -->|Rank 1| S2[Doc C: Grading Policy]:::rankNode
+                  Sparse -->|Rank 0| S1["Doc B: Syllabus OMSCS"]:::rankNode
+                  Sparse -->|Rank 1| S2["Doc C: Grading Policy"]:::rankNode
                   
                   D1 --> RRF["RRF Score Calculation (k = 60)"]
                   D2 --> RRF
                   S1 --> RRF
                   S2 --> RRF
                   
-                  RRF -->|Score: 0.0330| R1[Doc B: Syllabus OMSCS]:::highlight
-                  RRF -->|Score: 0.0166| R2[Doc A: Machine Learning]
-                  RRF -->|Score: 0.0164| R3[Doc C: Grading Policy]
+                  RRF -->|Score: 0.0330| R1["Doc B: Syllabus OMSCS"]:::highlight
+                  RRF -->|Score: 0.0166| R2["Doc A: Machine Learning"]
+                  RRF -->|Score: 0.0164| R3["Doc C: Grading Policy"]
             </div>
           </div>
         </div>
@@ -558,27 +558,27 @@ full_width: true
                   classDef highlight fill:#0f172a,stroke:#f43f5e,stroke-width:1.5px,color:#fda4af;
                   classDef vecNode fill:#1e1b4b,stroke:#0ea5e9,stroke-width:1px,color:#7dd3fc;
                   
-                  Doc[Top RRF Document Chunks] --> Split[Punctuation Boundary Splitter]
-                  Split --> S1[Sentence 1]
-                  Split --> S2[Sentence 2]
-                  Split --> S3[Sentence 3]
+                  Doc["Top RRF Document Chunks"] --> Split["Punctuation Boundary Splitter"]
+                  Split --> S1["Sentence 1"]
+                  Split --> S2["Sentence 2"]
+                  Split --> S3["Sentence 3"]
                   
-                  S1 --> E1[Vector s1]:::vecNode
-                  S2 --> E2[Vector s2]:::vecNode
-                  S3 --> E3[Vector s3]:::vecNode
+                  S1 --> E1["Vector s1"]:::vecNode
+                  S2 --> E2["Vector s2"]:::vecNode
+                  S3 --> E3["Vector s3"]:::vecNode
                   
-                  Query[Query: 'What is QPP?'] --> EQ[Query Vector q]:::vecNode
+                  Query["Query: 'What is QPP?'"] --> EQ["Query Vector q"]:::vecNode
                   
-                  EQ --> Dot1[Dot Product: q · s1]
+                  EQ --> Dot1["Dot Product: q · s1"]
                   E1 --> Dot1
-                  EQ --> Dot2[Dot Product: q · s2]
+                  EQ --> Dot2["Dot Product: q · s2"]
                   E2 --> Dot2
-                  EQ --> Dot3[Dot Product: q · s3]
+                  EQ --> Dot3["Dot Product: q · s3"]
                   E3 --> Dot3
                   
-                  Dot1 -->|Score: 0.82| R1[Sentence 1: High Similarity]:::highlight
-                  Dot2 -->|Score: 0.21| R2[Sentence 2: Low Similarity]
-                  Dot3 -->|Score: 0.54| R3[Sentence 3: Med Similarity]
+                  Dot1 -->|Score: 0.82| R1["Sentence 1: High Similarity"]:::highlight
+                  Dot2 -->|Score: 0.21| R2["Sentence 2: Low Similarity"]
+                  Dot3 -->|Score: 0.54| R3["Sentence 3: Med Similarity"]
             </div>
           </div>
         </div>
@@ -678,14 +678,14 @@ full_width: true
                       classDef highlight fill:#0f172a,stroke:#0d9488,stroke-width:1.5px,color:#2dd4bf;
                       classDef rankNode fill:#1e1b4b,stroke:#6366f1,stroke-width:1px,color:#a5b4fc;
                       
-                      subgraph BiEncoder [Bi-Encoder Architecture]
-                          Q1[Query] --> E1[Embedder] --> V1[Query Vector]
-                          D1[Document] --> E2[Embedder] --> V2[Doc Vector]
-                           V1 --> Cos[Cosine Similarity]
+                      subgraph BiEncoder ["Bi-Encoder Architecture"]
+                          Q1["Query"] --> E1["Embedder"] --> V1["Query Vector"]
+                          D1["Document"] --> E2["Embedder"] --> V2["Doc Vector"]
+                           V1 --> Cos["Cosine Similarity"]
                            V2 --> Cos
                       end
-                      subgraph CrossEncoder [Cross-Encoder Architecture]
-                          QD[Query + Document Joint Token Input] --> CA[Full Token-to-Token Cross-Attention] --> Class[Joint Score Logits]:::highlight
+                      subgraph CrossEncoder ["Cross-Encoder Architecture"]
+                          QD["Query + Document Joint Token Input"] --> CA["Full Token-to-Token Cross-Attention"] --> Class["Joint Score Logits"]:::highlight
                       end
                 </div>
               </div>
@@ -712,11 +712,11 @@ full_width: true
                       classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
                       classDef highlight fill:#0f172a,stroke:#f43f5e,stroke-width:1.5px,color:#fda4af;
                       
-                      Tokens[Input Token Sequence] --> RoPE[RoPE Positional Encoding]
-                      RoPE --> Attention[Grouped-Query Attention GQA]
-                      Attention --> FFN[SwiGLU Feed-Forward Network]
-                      FFN --> Norm[RMSNorm Stabilization]
-                      Norm --> Logits[Next-Token Probability Logits]:::highlight
+                      Tokens["Input Token Sequence"] --> RoPE["RoPE Positional Encoding"]
+                      RoPE --> Attention["Grouped-Query Attention GQA"]
+                      Attention --> FFN["SwiGLU Feed-Forward Network"]
+                      FFN --> Norm["RMSNorm Stabilization"]
+                      Norm --> Logits["Next-Token Probability Logits"]:::highlight
                 </div>
               </div>
             </div>
@@ -770,13 +770,13 @@ full_width: true
                       classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
                       classDef highlight fill:#0f172a,stroke:#c084fc,stroke-width:1.5px,color:#e9d5ff;
                       
-                      subgraph MHA [Multi-Head Attention]
-                          Q_MHA[8 Query Heads] -->|1-to-1| KV_MHA[8 Key/Value Heads]
-                          KV_MHA --> Cache_MHA[Large KV Cache Memory Size]
+                      subgraph MHA ["Multi-Head Attention"]
+                          Q_MHA["8 Query Heads"] -->|1-to-1| KV_MHA["8 Key/Value Heads"]
+                          KV_MHA --> Cache_MHA["Large KV Cache Memory Size"]
                       end
-                      subgraph GQA [Grouped-Query Attention]
-                          Q_GQA[8 Query Heads] -->|Grouped 8-to-1| KV_GQA[1 Key/Value Head]
-                          KV_GQA --> Cache_GQA[Compact KV Cache Memory Size]:::highlight
+                      subgraph GQA ["Grouped-Query Attention"]
+                          Q_GQA["8 Query Heads"] -->|Grouped 8-to-1| KV_GQA["1 Key/Value Head"]
+                          KV_GQA --> Cache_GQA["Compact KV Cache Memory Size"]:::highlight
                       end
                 </div>
               </div>
@@ -829,8 +829,8 @@ full_width: true
                       classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
                       classDef highlight fill:#0f172a,stroke:#0d9488,stroke-width:1.5px,color:#2dd4bf;
                       
-                      Q[User Raw Input] --> Normalizer["Acronym & Synonym Normalization [3]"]
-                      Normalizer --> LengthCheck{Length > 20 Words?}
+                      Q["User Raw Input"] --> Normalizer["Acronym & Synonym Normalization [3]"]
+                      Normalizer --> LengthCheck{"Length > 20 Words?"}
                       LengthCheck -->|Yes| Truncate["Sentence Compression (First/Last)"]
                       LengthCheck -->|No| PreFilter["Lexical Intent Pre-Filtering"]
                       Truncate --> PreFilter
@@ -874,9 +874,9 @@ full_width: true
                       classDef default fill:#1e293b,stroke:#334155,stroke-width:1px,color:#cbd5e1;
                       classDef highlight fill:#0f172a,stroke:#f43f5e,stroke-width:1.5px,color:#fda4af;
                       
-                      Inference[Model Autoregressive Inference] --> SchemaCheck{"Is Output Valid JSON [13]?"}
-                      SchemaCheck -->|Yes| StructuredParser[JSON Object Parsed]
-                      SchemaCheck -->|No| PlaintextFallback[Fallback Recovery Plaintext]
+                      Inference["Model Autoregressive Inference"] --> SchemaCheck{"Is Output Valid JSON [13]?"}
+                      SchemaCheck -->|Yes| StructuredParser["JSON Object Parsed"]
+                      SchemaCheck -->|No| PlaintextFallback["Fallback Recovery Plaintext"]
                       StructuredParser --> BoundaryFilter["Regex Punctuation Truncator"]
                       PlaintextFallback --> BoundaryFilter
                       BoundaryFilter --> RenderUI["UI Renders Clean Output Bubble"]:::highlight
@@ -3124,6 +3124,62 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
                     </tr>
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.825rem;">
                       <td class="ps-0 py-3 fw-bold text-white">
+                        <i class="fa fa-trophy text-warning me-2" style="color: #f59e0b;"></i>Llama-3.1-8B-Ollama
+                        <span class="d-block text-muted fw-normal small mt-0.5" style="font-size: 0.7rem;">meta-llama/Meta-Llama-3.1-8B-Instruct (via Ollama)</span>
+                      </td>
+                      <td class="text-center text-teal fw-bold" style="color: #2dd4bf;">1.41s</td>
+                      <td class="text-center text-light">0.235</td>
+                      <td class="text-center text-light">0.346</td>
+                      <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                          <span class="text-teal fw-bold" style="color: #2dd4bf;">100.0%</span>
+                          <div class="progress" style="width: 35px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                            <div class="progress-bar" style="width: 100%; background: #2dd4bf; border-radius: 2px;"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                          <span class="text-light">16.7%</span>
+                          <div class="progress" style="width: 35px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                            <div class="progress-bar" style="width: 16.7%; background: #38bdf8; border-radius: 2px;"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.2); font-size: 0.65rem;">Max Faithfulness (Local)</span>
+                      </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.825rem;">
+                      <td class="ps-0 py-3 fw-bold text-white">
+                        <i class="fa fa-star text-info me-2"></i>Llama-3.2-3B-4bit
+                        <span class="d-block text-muted fw-normal small mt-0.5" style="font-size: 0.7rem;">unsloth/Llama-3.2-3B-Instruct-bnb-4bit</span>
+                      </td>
+                      <td class="text-center text-teal fw-bold" style="color: #2dd4bf;">4.14s</td>
+                      <td class="text-center text-light">0.168</td>
+                      <td class="text-center text-light">0.331</td>
+                      <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                          <span class="text-teal fw-bold" style="color: #2dd4bf;">83.3%</span>
+                          <div class="progress" style="width: 35px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                            <div class="progress-bar" style="width: 83.3%; background: #2dd4bf; border-radius: 2px;"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                          <span class="text-light">16.7%</span>
+                          <div class="progress" style="width: 35px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                            <div class="progress-bar" style="width: 16.7%; background: #38bdf8; border-radius: 2px;"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge" style="background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); font-size: 0.65rem;">Fast 3B via 4-bit Quant</span>
+                      </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.825rem;">
+                      <td class="ps-0 py-3 fw-bold text-white">
                         <i class="fa fa-dot-circle text-muted me-2" style="opacity: 0.5;"></i>SmolLM2-360M
                         <span class="d-block text-muted fw-normal small mt-0.5" style="font-size: 0.7rem;">HuggingFaceTB/SmolLM2-360M-Instruct</span>
                       </td>
@@ -3364,17 +3420,17 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
                   id: "model_compare",
                   name: "Model Generation Metrics",
                   file: "/assets/images/ablation/generation_comparison.png",
-                  done: "Evaluated SmolLM2-135M, SmolLM2-360M, Qwen2.5-0.5B, Qwen2.5-1.5B, and DeepSeek-R1-1.5B on average latency, semantic similarity, and formatting conformance.",
-                  why: "Identifies which lightweight architectures can execute autoregressive token generation within browser RAM constraints. Qwen2.5-0.5B was the fastest (1.74s), while Qwen2.5-1.5B offered the best balance of quality and latency.",
-                  metrics: "Qwen2.5-0.5B: 1.74s latency, 83% JSON conformance | Qwen2.5-1.5B: 11.30s latency, 66% JSON conformance"
+                  done: "Evaluated SmolLM2-135M, SmolLM2-360M, Qwen2.5-0.5B, Qwen2.5-1.5B, DeepSeek-R1-1.5B, Llama-3.2-3B-4bit, and Llama-3.1-8B-Ollama on average latency, semantic similarity, and formatting conformance.",
+                  why: "Identifies which lightweight architectures can execute autoregressive token generation. Qwen2.5-0.5B was the fastest local model (1.70s), Llama-3.1-8B-Ollama executed in 1.41s via local Ollama hardware acceleration, while Llama-3.2-3B-4bit balanced size and logic.",
+                  metrics: "Llama-3.1-8B-Ollama: 1.41s latency | Llama-3.2-3B-4bit: 4.10s latency | Qwen2.5-0.5B: 1.70s latency"
                 },
                 {
                   id: "model_integrity",
                   name: "Model Generation Integrity",
                   file: "/assets/images/ablation/generation_integrity.png",
                   done: "Benchmarked groundedness, hallucination ratios, and LLM-judge faithfulness scores.",
-                  why: "Determines if small models can remain faithful to the retrieved context without hallucinating out-of-scope details. Qwen2.5-1.5B achieved the highest judge faithfulness score (83.33%).",
-                  metrics: "SmolLM2-135M: 50% Faithful | Qwen2.5-1.5B: 83.33% Faithful | DeepSeek-R1-1.5B: 33.33% Faithful"
+                  why: "Determines if small models can remain faithful to the retrieved context. The larger Llama-3.1-8B-Ollama achieved a perfect 100.0% Judge Faithfulness score, while Llama-3.2-3B-4bit followed with 83.3%.",
+                  metrics: "Llama-3.1-8B-Ollama: 100% Faithful | Llama-3.2-3B-4bit: 83.3% Faithful | DeepSeek-R1-1.5B: 33.3% Faithful"
                 },
                 {
                   id: "decoding",
@@ -3518,9 +3574,9 @@ queryId = q_${Date.now()}_${Math.floor(Math.random()*1000)}
                   id: "all_metrics",
                   name: "All-Metrics Comparison",
                   file: "/assets/images/ablation/metrics_comparison.png",
-                  done: "Plotted a comparison comparing overall performance metrics.",
-                  why: "Provides a unified holistic view of model tradeoffs in accuracy, compliance, and latency.",
-                  metrics: "Qwen2.5-1.5B holds the highest area-under-curve for accuracy but has 6x latency"
+                  done: "Benchmarked ROUGE-L, Semantic Cosine, Groundedness, Faithfulness, and Refusal Adherence across all 7 models on a unified heatmap matrix.",
+                  why: "Provides a holistic overview of generator trade-offs. While Llama-3.1-8B-Ollama achieves the top Faithfulness (100.0%) at very low latency, Qwen2.5-0.5B offers 83.3% JSON conformance, and DeepSeek-R1-1.5B excels in ROUGE-L overlap (35.9%).",
+                  metrics: "Llama-3.1-8B-Ollama: Faithfulness=1.00 | DeepSeek-R1-1.5B: ROUGE-L=0.36 | Llama-3.2-3B-4bit: Faithfulness=0.83"
                 }
               ]
             }

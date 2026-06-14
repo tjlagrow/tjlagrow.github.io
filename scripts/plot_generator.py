@@ -95,14 +95,17 @@ def generate_expanded_plots(results):
         hit3_vals = [p1[k]["hit_at_3"] for k in k_keys]
         mrr_vals = [p1[k]["mrr"] for k in k_keys]
         
-        ax.plot(labels, hit3_vals, marker='o', linewidth=2.5, color=SECONDARY, label="Recall@3",
+        x = np.arange(len(labels))
+        ax.plot(x, hit3_vals, marker='o', linewidth=2.5, color=SECONDARY, label="Recall@3",
                 markerfacecolor=SECONDARY, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.plot(labels, mrr_vals, marker='s', linewidth=2.5, color=ACCENT_AMBER, label="MRR",
+        ax.plot(x, mrr_vals, marker='s', linewidth=2.5, color=ACCENT_AMBER, label="MRR",
                 markerfacecolor=ACCENT_AMBER, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.fill_between(range(len(labels)), hit3_vals, color=SECONDARY, alpha=0.12)
-        ax.fill_between(range(len(labels)), mrr_vals, color=ACCENT_AMBER, alpha=0.08)
+        ax.fill_between(x, hit3_vals, color=SECONDARY, alpha=0.12)
+        ax.fill_between(x, mrr_vals, color=ACCENT_AMBER, alpha=0.08)
         
         style_axes(ax, "Retrieval Cutoff (K) Parameter Trade-offs", ylabel="Score")
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels)
         ax.set_ylim(min(mrr_vals) * 0.95, 1.05)
         plt.tight_layout()
         plt.savefig(os.path.join(IMAGE_OUT_DIR, "parameter_tradeoffs.png"), dpi=150)
@@ -145,7 +148,7 @@ def generate_expanded_plots(results):
             
             style_axes(ax, "Generator Performance: ROUGE-L vs. Semantic Similarity", ylabel="Score")
             ax.set_xticks(x)
-            ax.set_xticklabels(models, rotation=15)
+            ax.set_xticklabels(models, rotation=25, ha='right', rotation_mode='anchor')
             ax.set_ylim(0, 1.05)
             plt.tight_layout()
             plt.savefig(os.path.join(IMAGE_OUT_DIR, "generation_comparison.png"), dpi=150)
@@ -162,7 +165,7 @@ def generate_expanded_plots(results):
                 
                 style_axes(ax, "Generator Integrity: Lexical TTR vs. Groundedness", ylabel="Score")
                 ax.set_xticks(x)
-                ax.set_xticklabels(models, rotation=15)
+                ax.set_xticklabels(models, rotation=25, ha='right', rotation_mode='anchor')
                 ax.set_ylim(0, 1.05)
                 plt.tight_layout()
                 plt.savefig(os.path.join(IMAGE_OUT_DIR, "generation_integrity.png"), dpi=150)
@@ -172,8 +175,9 @@ def generate_expanded_plots(results):
             fig, ax = plt.subplots(figsize=(7, 5))
             latencies = [p2[m]["latency_sec"] for m in models]
             groundedness_vals = [p2[m]["groundedness"] for m in models]
-            colors_list = [PRIMARY, SECONDARY, ACCENT_ROSE, ACCENT_AMBER, ACCENT_PURPLE][:len(models)]
-            sizes = [150, 220, 290, 360, 430][:len(models)]
+            colors_base = [PRIMARY, SECONDARY, ACCENT_ROSE, ACCENT_AMBER, ACCENT_PURPLE, ACCENT_PINK, ACCENT_EMERALD]
+            colors_list = [colors_base[i % len(colors_base)] for i in range(len(models))]
+            sizes = [150 + i * 70 for i in range(len(models))]
             
             ax.scatter(latencies, groundedness_vals, s=sizes, c=colors_list, alpha=0.85, edgecolors='#cbd5e1', linewidth=1.2)
             for i, txt in enumerate(models):
@@ -182,7 +186,8 @@ def generate_expanded_plots(results):
             style_axes(ax, "Pareto Frontier: Generation Latency vs. Groundedness", "Average Latency (seconds, log scale)", "Groundedness Score", show_legend=False)
             ax.set_ylim(-0.05, 1.05)
             ax.set_xscale('log')
-            ax.xaxis.set_major_formatter(plt.FormatStrFormatter('%.2fs'))
+            from matplotlib.ticker import FuncFormatter
+            ax.xaxis.set_major_formatter(FuncFormatter(lambda y, _: '{:.2f}s'.format(y)))
             plt.tight_layout()
             plt.savefig(os.path.join(IMAGE_OUT_DIR, "latency_vs_recall.png"), dpi=150)
             plt.close()
@@ -239,18 +244,21 @@ def generate_expanded_plots(results):
             ("cynical_redditor", ACCENT_PURPLE)
         ]
         
+        x = np.arange(len(shots))
         for persona, color in persona_configs:
             if persona in p3:
                 conformance = [p3[persona][f"shot_{s}"]["json_conformance"] for s in shots]
                 style_dens = [p3[persona][f"shot_{s}"]["style_density"] for s in shots]
                 p_label = persona.replace("_", " ").title()
                 
-                ax.plot(x_ticks, conformance, linestyle="-", marker="o", color=color, label=f"{p_label} JSON Conformance",
+                ax.plot(x, conformance, linestyle="-", marker="o", color=color, label=f"{p_label} JSON Conformance",
                         markerfacecolor=color, markeredgecolor='white', markeredgewidth=1.2, markersize=6)
-                ax.plot(x_ticks, style_dens, linestyle="--", marker="s", color=color, label=f"{p_label} Style Density",
+                ax.plot(x, style_dens, linestyle="--", marker="s", color=color, label=f"{p_label} Style Density",
                         markerfacecolor='white', markeredgecolor=color, markeredgewidth=1.2, markersize=5)
                 
         style_axes(ax, "Few-Shot Style Anchoring vs. JSON Conformance Curve", xlabel="Shot Count Examples")
+        ax.set_xticks(x)
+        ax.set_xticklabels(x_ticks)
         ax.set_ylim(-0.05, 1.15)
         ax.legend(bbox_to_anchor=(1.02, 1), loc="upper left", frameon=True, fontsize=8)
         plt.tight_layout()
@@ -263,21 +271,26 @@ def generate_expanded_plots(results):
         shots = list(range(11))
         x_ticks = [f"{s}-sh" for s in shots]
         
+        x = np.arange(len(shots))
         for persona, color in [("helpful", PRIMARY), ("sassy", ACCENT_ROSE), ("pirate", SECONDARY), ("cynical_redditor", ACCENT_PURPLE)]:
             if persona in p3:
                 ground_vals = [p3[persona][f"shot_{s}"].get("groundedness", 0.0) for s in shots]
                 len_vals = [p3[persona][f"shot_{s}"].get("length", 0.0) for s in shots]
                 p_label = persona.replace("_", " ").title()
                 
-                ax1.plot(x_ticks, ground_vals, marker="o", color=color, label=p_label,
+                ax1.plot(x, ground_vals, marker="o", color=color, label=p_label,
                          markerfacecolor=color, markeredgecolor='white', markeredgewidth=1.2, markersize=6)
-                ax2.plot(x_ticks, len_vals, marker="s", color=color, label=p_label,
+                ax2.plot(x, len_vals, marker="s", color=color, label=p_label,
                          markerfacecolor=color, markeredgecolor='white', markeredgewidth=1.2, markersize=6)
                 
         style_axes(ax1, "Answer Groundedness vs. Shot Count", xlabel="Shot Count")
+        ax1.set_xticks(x)
+        ax1.set_xticklabels(x_ticks)
         ax1.set_ylim(-0.05, 1.05)
         
         style_axes(ax2, "Answer Length vs. Shot Count", xlabel="Shot Count", ylabel="Characters")
+        ax2.set_xticks(x)
+        ax2.set_xticklabels(x_ticks)
         
         plt.tight_layout()
         plt.savefig(os.path.join(IMAGE_OUT_DIR, "fewshot_tradeoffs.png"), dpi=150)
@@ -315,14 +328,17 @@ def generate_expanded_plots(results):
         faith_vals = [p4[k]["judge_faithfulness"] for k in ordering_keys]
         rel_vals = [p4[k]["judge_relevance"] for k in ordering_keys]
         
-        ax.plot(labels, faith_vals, marker='o', linewidth=2.5, color=ACCENT_ROSE, label="Judge Faithfulness",
+        x = np.arange(len(labels))
+        ax.plot(x, faith_vals, marker='o', linewidth=2.5, color=ACCENT_ROSE, label="Judge Faithfulness",
                 markerfacecolor=ACCENT_ROSE, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.plot(labels, rel_vals, marker='s', linewidth=2.5, color=ACCENT_AMBER, label="Judge Relevance",
+        ax.plot(x, rel_vals, marker='s', linewidth=2.5, color=ACCENT_AMBER, label="Judge Relevance",
                 markerfacecolor=ACCENT_AMBER, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.fill_between(range(len(labels)), faith_vals, color=ACCENT_ROSE, alpha=0.12)
-        ax.fill_between(range(len(labels)), rel_vals, color=ACCENT_AMBER, alpha=0.08)
+        ax.fill_between(x, faith_vals, color=ACCENT_ROSE, alpha=0.12)
+        ax.fill_between(x, rel_vals, color=ACCENT_AMBER, alpha=0.08)
         
         style_axes(ax, "Lost-in-the-Middle: Document Position Impact", ylabel="Evaluation Score")
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels)
         ax.set_ylim(min(faith_vals + rel_vals) * 0.9, 1.05)
         plt.tight_layout()
         plt.savefig(os.path.join(IMAGE_OUT_DIR, "lost_in_the_middle_ordering.png"), dpi=150)
@@ -383,14 +399,17 @@ def generate_expanded_plots(results):
         faith_vals = [p5[k]["judge_faithfulness"] for k in volume_keys]
         halluc_vals = [p5[k]["hallucination_ratio"] for k in volume_keys]
         
-        ax.plot(labels, faith_vals, marker='o', linewidth=2.5, color=ACCENT_PURPLE, label="Judge Faithfulness",
+        x = np.arange(len(labels))
+        ax.plot(x, faith_vals, marker='o', linewidth=2.5, color=ACCENT_PURPLE, label="Judge Faithfulness",
                 markerfacecolor=ACCENT_PURPLE, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.plot(labels, halluc_vals, marker='s', linewidth=2.5, color=ACCENT_AMBER, label="Hallucination Ratio",
+        ax.plot(x, halluc_vals, marker='s', linewidth=2.5, color=ACCENT_AMBER, label="Hallucination Ratio",
                 markerfacecolor=ACCENT_AMBER, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.fill_between(range(len(labels)), faith_vals, color=ACCENT_PURPLE, alpha=0.12)
-        ax.fill_between(range(len(labels)), halluc_vals, color=ACCENT_AMBER, alpha=0.08)
+        ax.fill_between(x, faith_vals, color=ACCENT_PURPLE, alpha=0.12)
+        ax.fill_between(x, halluc_vals, color=ACCENT_AMBER, alpha=0.08)
         
         style_axes(ax, "Context Volume Scaling: Recall vs. Hallucination", ylabel="Score")
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels)
         ax.set_ylim(-0.05, 1.05)
         plt.tight_layout()
         plt.savefig(os.path.join(IMAGE_OUT_DIR, "context_volume_impact.png"), dpi=150)
@@ -427,14 +446,17 @@ def generate_expanded_plots(results):
         hit3_vals = [p1[k]["hit_at_3"] for k in rrf_const_keys]
         mrr_vals = [p1[k]["mrr"] for k in rrf_const_keys]
         
-        ax.plot(labels, hit3_vals, marker='o', linewidth=2.5, color=ACCENT_AMBER, label="Recall@3",
+        x = np.arange(len(labels))
+        ax.plot(x, hit3_vals, marker='o', linewidth=2.5, color=ACCENT_AMBER, label="Recall@3",
                 markerfacecolor=ACCENT_AMBER, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.plot(labels, mrr_vals, marker='s', linewidth=2.5, color=ACCENT_EMERALD, label="MRR",
+        ax.plot(x, mrr_vals, marker='s', linewidth=2.5, color=ACCENT_EMERALD, label="MRR",
                 markerfacecolor=ACCENT_EMERALD, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.fill_between(range(len(labels)), hit3_vals, color=ACCENT_AMBER, alpha=0.12)
-        ax.fill_between(range(len(labels)), mrr_vals, color=ACCENT_EMERALD, alpha=0.08)
+        ax.fill_between(x, hit3_vals, color=ACCENT_AMBER, alpha=0.12)
+        ax.fill_between(x, mrr_vals, color=ACCENT_EMERALD, alpha=0.08)
         
         style_axes(ax, "Reciprocal Rank Fusion (RRF) Constant Optimization", ylabel="Score")
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels)
         ax.set_ylim(min(mrr_vals) * 0.95, 1.05)
         plt.tight_layout()
         plt.savefig(os.path.join(IMAGE_OUT_DIR, "rrf_parameter_tuning.png"), dpi=150)
@@ -467,17 +489,20 @@ def generate_expanded_plots(results):
         rep_ttrs = [p2[k]["lexical_diversity_ttr"] for k in rep_keys]
         rep_structs = [p2[k]["structure_fidelity"] for k in rep_keys]
         
-        ax.plot(rep_labels, rep_ttrs, marker='o', linewidth=2.5, color=ACCENT_PINK, label="Lexical TTR",
+        x = np.arange(len(rep_labels))
+        ax.plot(x, rep_ttrs, marker='o', linewidth=2.5, color=ACCENT_PINK, label="Lexical TTR",
                 markerfacecolor=ACCENT_PINK, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.plot(rep_labels, rep_structs, marker='s', linewidth=2.5, color=PRIMARY, label="JSON Conformance",
+        ax.plot(x, rep_structs, marker='s', linewidth=2.5, color=PRIMARY, label="JSON Conformance",
                 markerfacecolor=PRIMARY, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.fill_between(range(len(rep_labels)), rep_ttrs, color=ACCENT_PINK, alpha=0.12)
-        ax.fill_between(range(len(rep_labels)), rep_structs, color=PRIMARY, alpha=0.08)
+        ax.fill_between(x, rep_ttrs, color=ACCENT_PINK, alpha=0.12)
+        ax.fill_between(x, rep_structs, color=PRIMARY, alpha=0.08)
         
         ax.axvline(x=2, color=ACCENT_AMBER, linestyle=':', linewidth=1.5, alpha=0.8)
         ax.text(2.1, 0.8, "Sweet Spot (1.10)", color=ACCENT_AMBER, fontweight='bold', fontsize=8)
         
         style_axes(ax, "Repetition Penalty Sweeps (SmolLM2-360M)", ylabel="Score")
+        ax.set_xticks(x)
+        ax.set_xticklabels(rep_labels)
         ax.set_ylim(-0.05, 1.05)
         plt.tight_layout()
         plt.savefig(os.path.join(IMAGE_OUT_DIR, "repetition_penalty_sweeps.png"), dpi=150)
@@ -491,14 +516,17 @@ def generate_expanded_plots(results):
         faith_vals = [p4[k]["judge_faithfulness"] for k in cutoff_keys]
         ground_vals = [p4[k]["groundedness"] for k in cutoff_keys]
         
-        ax.plot(labels, faith_vals, marker='o', linewidth=2.5, color="#14b8a6", label="Judge Faithfulness",
+        x = np.arange(len(labels))
+        ax.plot(x, faith_vals, marker='o', linewidth=2.5, color="#14b8a6", label="Judge Faithfulness",
                 markerfacecolor="#14b8a6", markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.plot(labels, ground_vals, marker='s', linewidth=2.5, color=ACCENT_PURPLE, label="Groundedness",
+        ax.plot(x, ground_vals, marker='s', linewidth=2.5, color=ACCENT_PURPLE, label="Groundedness",
                 markerfacecolor=ACCENT_PURPLE, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.fill_between(range(len(labels)), faith_vals, color="#14b8a6", alpha=0.12)
-        ax.fill_between(range(len(labels)), ground_vals, color=ACCENT_PURPLE, alpha=0.08)
+        ax.fill_between(x, faith_vals, color="#14b8a6", alpha=0.12)
+        ax.fill_between(x, ground_vals, color=ACCENT_PURPLE, alpha=0.08)
         
         style_axes(ax, "Reranker Sentence Selection Limit Impact", ylabel="Score")
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels)
         ax.set_ylim(-0.05, 1.05)
         plt.tight_layout()
         plt.savefig(os.path.join(IMAGE_OUT_DIR, "reranker_cutoff_impact.png"), dpi=150)
@@ -534,20 +562,23 @@ def generate_expanded_plots(results):
         ground_vals = [p5[k]["groundedness"] for k in dist_density_keys]
         halluc_vals = [p5[k]["hallucination_ratio"] for k in dist_density_keys]
         
-        ax.plot(labels, faith_vals, marker='o', linewidth=2.5, color=ACCENT_EMERALD, label="Judge Faithfulness",
+        x = np.arange(len(labels))
+        ax.plot(x, faith_vals, marker='o', linewidth=2.5, color=ACCENT_EMERALD, label="Judge Faithfulness",
                 markerfacecolor=ACCENT_EMERALD, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.plot(labels, ground_vals, marker='s', linewidth=2.5, color=PRIMARY, label="Groundedness",
+        ax.plot(x, ground_vals, marker='s', linewidth=2.5, color=PRIMARY, label="Groundedness",
                 markerfacecolor=PRIMARY, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.plot(labels, halluc_vals, marker='^', linewidth=2.5, color=ACCENT_ROSE, label="Hallucination Ratio",
+        ax.plot(x, halluc_vals, marker='^', linewidth=2.5, color=ACCENT_ROSE, label="Hallucination Ratio",
                 markerfacecolor=ACCENT_ROSE, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.fill_between(range(len(labels)), faith_vals, color=ACCENT_EMERALD, alpha=0.1)
-        ax.fill_between(range(len(labels)), ground_vals, color=PRIMARY, alpha=0.08)
-        ax.fill_between(range(len(labels)), halluc_vals, color=ACCENT_ROSE, alpha=0.05)
+        ax.fill_between(x, faith_vals, color=ACCENT_EMERALD, alpha=0.1)
+        ax.fill_between(x, ground_vals, color=PRIMARY, alpha=0.08)
+        ax.fill_between(x, halluc_vals, color=ACCENT_ROSE, alpha=0.05)
         
         ax.axvline(x=3, color=ACCENT_ROSE, linestyle=':', linewidth=1.5, alpha=0.6)
         ax.text(3.1, 0.9, "Attention Distraction Threshold", color=ACCENT_ROSE, fontsize=8, fontweight='bold')
         
         style_axes(ax, "Attention Distraction: Model Robustness vs. Noise Density", ylabel="Score")
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels)
         ax.set_ylim(-0.05, 1.05)
         plt.tight_layout()
         plt.savefig(os.path.join(IMAGE_OUT_DIR, "distractor_density_threshold.png"), dpi=150)
@@ -582,17 +613,38 @@ def generate_expanded_plots(results):
         faith_vals = [p5[k]["judge_faithfulness"] for k in stress_keys]
         ground_vals = [p5[k]["groundedness"] for k in stress_keys]
         
-        ax.plot(labels, faith_vals, marker='o', linewidth=2.5, color=ACCENT_EMERALD, label="Judge Faithfulness",
+        x = np.arange(len(labels))
+        ax.plot(x, faith_vals, marker='o', linewidth=2.5, color=ACCENT_EMERALD, label="Judge Faithfulness",
                 markerfacecolor=ACCENT_EMERALD, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.plot(labels, ground_vals, marker='s', linewidth=2.5, color=ACCENT_AMBER, label="Groundedness",
+        ax.plot(x, ground_vals, marker='s', linewidth=2.5, color=ACCENT_AMBER, label="Groundedness",
                 markerfacecolor=ACCENT_AMBER, markeredgecolor='white', markeredgewidth=1.5, markersize=8)
-        ax.fill_between(range(len(labels)), faith_vals, color=ACCENT_EMERALD, alpha=0.12)
-        ax.fill_between(range(len(labels)), ground_vals, color=ACCENT_AMBER, alpha=0.08)
+        ax.fill_between(x, faith_vals, color=ACCENT_EMERALD, alpha=0.12)
+        ax.fill_between(x, ground_vals, color=ACCENT_AMBER, alpha=0.08)
         
         style_axes(ax, "Attention Stress Test: Context Expansion Window Impact", ylabel="Score")
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels)
         ax.set_ylim(-0.05, 1.05)
         plt.tight_layout()
         plt.savefig(os.path.join(IMAGE_OUT_DIR, "attention_stress_token_limit.png"), dpi=150)
         plt.close()
 
     print("Matplotlib premium figure compilation complete. Saved plots in assets/images/ablation/.")
+
+if __name__ == '__main__':
+    import json
+    # Use fallback file paths
+    cache_path = "artifacts/ablation_results.json"
+    if not os.path.exists(cache_path):
+        cache_path = os.path.join(os.path.dirname(__file__), "cache", "ablation_checkpoint.json")
+    if not os.path.exists(cache_path):
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "artifacts", "ablation_results.json")
+        
+    if os.path.exists(cache_path):
+        print(f"Loading cached ablation results from {cache_path}...")
+        with open(cache_path, "r") as f:
+            data = json.load(f)
+        generate_expanded_plots(data)
+    else:
+        print(f"No cache or results file found at {cache_path} to generate plots.")
+

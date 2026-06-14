@@ -237,6 +237,7 @@
                 tone: 'sassy',
                 category: 'Teaching',
                 query: 'What classes does TJ teach?',
+                reasoning: 'The user is asking about TJ\'s teaching courses. The context explicitly mentions CS 7641 and the number of students/TAs.',
                 answer: 'Oh, marvelous, another query about classes. As if it wasn\'t enough that TJ corrals 1400+ OMSCS students in CS 7641, he also has a small army of 30+ TAs to do the actual grading. Go ahead, ask what else he teaches, I\'ll wait.',
                 followups: ['Does TJ actually teach or just supervise?', 'Is reinforcement learning CS 7642 also this chaotic?', 'What was TJ\'s Outstanding TA award for?']
             },
@@ -244,6 +245,7 @@
                 tone: 'sassy',
                 category: 'Teaching',
                 query: 'Tell me about CS 7642 or Reinforcement Learning.',
+                reasoning: 'The user is inquiring about Reinforcement Learning (CS 7642). The context details TJ\'s support role for this course in the OMSCS program.',
                 answer: 'Ah, Reinforcement Learning, the science of letting an agent make mistakes until it learns something. TJ supported CS 7642 in Georgia Tech\'s OMSCS program. Truly heroic stuff, keeping virtual agents from crashing and burning.',
                 followups: ['Did TJ win TA of the Year for RL?', 'What is CS 7641 ML class like?', 'How many TAs support the ML courses?']
             },
@@ -251,6 +253,7 @@
                 tone: 'sassy',
                 category: 'Research',
                 query: 'What is TJ\'s brain research about?',
+                reasoning: 'The user asks about TJ\'s brain research. The context covers resting-state fMRI brain dynamics research in the Keilholz MIND Lab focusing on QPPs and Alzheimer\'s/Parkinson\'s biomarkers.',
                 answer: 'Look, TJ peers into brains using resting-state fMRI in the Keilholz MIND Lab. He tracks spantiotemporal patterns called QPPs (Quasi-Periodic Patterns) to find biomarkers for Alzheimer\'s and Parkinson\'s before they find us. Fascination is optional.',
                 followups: ['What on earth is a QPP?', 'Can you explain resting-state fMRI?', 'How does resting-state fMRI help diagnostic research?']
             },
@@ -258,6 +261,7 @@
                 tone: 'sassy',
                 category: 'Research',
                 query: 'Tell me about fMRI or Quasi-Periodic Patterns.',
+                reasoning: 'The user asks for explanations of fMRI or QPPs. The context explains that fMRI measures blood flow changes in the brain and QPPs are spatiotemporal patterns analyzed via algorithms to find disease markers.',
                 answer: 'fMRI is basically taking a slow 3D video of blood flowing in the brain. TJ uses it to capture spatiotemporal Quasi-Periodic Patterns. Yes, brains pulse, and yes, TJ writes algorithms to analyze those pulses. Groundbreaking, right?',
                 followups: ['Does fMRI use radiation?', 'What publications does TJ have?', 'Can I read his paper on ADNI classification?']
             },
@@ -265,6 +269,7 @@
                 tone: 'sassy',
                 category: 'Bio/Contact',
                 query: 'How can I contact TJ?',
+                reasoning: 'The user asks for TJ\'s contact details. The context provides the email tlagrow3 at gatech.edu, LinkedIn, GitHub, YouTube, and the Contact page form.',
                 answer: 'Trying to reach him? You can send a message via the form on the Contact page, or just email tlagrow3 at gatech dot edu. Just don\'t spam him, or I\'ll have to deal with it, and my tolerance for extra work is zero.',
                 followups: ['Does TJ have a LinkedIn?', 'Can I find his code on GitHub?', 'Does he have a YouTube channel?']
             },
@@ -272,6 +277,7 @@
                 tone: 'sassy',
                 category: 'General',
                 query: 'Who is Waddles?',
+                reasoning: 'The user asks who Waddles is. Waddles is the browser-native client-side RAG chatbot developed by TJ LaGrow.',
                 answer: 'I am Waddles, the world\'s most over-qualified chatbot assistant running fully client-side inside your browser. No server is hosting me. I do all the hard work while TJ gets the credit. Any other obvious questions?',
                 followups: ['What models are running in the browser?', 'How do you run client-side RAG?', 'Is it running purely locally without a server?']
             },
@@ -279,6 +285,7 @@
                 tone: 'pirate',
                 category: 'Teaching',
                 query: 'What classes does TJ teach?',
+                reasoning: 'The user asks about TJ\'s classes. The context mentions CS 7641 Lead TA/Instructor status and managing 1400+ OMSCS students.',
                 answer: 'Ahoy, landlubber! If it be Cap\'n TJ\'s legendary teaching ye seek, know that he commands the CS 7641 machine learning galleon! He rules over 1400 master-at-arms with a crew of 30 loyal TAs, and even plundered the Outstanding TA of the Year trophy! Harrr!',
                 followups: ['What other gold and loot does the Cap\'n teach?', 'How do I send a message in a bottle to Cap\'n TJ?', 'Did the Cap\'n win TA of the Year?']
             },
@@ -286,6 +293,7 @@
                 tone: 'pirate',
                 category: 'Teaching',
                 query: 'Tell me about CS 7642 or Reinforcement Learning.',
+                reasoning: 'The user asks about CS 7642 RL. The context states that TJ supported Reinforcement Learning in the OMSCS program.',
                 answer: 'Harrr! Reinforcement Learning be the wild sea where agents navigate by trial and error! Cap\'n TJ braved the rough waters supporting CS 7642 in the OMSCS fleet, guiding lost souls through the deep fog of neural rewards!',
                 followups: ['What other loot does TJ teach?', 'How do I hail Cap\'n TJ?', 'What be the machine learning galleon like?']
             },
@@ -293,6 +301,7 @@
                 tone: 'pirate',
                 category: 'Research',
                 query: 'What is TJ\'s brain research about?',
+                reasoning: 'The user asks about Cap\'n TJ\'s research. The context describes resting-state fMRI and spatiotemporal brain dynamics research on QPPs at the Keilholz MIND Lab.',
                 answer: 'Ahoy! The brave Cap\'n TJ sails the mysterious seas of the Keilholz MIND Lab! He maps the hidden dynamic tides of the mind using resting-state fMRI, tracking down Quasi-Periodic Patterns like buried treasure to defeat the Alzheimer\'s plague! Harrr!',
                 followups: ['What be a Quasi-Periodic Pattern?', 'Show me the Cap\'n\'s Google Scholar scroll!', 'How does he fight the Alzheimer\'s plague?']
             },
@@ -300,6 +309,7 @@
                 tone: 'pirate',
                 category: 'Research',
                 query: 'Tell me about fMRI or Quasi-Periodic Patterns.',
+                reasoning: 'The user asks for explanation of fMRI/QPP. The context explains blood flow tracking via fMRI and analyzing cyclic spatiotemporal patterns to diagnose brain conditions.',
                 answer: 'Avast! fMRI is our trusty spyglass for peering deep into the skulls of men! It tracks the flow of blood, letting us chart Quasi-Periodic Patterns that pulse like the ocean tides. TJ hunts these tides to find markers of cognitive disease!',
                 followups: ['Has TJ plundered many papers?', 'Can fMRI chart the pirate mind?', 'Where can I see his ADNI treasure maps?']
             },
@@ -307,6 +317,7 @@
                 tone: 'pirate',
                 category: 'Bio/Contact',
                 query: 'How can I contact TJ?',
+                reasoning: 'The user asks how to contact Cap\'n TJ. The context provides tlagrow3 at gatech.edu, LinkedIn, GitHub, YouTube, and the Contact page form.',
                 answer: 'To hail the Cap\'n, dispatch a message in a bottle to tlagrow3 at gatech dot edu! Ye may also drop anchor at his LinkedIn harbor, or cast a net onto his Contact page form! Sail fast, matey!',
                 followups: ['Where is the Cap\'n\'s GitHub code?', 'Does the Cap\'n have a YouTube channel?', 'How do I sail to his Contact page?']
             },
@@ -314,6 +325,7 @@
                 tone: 'pirate',
                 category: 'General',
                 query: 'Who is Waddles?',
+                reasoning: 'The user asks who Waddles is. Waddles describes himself as the first mate chatbot running on WebAssembly.',
                 answer: 'Harrr! I be Waddles, the fiercest truffle pig and first mate chatbot of this digital vessel! I guide ye through Cap\'n TJ\'s papers and teaching records using local WebAssembly power, no server required! Ahoy!',
                 followups: ['How does local WebAssembly work?', 'Show me the Cap\'n\'s loot list!', 'Are ye a real pirate truffle pig?']
             }
@@ -420,6 +432,24 @@
             toggle.setAttribute('aria-expanded', 'false');
         });
 
+        // Dynamic visual viewport scaling for mobile virtual keyboard height adjustment
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', () => {
+                if (windowEl.style.display !== 'none') {
+                    if (window.innerWidth <= 576) {
+                        const newHeight = window.visualViewport.height;
+                        windowEl.style.height = `${newHeight}px`;
+                        windowEl.style.maxHeight = `${newHeight}px`;
+                        scrollToBottom();
+                    } else {
+                        // Reset dynamic styling for desktop mode
+                        windowEl.style.height = '';
+                        windowEl.style.maxHeight = '';
+                    }
+                }
+            });
+        }
+
         // Event delegation for action chips and dynamically rendered follow-up chips
         body.addEventListener('click', (e) => {
             const chip = e.target.closest('.chatbot-chip');
@@ -461,6 +491,12 @@
         let currentSuggestion = "";
 
         if (input && hintEl) {
+            input.addEventListener('focus', () => {
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 300);
+            });
+
             input.addEventListener('input', () => {
                 const val = input.value;
                 if (!val || val.trim().length === 0) {
@@ -1198,27 +1234,80 @@
                     msg.innerHTML = "";
                     body.appendChild(msg);
 
+                    let answerContainer = msg;
+                    if (extraData && extraData.reasoning) {
+                        const thoughtDiv = document.createElement('div');
+                        thoughtDiv.className = 'waddles-thought-block';
+                        thoughtDiv.style.marginBottom = '10px';
+                        thoughtDiv.style.border = '1px solid rgba(255, 255, 255, 0.08)';
+                        thoughtDiv.style.borderRadius = '8px';
+                        thoughtDiv.style.background = 'rgba(14, 165, 233, 0.04)';
+                        thoughtDiv.style.overflow = 'hidden';
+                        thoughtDiv.style.width = '100%';
+                        
+                        const thoughtHeader = document.createElement('div');
+                        thoughtHeader.style.padding = '6px 10px';
+                        thoughtHeader.style.background = 'rgba(255, 255, 255, 0.02)';
+                        thoughtHeader.style.borderBottom = '1px solid rgba(255, 255, 255, 0.04)';
+                        thoughtHeader.style.display = 'flex';
+                        thoughtHeader.style.justifyContent = 'space-between';
+                        thoughtHeader.style.alignItems = 'center';
+                        thoughtHeader.style.cursor = 'pointer';
+                        thoughtHeader.style.userSelect = 'none';
+                        thoughtHeader.innerHTML = `<span style="color: #38bdf8; font-size: 0.725rem; font-weight: 700; font-family: monospace; display: flex; align-items: center; gap: 4px;">💭 Thought Process & Inferences</span><i class="fa fa-chevron-down" style="font-size: 0.7rem; color: #38bdf8; transition: transform 0.2s;"></i>`;
+                        
+                        const thoughtContent = document.createElement('div');
+                        thoughtContent.style.padding = '8px 10px';
+                        thoughtContent.style.fontSize = '0.75rem';
+                        thoughtContent.style.color = '#94a3b8';
+                        thoughtContent.style.lineHeight = '1.4';
+                        thoughtContent.style.fontStyle = 'italic';
+                        thoughtContent.style.display = 'none';
+                        thoughtContent.innerText = extraData.reasoning;
+                        
+                        thoughtHeader.addEventListener('click', () => {
+                            const isCollapsed = thoughtContent.style.display === 'none';
+                            thoughtContent.style.display = isCollapsed ? 'block' : 'none';
+                            const icon = thoughtHeader.querySelector('i');
+                            if (icon) {
+                                icon.style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
+                            }
+                            scrollToBottom();
+                        });
+                        
+                        thoughtDiv.appendChild(thoughtHeader);
+                        thoughtDiv.appendChild(thoughtContent);
+                        msg.appendChild(thoughtDiv);
+                    }
+
+                    const answerTextSpan = document.createElement('span');
+                    msg.appendChild(answerTextSpan);
+                    answerContainer = answerTextSpan;
+
                     const speed = 10;
                     function step() {
                         if (i < displayHtml.length) {
                             if (displayHtml[i] === '<') {
                                 const endTagIdx = displayHtml.indexOf('>', i);
                                 if (endTagIdx !== -1) {
-                                    msg.innerHTML += displayHtml.substring(i, endTagIdx + 1);
+                                    answerContainer.innerHTML += displayHtml.substring(i, endTagIdx + 1);
                                     i = endTagIdx + 1;
                                 } else {
-                                    msg.innerHTML += displayHtml[i];
+                                    answerContainer.innerHTML += displayHtml[i];
                                     i++;
                                 }
                             } else {
-                                msg.innerHTML += displayHtml[i];
+                                answerContainer.innerHTML += displayHtml[i];
                                 i++;
                             }
                             scrollToBottom();
                             setTimeout(step, speed);
                         } else {
                             if (citationHtml) {
-                                msg.innerHTML += citationHtml;
+                                const citationDiv = document.createElement('div');
+                                citationDiv.style.width = '100%';
+                                citationDiv.innerHTML = citationHtml;
+                                msg.appendChild(citationDiv);
                             }
                             if (extraData && extraData.visualAssetUrl) {
                                 renderVisualAsset(msg, extraData);
@@ -1649,6 +1738,7 @@
                         confidence: parsedObj.confidence ?? 0.75,
                         category: parsedObj.category ?? 'Bio/Contact',
                         followups: Array.isArray(parsedObj.followups) ? parsedObj.followups.slice(0, 3) : [],
+                        reasoning: parsedObj.reasoning ?? `Decoded answer using ${activeModelKey.toUpperCase()} from context source: ${bestMatch ? bestMatch.title : 'None'}.`,
                         sourceTitle: bestMatch ? bestMatch.title : null,
                         sourceUrl: bestMatch ? bestMatch.url : null,
                         visualAssetUrl: visualAssetUrl,
@@ -1665,6 +1755,7 @@
                 confidence: 0.6,
                 category: 'Unknown',
                 followups: [],
+                reasoning: `Autoregressive output decoding fallback. Model output was not valid JSON, raw text is rendered directly.`,
                 sourceTitle: bestMatch ? bestMatch.title : null,
                 sourceUrl: bestMatch ? bestMatch.url : null,
                 visualAssetUrl: visualAssetUrl,
@@ -1731,6 +1822,7 @@
                     answer: "<strong>Hello!</strong> I am Waddles. I can help you find information on TJ's OMSCS teaching, brain research, FlexStack certificates, or contact details. What would you like to explore?",
                     confidence: 1.0,
                     category: "Bio/Contact",
+                    reasoning: "User query identified as greeting/introduction. Displaying helpful greeting card with quick links.",
                     followups: ["What courses does TJ teach?", "Tell me about TJ's research.", "How can I contact TJ?"]
                 };
             }
@@ -1740,6 +1832,7 @@
                     answer: "<strong>Teaching at Georgia Tech</strong><br><br>TJ is the Lead Instructor for CS 7641 (Machine Learning) in Georgia Tech's OMSCS program, supporting 1400+ graduate students and directing 30+ TAs. He also worked with CS 7642 (Reinforcement Learning). In 2023, he was awarded the Outstanding Online TA of the Year at GT.<br><br>Find more details on the <a href=\"/teaching/\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Teaching Page</a>.",
                     confidence: 1.0,
                     category: "Teaching",
+                    reasoning: "User requested courses taught by TJ. Retrieved curated biography block summarizing Lead Instructor role in CS 7641.",
                     followups: ["What certificates are in FlexStack?", "How can I contact TJ?", "Tell me about TJ's research."]
                 };
             }
@@ -1749,6 +1842,7 @@
                     answer: "<strong>Neuroscience Research</strong><br><br>TJ's research in the Keilholz MIND Lab focuses on brain dynamics using resting-state fMRI. He studies Quasi-Periodic Patterns (QPPs) to identify biomarkers for diseases such as Alzheimer's and Parkinson's.<br><br>Check out his papers on the <a href=\"/research/\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Research Page</a> or view his <a href=\"https://scholar.google.com/citations?user=KO7oYeAAAAAJ\" target=\"_blank\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Google Scholar Profile</a>.",
                     confidence: 1.0,
                     category: "Research",
+                    reasoning: "User requested TJ's brain research details. Retrieved curated Mind Lab overview focusing on resting-state fMRI and QPPs.",
                     followups: ["Tell me about TJ's research.", "What courses does TJ teach?", "How can I contact TJ?"]
                 };
             }
@@ -1758,6 +1852,7 @@
                     answer: "<strong>FlexStack Certificates</strong><br><br>TJ is the Lead AI/LLM Expert for Georgia Tech's professional education FlexStack program. He developed the Data Modeling and Visualization Certificate and the Python AI Principles Certificate.",
                     confidence: 1.0,
                     category: "Teaching",
+                    reasoning: "User requested FlexStack program info. Retrieved curated block explaining lead role in developing Data Modeling and AI Principles certificates.",
                     followups: ["What courses does TJ teach?", "How can I contact TJ?", "Tell me about TJ's research."]
                 };
             }
@@ -1767,6 +1862,7 @@
                     answer: "<strong>Contact and Social Links</strong><br><br>You can connect with TJ via email at tlagrow3 at gatech dot edu. You can also visit his LinkedIn, GitHub, and YouTube profiles, or send a message using the form on the <a href=\"/contact/\" style=\"color:#2dd4bf; text-decoration:underline; font-weight:600;\">Contact Page</a>.",
                     confidence: 1.0,
                     category: "Bio/Contact",
+                    reasoning: "User requested contact details. Retrieved email, LinkedIn, GitHub, and message form details.",
                     followups: ["How can I contact TJ?", "What courses does TJ teach?", "Tell me about TJ's research."]
                 };
             }
@@ -1947,6 +2043,7 @@
                         dynamicExamplesText = "\n\nHere are some examples of queries and structured JSON responses in the correct tone:\n";
                         topExamples.forEach(ex => {
                             const mockResponse = {
+                                reasoning: ex.reasoning || "Analyzing query and retrieving corresponding context details.",
                                 answer: ex.answer,
                                 confidence: 1.0,
                                 category: ex.category,
@@ -1974,6 +2071,7 @@ Be extremely witty, highly sarcastic, and mock the user's curiosity slightly, wh
  
 Here is an example of the structured response format you MUST use:
 {
+  "reasoning": "The user is asking about TJ's teaching courses. The context explicitly mentions CS 7641 and the number of students/TAs.",
   "answer": "Oh, marvelous, another query about classes. As if it wasn't enough that TJ corrals 1400+ OMSCS students in CS 7641, he also has a small army of 30+ TAs to do the actual grading. Go ahead, ask what else he teaches, I'll wait.",
   "confidence": 1.0,
   "category": "Teaching",
@@ -1993,6 +2091,7 @@ Do not make up facts outside the context.${toolCallInstructions}${dynamicExample
  
 Here is an example of the structured response format you MUST use:
 {
+  "reasoning": "The user is asking about Cap'n TJ's courses. The context highlights he leads the CS 7641 Machine Learning course with 1400 students and 30 TAs.",
   "answer": "Ahoy, landlubber! If it be Cap'n TJ's legendary teaching ye seek, know that he commands the CS 7641 machine learning galleon! He rules over 1400 master-at-arms with a crew of 30 loyal TAs, and even plundered the Outstanding TA of the Year trophy! Harrr!",
   "confidence": 1.0,
   "category": "Teaching",
@@ -2015,6 +2114,7 @@ ${contextText}
 ${systemInstruction}
 You MUST respond with a single valid JSON object. Do not output any markdown formatting, backticks, or introduction text. Follow this schema:
 {
+  "reasoning": "Brief thought process explaining how the retrieved facts answer the user's query.",
   "answer": "Concise answer of 1-3 sentences.",
   "confidence": 0.0 to 1.0 (estimation of how well the context answers the query),
   "category": "One of [Research, Teaching, Bio/Contact, Unknown]",
@@ -2023,7 +2123,9 @@ You MUST respond with a single valid JSON object. Do not output any markdown for
 <|im_end|>
 ${historyPrompt}<|im_start|>user
 ${query}<|im_end|>
-<|im_start|>assistant
+${dynamicExamplesText ? `<|im_start|>system
+Remember to follow the JSON format examples above. Include the "reasoning" key in your JSON output.<|im_end|>
+` : ''}<|im_start|>assistant
 `;
                     const output = await activeGenerator(prompt, {
                         max_new_tokens: 256,
@@ -2117,6 +2219,10 @@ ${query}<|im_end|>
                         </div>
                     `;
 
+                    const keywordScore = bestMatch.score ?? (sparseMatches.find(m => m.doc === bestMatch)?.score ?? 1.0);
+                    const docTypeLabel = bestMatch.type.charAt(0).toUpperCase() + bestMatch.type.slice(1);
+                    const reasoning = `Keyword Match logic triggered. Query terms: [${searchTerms.join(', ')}]. Scanned local index database and identified document '${bestMatch.title}' (${docTypeLabel}) as highest matching node with frequency score of ${keywordScore.toFixed(2)}.`;
+
                     return {
                         answer: responseHtml,
                         confidence: 1.0,
@@ -2124,6 +2230,7 @@ ${query}<|im_end|>
                         followups: [],
                         sourceTitle: bestMatch.title,
                         sourceUrl: bestMatch.url,
+                        reasoning: reasoning,
                         trace: {
                             rawQuery: query,
                             processedQuery: searchTerms.join(' '),
@@ -2146,7 +2253,8 @@ ${query}<|im_end|>
                     </div>`,
                 confidence: 0.0,
                 category: "Unknown",
-                followups: []
+                followups: [],
+                reasoning: "Query terms did not yield high similarity scores (threshold < 2.0 or 0.38) in either keyword match or neural vector databases. Displaying general topic directory fallback cards."
             };
         }
     });

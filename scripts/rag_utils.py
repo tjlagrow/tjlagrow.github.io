@@ -654,6 +654,12 @@ def llm_judge_evaluate(context, query, generated_answer):
 
 
 def load_hf_generator(model_id, fallback_id=None):
+    import gc
+    import torch
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        
     from transformers import pipeline
     
     force_quant = None
